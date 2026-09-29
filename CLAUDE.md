@@ -14,10 +14,13 @@ The emphasis is on "assistant", not just "sync agent": the client should help no
 
 ## Architectural shape (intended)
 
-Two halves, designed together but deployable independently:
+Three parts (details and rationale in `docs/adr/0001-cloud-staging-on-r2.md`):
 
-- **Client** (runs on each family device): discovers and watches selected locations, chunks/dedupes/encrypts data locally, uploads to the homelab, and surfaces backup health to the user. Needs a background service/daemon plus a lightweight UI (tray/menu-bar app).
-- **Homelab server side**: the central backup target. Prefer building on an existing, proven backup repository format/server rather than inventing a storage format — the client's value is in the assistant/UX layer, not in reinventing deduplicating storage.
+- **Client** (runs on each family device): discovers keepsakes, keeps a local hash cache, computes dedup IDs, encrypts content and metadata to the homelab public key, uploads, and surfaces backup health to the user. Needs a background service/daemon plus a lightweight UI (tray/menu-bar app on desktop).
+- **Cloud staging (Cloudflare R2 + Workers + D1/Durable Objects + Queues)**: the only internet-facing component. Issues presigned upload URLs, holds the cross-user dedup index and claim/commit state, and briefly stages ciphertext for ingest and for restores. It never sees plaintext content, plaintext hashes, or filenames.
+- **Homelab (Proxmox)**: makes outbound connections only. Pulls staged objects, decrypts, verifies, stores permanently, and keeps the plaintext catalog. It also ingests USB-drive bundles. The storage engine behind it is still open; prefer an existing, proven format over inventing one.
+
+Upload bundles are transport-agnostic: the same encrypted objects and manifest travel via R2, via USB drive (sneakernet, a required feature for seeding large libraries), or potentially via LAN.
 
 Properties the design must hold to:
 
@@ -34,12 +37,13 @@ Decided with the owner; do not relitigate without asking:
 - **Users:** non-technical family members. The owner administers everything centrally; end users should never touch configuration. Device enrollment must be near-zero-effort (e.g. QR code).
 - **Scale:** 2–10 TB total across 10–25 devices, multiple people.
 - **Server host:** Linux / Proxmox in the homelab; the server side runs as containers or VMs.
-- **Connectivity:** a public, internet-exposed endpoint (not VPN-only). Treat the server as under attack: TLS, strong per-device credentials, rate limiting, and **devices can only append backups, never delete or rewrite them**, so a compromised or ransomwared device cannot destroy its own history.
-- **Encryption trust model:** data is encrypted client-side; the owner (admin) holds a recovery/escrow key and can decrypt any family member's backups. Privacy is against outsiders, not against the admin.
+- **Connectivity (ADR-0001):** devices upload to Cloudflare R2 staging from anywhere; the homelab is never exposed and only makes outbound connections. No AWS. USB-drive transport is required; LAN direct is optional. Treat the cloud API as under attack: strong per-device credentials, rate limiting, and **devices can only append backups, never delete or rewrite them**, so a compromised or ransomwared device cannot destroy its own history.
+- **Encryption trust model (ADR-0001):** content and metadata are encrypted on the device to the homelab public key; devices cannot read any backup data. Cross-user dedup uses HMAC(family secret, content), so the cloud sees only opaque IDs. The owner (admin) holds the private key and can decrypt everything; privacy is against outsiders (including the cloud provider), not against the admin.
+- **Deduplication:** whole-file, across all users, based on plaintext content. Clients keep a local cache of file hashes; source locator, filename and mtime are recorded for context (plaintext only at the homelab).
 - **Retention:** keep forever. Deleting a file on a device never removes the backed-up copy; pruning is a manual admin action only.
 - **v1 assistant features:** auto-discovery of keepsakes (propose what to protect rather than making users pick folders), plain-language per-person backup health, and proactive nudges (stale device, not yet backed up, storage issues). An admin dashboard is not a v1 goal.
 - **v1 data sources:** files on the device only (including the phone photo library). Pulling from iCloud / Google Photos and email / social-media exports is on the roadmap, so keep the source layer pluggable.
-- **Restore:** performed by the admin in v1; no end-user restore UI yet. v1 focus is getting data safely *in*.
+- **Restore:** performed by the admin in v1; no end-user restore UI yet. v1 focus is getting data safely *in*. Restores are delivered by re-encrypting to the target device's own key and staging in an expiring R2 prefix.
 - **Off-site copy of the homelab:** out of scope for now; handled by the owner's separate plans and to be revisited in a later phase.
 
 ## Open decisions
@@ -47,5 +51,6 @@ Decided with the owner; do not relitigate without asking:
 Record the outcome here (or in `docs/adr/`) as each is decided:
 
 - Client stack able to cover desktop + mobile (e.g. Flutter, Kotlin Multiplatform, or a shared Rust core with native/Tauri shells).
-- Backup engine/format to build on (e.g. restic, Kopia, Borg) and server target (REST server, S3-compatible store such as MinIO/Garage, SFTP), given the append-only and admin-escrow requirements.
-- Device enrollment and credential issuance/revocation flow.
+- Homelab storage engine behind the ingest service (plain content-addressed store vs. an existing format such as restic/Kopia).
+- Device enrollment (QR), per-device keypair and credential issuance/revocation, homelab keypair custody, and dedup-secret rotation.
+- Whether to build the LAN-direct transport.
