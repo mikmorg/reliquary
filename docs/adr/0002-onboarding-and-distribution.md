@@ -28,9 +28,16 @@ The stick and the card are deliberately separate: losing the stick alone does no
 - **Email is also used for backup nudges** (e.g. "your laptop hasn't backed up in 14 days") when the person isn't opening the app.
 - Consequence: name, email and per-device activity timestamps are stored in plain text in the cloud control plane (needed to send mail). File contents and file metadata remain encrypted per ADR-0001.
 
-### 3. Adding more devices
+### 3. Adding more devices: the "your other devices" wizard
 
-An already-enrolled device shows "Add another device", which displays a **short-lived, single-use QR code** (e.g. 10 minutes). The new device's app scans it and enrolls under the same account. No admin involvement is required.
+The desktop app actively guides the person to protect their other devices; it is part of the assistant, not a hidden menu item.
+
+- **During first-run onboarding,** right after the first device is enrolled, the wizard asks which other devices the person uses (Android phone or tablet, iPhone or iPad, another computer) and walks through each one. It can be skipped, but not silently.
+- **Android:** the wizard shows a QR code that opens the Google Play listing (closed track) and carries a **short-lived, single-use enrollment token** (e.g. 10 minutes). After installing, the phone app either receives the token automatically (via the Play install referrer, if feasible) or scans the same QR on first launch. It then enrolls under the same account and starts with a phone-specific discovery of the camera roll.
+- **Another computer:** the wizard offers two routes: (a) "Copy installer to a USB stick", which writes the desktop builds and a Start-here guide to any stick; or (b) a download link for use on that computer. The new computer enrolls with a short **pairing code** shown by the first device (typed rather than scanned, since computers may lack cameras), which is single-use and short-lived like the QR token.
+- **iPhone/iPad:** recorded as "not yet supported". The assistant remembers it and notifies the person when iOS support arrives.
+- **Ongoing nudges:** devices the person said they own but has not enrolled appear in the plain-language health view ("Your Android phone isn't protected yet — set it up") and in email nudges, until enrolled or dismissed.
+- Adding devices never requires the admin. Any enrolled device can show the QR or pairing code, including the phone (e.g. to set up a second computer).
 
 ### 4. Platforms and distribution
 
@@ -55,7 +62,7 @@ The owner chose not to pay for Apple or Windows code signing yet. Consequences a
 - **Android APK sideloaded from the stick:** rejected for non-technical users (security warnings, no automatic updates) and increasingly restricted by Google's developer-verification requirements.
 - **Invite embedded on the stick:** rejected; a lost stick would then be a usable account. The printed card acts as a separate physical factor.
 - **Passwords or passkeys:** unnecessary under this trust model (devices cannot read data; admin-mediated restore) and a support burden.
-- **Admin issues a new invite per device:** rejected in favour of QR from an enrolled device; less work for the owner.
+- **Admin issues a new invite per device:** rejected in favour of the device wizard (QR or pairing code from an enrolled device); less work for the owner.
 
 ## Open questions
 
