@@ -37,6 +37,9 @@ Decided with the owner; do not relitigate without asking:
 - **Connectivity:** a public, internet-exposed endpoint (not VPN-only). Treat the server as under attack: TLS, strong per-device credentials, rate limiting, and **devices can only append backups, never delete or rewrite them**, so a compromised or ransomwared device cannot destroy its own history.
 - **Encryption trust model:** data is encrypted client-side; the owner (admin) holds a recovery/escrow key and can decrypt any family member's backups. Privacy is against outsiders, not against the admin.
 - **Retention:** keep forever. Deleting a file on a device never removes the backed-up copy; pruning is a manual admin action only.
+- **v1 assistant features:** auto-discovery of keepsakes (propose what to protect rather than making users pick folders), plain-language per-person backup health, and proactive nudges (stale device, not yet backed up, storage issues). An admin dashboard is not a v1 goal.
+- **v1 data sources:** files on the device only (including the phone photo library). Pulling from iCloud / Google Photos and email / social-media exports is on the roadmap, so keep the source layer pluggable.
+- **Restore:** performed by the admin in v1; no end-user restore UI yet. v1 focus is getting data safely *in*.
 - **Off-site copy of the homelab:** out of scope for now; handled by the owner's separate plans and to be revisited in a later phase.
 
 ## Open decisions
