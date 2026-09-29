@@ -51,22 +51,25 @@ The desktop app actively guides the person to protect their other devices; it is
 
 The owner chose not to pay for Apple or Windows code signing yet. Consequences and mitigations:
 
-- **First launch from USB is likely less hostile than a download.** Windows SmartScreen relies on the Mark-of-the-Web, and macOS Gatekeeper's first-launch check on the quarantine attribute; both are normally set on *downloaded* files, not on files copied from a USB stick. **This must be verified on real hardware** (current Windows 11 and macOS releases) before relying on it. On Apple Silicon, binaries must still be at least ad-hoc signed to run, which is free.
-- If warnings do appear, the "Start here" guide shows the exact steps with screenshots (Windows: *More info → Run anyway*; macOS: *System Settings → Privacy & Security → Open Anyway*).
+- **First launch from USB is less hostile than a download** (verified from sources; see `docs/research/fact-check-adr-0001-0002.md`, items 8–9). The Mark-of-the-Web is an NTFS alternate data stream that FAT32/exFAT sticks cannot carry, so SmartScreen does not prompt; Finder copies from USB do not set `com.apple.quarantine`, so Gatekeeper does not evaluate the app. Build the stick from locally built artifacts (not files downloaded onto the build machine) and format it exFAT. On Apple Silicon, binaries must be at least ad-hoc signed (free); **self-updated binaries must be re-signed ad hoc.**
+- **⚠ Blocker to resolve: Windows 11 Smart App Control (SAC).** When SAC is on (typically on clean installs), it blocks unsigned executables that lack cloud reputation **regardless of Mark-of-the-Web, with no "Run anyway" option**. On such PCs this decision fails. It must be tested on real hardware (spike 1 in `docs/research/client-stack.md`). Options if it bites: buy Windows signing (Azure Artifact Signing, $9.99/month, individuals in the US/Canada only), or have the Start-here guide turn SAC off (Microsoft now allows this without reinstalling), which weakens that PC's protection.
+- If other warnings appear, the "Start here" guide shows the exact steps with screenshots (Windows: *More info → Run anyway*; macOS Sequoia+: *System Settings → Privacy & Security → Open Anyway*, which needs an admin password).
 - **Self-updates must be signed with the project's own key** (e.g. Ed25519 / minisign), and the app must verify the signature before installing. Without OS signing, this is the only thing preventing a compromised update channel from pushing malware to every family device. The update signing key is kept offline by the admin.
 - Unsigned, self-updating binaries may trip antivirus heuristics; test with Windows Defender.
 
 ## Alternatives considered
 
 - **Unlisted App Store and public Play listings from day one:** deferred for cost and review overhead; Android via a closed track gets most of the benefit.
-- **Android APK sideloaded from the stick:** rejected for non-technical users (security warnings, no automatic updates) and increasingly restricted by Google's developer-verification requirements.
+- **Android APK sideloaded from the stick:** rejected for non-technical users (security warnings, no automatic updates). Google's developer verification is enforced from 30 Sep 2026 in some countries and globally in 2027; apps from unregistered developers then need a 24-hour "advanced flow" to install.
+- **Google Play "limited distribution" account (free, up to 20 authorized devices, since Aug 2026):** not yet evaluated; a candidate if the family's Android device count stays at or below 20 and the $25 account plus the 12-tester, 14-day closed-testing requirement proves awkward.
 - **Invite embedded on the stick:** rejected; a lost stick would then be a usable account. The printed card acts as a separate physical factor.
 - **Passwords or passkeys:** unnecessary under this trust model (devices cannot read data; admin-mediated restore) and a support burden.
 - **Admin issues a new invite per device:** rejected in favour of the device wizard (QR or pairing code from an enrolled device); less work for the owner.
 
 ## Open questions
 
-- Email sending provider reachable from Workers (e.g. Cloudflare's own email sending if available, or Resend or Postmark); must not be AWS.
-- Google Play specifics: the one-time developer fee and any testing-track requirements for new personal accounts (Google has required a period of closed testing with a minimum number of testers before production for newer accounts). Confirm current rules; a family closed track may be the permanent channel.
-- Whether the Play Install Referrer can carry the invite from the QR into the Android app, so nobody types the code on a phone.
+- Email sending provider: **Cloudflare Email Service** (public beta; Workers binding; arbitrary recipients need the Workers Paid plan and an onboarded domain; 3,000 emails/month included) vs. Resend or Postmark. Not AWS.
+- Google Play: $25 one-time fee; personal accounts created after 13 Nov 2023 need 12 testers opted in for 14 days before production. A closed track has no documented time limit, so using it permanently looks viable (unconfirmed). Each family member must opt in with the listed Google account. Compare with the free limited-distribution account (see Alternatives).
+- Whether the Play Install Referrer carries the enrollment token through the closed-track opt-in flow (reportedly works for testing tracks; reportedly fails with work profiles). Test on a real device; the fallback is scanning the QR in the app.
+- Windows Smart App Control (see §5): test, then decide on signing.
 - Invite and QR lifetimes, and how the admin generates and prints cards (CLI vs. small admin page).

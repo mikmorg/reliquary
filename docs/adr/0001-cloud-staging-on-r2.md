@@ -16,6 +16,7 @@ The original plan exposed the homelab directly to the internet. That makes the l
 - Storage: **Cloudflare R2** (S3-compatible API; no egress fees).
 - Control plane: **Cloudflare Workers** (API, device auth, presigned URLs), **D1 / Durable Objects** (dedup index, claim/commit state), **Cloudflare Queues** (object-staged events). Single vendor; AWS was considered and rejected (see Alternatives).
 - The **homelab only makes outbound connections**: it pulls events from the queue, downloads staged objects, verifies, stores, and reports "committed". No inbound port is opened.
+- Queue messages are retained for at most 14 days (paid plan; 24 hours on the Free plan). The queue is therefore only a *notification* path: the homelab must also **reconcile** on startup and periodically by listing `pending` objects in D1/R2, so an outage longer than the retention period loses no data.
 - Staged objects are deleted after the homelab commits them (optionally retained for a short, configurable warm-cache window).
 
 ### 2. Encryption and deduplication
@@ -63,12 +64,13 @@ Restore is admin-initiated in v1. The homelab re-encrypts the requested files to
 
 - **Public endpoint on the homelab:** rejected; it has the largest attack surface and ties uploads to home uplink and uptime.
 - **AWS (S3 + Lambda + DynamoDB + SQS):** functionally equivalent, but S3 egress (~$0.09/GB, so ~$180–$900 for the initial 2–10 TB seed plus ongoing cost) is paid on every transfer home. Rejected in favour of R2.
-- **AWS Snowball to bring data home:** reportedly unavailable to new customers since late 2024, sized for far larger volumes, and made pointless by R2's zero egress. Replaced by the USB transport.
+- **AWS Snowball to bring data home:** closed to new customers since 7 Nov 2025 (verified), sized for far larger volumes, and made pointless by R2's zero egress. Replaced by the USB transport.
 - **Plaintext SHA-256 and metadata in the cloud:** rejected; it lets the cloud confirm known files and exposes filenames and paths, contradicting the trust model.
 
 ## Open questions
 
 - Homelab storage engine behind the ingest service (plain content-addressed store vs. an existing format such as restic/Kopia).
 - Key management details: generating and storing the homelab keypair, rotating the dedup secret, and enrollment by QR code (see the open decision on enrollment).
-- Confirm current R2 and Workers pricing and limits (object size, multipart part limits, Queue throughput) against 2–10 TB.
+- R2 and Queues limits were checked (`docs/research/fact-check-adr-0001-0002.md`): parts 5 MiB–5 GiB, ≤ 10,000 parts, equal part sizes except the last; incomplete multipart uploads auto-abort after 7 days by default. Still to spike: presigned UploadPart (works in practice but not explicitly documented) and a part-size policy.
+- Resumable uploads vs. encryption randomness: `age` picks a fresh file key per encryption, so a resumed upload must reuse on-disk ciphertext or reproduce identical parts (see `docs/research/client-stack.md`, spike 2). This may require a documented chunked content-encryption scheme, with `age` used only to wrap keys and metadata.
 - Whether LAN direct is worth building in addition to USB.
