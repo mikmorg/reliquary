@@ -12,7 +12,7 @@ Delete these comments before submitting.
 - **Date:** YYYY-MM-DD
 - **Owner workstream:** <ID>
 - **Decider:** the owner
-- **Gate:** A | B | C | P2 | build
+- **Gate:** A | B | C | P2 | build | before B-track | before adopting code (as reserved in `docs/adr/README.md`)
 - **Supersedes / Amends:** None | ADR-NNNN (§x)
 - **Evidence:** `docs/research/<id>-<slug>.md`
 - **Traceability:** R-NN, Q1-N, OPEN-N (see `docs/research/traceability.md`)
@@ -64,7 +64,7 @@ Delete these comments before submitting.
 
 ## Evidence
 
-<The load-bearing claims this decision rests on, copied from the research note's claims table with their verdicts. Every row must be Verified. A decision cannot rest only on a Contested or Secondary-only claim.>
+<The load-bearing claims this decision rests on, copied from the research note's claims table with their verdicts. Every load-bearing point needs at least one Verified claim. A Contested or Secondary-only claim may appear only beside a Verified one, never as the sole support (PLAN §5.1).>
 
 | Claim | Source (primary) | Verdict |
 |---|---|---|

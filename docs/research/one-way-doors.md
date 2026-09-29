@@ -21,7 +21,7 @@ Status values: **Open**, **Proposed** (ADR draft exists), **Closed** (ADR Accept
 | 9 | Update trust root (two embedded keys, manifest format) | D5 | Gate C | ADR-0015 | Keys are embedded in every shipped client. Losing or leaking the update key strands every desktop client. | Open |
 | 10 | Pinned homelab key(s) in the first kit | D3 | Gate C | ADR-0014 | Keys printed on cards and baked into kits cannot be recalled once handed out. | Open |
 | 11 | Invite-code format printed on cards | E5 | Gate C | ADR-0038 | Printed cards already in relatives' drawers must still redeem. | Open |
-| 12 | Android package name, signing key, distribution channel | B3 | First Play upload | ADR-0019 (OD-10) | Moving between channels may require a new package name or signing key (B3 is checking this). | Open |
+| 12 | Android package name, signing key, distribution channel | B3 | First Play upload | ADR-0019 (OD-10) | Moving between channels may require a new package name or signing key (B3 is checking this). Creating an app in Play Console registers its package name to the account (H5 §6 F3), so the B3-S3 dry run must use a throwaway package name unless ADR-0019 has fixed the real one. | Open |
 
 ## Rules
 

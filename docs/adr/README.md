@@ -69,7 +69,7 @@ Gate meanings (PLAN §4.2): **A** formats frozen before any real family byte is 
 ### Changing a decision
 - **Never edit an Accepted ADR**, not even to fix a typo in its reasoning. A change is a new ADR with Status **Proposed** that says `Supersedes: ADR-NNNN` (whole decision) or `Amends: ADR-NNNN §x` (one section). When the owner accepts it, the old ADR's row here changes to **Superseded by ADR-NNNN** (or gains "amended by"); the old file stays untouched.
 - **Settled requirements in CLAUDE.md change only with the owner.** A proposal that would change one goes to the decision queue as an OD item with a superseding-ADR draft attached.
-- Known pending conflicts with CLAUDE.md or the Accepted ADRs are tracked as OD-01, OD-03, OD-04, OD-05, OD-09, OD-11, OD-12 and OD-13 in `docs/research/decision-queue.md`.
+- Known pending conflicts with CLAUDE.md or the Accepted ADRs are tracked as OD-01, OD-03, OD-04, OD-05, OD-09, OD-11, OD-12 and OD-13 in `docs/research/decision-queue.md`. OD-10 and OD-20 may also touch settled text, depending on the option chosen.
 
 ### After acceptance
 - H1 updates this table (status, date, file link).

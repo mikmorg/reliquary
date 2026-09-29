@@ -11,9 +11,12 @@ This folder holds the research that turns the settled requirements in `CLAUDE.md
 | If you want to… | Read |
 |---|---|
 | Understand the whole plan | [PLAN.md](PLAN.md): workstreams (§2), checklist (§3), waves and gates (§4), how agents run (§5), definition of done (§6) |
+| Answer the owner intake (about 1 hour) | [owner-intake.md](owner-intake.md) |
 | See what the owner must decide | [decision-queue.md](decision-queue.md) |
 | See which choices cannot be undone, and when they close | [one-way-doors.md](one-way-doors.md) |
 | Check a threshold before writing a pass criterion | [budgets.md](budgets.md) |
+| Use the agreed terms and data model | [../design/glossary.md](../design/glossary.md), [../design/data-model.md](../design/data-model.md) |
+| Handle test data or family data | [h3-research-data-governance.md](h3-research-data-governance.md) |
 | Check that every requirement has an owner | [traceability.md](traceability.md) |
 | Find out whether a source can be reached from the container | [sources.md](sources.md) |
 | Find or reserve an ADR number | [../adr/README.md](../adr/README.md) |
@@ -42,7 +45,7 @@ This folder holds the research that turns the settled requirements in `CLAUDE.md
 
 ## Conventions (summary of PLAN §2.0 and §5)
 
-**Priorities:** P0 is on the critical path or a one-way door before Gate A. P1 blocks the family pilot (Gate C). P2 comes after the pilot.
+**Priorities:** P0 is on the critical path, or a one-way door that must close before Gate A (a few Gate C doors are also P0 and flagged). P1 blocks the family pilot (Gate C). P2 comes after the pilot.
 
 **Execution tags:** `[CT]` cloud container; `[SB]` sandbox Cloudflare account and throwaway domain, never production; `[OL]` owner-lab hardware, where agents deliver a kit; `[FM]` family participants, with consent; `[EXT]` external calendar wait; `(build)` needs real code, after research.
 
@@ -78,7 +81,7 @@ Wave numbers from PLAN §4.1. The ADR column lists reserved numbers from PLAN §
 | B1 | Desktop runtime and resource governance | P1 | 2 | 0017 |
 | B2 | Android runtime and media access | P1 | 2 | 0018 |
 | B3 | Android distribution and Play compliance | P0 desk checks / P1 | 1 (+ EXT review wait) | 0019 |
-| B4 | iOS decision and readiness | P0 decision / P2 build | 1 | part of 0004 |
+| B4 | iOS decision and readiness | P0 decision / P2 build | 0–1 | part of 0004 |
 | B5 | Source layer and change detection | P1 | 2 | 0020 |
 | B6 | Client engine, local state, transfer, USB writer | P1 | 2 | 0021 |
 | B7 | Packaging, install from USB, self-update | P1 (B7-S1 P0) | 1 (kit) → 2 | 0022 |
@@ -112,10 +115,10 @@ Wave numbers from PLAN §4.1. The ADR column lists reserved numbers from PLAN §
 | G2 | Test strategy, local emulator, device lab | P1 (emulator P0) | 1 → 3 | 0035 |
 | G3 | Licence, versioning, release, docs system | P1 licence / P2 | 3 | 0036 |
 | H1 | Research-run setup, governance, templates | P0 | 0 | none (this folder's governance files) |
-| H2 | Owner intake and infrastructure baseline | P0 | 0 | none (`h2-owner-intake.md`) |
-| H3 | Shared corpus and research-data governance | P0 | 0 → 1 | none (`h3-corpus-and-data-governance.md`) |
-| H4 | Glossary and canonical data model | P0 | 0 → 2 | none (`docs/design/glossary.md`, `data-model.md`) |
-| H5 | Long-lead items and procurement | P0 | 0 (start) | none (`h5-long-lead.md`) |
+| H2 | Owner intake and infrastructure baseline | P0 | 0 | none ([owner-intake.md](owner-intake.md); PLAN calls it `h2-owner-intake.md`) |
+| H3 | Shared corpus and research-data governance | P0 | 0 → 1 | none ([h3-research-data-governance.md](h3-research-data-governance.md) and [corpus/](corpus/README.md); PLAN calls it `h3-corpus-and-data-governance.md`) |
+| H4 | Glossary and canonical data model | P0 | 0 → 2 | none ([glossary.md](../design/glossary.md), [data-model.md](../design/data-model.md)) |
+| H5 | Long-lead items and procurement | P0 | 0 (start) | none ([h5-long-lead-items.md](h5-long-lead-items.md); PLAN calls it `h5-long-lead.md`) |
 | H6 | Integration synthesis and architecture overview | P0 at each gate | 3 (and each gate) | none (`docs/design/architecture-overview.md`) |
 
 ## Wave 0 status (H1)
@@ -130,3 +133,8 @@ Wave numbers from PLAN §4.1. The ADR column lists reserved numbers from PLAN §
 | Proposed `.claude/agents` definitions and settings diff | Not started. Needs owner approval before anything is applied. |
 | H1-S2 pilot run of F3 end to end | Not started. Must pass before Wave 1 fans out. |
 | Sandbox Cloudflare account, throwaway domain, nested Proxmox | **Owner action**. Also blocked from the container until `api.cloudflare.com` and related hosts are allowed. |
+| H2 owner intake and provisional E2 scope | Questions ready ([owner-intake.md](owner-intake.md), §K is the provisional scope). **Waiting for the owner's answers**; OD-14 and the budget values depend on them. |
+| H3 research-data rules and corpus | Draft ([h3-research-data-governance.md](h3-research-data-governance.md), [corpus/](corpus/README.md)). Rules take effect when the owner confirms them (OD-21). H3-S1 not run: the generator does not exist yet (G2). |
+| H4 glossary and data model | v0 started ([glossary.md](../design/glossary.md), [data-model.md](../design/data-model.md)); completed in Wave 2. |
+| H5 long-lead items | List ready ([h5-long-lead-items.md](h5-long-lead-items.md)); the §2 start list runs on the day the owner says "go". |
+| Questions to T1 and T2 (PLAN §1) | **Not yet recorded as sent.** Neither `client-stack.md` nor the fact-check shows them yet. |

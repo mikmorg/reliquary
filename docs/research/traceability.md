@@ -107,7 +107,7 @@ H6 proposes the CLAUDE.md "Open decisions" update once these close.
 
 ## 4. Artifacts claimed by more than one workstream
 
-PLAN §2.1 says every normative artifact has exactly one owner. These artifacts appear in the "Owns" line of two workstreams. The proposed lead follows §2.1 where it names one, and otherwise follows the workstream that does not say "with". **These are proposals for H6 and the owner to confirm.** Nothing has been decided here.
+PLAN §2.1 says every normative artifact has exactly one owner. These artifacts appear in the "Owns" line of two or more workstreams. The proposed lead follows §2.1 where it names one, and otherwise follows the workstream that does not say "with". **These are proposals for H6 and the owner to confirm.** Nothing has been decided here.
 
 | Artifact | Claimed by | Proposed lead | Proposed split |
 |---|---|---|---|
@@ -124,10 +124,15 @@ PLAN §2.1 says every normative artifact has exactly one owner. These artifacts 
 | Golden corpus spec | H3 ("with A5") and A5 | A5 (§2.1 lists it under ADR-0016) | H3 sets the storage and consent rules |
 | Privacy policy for Play | D6 ("with B3") and B3 ("with D6") | D6 (ADR-0027) | B3 adapts it for the Play listing |
 | Email templates | C3 ("with E6") and E3 ("with C3 and E6") | E3 (copy) | C3 owns the sending mechanics and DNS; E6 reviews language |
+| Homelab BOM tiers | C4 ("BOM tiers (with C5)") and C5 ("two-tier BOM") | C5 (§2.1 lists the BOM under ADR-0030) | C4 supplies the cost and capacity inputs |
+| Owner alert routing | C3 ("owner alert routing (with C7)") and C7 ("routing matrix") | C7 (ADR-0033 operations part) | C3 supplies the email and push delivery mechanics |
+| Lost or stolen device runbook | D3 ("lost/stolen device runbooks") and C8 (runbook "device lost") | C8 (§2.1 lists runbooks under ADR-0032) | D3 supplies the revocation and credential steps |
+| Leaving and death: charter sections and procedures | D6 (charter; "departure/death/export procedures (people side with E7)") and E7 ("charter sections on leaving and death (with D6/E6)") | D6 (§2.1 lists the family charter under ADR-0027) | E7 drafts the leaving and death sections and the life-event playbooks; A6 owns the mechanics |
+| Superseding or amending drafts of ADR-0001/0002 | D1 ("superseding-ADR drafts for any changes to ADR-0001/0002"), B3 ("design-change requests against ADR-0002"), B4 (amendment to CLAUDE.md or ADR-0002), D5 ("amendments to ADR-0002 §5") | The workstream whose OD drives the change: B4 (OD-01), B3 (OD-10, OD-11), D5 (OD-09), D1 (OD-04 and other security changes) | B7 supplies the OD-09 signing evidence; D1 reviews every draft against the threat register |
 
 ## 5. Summary at 2026-09-29
 
-- 47 requirements, 6 open-decision rows and 13 ADR open-question rows are mapped. Every one has a lead except **C-01 (warm cache): ORPHAN**.
+- 47 requirements, 6 open-decision rows, 13 ADR open-question rows and 9 ADR commitments are mapped. Every one has a lead except **C-01 (warm cache): ORPHAN**.
 - **CONFLICT** items waiting on the owner: R-03 (OD-01), plus risks on R-07 (OD-12), R-08 (OD-05), R-26 (OD-11) and R-32 (OD-13).
-- 13 artifacts are claimed by two workstreams (§4). H6 should settle them before Wave 2 fans out.
+- 18 artifacts are claimed by more than one workstream (§4). H6 should settle them before Wave 2 fans out.
 - Every row is Open. H6 updates the table at each gate.

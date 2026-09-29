@@ -73,9 +73,11 @@ Key claims are those that are load-bearing for a decision, time-sensitive, or us
 
 ## Spikes
 
-| Spike | Exec tag | Budget IDs | Data class | Status | Result |
-|---|---|---|---|---|---|
-| <ID>-S1 | CT / SB / OL / FM / EXT | BUD-... | <H3 class> | Not started / Running / Kit-ready / Pass / Fail / No result | <measured numbers, or link to the kit's results file> |
+Each spike states the items in the PLAN §2.0 spike template: hypothesis, the decision it informs, pass → option X / fail → option Y, budget IDs, exec tag and data-handling class.
+
+| Spike | Hypothesis | Pass → / fail → (decision) | Exec tag | Budget IDs | Data class | Status | Result |
+|---|---|---|---|---|---|---|---|
+| <ID>-S1 | | Pass → <option X, ADR-NNNN>; fail → <option Y> | CT / SB / OL / FM / EXT | BUD-... | <in → out, H3 §2, e.g. `SYN → results`> | Not started / Running / Kit-ready / Pass / Fail / No result | <measured numbers, or link to the kit's results file> |
 
 Say so explicitly if an emulator stood in for real hardware.
 

@@ -2,7 +2,7 @@
 
 - **Owner:** H1 keeps the queue; the **owner** decides; the listed workstreams supply evidence.
 - **Last updated:** 2026-09-29
-- **Source:** `docs/research/PLAN.md` §4.3
+- **Source:** `docs/research/PLAN.md` §4.3 (OD-01 to OD-20). Items from OD-21 on are added by research notes through H1.
 
 Decisions are batched so the owner can clear them in a few sittings. An item is closed only when the owner's answer is written in the Outcome column, with the date and a link to the ADR or note that records it.
 
@@ -23,7 +23,7 @@ Status values: **Open** (waiting for evidence), **Ready** (decision request writ
 | OD-07 | Homelab at-rest posture | Gate A | A6 | ADR-0012 | No | Open | |
 | OD-08 | Recovery recipient, k-of-n and share holders | Gate A | D2, E7 | ADR-0008, ADR-0040 | No | Open | |
 | OD-09 | Signing spend (Windows and/or Apple Developer ID) | Gate C | B7-S1/S2, T1 spike 1 | ADR-0022, ADR-0015 | **Yes**: ADR-0002 §5 | Open | |
-| OD-10 | Android channel (closed track vs limited distribution); personal vs organisation account | Wave 1 | B3 | ADR-0019 | Possibly: ADR-0002 §4 prefers the closed track | Open | |
+| OD-10 | Android channel (closed track vs limited distribution); personal vs organisation account | Wave 1 | B3 (H5 §6 F1, F3) | ADR-0019 | Possibly: ADR-0002 §4 prefers the closed track. H5 found that "limited distribution" installs from outside Play, close to the sideloading ADR-0002 rejected, so choosing it touches settled text. The personal vs organisation half can be answered at the intake (Q-E6). | Open | |
 | OD-11 | Play account deletion vs keep-forever | Wave 1 | B3-S2 | ADR-0019 | **Yes**: CLAUDE.md retention | Open | |
 | OD-12 | User pause/exclude controls vs "users never touch configuration" | Wave 2 | D6, E3 | ADR-0027, ADR-0024 | **Yes**: CLAUDE.md users | Open | |
 | OD-13 | Any admin web page or read-only gallery vs "no admin dashboard in v1" | Wave 2 | C8 | ADR-0032 | **Yes**: CLAUDE.md v1 features | Open | |
@@ -34,6 +34,7 @@ Status values: **Open** (waiting for evidence), **Ready** (decision request writ
 | OD-18 | "Safe to delete" in v1 or not | Gate C | E3 | ADR-0024, ADR-0025 | No | Open | |
 | OD-19 | Documents on Android in v1 (SAF vs all-files access vs media only) | Wave 1 | E2, B3 | ADR-0004, ADR-0018, ADR-0019 | No (scope within "files on the device") | Open | |
 | OD-20 | Per-person storage budgets and categories that need approval | Wave 2 | C4 | C4 fair-share proposal | Possibly: CLAUDE.md keep-forever | Open | |
+| OD-21 | Confirm the research-data rules: data classes, rules R1–R12 and the output check, including exact sizes counting as family data (R3), 90-day deletion of raw outputs (R7), and no committed third-party binaries until ADR-0036 (R9). Added by the Wave 0 checker from H3's owner actions 1–2. | **Wave 0** (before any `FAM → AGG` spike) | H3 | `h3-research-data-governance.md` | No; it tightens the plan's H3 rules | **Open: needs the H2 intake now** (Q-J6) | |
 
 ## Suggested sittings
 
@@ -41,7 +42,7 @@ Derived from the "Needed by" column and the Wave 1 exit criterion in PLAN §4.1.
 
 | Sitting | When | Items |
 |---|---|---|
-| 1 | Wave 0, during the H2 intake | OD-14, plus confirming the values in `budgets.md` |
+| 1 | Wave 0, during the H2 intake | OD-14, OD-21, plus confirming the values in `budgets.md` and the personal vs organisation half of OD-10 |
 | 2 | Wave 1 exit | OD-01, OD-02, OD-03, OD-04, OD-10, OD-11, OD-19 (the Wave 1 exit criterion says "decided or scheduled") |
 | 3 | Wave 2 | OD-05, OD-12, OD-13, OD-16, OD-20; OD-15 if F1 recommends adopting code |
 | 4 | Gate A | OD-06, OD-07, OD-08, OD-17 (Gate A risks) |

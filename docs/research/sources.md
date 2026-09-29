@@ -59,12 +59,22 @@
 | dontkillmyapp.com, www.reddit.com, news.ycombinator.com, hn.algolia.com | Blocked | Search only; GitHub issue search for issue data | B2, F2 |
 | aws.amazon.com, textslashplain.com, www.backblaze.com, resend.com, postmarkapp.com, tus.io, sigsum.org, www.sqlite.org, www.postgresql.org, doc.rust-lang.org, docs.syncthing.net, mozilla.github.io, en.wikipedia.org, web.archive.org, gitlab.com, context7.com, www.google.com | Blocked | Search only, or the project's GitHub repo on raw where one exists (for example `mozilla/uniffi-rs`, `cloudflare/workers-rs`, both 200) | various |
 
+### Test-corpus hosts (reported by H3, re-tested 2026-09-29 with curl)
+
+| Host | Result | Workaround | Used by |
+|---|---|---|---|
+| digitalcorpora.s3.amazonaws.com (GovDocs1) | **Direct** | — | H3, A6, A7 |
+| s3.eu-north-1.amazonaws.com/napierone.com | **Direct** | — | H3 |
+| storage.googleapis.com/openimages | **Direct** for named objects (the bucket root answers 403, which is the bucket's own access rule, not the proxy) | — | H3, F3 |
+| raw.pixls.us, pixls.us, digitalcorpora.org, dumps.wikimedia.org, download.blender.org, media.xiph.org | Blocked | Fetch from the homelab instead (H3 owner action 4), or add to the allowlist | H3, A5, A6 |
+
 ### GitHub
 
 | Route | Result |
 |---|---|
 | raw.githubusercontent.com | Works for any public repo. |
 | github.com, api.github.com, codeload.github.com (curl) | The tunnel opens, but GitHub answers 403 "GitHub access to this repository is not enabled for this session" for repos outside this project. |
+| `git clone` / `git ls-remote` over HTTPS to github.com (public repos) | Works (re-tested 2026-09-29 with `git ls-remote` on a public repo, as H3 reported). A blobless clone (`--filter=blob:none`) is enough to read licences and doc sources. |
 | GitHub MCP `search_issues` | Works across public repos (tested on `immich-app/immich`), with issue numbers, titles, dates and total counts. Use it for F1/F2 issue mining. |
 | GitHub MCP `get_file_contents` | Limited to `mikmorg/reliquary`. Use raw.githubusercontent.com instead. |
 
@@ -113,6 +123,7 @@ Change it in the environment's settings: open the cloud environment menu in the 
 | **Before Wave 1** | developers.cloudflare.com, docs.rs, v2.tauri.app | Rendered pages, including content pulled in from partials that the raw mirrors do not show |
 | Wave 1–2 | www.rfc-editor.org, datatracker.ietf.org, eprint.iacr.org, arxiv.org, c2sp.org | D3 (RFC 9421, 9449, 8628), F3 literature, A2 |
 | Wave 1–2 | dl.google.com | B2-S3 emulator; Android builds |
+| Wave 1–2, or fetch from the homelab | raw.pixls.us, pixls.us, digitalcorpora.org, dumps.wikimedia.org, download.blender.org, media.xiph.org | H3 test corpus (licences and files) |
 | Wave 2 | android-developers.googleblog.com, support.apple.com, blog.cloudflare.com, ocfl.io, restic.readthedocs.io, kopia.io, docs.immich.app, ente.io, openzfs.github.io, pve.proxmox.com, www.loc.gov, csrc.nist.gov, owasp.org, www.w3.org, dontkillmyapp.com | Rendered versions of pages now read via mirrors or search |
 
 If the owner declines, the rows marked "Secondary only" stay that way and cannot be the sole support for an ADR.
@@ -129,3 +140,4 @@ If the owner declines, the rows marked "Secondary only" stay that way and cannot
 | Date | Workstream | Source | Route tried | H1 action |
 |---|---|---|---|---|
 | 2026-09-29 | H1 | Initial sweep (above) | curl, WebFetch, WebSearch, Context7, GitHub MCP | Allowlist request raised to the owner |
+| 2026-09-29 | H3 | Corpus hosts (above) | curl, git | Added to the host register and the allowlist request; homelab fetch proposed |

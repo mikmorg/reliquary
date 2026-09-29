@@ -13,7 +13,7 @@ Delete these comments before handing the kit over. Mark the spike "kit-ready" in
 - **Prepared by / date:** <agent or person>, YYYY-MM-DD
 - **Who runs it:** Owner | Owner with relative | Relative, owner silent | External wait
 - **Time needed:** <hands-on time> plus <waiting time>
-- **Data-handling class:** <class from H3's `docs/research/h3-corpus-and-data-governance.md`; see "Data handling" below>
+- **Data-handling class:** <classes read → written, from H3's `docs/research/h3-research-data-governance.md` §2, e.g. `SYN → results` or `FAM → AGG`; see "Data handling" below>
 
 ## Purpose
 
@@ -67,7 +67,7 @@ Do the steps in order. After each step, write down what you saw in the results t
 
 ## Data handling
 
-H3 defines the classes and the rules. Until H3's document exists, apply the plan's rules (PLAN H3):
+H3 defines the classes, rules and output check in `docs/research/h3-research-data-governance.md` (§2–§4; a draft until the owner confirms it, OD-21). Whatever its status, always apply at least the plan's rules (PLAN H3):
 
 - Only **sizes, types and counts** leave the device or the homelab. Never filenames, pixels or EXIF GPS.
 - Private fixtures stay on the homelab, outside the repo.
