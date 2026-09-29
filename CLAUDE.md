@@ -8,7 +8,7 @@ Reliquary is in the research & design phase. There is no source code, build syst
 
 ## Purpose
 
-A cross-platform client application (Windows, macOS, Linux, iOS, Android) that acts as an *assistant* for making sure a household's keepsakes and important data — photos, videos, documents, scans, records — are backed up to a central backup server running on the owner's homelab.
+A cross-platform client application (Windows, macOS, Linux, Android; iOS later) that acts as an *assistant* for making sure a household's keepsakes and important data — photos, videos, documents, scans, records — are backed up to a central backup server running on the owner's homelab.
 
 The emphasis is on "assistant", not just "sync agent": the client should help non-technical users discover what is worth protecting, tell them plainly what is and is not backed up, and flag problems (stale backups, unreachable server, files that changed but did not upload).
 
@@ -33,8 +33,11 @@ Properties the design must hold to:
 
 Decided with the owner; do not relitigate without asking:
 
-- **Platforms (v1):** Windows, macOS, Linux, iOS, Android. Phones are first-class (camera rolls are the main keepsake source), so desktop-only stacks are out, and iOS background-execution limits shape the mobile design.
-- **Users:** non-technical family members. The owner administers everything centrally; end users should never touch configuration. Device enrollment must be near-zero-effort (e.g. QR code).
+- **Platforms (v1):** Windows, macOS, Linux, Android. **iOS is deferred** (revisit with the Apple Developer membership), but the client stack must not preclude it. Phones are first-class (camera rolls are the main keepsake source), so desktop-only stacks are out.
+- **Users:** non-technical family members. The owner administers everything centrally; end users should never touch configuration.
+- **Onboarding and distribution (ADR-0002):** each person receives a USB stick with the desktop app and a printed **one-use, expiring invite code** (with QR). Redeeming it creates an account with just a **name and email** (verified by email; no password) and enrolls the first device. Additional devices are enrolled by scanning a short-lived QR code shown on an already-enrolled device. Desktop apps install themselves from the stick and self-update; Android ships via Google Play (family closed track). The same stick doubles as the USB seeding transport.
+- **Code signing:** no Apple or Windows code signing for now. Self-updates **must** be signed with the project's own offline key and verified by the app before installing.
+- **Email:** used for signup verification and backup nudges. Account name, email and device activity times are plaintext in the cloud control plane; file content and metadata are not.
 - **Scale:** 2–10 TB total across 10–25 devices, multiple people.
 - **Server host:** Linux / Proxmox in the homelab; the server side runs as containers or VMs.
 - **Connectivity (ADR-0001):** devices upload to Cloudflare R2 staging from anywhere; the homelab is never exposed and only makes outbound connections. No AWS. USB-drive transport is required; LAN direct is optional. Treat the cloud API as under attack: strong per-device credentials, rate limiting, and **devices can only append backups, never delete or rewrite them**, so a compromised or ransomwared device cannot destroy its own history.
@@ -50,7 +53,7 @@ Decided with the owner; do not relitigate without asking:
 
 Record the outcome here (or in `docs/adr/`) as each is decided:
 
-- Client stack able to cover desktop + mobile (e.g. Flutter, Kotlin Multiplatform, or a shared Rust core with native/Tauri shells).
+- Client stack able to cover desktop + Android now and iOS later (e.g. Flutter, Kotlin Multiplatform, or a shared Rust core with native/Tauri shells). Planned as ADR-0003.
 - Homelab storage engine behind the ingest service (plain content-addressed store vs. an existing format such as restic/Kopia).
-- Device enrollment (QR), per-device keypair and credential issuance/revocation, homelab keypair custody, and dedup-secret rotation.
+- Per-device credential format and revocation, homelab keypair custody, dedup-secret rotation, and the email sending provider (not AWS).
 - Whether to build the LAN-direct transport.
