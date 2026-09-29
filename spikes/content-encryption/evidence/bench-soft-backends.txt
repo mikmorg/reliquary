@@ -1,0 +1,22 @@
+== soft 1g
+{
+  "bytes": 1073741824,
+  "chacha20poly1305_only_mem": "381 MB/s",
+  "fused_sha256+hmac+chacha_mem": "99 MB/s",
+  "hmac_sha256_only_mem": "277 MB/s",
+  "num_parts": 205,
+  "pass1_sha256+hmac_file": "140 MB/s",
+  "pass2_encrypt+tag_journal_file": "355 MB/s",
+  "sha256_only_mem": "299 MB/s"
+}
+== soft 200m
+{
+  "bytes": 209727545,
+  "chacha20poly1305_only_mem": "332 MB/s",
+  "fused_sha256+hmac+chacha_mem": "113 MB/s",
+  "hmac_sha256_only_mem": "268 MB/s",
+  "num_parts": 41,
+  "pass1_sha256+hmac_file": "137 MB/s",
+  "pass2_encrypt+tag_journal_file": "361 MB/s",
+  "sha256_only_mem": "231 MB/s"
+}

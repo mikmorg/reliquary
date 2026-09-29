@@ -1,0 +1,22 @@
+== default 1g
+{
+  "bytes": 1073741824,
+  "chacha20poly1305_only_mem": "1030 MB/s",
+  "fused_sha256+hmac+chacha_mem": "428 MB/s",
+  "hmac_sha256_only_mem": "1141 MB/s",
+  "num_parts": 205,
+  "pass1_sha256+hmac_file": "668 MB/s",
+  "pass2_encrypt+tag_journal_file": "922 MB/s",
+  "sha256_only_mem": "1136 MB/s"
+}
+== default 200m
+{
+  "bytes": 209727545,
+  "chacha20poly1305_only_mem": "1001 MB/s",
+  "fused_sha256+hmac+chacha_mem": "400 MB/s",
+  "hmac_sha256_only_mem": "1094 MB/s",
+  "num_parts": 41,
+  "pass1_sha256+hmac_file": "678 MB/s",
+  "pass2_encrypt+tag_journal_file": "932 MB/s",
+  "sha256_only_mem": "1060 MB/s"
+}
