@@ -1,0 +1,8 @@
+# D2-S1 emulation run 2026-10-06T15:40:06Z
+# age v1.3.1; go version go1.24.7 linux/amd64; nproc 4; loadavg 0.58 0.23 0.08 3/118 1645
+{"batch":100,"batched_elapsed_s":0.459163677,"batched_file_keys":2000,"batched_unwraps_per_s":4355.745238968456,"delay_ms_env":"","loadavg":"1.09 0.35 0.12 2/120 12117","n":2000,"native_inprocess_unwraps_per_s":6065.973656877649,"plugin":"age-plugin-swtest","stock_client_elapsed_s":7.42204391,"stock_client_unwraps_per_s":269.4675515602009}
+{"batch":100,"batched_elapsed_s":0.49070267,"batched_file_keys":2000,"batched_unwraps_per_s":4075.7878900475516,"delay_ms_env":"","loadavg":"1.08 0.36 0.13 1/116 22677","n":2000,"native_inprocess_unwraps_per_s":7412.895173704501,"plugin":"age-plugin-swtest","stock_client_elapsed_s":5.105869039,"stock_client_unwraps_per_s":391.70609052513146}
+{"batch":100,"batched_elapsed_s":0.446546372,"batched_file_keys":2000,"batched_unwraps_per_s":4478.8181595617125,"delay_ms_env":"","loadavg":"1.08 0.38 0.13 1/116 660","n":2000,"native_inprocess_unwraps_per_s":9322.541143299013,"plugin":"age-plugin-swtest","stock_client_elapsed_s":5.152676096,"stock_client_unwraps_per_s":388.147821197725}
+{"cli_per_file_n": 200, "elapsed_s": 1.365, "unwraps_per_s": 146.5, "loadavg": "1.55 0.49 0.17 2/112 4545"}
+{"cli_per_file_n": 200, "elapsed_s": 1.374, "unwraps_per_s": 145.5, "loadavg": "1.55 0.49 0.17 1/110 6991"}
+{"cli_per_file_n": 200, "elapsed_s": 1.366, "unwraps_per_s": 146.4, "loadavg": "1.55 0.49 0.17 1/110 9412"}

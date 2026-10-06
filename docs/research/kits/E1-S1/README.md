@@ -84,6 +84,31 @@ E1-S1's threshold in the budget overlap table.
 - [ ] The relative's computer is plugged in. Note whether it is on battery.
 - [ ] Nothing else heavy is running, such as a backup or a game update. Note it if something is.
 
+## Required before any family run (added 2026-10-06 after skeptic review)
+
+These are gates. Parts B and C do not start until each is done or explicitly waived by the owner.
+
+1. **Real binaries run on real Windows and macOS.** The spike only type-checked these targets
+   (`cargo check`); nothing was linked or run. Build on each OS (or cross-build and link), copy the
+   binary to a USB stick, and run it from the stick on a test machine. Record what Windows Smart
+   App Control / Defender and macOS Gatekeeper (quarantine on files copied from a stick; Apple
+   Silicon needs at least an ad-hoc signature, which Apple's linker is generally understood to add
+   by default; that is general knowledge, not verified in this run, so check with `codesign -dv`)
+   say. If the binary cannot run without changing security settings, the
+   kit's answer is **No result** on those machines; the owner decides whether that is acceptable
+   before visits are booked around it.
+2. **CT fixes to the spike code** (throwaway code in `spikes/E1-S1/census`):
+   - print the **plain-words summary first**, followed by one sentence such as "The rest is the
+     same numbers as a table; nothing else is saved", then the table. In the SYN sample the summary
+     comes after about 259 lines of CSV, which a relative cannot meaningfully review (H3 R6);
+   - count hidden `.<name>.icloud` stub files (older macOS iCloud Drive; unverified, see Part A
+     step 6a) as cloud-only by their inner extension, never opening them.
+3. **Timing on real disks is required, not optional.** The spike's timings come from tmpfs and a
+   warm ext4 cache in a 4-vCPU container and say nothing about NTFS with Defender, APFS or an HDD.
+   Part A step 7 and Part B steps 8–12 must record file counts and times on at least one Windows
+   machine with Defender on and one Mac. Report them against E1-S1's local "< 10 min"; do not
+   quote them as BUD-SCAN evidence (BUD-SCAN is about background priority on a mid-range laptop).
+
 ## Procedure
 
 After each step, write what you saw in the results table, even if it looks unimportant. If
@@ -108,17 +133,36 @@ checks compile but have never run.
 4. Run it again with `--exif`.
    - **You should see:** the same counts, and the cloud icons unchanged. `--exif` reads only local
      media.
-5. **Hydration test** (answers E1 note C10). Pick one online-only **extensionless** test file.
+4a. **Windows placeholder bits come only from enumeration data.** `FILE_ATTRIBUTE_RECALL_ON_OPEN`
+   has the same value (0x00040000) as `FILE_ATTRIBUTE_EA`, and Microsoft says RECALL_ON_OPEN
+   "only appears in directory enumeration classes" (E1 note K7). The spike reads attributes from
+   `DirEntry::metadata` (enumeration), which is correct; never switch to a path-based call. If you
+   can create a local, non-placeholder file with NTFS extended attributes (for example one written
+   by WSL with metadata enabled), check that the census counts it as **local**, not cloud-only.
+4b. **Other sync clients.** If Google Drive for desktop or Dropbox is installed on a test account,
+   repeat steps 1–3 with their online-only files. Record the result per client.
+4c. **Directory population.** Put the test OneDrive in a state where a folder has never been
+   opened on this PC (for example a fresh sign-in with Files On-Demand). Run the census and watch
+   OneDrive's activity: does enumerating the folder fetch its listing from the network? Record it.
+   The census never opens files, but listing an unpopulated cloud folder may still cause traffic.
+5. **Hydration test** (answers E1 note K8). Pick one online-only **extensionless** test file.
    Open it in Notepad, then close it.
-   - **You should see:** it downloads (the icon changes). That confirms opening a placeholder
-     hydrates it, which is why the census never opens one.
+   - **You should see:** it downloads (the icon changes). Microsoft documents this for
+     RECALL_ON_DATA_ACCESS ("reading the file … will cause at least some of the file … content to
+     be fetched"); the test confirms it in practice, which is why the census never opens a
+     placeholder. Whether the **whole** file downloads is what this step measures.
    - Record what happened.
 6. **Mac with a test Apple ID, if available:** in iCloud Drive, put 20 test files in a folder and
    choose *Remove Download*. In Terminal, run `ls -lO` in that folder.
    - **You should see:** a `dataless` flag on those files.
    - Run `./census --root "<that folder>"`. **You should see:** `cloud_only_files,20`, and the
      files still not downloaded.
-7. **Timing on a slow disk (optional):** if an old HDD laptop is available, run the census on the
+6a. **Older macOS (before Sonoma), if any family Mac runs it:** on a test Apple ID, remove the
+   download of a few iCloud Drive files and run `ls -la` in that folder. Record whether they appear
+   as hidden `.<name>.icloud` files instead of `dataless` files (stated from general knowledge by a
+   reviewer; not verified). If they do, the CT fix in "Required before any family run" item 2 is
+   needed before running on such Macs.
+7. **Timing on a slow disk (required where available; see gate 3):** if an old HDD laptop is available, run the census on the
    owner's own home folder there (Part B rules). Record the time and the file count.
 
 **Stop Part A and record "Fail" if:** any placeholder was downloaded by the census in steps 3, 4
@@ -153,6 +197,13 @@ places the person mentioned, on paper.
 14. Ask the relative to sit at their own computer. Explain: "This counts your files by kind and
     size. It does not look inside your photos or send anything anywhere. It shows us everything
     before it saves anything, and you decide."
+    - **Before** opening the terminal, say what will appear: "I'm going to open a plain text
+      window where I type one command. It looks technical, but it only runs the counting tool from
+      this stick. Your computer might ask whether the tool may look in your Documents or Photos
+      folders; I'll read it out, and you decide. Saying no is fine."
+    - Offer a **printed** copy of the plain-words summary after the run, if they want one.
+    - On a Mac, a refused permission prompt leaves that folder (often Photos or Documents)
+      unreadable. That is expected: record it as a known gap (`unreadable_dirs`), not a failure.
 15. Plug in the USB stick. Open a terminal (Windows: PowerShell; Mac: Terminal). Run the census as
     in step 8. Add `--exif` only if Part B showed it is affordable. Start the stopwatch.
     - **You should see:** the same screens as in Part B.

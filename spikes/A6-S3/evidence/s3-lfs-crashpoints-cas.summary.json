@@ -1,0 +1,24 @@
+{
+ "mode": "powercut(LazyFS clear-cache)",
+ "nofsync": false,
+ "layout": "cas",
+ "kills": 50,
+ "cycles_completed": 0,
+ "violations": {},
+ "quarantined": 19,
+ "torn_manifest_events": 8,
+ "tmp_removed": 17,
+ "acks_total": 434,
+ "final_checks": [],
+ "self_crash_points": {
+  "after-ack": 5,
+  "catalog-before-ack": 5,
+  "manifest-before-catalog": 3,
+  "manifest-torn": 8,
+  "renamed-before-dirsync": 6,
+  "renamed-before-manifest": 5,
+  "tmp-synced": 8,
+  "tmp-written-unsynced": 8
+ },
+ "iterations": 50
+}

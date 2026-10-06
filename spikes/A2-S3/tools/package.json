@@ -1,0 +1,7 @@
+{
+  "name": "a2-s3-typage-tool",
+  "private": true,
+  "type": "module",
+  "description": "THROWAWAY SPIKE helper for A2-S3: typage (npm age-encryption) CLI.",
+  "dependencies": { "age-encryption": "0.3.1" }
+}

@@ -1,0 +1,81 @@
+== round 1 load: 7.25 6.66 5.48
+{
+  "pqx1": {
+    "gen_per_sec": 5471.6,
+    "gen_us": 182.8,
+    "header_len": 1627,
+    "iters": 3000,
+    "open_per_sec": 3215.2,
+    "open_us": 311.0
+  },
+  "pqx2": {
+    "gen_per_sec": 2573.8,
+    "gen_us": 388.5,
+    "header_len": 3184,
+    "iters": 3000,
+    "open_per_sec": 1504.3,
+    "open_us": 664.7
+  },
+  "x25519x1": {
+    "gen_per_sec": 11378.1,
+    "gen_us": 87.9,
+    "header_len": 168,
+    "iters": 3000,
+    "open_per_sec": 12768.1,
+    "open_us": 78.3
+  }
+}
+== round 2 load: 7.39 6.70 5.50
+{
+  "pqx1": {
+    "gen_per_sec": 4829.7,
+    "gen_us": 207.1,
+    "header_len": 1627,
+    "iters": 3000,
+    "open_per_sec": 3035.7,
+    "open_us": 329.4
+  },
+  "pqx2": {
+    "gen_per_sec": 2582.6,
+    "gen_us": 387.2,
+    "header_len": 3184,
+    "iters": 3000,
+    "open_per_sec": 1584.9,
+    "open_us": 631.0
+  },
+  "x25519x1": {
+    "gen_per_sec": 9640.1,
+    "gen_us": 103.7,
+    "header_len": 168,
+    "iters": 3000,
+    "open_per_sec": 10931.2,
+    "open_us": 91.5
+  }
+}
+== round 3 load: 7.28 6.69 5.50
+{
+  "pqx1": {
+    "gen_per_sec": 5305.6,
+    "gen_us": 188.5,
+    "header_len": 1627,
+    "iters": 3000,
+    "open_per_sec": 2581.1,
+    "open_us": 387.4
+  },
+  "pqx2": {
+    "gen_per_sec": 2697.1,
+    "gen_us": 370.8,
+    "header_len": 3184,
+    "iters": 3000,
+    "open_per_sec": 1623.1,
+    "open_us": 616.1
+  },
+  "x25519x1": {
+    "gen_per_sec": 11456.2,
+    "gen_us": 87.3,
+    "header_len": 168,
+    "iters": 3000,
+    "open_per_sec": 12773.2,
+    "open_us": 78.3
+  }
+}

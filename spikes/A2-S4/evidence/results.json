@@ -1,0 +1,556 @@
+{
+ "table": [
+  {
+   "attack": "A1 forged object + record signed by attacker key under its own name",
+   "attacker": "public-key holder",
+   "expected": "E_SIG_UNKNOWN_KEY",
+   "got": "E_SIG_UNKNOWN_KEY",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "A2 forged record claims registered device name, attacker key",
+   "attacker": "public-key holder",
+   "expected": "E_SIG_KEY_HASH",
+   "got": "E_SIG_KEY_HASH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "A3 forged record with victim's key hash, attacker signature",
+   "attacker": "public-key holder",
+   "expected": "E_SIG_INVALID",
+   "got": "E_SIG_INVALID",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "A4 unsigned record (valid age file, no signature line)",
+   "attacker": "public-key holder",
+   "expected": "E_RECORD_FORMAT",
+   "got": "E_RECORD_FORMAT",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "A5 forged dedup-hit record (object null), attacker key",
+   "attacker": "public-key holder",
+   "expected": "E_SIG_KEY_HASH",
+   "got": "E_SIG_KEY_HASH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "B1 staged object replaced by attacker's valid age object (same size)",
+   "attacker": "public-key holder",
+   "expected": "E_BINDING_HEADER_MAC",
+   "got": "E_BINDING_HEADER_MAC",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "B2 same, binding pre-check disabled (TEST flag): content check must still reject",
+   "attacker": "public-key holder",
+   "expected": "E_CONTENT_MISMATCH",
+   "got": "E_CONTENT_MISMATCH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": "--skip-binding-precheck"
+  },
+  {
+   "attack": "B4 attacker object carrying a copy of the victim's MAC line",
+   "attacker": "public-key holder",
+   "expected": "E_OBJECT_HMAC",
+   "got": "E_OBJECT_HMAC",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "B3 another honest object presented under the victim's record",
+   "attacker": "public-key holder",
+   "expected": "E_BINDING_HEADER_MAC",
+   "got": "E_BINDING_HEADER_MAC",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "C1 dropped final chunk (record intact)",
+   "attacker": "public-key holder",
+   "expected": "E_BINDING_LENGTH",
+   "got": "E_BINDING_LENGTH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "C2 dropped final chunk, binding pre-check disabled (TEST flag)",
+   "attacker": "public-key holder",
+   "expected": "E_STREAM_TRUNCATED",
+   "got": "E_STREAM_TRUNCATED",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": "--skip-binding-precheck"
+  },
+  {
+   "attack": "C3 one byte cut from the end",
+   "attacker": "public-key holder",
+   "expected": "E_BINDING_LENGTH",
+   "got": "E_BINDING_LENGTH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "C4 one byte cut, pre-check disabled",
+   "attacker": "public-key holder",
+   "expected": "E_STREAM_AUTH",
+   "got": "E_STREAM_AUTH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": "--skip-binding-precheck"
+  },
+  {
+   "attack": "C5 full-chunk object, final chunk dropped at a chunk boundary",
+   "attacker": "public-key holder",
+   "expected": "E_BINDING_LENGTH",
+   "got": "E_BINDING_LENGTH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "C6 same, pre-check disabled: STREAM final-flag check",
+   "attacker": "public-key holder",
+   "expected": "E_STREAM_TRUNCATED",
+   "got": "E_STREAM_TRUNCATED",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": "--skip-binding-precheck"
+  },
+  {
+   "attack": "C7 trailing data appended after the final chunk",
+   "attacker": "public-key holder",
+   "expected": "E_BINDING_LENGTH",
+   "got": "E_BINDING_LENGTH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "C8 trailing data, pre-check disabled",
+   "attacker": "public-key holder",
+   "expected": "E_STREAM_AUTH",
+   "got": "E_STREAM_AUTH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": "--skip-binding-precheck"
+  },
+  {
+   "attack": "C9 two chunks swapped (reordering)",
+   "attacker": "public-key holder",
+   "expected": "E_STREAM_AUTH",
+   "got": "E_STREAM_AUTH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "D1 object with PQ + X25519 stanzas (downgrade)",
+   "attacker": "public-key holder",
+   "expected": "E_PROFILE",
+   "got": "E_PROFILE",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "D2 object with an extra unknown stanza (valid age, not in profile)",
+   "attacker": "public-key holder",
+   "expected": "E_PROFILE",
+   "got": "E_PROFILE",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "D3 honest record re-encrypted with an extra X25519 stanza",
+   "attacker": "public-key holder",
+   "expected": "E_PROFILE",
+   "got": "E_PROFILE",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "D4 victim object with its stanza's X25519 share set to a low-order point",
+   "attacker": "public-key holder",
+   "expected": "E_OBJECT_HEADER",
+   "got": "E_OBJECT_HEADER",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "E1 record signed with dev-a key but device_id says dev-b",
+   "attacker": "registered device",
+   "expected": "E_DEVICE_MISMATCH",
+   "got": "E_DEVICE_MISMATCH",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "E2 new record reusing a committed device_seq",
+   "attacker": "registered device",
+   "expected": "E_REPLAY_SEQ",
+   "got": "E_REPLAY_SEQ",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "E3 committed record_id reused with different content",
+   "attacker": "registered device",
+   "expected": "E_REPLAY_RECORD_ID",
+   "got": "E_REPLAY_RECORD_ID",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "E4 oversized record (> 1 MiB)",
+   "attacker": "public-key holder",
+   "expected": "E_RECORD_TOO_LARGE",
+   "got": "E_RECORD_TOO_LARGE",
+   "exit": 10,
+   "store_unchanged": true,
+   "flags": ""
+  },
+  {
+   "attack": "F1 replay of a committed honest record",
+   "attacker": "anyone with cloud access",
+   "expected": "idempotent re-ack",
+   "got": "duplicate",
+   "exit": 0,
+   "store_unchanged": true,
+   "flags": ""
+  }
+ ],
+ "results": [
+  {
+   "check": "baseline: honest single-PUT upload ingests",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "baseline: honest multipart upload ingests",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A1 forged object + record signed by attacker key under its own name: rejected with E_SIG_UNKNOWN_KEY, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_SIG_UNKNOWN_KEY",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "A2 forged record claims registered device name, attacker key: rejected with E_SIG_KEY_HASH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_SIG_KEY_HASH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "A3 forged record with victim's key hash, attacker signature: rejected with E_SIG_INVALID, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_SIG_INVALID",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "A4 unsigned record (valid age file, no signature line): rejected with E_RECORD_FORMAT, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_RECORD_FORMAT",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "A5 forged dedup-hit record (object null), attacker key: rejected with E_SIG_KEY_HASH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_SIG_KEY_HASH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "B1 staged object replaced by attacker's valid age object (same size): rejected with E_BINDING_HEADER_MAC, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_BINDING_HEADER_MAC",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "B2 same, binding pre-check disabled (TEST flag): content check must still reject: rejected with E_CONTENT_MISMATCH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_CONTENT_MISMATCH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "B4 attacker object carrying a copy of the victim's MAC line: rejected with E_OBJECT_HMAC, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_OBJECT_HMAC",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "B3 another honest object presented under the victim's record: rejected with E_BINDING_HEADER_MAC, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_BINDING_HEADER_MAC",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C1 dropped final chunk (record intact): rejected with E_BINDING_LENGTH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_BINDING_LENGTH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C2 dropped final chunk, binding pre-check disabled (TEST flag): rejected with E_STREAM_TRUNCATED, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_STREAM_TRUNCATED",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C3 one byte cut from the end: rejected with E_BINDING_LENGTH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_BINDING_LENGTH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C4 one byte cut, pre-check disabled: rejected with E_STREAM_AUTH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_STREAM_AUTH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C5 full-chunk object, final chunk dropped at a chunk boundary: rejected with E_BINDING_LENGTH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_BINDING_LENGTH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C6 same, pre-check disabled: STREAM final-flag check: rejected with E_STREAM_TRUNCATED, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_STREAM_TRUNCATED",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C7 trailing data appended after the final chunk: rejected with E_BINDING_LENGTH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_BINDING_LENGTH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C8 trailing data, pre-check disabled: rejected with E_STREAM_AUTH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_STREAM_AUTH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "C9 two chunks swapped (reordering): rejected with E_STREAM_AUTH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_STREAM_AUTH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "D1 object with PQ + X25519 stanzas (downgrade): rejected with E_PROFILE, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_PROFILE",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "D2 object with an extra unknown stanza (valid age, not in profile): rejected with E_PROFILE, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_PROFILE",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "D3 honest record re-encrypted with an extra X25519 stanza: rejected with E_PROFILE, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_PROFILE",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "D4 victim object with its stanza's X25519 share set to a low-order point: rejected with E_OBJECT_HEADER, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_OBJECT_HEADER",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "E1 record signed with dev-a key but device_id says dev-b: rejected with E_DEVICE_MISMATCH, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_DEVICE_MISMATCH",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "E2 new record reusing a committed device_seq: rejected with E_REPLAY_SEQ, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_REPLAY_SEQ",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "E3 committed record_id reused with different content: rejected with E_REPLAY_RECORD_ID, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_REPLAY_RECORD_ID",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "E4 oversized record (> 1 MiB): rejected with E_RECORD_TOO_LARGE, no store write",
+   "pass": true,
+   "detail": {
+    "exit": 10,
+    "code": "E_RECORD_TOO_LARGE",
+    "store_unchanged": true,
+    "stderr": ""
+   }
+  },
+  {
+   "check": "F1 replayed honest record: idempotent (exit 0), no new catalog row, receipt re-issued",
+   "pass": true,
+   "detail": {
+    "rc": 0,
+    "rows": [
+     2,
+     2
+    ]
+   }
+  },
+  {
+   "check": "final: the untouched victim upload still ingests",
+   "pass": true,
+   "detail": ""
+  }
+ ],
+ "codes": [
+  "E_BINDING_HEADER_MAC",
+  "E_BINDING_LENGTH",
+  "E_CONTENT_MISMATCH",
+  "E_DEVICE_MISMATCH",
+  "E_OBJECT_HEADER",
+  "E_OBJECT_HMAC",
+  "E_PROFILE",
+  "E_RECORD_FORMAT",
+  "E_RECORD_TOO_LARGE",
+  "E_REPLAY_RECORD_ID",
+  "E_REPLAY_SEQ",
+  "E_SIG_INVALID",
+  "E_SIG_KEY_HASH",
+  "E_SIG_UNKNOWN_KEY",
+  "E_STREAM_AUTH",
+  "E_STREAM_TRUNCATED",
+  "idempotent re-ack"
+ ],
+ "passed": 30,
+ "failed": 0
+}

@@ -131,9 +131,11 @@ Copy this section into `docs/research/kits/D2-S3/results.md` and fill it in. Do 
 - **Tabletop answers (A8, E7):** <one line per scenario>
 - **Follow-ups for the workstream:** <runbook wording, card layout, tooling, k-of-n, holder choice>
 
-## Agent dry run of this kit (2026-09-29)
+## Agent dry run of this kit (2026-10-06)
 
 `dry-run-check.py` was run in the research container (x86-64 Linux, age v1.3.1 built from
-`proxy.golang.org`, shamir-mnemonic 0.3.0) for the classic 128-bit and PQ 256-bit variants. The output
-is in `dry-run-2026-09-29.txt`. It shows only that the commands work mechanically; it is not a result for
-D2-S3, which needs a real relative.
+`proxy.golang.org`, shamir-mnemonic 0.3.0, SYN photos) for the classic 128-bit and PQ 256-bit variants:
+10/10 checks passed for each. The output is in `dry-run-2026-10-06.txt` (it contains no share text or secret).
+An earlier draft of this section, dated 2026-09-29, referred to a `dry-run-2026-09-29.txt` that was never
+saved; this run replaces it. The dry run shows only that the commands work mechanically (about 1 s of tool
+time). It is not a result for D2-S3, which needs a real relative.

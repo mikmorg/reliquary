@@ -1,0 +1,107 @@
+{
+ "vectors": 15,
+ "regenerated_identically": true,
+ "decoders": {
+  "go-age-1.3.2": {
+   "pass": 15,
+   "total": 15,
+   "detail": {
+    "rq_pq1_1byte": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_pq1_3chunks": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_pq1_64k_exact": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_pq1_64k_plus1": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_pq1_bad_mac": {
+     "pass": true,
+     "exit": 1,
+     "stderr": "age: error: bad header MAC\nage: report unexpected or unhelpful errors at https://filippo.io/age/repo"
+    },
+    "rq_pq1_drop_final_chunk": {
+     "pass": true,
+     "exit": 1,
+     "stderr": "age: error: unexpected EOF\nage: report unexpected or unhelpful errors at https://filippo.io/age/repo"
+    },
+    "rq_pq1_empty": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_pq1_grease": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_pq1_header_truncated": {
+     "pass": true,
+     "exit": 1,
+     "stderr": "age: error: failed to read header: failed to parse header: failed to read line: EOF\nage: report unex"
+    },
+    "rq_pq1_low_order": {
+     "pass": true,
+     "exit": 1,
+     "stderr": "age: error: invalid mlkem768x25519 recipient: crypto/ecdh: bad X25519 remote ECDH input: low order p"
+    },
+    "rq_pq1_mixed_x25519": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_pq1_no_match": {
+     "pass": true,
+     "exit": 1,
+     "stderr": "age: error: no identity matched any of the recipients\nage: report unexpected or unhelpful errors at "
+    },
+    "rq_pq1_trailing_data": {
+     "pass": true,
+     "exit": 1,
+     "stderr": "age: error: failed to decrypt and authenticate payload chunk, file may be corrupted or tampered with"
+    },
+    "rq_pq2_second_identity": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    },
+    "rq_x25519_legacy": {
+     "pass": true,
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "rust-strict": {
+   "fail": 0,
+   "failed": [],
+   "n/a": 0,
+   "pass": 15,
+   "strict_low_order": true,
+   "total": 15
+  },
+  "typage-0.3.1": {
+   "pass": 15,
+   "fail": 0,
+   "na": 0,
+   "failed": []
+  },
+  "kage-0.8.0": {
+   "pass": 15,
+   "fail": 0,
+   "na": 0,
+   "failed": ""
+  }
+ }
+}

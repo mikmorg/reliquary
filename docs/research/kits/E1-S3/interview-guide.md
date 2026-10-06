@@ -73,7 +73,8 @@ Record belief and reality separately (P7, P8). Don't comment on any gap while in
 If a neutral facilitator is running the interview, **the owner leaves the room** for this section.
 
 Read first: "In the planned system, [Owner] could technically see every photo that is saved. Other
-family members could not, and nor could the cloud company."
+family members could not, and nor could the cloud company. Once something is saved at home it is
+kept: deleting it from your phone does not remove it there, and only [Owner] can remove it."
 
 16. "How do you feel about that?" (Let them talk. Then ask: "Is there a kind of thing you would
     want left out?")
@@ -101,3 +102,19 @@ Record a few words of theme only (P12, P13). No quotes tied to names.
 "Is there anything I should have asked but didn't?" Thank them.
 
 Then the observed tasks (E2, E5) follow, as in `../E1-S1/visit-plan.md`.
+
+## Debrief (after **all** data collection for the visit, including E2/E5 tasks)
+
+The interview deliberately does not comment on gaps, so that answers are not steered. Before
+leaving, close the loop, so nobody is left worried or exposed:
+
+1. Tell the person plainly what the check showed, without blame: for example "your phone photos
+   are copied to iCloud, but the old laptop's photos exist only on that laptop".
+2. If something important exists in **only one place**, offer the interim stopgap that E2-S3
+   recommends for that device type (for example turning the phone's own cloud backup on, or
+   copying a folder to a stick the owner takes home), or book a time to do it. Do not delete
+   anything and do not buy storage on the spot.
+3. Record on the person page, by **type only**, any single-copy finding and the action agreed. This
+   is an interim-protection action list for the owner, not research data for export.
+4. E1-S3 coding uses only the notes taken **before** the debrief, so the debrief does not
+   contaminate the story counts.

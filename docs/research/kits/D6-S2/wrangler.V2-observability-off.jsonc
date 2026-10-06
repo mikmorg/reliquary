@@ -1,0 +1,7 @@
+// V2: Workers Logs off (nothing persisted). wrangler tail still streams live.
+{
+  "name": "d6s2-probe",
+  "main": "probe-worker.js",
+  "compatibility_date": "2026-09-01",
+  "observability": { "enabled": false }
+}

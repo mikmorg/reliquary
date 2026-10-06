@@ -1,0 +1,19 @@
+# typage 0.3.1 Encrypter with recipients [age1pq1..., age1...] (exit 0); inspected 2026-10-06T16:20:59Z
+{"file_len":1758,"header_len":1725,"prefix_len":1741,"pt_len":1,"stanzas":[{"arg_lens":[1494],"args":1,"body_len":32,"type":"mlkem768x25519"},{"arg_lens":[43],"args":1,"body_len":32,"type":"X25519"}]}
+/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S3/work/mixed_ts.age is an age file, version "age-encryption.org/v1".
+
+This file is encrypted to the following recipient types:
+  - "mlkem768x25519"
+  - "X25519"
+
+This file does NOT use post-quantum encryption.
+
+Size breakdown (assuming it decrypts successfully):
+
+    Header                      1725 bytes
+    Encryption overhead           32 bytes
+    Payload                        1 bytes
+                        -------------------
+    Total                       1758 bytes
+
+Tip: for machine-readable output, use --json.

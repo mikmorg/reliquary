@@ -1,11 +1,11 @@
 # A6. Homelab at-rest posture, storage engine and catalog
 
 - **Workstream:** A6 (see `docs/research/PLAN.md`, section "A6.")
-- **Status:** Draft (analyst deep read, Wave 1, batch W1-b). Not yet under skeptic review. Spike results pending: a separate spike runner is working on the A6 spikes in parallel (see [Spikes](#spikes)).
-- **Date:** 2026-09-29 (last updated 2026-09-29)
+- **Status:** Draft (analyst deep read, Wave 1, batch W1-b; second analyst pass reconciles it with the A2 and D2 drafts, see [Second pass](#second-pass-reconciliation-with-a2-and-d2)). Not yet under skeptic review. Spike results pending: a separate spike runner is working on the A6 spikes in parallel (see [Spikes](#spikes)).
+- **Date:** 2026-09-29 (last updated 2026-09-29, second analyst pass)
 - **Wave 1 scope:** the at-rest posture (OD-07, one-way door #4) and the knockout screen of storage engines for the ADR-0012 draft. The bake-off (A6-S2) is Wave 2; only its kit is written now. The catalog (ADR-0013) is Wave 2 because the choice is not trivially decided (§F7).
 - **Feeds:** ADR-0012 (reserved in `docs/adr/README.md`; the draft is the next stage), OD-07, one-way door #4, new decision requests DR-A6-1 to DR-A6-3 (below; H1 assigns OD numbers). Evidence for OD-08 (recovery recipient) and OD-13 (read-only gallery).
-- **Depends on:** the CE spike (`content-encryption-format.md`, which is also T1 spike 2), A1 (the store is addressed by plain SHA-256), A3 (durable-commit contract F6), D1 (SR-04, SR-20, AR-08), D2 (key custody, not yet written), C5 (hardware, filesystem), owner intake answers C1, C3, C5, C6 and C12 (not yet given)
+- **Depends on:** the CE spike (`content-encryption-format.md`, which is also T1 spike 2), A1 (the store is addressed by plain SHA-256), A3 (durable-commit contract F6), D1 (SR-04, SR-20, AR-08), D2 (`d2-key-hierarchy-custody-recovery.md`, draft: key set K-01..K-07, archive identity X as K-03b), A2 (`a2-object-envelope.md`, draft: OD-06 PQ, recipient placement DR-A2-2), C5 (hardware, filesystem), owner intake answers C1, C3, C5, C6 and C12 (not yet given)
 - **Traceability rows advanced:** R-09, R-26, R-28, R-38, R-45, R-46, OPEN-2, Q1-1 (see `docs/research/traceability.md`)
 
 ## Summary
@@ -26,8 +26,13 @@
    restic is kept even though it fails the per-file-by-hash criterion natively, so that the ADR can show the cost of *not* adopting it.
 5. **Confidence:**
    - **High** on the facts behind the knockouts (primary specs and source).
-   - **Medium** on the recommended posture. It is reasoned, not yet measured or reviewed by D2, and it adds a key-rotation duty.
+   - **Medium** on the recommended posture. It is reasoned, not yet measured. The D2 and A2 drafts both build on it (D2 K-03b, A2 DR-A2-2), but nobody has skeptic-reviewed it yet, and it adds a key-rotation duty.
    - **Low** on anything about scale (index RAM, audit hours). No measurement exists yet.
+6. **Second pass (reconciliation with the A2 and D2 drafts, [§Second pass](#second-pass-reconciliation-with-a2-and-d2)):**
+   - A6 needs one thing from the recipient-placement debate (A2 P1 vs D2 "devices include R"): **stored headers are always written by the homelab, as {X, R}**. Both drafts already agree on that. Where R sits on the *device* header only changes how long the ingest key I_e must be kept before it is destroyed.
+   - If OD-06 picks PQ, the per-object header overhead is about 3.2 KB stored plus about 1.6 KB for the kept original header h0 (A2 C6). Keep h0 inside the append-only manifest, not as a second file per object, so the store stays at one file per item.
+   - A Rust rewrap is feasible with the public API of the `age` 0.12.1 crate (`Identity::unwrap_stanza`, `Recipient::wrap_file_key`, `FileKey: ExposeSecret`, age-core stanza read/write). The header parser and the header MAC are private, so Reliquary writes about one screen of its own header code (C20). This matches D2's finding that Go age also has no rewrap API.
+   - New for A8: a restore could also be a header rewrap to the device key. That would make the restored payload byte-identical to the first upload, which lets the cloud link the two (C22). Re-encrypting under a fresh file key avoids this.
 
 ## Questions
 
@@ -86,6 +91,13 @@
   - api.github.com.
   - The GitHub MCP is limited to `mikmorg/reliquary`.
   - perkeep.org: Perkeep got **no result**.
+- **Second pass (2026-09-29):**
+  - Re-checked against the primary text: the age scrypt-only-stanza rule (`age.md`, "An scrypt stanza, if present, MUST be the only stanza"); restic's symmetric key model and its append-only threat-model paragraph (`design.rst`); the Borg 2 "DO NOT USE BORG2 FOR YOUR PRODUCTION BACKUPS" banner (`README.rst`). No change.
+  - New primary source: the Rust `age` crate source, for rewrap feasibility (S34, C20).
+  - Reconciled with the A2 and D2 drafts (S35).
+  - Still blocked:
+    - git.proxmox.com (proxy `CONNECT` 403), so current PBS 4.x behaviour remains unverified;
+    - restic issues #187 and #533 through `gh api` (this session has no GitHub access to that repository), so the "no asymmetric mode" point still rests on `design.rst` (primary) plus secondary search results.
 - **Stop rule:** the analyst's re-reads added one new primary fact that changes the analysis: the age scrypt-mixing rule (C3). They also added two primary facts that sharpen it: rustic_core's `FixedSize` chunker option (C16) and OCFL extension 0004 (C13). No further sources were sought for the Wave 1 scope.
 
 ## Sources
@@ -125,6 +137,8 @@
 | S31 | restic #187, #533 (search results only) | restic community | unknown | 2026-09-29 (scout) | No |
 | S32 | Duplicati forum threads 7591, 9291; duplicati #4923 (snippets/titles) | community | unknown | 2026-09-29 (scout) | No |
 | S33 | git-annex backends page (search snippet) | git-annex | unknown | 2026-09-29 (scout) | No |
+| S34 | Rust `age` 0.12.1 crate source (`src/lib.rs`, `src/protocol.rs`, `src/keys.rs`) and `age-core` 0.12.0 (`src/format.rs`), from static.crates.io; version and date from index.crates.io | str4d / rage | age 0.12.1, published 2026-07-14 | 2026-09-29 (second pass) | Yes |
+| S35 | A2 `a2-object-envelope.md` (C6, C9, C21, Q9, DR-A2-2) and D2 `d2-key-hierarchy-custody-recovery.md` (K-01..K-07, C14, §F2) | Project (drafts) | 2026-09-29 | 2026-09-29 (second pass) | Yes (project drafts, not skeptic-reviewed) |
 
 ## Claims
 
@@ -150,6 +164,9 @@ Key claims are load-bearing for OD-07 or the knockout screen. Skeptic columns ar
 | C16 | rustic_core 0.13.0 says its API is "in an early development stage" and "subject to change". It opens repositories only with `Credentials::Password` or `Credentials::Masterkey`. Its config supports a `FixedSize` chunker as an alternative to Rabin. Whether restic accepts a repository written with it was not checked. | S10 | Yes | | | | pending |
 | C17 | Plakar went 1.1.0 → 1.1.7 between 2026-06-05 and 2026-09-24. Behaviour changed inside the minor series (plaintext repositories need `PLAKAR_INSECURE_PLAINTEXT` from 1.1.5). Some features depend on a vendor authentication flow (1.1.6). | S29 | No (knockout context) | | | | Secondary only |
 | C18 | Kopia had a restore regression that corrupted Canon CR2 files (v0.22.2, #5049, fixed by PR #5052). A still-open report (#4769) describes maintenance deleting live blobs on S3 with Object Lock. | S28 | No (context) | | | | Secondary only |
+| C20 | The Rust `age` crate 0.12.1 (published 2026-07-14) keeps its header parser (`mod format`) and its header-MAC and payload-key derivation (`mod keys`: `mac_key`, `v1_payload_key`, both `pub(crate)`) private. It does expose `Identity::unwrap_stanza(&Stanza) -> FileKey`, `Recipient::wrap_file_key(&FileKey) -> Vec<Stanza>`, and `FileKey: ExposeSecret<[u8; 16]>`. age-core 0.12.0 exposes `format::read::age_stanza` and `format::write::age_stanza`. A Rust header rewrap therefore uses public key-wrapping APIs plus a small Reliquary-owned header parser, serializer and HKDF-SHA-256 MAC, written to the C2SP spec and tested against Go age (inference: about one screen of code) | S34 (crate source read 2026-09-29) | Yes (A′ feasibility) | | | | pending |
+| C21 | Header overhead under A′ if OD-06 = PQ: the stored header {X, R} with two PQ stanzas is 3,184 B and the kept h0 is 1,627 B (A2 C6, measured with Go age 1.3.2). That is about 4.8 KB per object, or about 4.3–21.6 GB at A2's 0.9M–4.5M objects for 2–10 TB. That is about 0.2 % of stored bytes (arithmetic, not measured on family data) | S35 (A2 C6, C21) | No (cost) | | | | pending |
+| C22 | If a restore (ADR-0001: "re-encrypting to the target device's own key") is done as a header rewrap under A′, the payload staged in R2 is byte-identical to the payload the device first uploaded. The cloud could then link a restore to the original upload by ciphertext equality, unless it no longer holds the original. Re-encrypting under a fresh file key avoids that link at about 28 h of CPU per 10 TB (A2 Q9 arithmetic). Single restores are small (inference) | S11, S35 | No (A8 input) | | | | pending |
 | C19 | A full read audit of 10 TB takes 10¹³ B ÷ (sustained read rate). That is about 27.8 h at 100 MB/s and about 9.3 h at 300 MB/s, both far inside a 720 h monthly window. This is arithmetic, **not a measurement**; A6-S2/A7-S2 measure the real rate. | arithmetic | Yes (BUD-AUDIT feasibility) | | | | pending |
 
 ## Findings
@@ -218,7 +235,7 @@ Both keep the reading key off the always-on machine. Neither passes the knockout
    - the original payload bytes follow unchanged.
 
    The result is a standard age v1 file: `age -d -i archive.key obj` works (C2).
-4. Keep the original header (184 B for one X25519 stanza, CE §5) as `<sha256>.h0`. The device-signed record binds `header_mac` (CE §11 step 3), so this keeps the whole provenance chain verifiable. Once `R_in,e` is destroyed, the old header is useless to an attacker.
+4. Keep the original device-written header h0 (168 B with one X25519 stanza, 1,627 B with one PQ stanza; A2 C6, CE §5). Store it as an entry in the append-only manifest (§F2), not as a second `<sha256>.h0` file, so the store stays at one file per item (second pass). The device-signed record binds `header_mac` (CE §11 step 3), so this keeps the whole provenance chain verifiable: with X online, recover the file key from the stored header, then recompute h0's MAC. Once `R_in,e` is destroyed, the old header is useless to an attacker.
 5. **Rotate** the ingest key (the interval is for D2 to set). Destroy `sk_in,e` once no staged, USB or in-flight object for epoch e remains. The limit comes from the longest path: USB bundles and the device safety valve (A3 DR-A3-3).
    - The payoff: an ingest key captured later, together with R2 ciphertext the cloud may have retained, decrypts nothing older than the retained epochs. This matters because ADR-0001 treats the cloud as under attack.
 6. **Metadata records** get the same rewrap and are archived in the store. The catalog is a projection that can be rebuilt from them (A6-S4). A rebuild needs the archive key and is an attended admin task.
@@ -287,6 +304,22 @@ The engine is not trivially decided, so ADR-0013 stays in Wave 2. From A1, A3 an
 - be rebuildable from the store's archived records plus the manifest (A6-S4).
 
 F1 already recommends SQLite on devices. Whether the homelab uses SQLite or Postgres (pgBackRest checksums every file and supports resume, per the scout) is left to Wave 2 with its own sources, because sqlite.org and postgresql.org were blocked this run.
+
+### Second pass: reconciliation with A2 and D2
+
+Since the first pass, the D2 and A2 drafts have appeared, and both build on A′. This pass checks that the three notes agree, and records what A6 needs.
+
+| Topic | D2 draft | A2 draft | A6 position (this pass) | Confidence |
+|---|---|---|---|---|
+| Stored header | {X, R} rewrapped at ingest (K-03b; diagram §F2) | {X, R} written by the homelab at the A′ rewrap (P1) | **Agreed.** ADR-0012 states that every stored object and archived record carries a homelab-written {X, R} header, and that a header scrub can check the stanza set without any key, because stanza *types* are plaintext in age headers (S11). The check must tolerate any random "grease" stanza the encoder adds (age-core has `grease_the_joint`, S34). | High |
+| R on the device header | Yes: {I, R}, so late USB bundles survive I's destruction | No (P1): the homelab cannot verify a device-written R stanza (A2 C9), and the PQ header grows to 3,184 B | **Orthogonal to the at-rest posture.** A6 never stores the device's R stanza: it is replaced at rewrap, and h0 is kept only for its MAC. The placement changes only **when I_e may be destroyed**. Under P1, not before the longest drain path (USB in a drawer, A3 DR-A3-3). Under P2, earlier, because R still opens late arrivals. That is an A2/D2 decision (DR-A2-2); A6 accepts either. | Medium |
+| Ingest key I unlock | Unattended under A′ (key file or Tang); vTPM excluded | — | Agreed (Q2). | Medium |
+| At-rest volume and catalog keys (K-06, K-07) | Must be sealed to R in the doomsday bundle | — | Agreed. Under A′ the catalog dataset is the only one that needs a key (§F6, DR-A6-3). | Medium |
+| Rewrap tooling | Go age has no header-rewrite API; upstream closed the request (D2 C14) | Go age decrypts and rewraps at home | The Rust ingest service can do it with public `age` 0.12.1 APIs plus its own header code (C20). Use Go age as the interop oracle (A2-S3). Proposed A6-S6 and D2-S2 should share one test vector set. | Medium-high |
+| Overhead | 3,184 B with two PQ stanzas (D2 C4) | Same (A2 C6) | About 4.8 KB per object including h0, about 0.2 % (C21). Not a reason to change posture. | Medium |
+| Restore delivery | — | — | Hand-off to A8: prefer fresh re-encryption over header rewrap for R2 restores, to avoid the linkability in C22. A header rewrap is fine for USB restores that never touch the cloud. | Medium |
+
+No conflict found that would change the recommendation.
 
 ### Alternatives compared
 
@@ -357,6 +390,9 @@ No emulator stands in for real hardware in any result above. None has run yet.
 | Does restic read a rustic `FixedSize`-chunker repository? Relevant only to the comparator | A6-S2 | Wave 2 |
 | Immich external-library read-only mode over a generated tree | C8 (OD-13) | Wave 2 |
 | PBS 4.x current docs (mirror stale) | H1 (route) | Before C8 relies on PBS |
+| Device recipient placement (P1 vs P2), which sets when I_e can be destroyed | A2 + D2 (DR-A2-2); A6 accepts either | Gate A |
+| Restore delivery by fresh re-encryption vs header rewrap (C22) | A8 | ADR-0028 |
+| One shared rewrap test vector set for A6-S6, D2-S2 and A2-S3 | A2, D2, A6 | Wave 2 |
 
 ## Recommendation
 
@@ -427,4 +463,6 @@ No emulator stands in for real hardware in any result above. None has run yet.
 | C8 | Keep PBS for VM and catalog backups (intake C12); Immich external-library check for OD-13 | ADR-0032 |
 | D1 | Revisit AR-08: under A′, an ingest compromise is bounded to the open key epochs | Threat register |
 | E7 / OD-08 | Recovery recipient added at ingest, not on devices (smaller device header), if D2 agrees | Life events |
-| H1 | Blocked sources listed in Method; the stale PBS mirror | `sources.md` |
+| H1 | Blocked sources listed in Method; the stale PBS mirror; git.proxmox.com (403); GitHub API for restic/restic | `sources.md` |
+| A8 | Restores to R2: re-encrypt under a fresh file key rather than rewrap the header, to avoid ciphertext linkability (C22) | ADR-0028 |
+| A2, D2 | A6 accepts P1 or P2 (DR-A2-2). A6 requires a homelab-written {X, R} stored header and h0 kept in the manifest. A Rust rewrap can use public `age` APIs (C20) | Joint Gate A review |

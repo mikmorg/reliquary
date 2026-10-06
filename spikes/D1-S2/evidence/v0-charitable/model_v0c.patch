@@ -1,0 +1,41 @@
+--- /home/user/reliquary/spikes/D1-S2/model.py	2026-09-29 09:29:55.591591232 +0000
++++ model_v0c.py	2026-10-06 16:38:54.891923651 +0000
+@@ -104,6 +104,7 @@
+     homelab_verify: bool      # homelab recomputes HMAC/SHA-256 after decryption (ADR-0001 step 4)
+     registry_auth: bool       # device signing keys come from an authenticated channel, not the Worker
+     reconcile_missing: bool = False  # a staged claim whose staged object has vanished counts as missing
++    green_on_committed: bool = False  # V0-charitable: no receipts; green only when the Worker answers 'present' (committed)
+ 
+ V1 = Variant("V1-proposed", per_upload_keys=True, create_only=False, receipts=True, pinned_trust=True,
+              ttl=True, staged_state=True, reset_on_reject=True, requery=True, attribution=True,
+@@ -113,7 +114,12 @@
+              pinned_trust=False, ttl=True, staged_state=False, reset_on_reject=False, requery=False,
+              attribution=False, homelab_verify=True, registry_auth=False)
+ 
++V0C = replace(V0, name="V0c-charitable", green_on_committed=True, requery=True,
++              reset_on_reject=True, reconcile_missing=True)
++V0C_MIN = replace(V0, name="V0c-min", green_on_committed=True, requery=True)
+ def ablations():
++    return [V0, V0C, V0C_MIN, replace(V0C, name="V0c+per_upload_keys", per_upload_keys=True)]
++def _unused():
+     out = [V0, V1, replace(V1, name="V1+create_only", create_only=True)]
+     for f in ["per_upload_keys", "receipts", "pinned_trust", "ttl", "staged_state", "reset_on_reject",
+               "requery", "attribution", "homelab_verify", "registry_auth", "reconcile_missing"]:
+@@ -257,7 +263,7 @@
+                 if v.staged_state and c and c[1] == "claimed" and c[2] == dev and c[3] == n:
+                     claims = set_claim(claims, IDF, (IDF, "staged", dev, n, -1))
+                 emit(f"{dev}:PUT {key}+Complete", False, r2=r2, claims=claims,
+-                     devs=setdev("awaiting" if v.receipts else "done", key, n))
++                     devs=setdev("awaiting" if (v.receipts or v.green_on_committed) else "done", key, n))
+         elif phase == "present":
+             # counts only with a valid receipt for this content from ANY device
+             if any(valid_receipt_for(v, r) for r in st["relay"]):
+@@ -268,7 +274,7 @@
+             if v.requery:
+                 emit(f"{dev}:timeout->requery", False, devs=setdev("idle", None, n))
+         elif phase == "awaiting":
+-            if any(valid_receipt_for(v, r, dev) for r in st["relay"]):
++            if v.receipts and any(valid_receipt_for(v, r, dev) for r in st["relay"]):
+                 emit(f"{dev}:receipt verified -> GREEN", False, devs=setdev("protected", key, n))
+             if v.requery:
+                 emit(f"{dev}:timeout->requery", False, devs=setdev("idle", None, n))

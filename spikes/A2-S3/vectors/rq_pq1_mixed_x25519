@@ -1,0 +1,15 @@
+expect: success
+payload: c5a359521f8cf4d30d425ed7927e17baf4f8481ab7cfaafca6132bfa58839452
+file key: 22a7070e10f24e53283c32bb557cddc3
+identity: AGE-SECRET-KEY-PQ-1XYYAMMZERU3362F83MHKJMY2HFFFZT06AVWAFEVSA9LFRKYU7EKQFRSN4L
+comment: PQ + X25519 stanzas: valid age (decrypt succeeds), but violates the age SHOULD NOT and the Reliquary profile (ingest: E_PROFILE)
+comment: seed=31bde72fe0481bf5a1a05ea4fcfa273f5a5e970f4aa87fcdc26313500792cc0d context=6a1b9628be3166295e0b31d3928434b4e072b3e7e9b82a355e4b263f455a2047 (Reliquary encoder, hedged HKDF labels reliquary/v1/hedge/*)
+
+age-encryption.org/v1
+-> mlkem768x25519 pmr5aw5kVpFWRkOc+jiUwwaklAcImiQ7AFtm1AUziRe+Q9pWJAZJpGoq4NH0FeDUsTpHey2AX4iMOQL5UmR2hJmNDlGJ858B8cAAcQuh/6MR2gXIXSe4aBHXOmi+++kUumi4MyABquHEJ8Wdw9HkCgvUeZm4YlU3AX2GzFPB5wiMylS8riJp1RD2AJV3m6VSTTxAbXXj/9aVT+aHO+cUNzbQPjr0fSttSLb0XeE9YqFQvqGj8K8JRG6XNi8wJJLm4wZV05hzlfszZ7x+i00PNnQm1y4JWy2H/WWFEOLoxzPY2clhwUP73cMD+Y3x4608CqCYe5FB8CcBy6yUFvBn42oyn6L0YH8EwpGmxkqrH0v1IHHsQWxNVw4RB8zT7glM3iNau7OSjHZWmIrNjPloEQcZdmPeSJUM7r0EQuhpg4HpLnVoh+ncoUIwyf9XO7pthqCF+xA8MTPFJhj/bzuGwDj18Lb6P0btAQ5bT5TELalfuOtW9XANUQMZviT6h8+22IaV7Oli2sBYr4b0aNP5XceECxjX7qkKL+d3yRyIHlWd9D/e/8SNXBqwD6Q5nIGYYy612Vpd36FeKSLtE1SRIvF8e3W8/fA2xOuycef18SRUYijXj/w+2fn1vALnxWJBkDgQmiIvWz41FA5ibTxCN2ahKmVFvG3SNqmRvCB/ZBbzkwf3Uip4tgxBEQ5y8di0VoDa41h6UkcXTbZ/3lOP/to68ahTslWjU4jPFm39JWcGih1GMdlwep8/BZjuv5qT8RUO7OaQsD45cW4cE7l4JQDzGzbwgp9Ad+ZZCjPchm9CH4JI0zVQX5+7SN+Ul5Xjx9i8x0dfqytmA+afWnR288iabQj1we62fPSx4cGPe1yX4rVa+7VZy69bJ0quOxdT3576QGbBgK4QxI0u1Ho8FtKdGk1pItrxus1CRqncghGDYwnljUD4/TVG/1gYG/Gh9LvO5gyO2uSqRzNXiURhpniXa/88n5aXBMsZ5BhP8DVNHxr8zhRcjLYubS/QIqxKWzvyaewCuGcibIL5WY6CSBkPovFTKhmUyvlvgWUrI9abonWGchGn2zvQwJuqdABonImWyEMcWQpY+j5T2OWcI0/jkHNNo8wKwQgbxAeXnMgc5lxQfYrfUDLokz+tnJs+IlZnPjS5Pn+qoWUAxKSLBkB+9ZMTxEklEe3IAa9aaoIfORq5DsDJpKisNvUeej0e3Wd1P/GAZWNQ3Szl/jNyuAVu0euU611CqRV2oCd7Q1jJaRmjCSkAIcuc2mfUcsO7WpCA8ws+Q1J9GVaEaKbne34OFAzMKNI+Oeustz8Oox6ztMySMEPOmktXPiXrEjhgr0EW7E7HT1aOH0xuSQT0ASKkRT0enLapoqY+ba+ec27QLzvFX5/lZA6YhZ8BpE3m2Iuchei8qMDBAsiBQ7Nl5UclWZDvFfzfL2hHOpEvNv9iWKtcZwQDLgf0SFORPALxEgcLxkMxn3V9ezVzw4i9CA
+/+uL7LNe3zKmaRDre8O4NFu74c+rochN/A6F/U45V2M
+-> X25519 2JjOEvidImrRdbHMg76Vk3tOJd3UzKcJdemRLQD3ehg
+dbUAc/AWnhSRrnRpGQeC4u7UVU+dMy+rvSdQw+RX3kY
+--- n1X15k7Pm9XIhopgALoj3prhQErcTmlll4xiov/Jspg
+¦-1;à1ê±Dœa”?‹§ ïv>„\ŸjZ»,·±ÑˆÞµQ‘¹&­/éúP¤ø>ÞÐy‰|þ½DoYìç«¼J:ª­i ræìÊÈ¢ýâ·
+U5Ë'ôÌû[âcd0U<ŒºÅ¬,oO½×m%P¶½ÇŸÑ«BÑÎ|sÿZ¥OûZï6¬Ye]ëy¾Oo;ÜÚZgÑûÑ)ªÁðÔ`oê57ßpöÎºû=o›ÃÌù_¢·J[2$hÏeXû™ÏaÈäO	qS¼ÓÙ5è)3S¹ñg8q—Ûü°³LGC±øn"¹

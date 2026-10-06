@@ -1,0 +1,122 @@
+{
+ "default": {
+  "kem": {
+   "pqx1": {
+    "header_len": 1627,
+    "gen_us_best": 157.4,
+    "open_us_best": 289.4
+   },
+   "pqx2": {
+    "header_len": 3184,
+    "gen_us_best": 319.4,
+    "open_us_best": 607.6
+   },
+   "x25519x1": {
+    "header_len": 168,
+    "gen_us_best": 80.7,
+    "open_us_best": 75.0
+   }
+  },
+  "obj_MBps_best_of_3": {
+   "16384": {
+    "x25519x1": 179.3,
+    "pqx1": 86.3,
+    "pqx2": 48.3,
+    "pq1_loss_pct": 51.9,
+    "pq2_loss_pct": 73.1
+   },
+   "102400": {
+    "x25519x1": 603.9,
+    "pqx1": 381.7,
+    "pqx2": 244.9,
+    "pq1_loss_pct": 36.8,
+    "pq2_loss_pct": 59.4
+   },
+   "1048576": {
+    "x25519x1": 981.7,
+    "pqx1": 839.0,
+    "pqx2": 732.6,
+    "pq1_loss_pct": 14.5,
+    "pq2_loss_pct": 25.4
+   },
+   "4194304": {
+    "x25519x1": 1011.1,
+    "pqx1": 964.1,
+    "pqx2": 926.5,
+    "pq1_loss_pct": 4.6,
+    "pq2_loss_pct": 8.4
+   },
+   "26214400": {
+    "x25519x1": 1011.7,
+    "pqx1": 1009.9,
+    "pqx2": 1047.8,
+    "pq1_loss_pct": 0.2,
+    "pq2_loss_pct": -3.6
+   }
+  },
+  "load1_range": [
+   7.62,
+   9.07
+  ]
+ },
+ "soft": {
+  "kem": {
+   "pqx1": {
+    "header_len": 1627,
+    "gen_us_best": 182.8,
+    "open_us_best": 311.0
+   },
+   "pqx2": {
+    "header_len": 3184,
+    "gen_us_best": 370.8,
+    "open_us_best": 616.1
+   },
+   "x25519x1": {
+    "header_len": 168,
+    "gen_us_best": 87.3,
+    "open_us_best": 78.3
+   }
+  },
+  "obj_MBps_best_of_3": {
+   "16384": {
+    "x25519x1": 128.1,
+    "pqx1": 70.9,
+    "pqx2": 40.8,
+    "pq1_loss_pct": 44.7,
+    "pq2_loss_pct": 68.1
+   },
+   "102400": {
+    "x25519x1": 281.8,
+    "pqx1": 215.3,
+    "pqx2": 159.1,
+    "pq1_loss_pct": 23.6,
+    "pq2_loss_pct": 43.5
+   },
+   "1048576": {
+    "x25519x1": 372.6,
+    "pqx1": 345.9,
+    "pqx2": 335.2,
+    "pq1_loss_pct": 7.2,
+    "pq2_loss_pct": 10.0
+   },
+   "4194304": {
+    "x25519x1": 361.6,
+    "pqx1": 372.6,
+    "pqx2": 382.4,
+    "pq1_loss_pct": -3.0,
+    "pq2_loss_pct": -5.8
+   },
+   "26214400": {
+    "x25519x1": 373.1,
+    "pqx1": 366.6,
+    "pqx2": 351.5,
+    "pq1_loss_pct": 1.7,
+    "pq2_loss_pct": 5.8
+   }
+  },
+  "load1_range": [
+   7.16,
+   8.5
+  ]
+ }
+}

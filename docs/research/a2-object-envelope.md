@@ -1,8 +1,8 @@
 # A2. Object envelope and metadata-record format
 
 - **Workstream:** A2 (see `docs/research/PLAN.md`, section "A2.")
-- **Status:** Draft (analyst deep read, Wave 1 batch W1-a). Skeptic review has not started, so every claim below is **pending**. A separate spike runner is running A2-S1 to A2-S4 in parallel; see [Spikes](#spikes).
-- **Date:** 2026-09-29 (last updated 2026-09-29)
+- **Status:** Draft (analyst deep read, Wave 1 batch W1-a; continuation pass 2026-10-06 re-checked versions, re-ran M1 and added C22–C23). Skeptic review has not started, so every claim below is **pending**. A separate spike runner is running A2-S1 to A2-S4 in parallel; see [Spikes](#spikes).
+- **Date:** 2026-09-29 (last updated 2026-10-06)
 - **Wave 1 scope:** the P0 **object envelope** for the ADR-0007 draft, covering the construction, the post-quantum option (OD-06), recipients, sender authentication, resumability, truncation, padding and agility. The **metadata-record schema is provisional** (P1; it follows A5 and the H4 data model).
 - **Feeds:** ADR-0007 and `docs/spec/object-format.md` (both reserved for A2), OD-06 (PQ), evidence for OD-07 (A6 posture) and OD-08 (recovery recipient), one-way door #2 (object envelope, PQ, sender authentication), and new decision requests DR-A2-1 to DR-A2-4 (below; H1 assigns OD numbers).
 - **Depends on:**
@@ -33,6 +33,7 @@
    - it is carried in a C2SP **signed-note**, so signature algorithms can be swapped later;
    - receipts bind the digest of the *signed plaintext record*, which stays stable across batching and rewrap.
 4. **No stock Rust age crate can write or read PQ objects** (age 0.12.1). The client encoder must emit the X-Wing stanza itself, for example with the `hpke` 0.14.1 crate. Byte-level interop with Go age is **unverified** until A2-S3 runs.
+5. **New in the continuation pass: X-Wing is not yet behaviourally frozen.** The CCTV vector `hybrid_low_order` requires a *header failure* when the X25519 part of `enc` is a low-order point (all-zero shared secret). The `hpke` 0.14.1 X-Wing decapsulation uses the RustCrypto `x-wing` key type that *accepts* that case, and `x-wing` 0.1.1 (2026-10-01) says CFRG has yet to pick one behaviour for the RFC (C22). The encrypt direction is unaffected. Any Rust *decrypt* path (A8 device restores, Rust homelab tools) must add the rejection itself, and A2-S3 must run `hybrid_low_order` against it.
 
 **Confidence:**
 
@@ -57,7 +58,8 @@
 | 8 | Metadata-record fields and encoding; schema evolution | **Provisional:** a signed-note (C2SP) whose text is one line of compact I-JSON, signed with the device's Ed25519 key. The fields are from H4 §6.1 plus the A1, A3 and B4 additions (§F6). Deterministic CBOR (CDE) is the main alternative. The choice follows A5 and the D2/E7 recovery kit. | Low-medium |
 | 9 | Algorithm agility and migration | Agility lives at the **stanza** level: new recipient types, rewrap only. The payload suite (ChaCha20-Poly1305, 64 KiB STREAM) is fixed by age v1. Replacing it means decrypting and re-encrypting at the homelab: about 28 h per 10 TB at BUD-INGEST's 100 MB/s (arithmetic). Signature agility comes from signed-note key names and type bytes. The record's `object.profile` names the Reliquary profile. | Medium |
 | 10 | (new) Can the homelab verify a recovery stanza written by a device? | **No.** An HPKE SealBase stanza can be checked only with the recipient's private key or the sender's encapsulation randomness, and R is offline. A buggy or malicious device could write a garbage R stanza that ingest cannot detect (C9). | High (logic) |
-| 11 | (new) Does the Rust ecosystem have a drop-in PQ age implementation? | **No.** The `age` crate 0.12.1 has native `x25519`, `scrypt`, `tag` and `tagpq` only (confirmed by listing `src/native/`). Its `hpke` and `ml-kem` dependencies serve the encryption-only `tagpq` recipient (C7). This resolves a conflict between scouts. | High |
+| 11 | (new) Does the Rust ecosystem have a drop-in PQ age implementation? | **No.** The `age` crate 0.12.1 has native `x25519`, `scrypt`, `tag` and `tagpq` only (confirmed by listing `src/native/`). Its `hpke` and `ml-kem` dependencies serve the encryption-only `tagpq` recipient (C7). This resolves a conflict between scouts. Re-checked 2026-10-06: 0.12.1 is still the latest `age` crate. | High |
+| 12 | (new) Is the X-Wing KEM behaviour stable across implementations? | **Not fully.** Go age (via CCTV `hybrid_low_order`) rejects a low-order X25519 share; Rust `hpke` 0.14.1 on `x-wing`'s default key accepts it; `x-wing` 0.1.1 adds a rejecting key type and says the default will change once CFRG publishes the RFC (C22). Honest encryptions are unaffected; only malformed-stanza handling differs. Treat as a decrypt-side conformance item, not a format change. | High (facts); Medium (impact) |
 
 ## Method
 
@@ -93,6 +95,13 @@
   - developers.google.com/tink (Tink source used instead).
   - WebSearch: the session budget was exhausted.
   - A COSE struct draft path on raw GitHub returned 404, so COSE was **not** evaluated from a primary source.
+  - mailarchive.ietf.org (403 from shell, 2026-10-06): the CFRG message that `x-wing` 0.1.1 cites for "CFRG have decided" on non-contributory X25519 was not read; C22 relies on the crate's own statement of it.
+- **Continuation pass (2026-10-06, after the session limit interrupted Wave 1):**
+  - re-checked latest versions: `age` crate 0.12.1, Go age v1.3.2, typage 0.3.1, CCTV age 2026-09-25 (all unchanged); `hpke` 0.14.1 unchanged; **`x-wing` 0.1.1 published 2026-10-01** (new);
+  - diffed `x-wing` 0.1.0 vs 0.1.1 source and read `hpke` 0.14.1 `src/kem/xwing.rs` in full (C22, C23);
+  - read the CCTV `hybrid_low_order` vector and its generator (`internal/tests/hybrid_low_order.go`);
+  - re-ran M1 with Go age v1.3.2 (M2): identical numbers.
+  - The partial spike-runner tree at `scratchpad/A2/ce-pq` (a copy of the CE spike with `hpke = "=0.14.1"` added) was **not** used as evidence; its `evidence/` files are the CE run's.
 - **Stop rule:** by the end of the analyst pass, no new primary source changed a finding. The last three reads (signed-note, `hpke` crate source, CCTV README) refined the design without contradicting it.
 
 ## Sources
@@ -106,6 +115,8 @@
 | S5 | Rust `age` 0.12.1 crate (static.crates.io): `src/native/{x25519,scrypt,tag,tagpq}.rs`, `Cargo.toml` (hpke ^0.12, ml-kem ^0.2), CHANGELOG | str4d | 0.12.1, 2026-07-14 | 2026-09-29 | Yes |
 | S6 | Rust `hpke` 0.14.1 crate: `src/kem/xwing.rs` (KEM_ID 0x647a, draft-ietf-hpke-pq-03, auth-mode errors), `Cargo.toml` (depends on `x-wing` 0.1.0 "hazmat", `ml-kem` 0.3; default features include x25519, mlkem, chacha; rust-version 1.85) | RustCrypto | 0.14.1 | 2026-09-29 | Yes |
 | S7 | Rust `x-wing` 0.1.0 crate `Cargo.toml` ("X-Wing KEM (draft 06)"); `hpke-rs` 0.7.0 `src/kem.rs` (XWingDraft06, auth unsupported) | RustCrypto; Cryspen | 0.1.0; 0.7.0 | 2026-09-29 | Yes |
+| S26 | Rust `x-wing` 0.1.1 crate (static.crates.io): `CHANGELOG.md` (0.1.1, 2026-10-01: "Fallible `DecapsulationKeyRejectNonContrib`"), `src/lib.rs` (backstory doc comment on non-contributory X25519; cites a CFRG mail-archive message) | RustCrypto | 0.1.1, 2026-10-01 (crates.io pubtime) | 2026-10-06 | Yes |
+| S27 | CCTV age `testdata/hybrid_low_order` ("expect: header failure"; "the X25519 part of enc is a low-order point, so the shared secret is the disallowed all-zero value") and `internal/tests/hybrid_low_order.go` (order-8 point) | C2SP | module 2026-09-25 (50a8ecf2a220) | 2026-10-06 | Yes |
 | S8 | draft-ietf-hpke-pq editor's copy: `hpkewg/hpke-pq @ main : draft-ietf-hpke-pq.md` (hybrid KEM mapping; IANA 0x647a Nenc 1120, Npk 1216, Auth "no"; §"Asymmetric-Key-Authenticated Modes of RFC9180") | IETF HPKE WG | editor's copy (-latest); age cites -03 | 2026-09-29 | Yes |
 | S9 | X-Wing draft editor's copy: `dconnolly/draft-connolly-cfrg-xwing-kem @ main` (§"Not an authenticated KEM") | Connolly et al. | editor's copy | 2026-09-29 | Yes |
 | S10 | HPKE source markdown: `cfrg/draft-irtf-cfrg-hpke @ master` (KCI; Auth-mode caveats; non-goals). May differ editorially from RFC 9180 | IRTF CFRG | master | 2026-09-29 | Yes (mirror) |
@@ -125,6 +136,7 @@
 | S24 | Reliquary CE note `content-encryption-format.md` and `spikes/content-encryption/` | this repo (T1) | 2026-09-29 | 2026-09-29 | Yes (project evidence) |
 | S25 | Reliquary drafts: D2, F3, D1, A1, A3, A6, B4 notes and `docs/design/data-model.md` | this repo | 2026-09-29 | 2026-09-29 | Project evidence (drafts, not yet skeptic-reviewed) |
 | M1 | Analyst reproduction with Go age v1.3.2 in the container (header sizes, mixing refusal, recipient length) | this note | 2026-09-29 | 2026-09-29 | Measurement (synthetic data) |
+| M2 | Re-run of M1 (fresh keys, 1,000 random bytes): one PQ stanza header 1,627 B (file 2,659 B), two PQ 3,184 B (4,216 B), one X25519 168 B (1,200 B); recipient 1,959 chars; mixed PQ + X25519 refused (exit 1, "incompatible recipients: can't mix post-quantum and classic recipients"); two-stanza file decrypts with the second identity | this note | 2026-10-06 | 2026-10-06 | Measurement (synthetic data) |
 
 ## Claims
 
@@ -137,7 +149,7 @@ All verdicts are pending skeptic review.
 | C3 | Streaming decryption MUST error at EOF without a valid final chunk. Seeking relative to the end MUST first verify the final chunk. The payload MUST NOT be modified without re-encrypting with a fresh nonce. | S1 | Yes | | | | pending |
 | C4 | The `mlkem768x25519` stanza is HPKE SealBase with KEM MLKEM768-X25519 (draft-ietf-hpke-pq-03 / filippo.io/hpke-pq), HKDF-SHA256, ChaCha20Poly1305, info `age-encryption.org/mlkem768x25519`, empty aad. It has two arguments (the type and base64 of a 1,120-byte enc) and a 32-byte body. Identities MUST reject a non-canonical enc or wrong lengths. | S1, S8 | Yes | | | | pending |
 | C5 | The same file SHOULD NOT be encrypted to `mlkem768x25519` (or `mlkem768p256tag`) and to non-PQ recipients. Go age 1.3.2 enforces this through a `postquantum` label and fails with "can't mix post-quantum and classic recipients" (reproduced, M1). An scrypt stanza MUST be alone. | S1, S2, M1 | Yes | | | | pending |
-| C6 | Measured with Go age 1.3.2 (M1): header 1,627 B with one PQ stanza, 3,184 B with two PQ stanzas, 168 B with one X25519 stanza. A PQ recipient string is 1,959 characters. These match D2's independent measurement and the README's age-inspect example. | M1, S3, D2 C4 | Yes (cost; A2-S1 rule) | | | | pending |
+| C6 | Measured with Go age 1.3.2 (M1, reproduced in M2): header 1,627 B with one PQ stanza, 3,184 B with two PQ stanzas, 168 B with one X25519 stanza. A PQ recipient string is 1,959 characters. These match D2's independent measurement and the README's age-inspect example. | M1, M2, S3, D2 C4 | Yes (cost; A2-S1 rule) | | | | pending |
 | C7 | The Rust `age` crate 0.12.1 (latest, 2026-07-14) has native `x25519`, `scrypt`, `tag` and `tagpq` modules, and no `mlkem768x25519` recipient or identity. Its hpke and ml-kem dependencies serve the encryption-only `tagpq`. | S5 | Yes | | | | pending |
 | C8 | The Rust `hpke` 0.14.1 crate implements the MLKEM768-X25519 KEM (0x647a), citing filippo.io/hpke-pq and draft-ietf-hpke-pq-03, on top of RustCrypto `x-wing` 0.1.0 ("draft 06"). It is a candidate for the client's own stanza encoder. **Byte-level interop with Go age is not verified.** CCTV vectors can test only the decrypt direction (C14), so interop needs Go age to decrypt Rust output (A2-S3). | S6, S7, S4 | Yes | | | | pending |
 | C9 | The homelab cannot verify that a device-written stanza for an offline recipient R wraps the right file key. Checking a SealBase output needs skR or the sender's encapsulation randomness. A faulty device could therefore store unrecoverable R stanzas undetected, unless the homelab writes R itself (A′ rewrap) or the device discloses its encapsulation randomness to the homelab. | S1, S8 (logic) | Yes | | | | pending |
@@ -152,6 +164,8 @@ All verdicts are pending skeptic review.
 | C18 | Apple CryptoKit has HPKE from iOS 17 / macOS 14, and X-Wing (XWingMLKEM768X25519, citing X-Wing draft 06) only from iOS 26 / macOS 26. A Rust core, not CryptoKit, is therefore the portable PQ path. | S13 | No | | | | pending |
 | C19 | saltpack v2 authenticates the sender with per-recipient MAC keys derived by DH between the sender's long-term key and the recipient key. This needs a DH-capable recipient key, so it does not transfer to a KEM-only PQ recipient. | S16 | No | | | | pending |
 | C20 | Ente fixes its secretstream chunk size permanently ("Existing encrypted files depend on this chunk boundary"). rclone crypt's documented format has no final-chunk marker. Borg 1 reused counter nonces after a rollback (borg #1039). | S17, S18, S23 | No (lessons) | | | | pending |
+| C22 | CCTV `hybrid_low_order` expects **header failure** for an `mlkem768x25519` stanza whose X25519 share is a low-order point (all-zero shared secret). Rust `hpke` 0.14.1 wraps `x_wing::DecapsulationKey` and calls its infallible `decapsulate` (xwing.rs l.28, l.181). `x-wing` 0.1.1 (2026-10-01) documents that this default type *accepts* non-contributory X25519, adds `DecapsulationKeyRejectNonContrib`, states that CFRG will pick a single behaviour for the RFC, and that the default type "will be altered" when it is published. Inference (untested until A2-S3): `hpke` 0.14.1 as a decoder fails `hybrid_low_order`. | S6, S26, S27 | Yes (A2-S3; decrypt paths) | | | | pending |
+| C23 | Rust `hpke` 0.14.1 X-Wing encapsulation draws its 64 bytes of encapsulation randomness from a caller-supplied `CryptoRng` (`encap_with_rng`); the deterministic entry point is `pub(crate)`. So CE-style hedged randomness can be injected only through a seeded `CryptoRng` (source reading; not prototyped). | S6 | No (supporting F5) | | | | pending |
 | C21 | Header overhead arithmetic (not measured on family data). At F3's 0.9M–4.5M files for 2–10 TB, one PQ stanza per content object costs about 1.5–7.3 GB of headers; two stanzas about 2.9–14.3 GB, i.e. about 0.07 % vs 0.14 % of stored bytes. Metadata records double these unless records are batched (§F6). | C6 + F3 | Yes (cost) | | | | pending |
 
 ## Findings
@@ -184,7 +198,7 @@ All verdicts are pending skeptic review.
   - **CPU:** one X-Wing encapsulation per stanza per object. D2 measured software *decapsulation* at 4,904–6,827 per second in the container (D2 C12, x86). Phone encapsulation cost is **not measured**; that is the job of A2-S1 (OL kit).
   - **Distribution:** a recipient string is 1,959 characters (C6). The QR code must carry the trust-bundle **digest** (CE D-9), never the recipient itself.
   - **Tooling:** heirs need Go age ≥ 1.3.0 or the `age-plugin-pq` plugin (C13). No Rust drop-in exists (C7).
-  - **Spec maturity:** the KEM is referenced from an IETF *draft* (-03) and filippo.io/hpke-pq (C4, S8).
+  - **Spec maturity:** the KEM is referenced from an IETF *draft* (-03) and filippo.io/hpke-pq (C4, S8). One behavioural detail is still open at CFRG: whether a non-contributory (all-zero) X25519 result is rejected. age's CCTV vectors already pin *reject* (C22). Because an honest encryptor never produces such a share, this affects only how decoders treat malformed or hostile stanzas, never the bytes of a valid object.
 - **Risk if the KEM draft changes:** the age stanza name `mlkem768x25519` is bound to its referenced definition. The age(1) promise covers files already written (C13). This is an inference about maintainer behaviour, and skeptics should attack it.
 - **No mixing** (C5). A PQ object cannot carry an X25519 stanza "for compatibility", and cannot carry a scrypt stanza. This binds D2's recovery design (D2 F3).
 - **Fallback if A2-S3 finds no interoperable Rust X-Wing:**
@@ -244,7 +258,8 @@ All verdicts are pending skeptic review.
   - 1,643 B with one PQ stanza, or 3,200 B with two;
   - the part and chunk math is unit-tested for prefixes of 1–65,551 B;
   - the sealed state persists the whole prefix, so it grows by about 1.5–3 KB per in-flight upload.
-- **Hedging.** Derive each stanza's 64-byte X-Wing encapsulation randomness from the CE hedge (HKDF over the CSPRNG seed with salt SHA-256(plaintext); new info labels such as `reliquary/v1/hedge/xwing-encap/<i>`). Feed it to the library through a seeded CSPRNG, which the `hpke` API appears to accept (it is generic over `rand_core::CryptoRng`; not tried). This is **not prototyped**; A2-S2 or a follow-up should cover it.
+- **Hedging.** Derive each stanza's 64-byte X-Wing encapsulation randomness from the CE hedge (HKDF over the CSPRNG seed with salt SHA-256(plaintext); new info labels such as `reliquary/v1/hedge/xwing-encap/<i>`). Feed it to the library through a seeded CSPRNG. Source reading confirms this is the only route: `hpke` 0.14.1 draws the 64 encapsulation bytes from the caller's `CryptoRng`, and its deterministic entry point is crate-private (C23). This is **not prototyped**; A2-S2 or a follow-up should cover it.
+- **Decrypt-side conformance (C22).** Any Rust code that *opens* `mlkem768x25519` stanzas (A8 device restores under D2 K-10; Rust homelab tools, if any) must reject a low-order X25519 share, either via `x-wing` ≥ 0.1.1 `DecapsulationKeyRejectNonContrib` (which `hpke` 0.14.1 does not expose) or by checking the X25519 output itself. Go age already does (CCTV). The client's *encrypt* path is unaffected.
 - **Truncation.** Keep CE §5.4 (valid-length classes) and §5.5 (authenticate the final chunk before serving any chunk). Error codes are specified in `object-format.md`, as A2-S4 requires.
 - **iOS (B4 K2–K4).**
   - The keystream guard must hold **before** a part file is handed to `nsurlsessiond` (K2).
@@ -323,7 +338,7 @@ All verdicts are pending skeptic review.
 | Go `filippo.io/age` + age-inspect, age-plugin-pq | Homelab decrypt and rewrap; heir tool; interop oracle | BSD-3-Clause (not re-checked) | v1.3.2, 2026-08-29; go.mod needs Go 1.25 | S2 |
 | Rust `age` | Decrypt side (X25519 only) | MIT/Apache-2.0 | 0.12.1, 2026-07-14; no PQ identity | S5 |
 | Rust `hpke` (RustCrypto) | X-Wing stanza encoder and decoder in the client core | MIT/Apache-2.0 | 0.14.1; interop unverified | S6 |
-| Rust `x-wing`, `ml-kem` | X-Wing KEM building blocks | MIT/Apache-2.0 (not re-checked) | 0.1.0 ("draft 06"); ml-kem 0.3 | S7 |
+| Rust `x-wing`, `ml-kem` | X-Wing KEM building blocks | MIT/Apache-2.0 (crate ships LICENSE-MIT and LICENSE-APACHE) | 0.1.1, 2026-10-01 ("draft 06"; adds rejecting decapsulation key); ml-kem 0.3 | S7, S26 |
 | typage (`age-encryption`) | TypeScript age with hybrid PQ; A2-S3 third implementation | BSD-3-Clause (not re-checked) | 0.3.1, 2026-08-28 | S12 |
 | CCTV age vectors | Conformance (decrypt direction) | Not checked (README: copying allowed "without attribution") | 2026-09-25 | S4 |
 | ed25519-dalek | Device record signatures | BSD-3-Clause (not re-checked) | not checked in this run | — |
@@ -337,7 +352,7 @@ Placeholder: a separate spike runner is running these in parallel. Results will 
 |---|---|---|---|---|---|---|---|
 | A2-S1 Throughput and energy, X25519 vs PQ | PQ adds a header ≤ 3 KB per object and ≤ 10 % throughput loss on a low-end phone; encryption is never the bottleneck against a 100 Mbit uplink | Pass → PQ from day one (DR-A2-1); fail → X25519 now plus a migration plan. **Note:** the analyst measured 3,184 B for two PQ stanzas, which fails the header limit as written; one stanza (1,627 B) passes (DR-A2-2) | CT + OL | BUD-HASH, BUD-BAT-S | SYN → results | (spike runner) | (spike runner) |
 | A2-S2 Kill-and-resume, 50 random kills | Every object decrypts to the exact SHA-256, at most one segment is re-encrypted per kill, no (key, nonce) reuse, no file key survives commit. Should include a PQ-header variant and the X-Wing hedging | Pass → CE resume mechanism in ADR-0007; fail → temp-file ciphertext spool | CT | BUD-TMP | SYN → results | (spike runner) | (spike runner) |
-| A2-S3 Interop | Rust output (with the X-Wing stanza) decrypts with Go age ≥ 1.3.0 and typage, and vice versa; 100 % of CCTV vectors (incl. `hybrid_*`) and project vectors pass | Pass → Rust `hpke` X-Wing in the encoder; fail → F2 fallback (X25519 on device, PQ rewrap at home) | CT | — | SYN → results | (spike runner) | (spike runner) |
+| A2-S3 Interop | Rust output (with the X-Wing stanza) decrypts with Go age ≥ 1.3.0 and typage, and vice versa; 100 % of CCTV vectors (incl. `hybrid_*`) and project vectors pass. **Expect `hybrid_low_order` to fail on a plain `hpke` 0.14.1 decoder (C22)**; record it, then re-run with a rejecting decapsulation | Pass → Rust `hpke` X-Wing in the encoder; fail → F2 fallback (X25519 on device, PQ rewrap at home) | CT | — | SYN → results | (spike runner) | (spike runner) |
 | A2-S4 Forgery and truncation | A forged object plus record (attacker holds only the public key) and a dropped final chunk are both rejected before any catalog write, with specific error codes | Pass → F4 binding set; fail → add an outer binding | CT | — | SYN → results | (spike runner) | (spike runner) |
 
 The measurement in M1 used Go age binaries on an x86 container VM, not a phone.
@@ -357,6 +372,7 @@ None that contradict. For the owner's awareness:
 3. **Recipient placement**, P1 vs P2 (DR-A2-2). It couples to OD-07 (A6) and OD-08 (D2). A joint A2/A6/D2 review is needed before ADR-0007/0008/0012 drafts.
 4. **Is a 128-bit file key adequate against quantum key search** for keep-forever data? The age spec fixes 16 bytes and derives a 256-bit payload key. No primary source on this was read in this run (NIST blocked). Skeptic 1 should find one.
 5. **Status of draft-ietf-hpke-pq**, and whether a later revision changes MLKEM768-X25519 bytes. Datatracker was blocked. Owner: H1 source escalation.
+10. **CFRG's choice on non-contributory X25519 in X-Wing** (C22), and whether it reaches age's `mlkem768x25519` definition. The CFRG mail archive was blocked. Expected impact is decoder strictness only. Owner: H1 (source), A2 (track before Gate A).
 6. **Record encoding:** JSON-in-signed-note vs deterministic CBOR, after A5's item model and the E7/D2 break-glass tool requirements. Owner: A2 Wave 2.
 7. **kage PQ support**, and which Tink release first ships X_WING. Relevant only if a non-Rust client is chosen (ADR-0003). Owner: T1/B-track.
 8. **Device signing key storage:** Ed25519 support in Android Keystore and iOS Secure Enclave was not checked. The Secure Enclave is P-256. Owner: D3.
@@ -367,7 +383,7 @@ None that contradict. For the owner's awareness:
 Adopt for the ADR-0007 draft:
 
 1. **Construction:** standard age v1 objects from the client's own encoder, with CE's journaled resume (CE D-1). Restrict the profile to a single stanza type per object: no scrypt, plugin or armor. Use a generic multi-stanza header parser with strict limits.
-2. **PQ from day one (DR-A2-1):** every stanza on every object and record is `mlkem768x25519`. This is conditional on A2-S3 showing Rust↔Go interop. If that fails, take the F2 fallback.
+2. **PQ from day one (DR-A2-1):** every stanza on every object and record is `mlkem768x25519`. This is conditional on A2-S3 showing Rust↔Go interop. If that fails, take the F2 fallback. Every decoder the project ships must pass all CCTV `hybrid_*` vectors, including the low-order rejection (C22).
 3. **Recipients (DR-A2-2):** the device writes the ingest stanza only; the homelab rewraps to {archive X, recovery R} at ingest and keeps h0. Pending the joint decision with D2 and A6.
 4. **Sender authentication:** device Ed25519 signature on a signed-note record inside the encryption, binding the §F4 fields. Allocate `device_seq` and sign at sealing time. Receipts bind `record_sha256`. No HPKE Auth or PSK mode.
 5. **Truncation and random access:** CE §5.4 and §5.5 rules, unchanged.
@@ -451,7 +467,7 @@ Adopt for the ADR-0007 draft:
 | A4 (ADR-0011) | USB bundles carry the same objects and records; late bundles need I_e kept until drained under P1 | §F3 |
 | A1 (ADR-0006) | Record carries the text-form `dedup_id` if JSON records are kept (A1 assumed the binary form in CBOR) | §F6 |
 | D3 (ADR-0014), E5 | The QR carries the trust-bundle digest, never a 1,959-character PQ recipient; device Ed25519 key storage per platform | C6; open question 8 |
-| A8 (ADR-0028) | Restore sealing to a device key: if PQ (D2 K-10), the client needs the Rust X-Wing *decrypt* path too, because the `age` crate lacks it | C7 |
+| A8 (ADR-0028) | Restore sealing to a device key: if PQ (D2 K-10), the client needs the Rust X-Wing *decrypt* path too, because the `age` crate lacks it; that path must reject low-order X25519 shares (`hpke` 0.14.1 alone does not) | C7, C22 |
 | G2 (ADR-0035) | Run CCTV plus project vectors in CI against every implementation (Duplicacy lesson) | C14, S23 |
 | F3 | F3-S1 result decides DR-A2-4 | §F7 |
 | H1 | Blocked sources (Method); OD numbers for DR-A2-1..4; DR-A2-1 is OD-06 | Registry owner |

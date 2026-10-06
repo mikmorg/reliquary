@@ -1,0 +1,12 @@
+// V3: V1 plus Workers tracing (Beta). Fetch-handler spans document url.full, url.path, user_agent.*,
+// geo.locality.name and cloudflare.asn (workers/observability/traces/spans-and-attributes.mdx).
+{
+  "name": "d6s2-probe",
+  "main": "probe-worker.js",
+  "compatibility_date": "2026-09-01",
+  "observability": {
+    "enabled": true,
+    "logs": { "invocation_logs": false },
+    "traces": { "enabled": true }
+  }
+}

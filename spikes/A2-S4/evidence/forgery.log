@@ -1,0 +1,31 @@
+PASS baseline: honest single-PUT upload ingests
+PASS baseline: honest multipart upload ingests
+PASS A1 forged object + record signed by attacker key under its own name: rejected with E_SIG_UNKNOWN_KEY, no store write :: {'exit': 10, 'code': 'E_SIG_UNKNOWN_KEY', 'store_unchanged': True, 'stderr': ''}
+PASS A2 forged record claims registered device name, attacker key: rejected with E_SIG_KEY_HASH, no store write :: {'exit': 10, 'code': 'E_SIG_KEY_HASH', 'store_unchanged': True, 'stderr': ''}
+PASS A3 forged record with victim's key hash, attacker signature: rejected with E_SIG_INVALID, no store write :: {'exit': 10, 'code': 'E_SIG_INVALID', 'store_unchanged': True, 'stderr': ''}
+PASS A4 unsigned record (valid age file, no signature line): rejected with E_RECORD_FORMAT, no store write :: {'exit': 10, 'code': 'E_RECORD_FORMAT', 'store_unchanged': True, 'stderr': ''}
+PASS A5 forged dedup-hit record (object null), attacker key: rejected with E_SIG_KEY_HASH, no store write :: {'exit': 10, 'code': 'E_SIG_KEY_HASH', 'store_unchanged': True, 'stderr': ''}
+PASS B1 staged object replaced by attacker's valid age object (same size): rejected with E_BINDING_HEADER_MAC, no store write :: {'exit': 10, 'code': 'E_BINDING_HEADER_MAC', 'store_unchanged': True, 'stderr': ''}
+PASS B2 same, binding pre-check disabled (TEST flag): content check must still reject: rejected with E_CONTENT_MISMATCH, no store write :: {'exit': 10, 'code': 'E_CONTENT_MISMATCH', 'store_unchanged': True, 'stderr': ''}
+PASS B4 attacker object carrying a copy of the victim's MAC line: rejected with E_OBJECT_HMAC, no store write :: {'exit': 10, 'code': 'E_OBJECT_HMAC', 'store_unchanged': True, 'stderr': ''}
+PASS B3 another honest object presented under the victim's record: rejected with E_BINDING_HEADER_MAC, no store write :: {'exit': 10, 'code': 'E_BINDING_HEADER_MAC', 'store_unchanged': True, 'stderr': ''}
+PASS C1 dropped final chunk (record intact): rejected with E_BINDING_LENGTH, no store write :: {'exit': 10, 'code': 'E_BINDING_LENGTH', 'store_unchanged': True, 'stderr': ''}
+PASS C2 dropped final chunk, binding pre-check disabled (TEST flag): rejected with E_STREAM_TRUNCATED, no store write :: {'exit': 10, 'code': 'E_STREAM_TRUNCATED', 'store_unchanged': True, 'stderr': ''}
+PASS C3 one byte cut from the end: rejected with E_BINDING_LENGTH, no store write :: {'exit': 10, 'code': 'E_BINDING_LENGTH', 'store_unchanged': True, 'stderr': ''}
+PASS C4 one byte cut, pre-check disabled: rejected with E_STREAM_AUTH, no store write :: {'exit': 10, 'code': 'E_STREAM_AUTH', 'store_unchanged': True, 'stderr': ''}
+PASS C5 full-chunk object, final chunk dropped at a chunk boundary: rejected with E_BINDING_LENGTH, no store write :: {'exit': 10, 'code': 'E_BINDING_LENGTH', 'store_unchanged': True, 'stderr': ''}
+PASS C6 same, pre-check disabled: STREAM final-flag check: rejected with E_STREAM_TRUNCATED, no store write :: {'exit': 10, 'code': 'E_STREAM_TRUNCATED', 'store_unchanged': True, 'stderr': ''}
+PASS C7 trailing data appended after the final chunk: rejected with E_BINDING_LENGTH, no store write :: {'exit': 10, 'code': 'E_BINDING_LENGTH', 'store_unchanged': True, 'stderr': ''}
+PASS C8 trailing data, pre-check disabled: rejected with E_STREAM_AUTH, no store write :: {'exit': 10, 'code': 'E_STREAM_AUTH', 'store_unchanged': True, 'stderr': ''}
+PASS C9 two chunks swapped (reordering): rejected with E_STREAM_AUTH, no store write :: {'exit': 10, 'code': 'E_STREAM_AUTH', 'store_unchanged': True, 'stderr': ''}
+PASS D1 object with PQ + X25519 stanzas (downgrade): rejected with E_PROFILE, no store write :: {'exit': 10, 'code': 'E_PROFILE', 'store_unchanged': True, 'stderr': ''}
+PASS D2 object with an extra unknown stanza (valid age, not in profile): rejected with E_PROFILE, no store write :: {'exit': 10, 'code': 'E_PROFILE', 'store_unchanged': True, 'stderr': ''}
+PASS D3 honest record re-encrypted with an extra X25519 stanza: rejected with E_PROFILE, no store write :: {'exit': 10, 'code': 'E_PROFILE', 'store_unchanged': True, 'stderr': ''}
+PASS D4 victim object with its stanza's X25519 share set to a low-order point: rejected with E_OBJECT_HEADER, no store write :: {'exit': 10, 'code': 'E_OBJECT_HEADER', 'store_unchanged': True, 'stderr': ''}
+PASS E1 record signed with dev-a key but device_id says dev-b: rejected with E_DEVICE_MISMATCH, no store write :: {'exit': 10, 'code': 'E_DEVICE_MISMATCH', 'store_unchanged': True, 'stderr': ''}
+PASS E2 new record reusing a committed device_seq: rejected with E_REPLAY_SEQ, no store write :: {'exit': 10, 'code': 'E_REPLAY_SEQ', 'store_unchanged': True, 'stderr': ''}
+PASS E3 committed record_id reused with different content: rejected with E_REPLAY_RECORD_ID, no store write :: {'exit': 10, 'code': 'E_REPLAY_RECORD_ID', 'store_unchanged': True, 'stderr': ''}
+PASS E4 oversized record (> 1 MiB): rejected with E_RECORD_TOO_LARGE, no store write :: {'exit': 10, 'code': 'E_RECORD_TOO_LARGE', 'store_unchanged': True, 'stderr': ''}
+PASS F1 replayed honest record: idempotent (exit 0), no new catalog row, receipt re-issued :: {'rc': 0, 'rows': [2, 2]}
+PASS final: the untouched victim upload still ingests
+{"passed": 30, "failed": 0, "codes": ["E_BINDING_HEADER_MAC", "E_BINDING_LENGTH", "E_CONTENT_MISMATCH", "E_DEVICE_MISMATCH", "E_OBJECT_HEADER", "E_OBJECT_HMAC", "E_PROFILE", "E_RECORD_FORMAT", "E_RECORD_TOO_LARGE", "E_REPLAY_RECORD_ID", "E_REPLAY_SEQ", "E_SIG_INVALID", "E_SIG_KEY_HASH", "E_SIG_UNKNOWN_KEY", "E_STREAM_AUTH", "E_STREAM_TRUNCATED", "idempotent re-ack"]}

@@ -1,394 +1,459 @@
 # C4. Cost, capacity and storage-budget model (v0)
 
 - **Workstream:** C4 (see `docs/research/PLAN.md`, section "C4.")
-- **Status:** Draft (analyst deep read, Wave 1 batch W1-c). Skeptic review has not run yet.
-- **Date:** 2026-09-29 (last updated 2026-09-29)
-- **Feeds:** OD-14 (BUD-CLOUD, BUD-ABUSE, billing alerts), OD-20 (per-person budgets and approval categories), ADR-0030 (C5 BOM: cost and capacity inputs), ADR-0010 (C1: warm cache, meters), ADR-0014 (D3 + C2: abuse limits), ADR-0021 (B6: part-size policy)
-- **Depends on:** T2 (`fact-check-adr-0001-0002.md`), T1 spike 2 (`content-encryption-format.md`, part size), H2 (`owner-intake.md` B1–B3, C4, D1–D2, F4), H5 (`h5-long-lead-items.md` fee and lead-time lines). **Still missing:** A0 (measured operations per file), E1 (growth per person), A6 (storage-engine overhead), C5 (BOM prices), H2 answers.
+- **Status:** Final for Wave 1 (v0). The skeptic review ran (sources, logic and adversary lenses) and the C4-S1 spike ran. v1 follows once A0, E1, H2 and the C2 `[SB]` checks report.
+- **Date:** 2026-09-29 (last updated 2026-10-06, synthesis)
+- **Feeds:** OD-14 (BUD-CLOUD, BUD-ABUSE, billing alerts, beta-feature policy), OD-20 (per-person budgets and approval categories), ADR-0030 (C5 BOM: cost and capacity inputs), ADR-0010 (C1: warm cache, meters, seed admission), ADR-0014 (D3 + C2: abuse limits, conditional create), ADR-0021 (B6: part-size policy). C4 owns **no ADR** (PLAN §2.1). It owns this model, the script and CSVs (`spikes/C4-S1/`), the billing-alert list (§F4) and the fair-share proposal (§F9).
+- **Depends on:** T2 (`fact-check-adr-0001-0002.md`), T1 spike 2 (`content-encryption-format.md`, part size), H2 (`owner-intake.md` B1–B4, C4, D1–D2, F4), H5 (`h5-long-lead-items.md` fee and lead-time lines). **Still missing:** A0 (measured operations per file), E1 (growth per person and file sizes), A6 (storage-engine overhead), C5 (BOM prices), H2 answers, C2 `[SB]` billing checks.
 - **Traceability rows closed or advanced:** R-09 (scale), R-26 (keep forever: capacity forecast), R-31 (storage-issue nudges: pool-full behaviour), C-01 (warm-cache orphan: cost side only)
 
 ## Summary
 
-The steady-state cloud bill is **about $5–7 per month**, and $5 of that is the fixed Workers Paid fee. Usage charges stay inside the free allowances unless staged objects are kept in R2 as a warm cache. A seed month that pushes 2 TB through R2 costs **about $11–17**, or **about $40** if a 30-day warm cache is left on during the seed. Every figure is below the owner-intake defaults ($25 steady, $50 seed). The number that is **not** bounded today is abuse spend. Cloudflare budget alerts are informational, arrive a day late and never cap anything. A stolen device credential that makes small PUTs at 1,000/s spends $50 in under 2 hours. A presigned URL can be replayed until it expires, which multiplies the per-URL cost by up to its expiry in seconds. Reliquary therefore needs its own meters and auto-suspend in the Worker. With those, the worst case can be held under a $50 BUD-ABUSE. For the homelab, capacity rather than money is the risk: a 2-disk 16 TB mirror holding 10 TB reaches 80 % full in about 2 years at 1.5 TB/year growth. The model is v0. Operation counts are assumptions until A0 measures them. Growth is a scenario range until the E1 census. Disk prices and power are owner inputs, because no primary price source could be reached.
+At steady state the cloud bill is a little over the fixed $5 Workers Paid fee. The C4-S1 model gives a central $5.00–7.52 per month. Across every combination of the assumed ranges, the highest result is $11.16. Both are well below the proposed $25 BUD-CLOUD, but the ±25 % precision target is **not** met above 0.5 TB/yr of growth until A0 measures CPU per request and mean file size. A 2 TB seed month through R2 costs about $12–18. It costs about $42 if a 30-day warm cache stays on. A seed from a home behind a **data cap** can cost far more ($60–100 per month) unless the Worker paces seed uploads to what the homelab may pull. Cloudflare has no spend cap: budget alerts are informational, a day late, and exclude the $5 fee. Abuse spend is therefore **unbounded today**. It can be held under a $50 BUD-ABUSE only with Reliquary's own controls: mandatory create-only writes, per-device caps, two independent spend meters and a key-rotation kill switch. That bound is **provisional** on four billing behaviours that only a sandbox can check. On the homelab, the risk is capacity rather than money. A 2 × 16 TB mirror holding 10 TB reaches 80 % full in about 2 years at 1.5 TB/yr, so C5 should price the 32 TB tier as the reference case. Confidence: high on unit prices, medium on volumes, low on homelab running costs.
 
 ## Questions
 
 | # | Question (PLAN C4) | Short answer | Confidence |
 |---|---|---|---|
-| 1 | Line items: Workers Paid, requests, CPU, D1, DOs, Queues, R2 storage and Class A/B, email | All unit prices come from primary sources (§Findings F1). At family scale the only non-zero lines are the $5 base, R2 Class A in seed months, staged storage, and Queues in seed months. The rest sit inside the included usage. | High on prices; Medium on volumes (A0 pending) |
-| 2 | Seed scenarios: 10 TB via R2 with 8/16/64 MiB parts, mostly USB, or legacy import; peak staging for a drain rate | 10 TB via R2 costs about $55 over 5 months (about $30 above the base fee). Part size changes the bill by less than $1 per 2 TB month, because per-file operations dominate. Peak staging depends on homelab downtime and the warm-cache window, not on drain rate, whenever the home downlink exceeds family upload (§F3). Cloud cost does not choose between R2, USB and legacy import. ISP caps, time and owner effort do. | Medium |
-| 3 | Home ISP: caps, hairpin, restore over uplink, puller throttle schedule | A byte uploaded from home crosses the home link twice, once up and once down on the pull. Holding 1 TB in R2 for a month costs $15. Overage on one ISP's legacy capped plan costs about $200/TB (secondary source, low confidence). So throttling the puller to fit a cap is cheap. Restores are limited by the home uplink: 1 TB takes 4.6 days at 20 Mbps (§F5). | High on arithmetic; Low on ISP terms |
-| 4 | Growth per person, dedup ratio, redundancy overhead, headroom, disk-purchase trigger | Formula and three hardware tiers are in §F6. Growth and dedup are **no result** until E1 and A1/F3. The trigger fires when the projected fill reaches the headroom target within lead time plus a buffer. | High on formula; no data yet |
-| 5 | Homelab running costs: power, UPS, drive replacements, refresh | Formulas only (§F7). The Backblaze failure rates are secondary (1.2–1.6 % AFR from search snippets). Power, $/TB and UPS battery life are owner inputs. No primary price source was reachable. | Low (inputs missing) |
-| 6 | Optional costs | Apple $99/yr; Azure Artifact Signing Basic $9.99/month (5,000 signatures); Android: $25 (Play, or ADC full distribution) or $0 (ADC limited distribution, ≤ 20 devices); domain about $10–15/yr (estimate); email $0 inside 3,000/month (§F8). | High (domain: Low) |
-| 7 | Storage governance: soft budgets, approval categories, pool-full behaviour, seasonal bursts | Proposal in §F9 (for OD-20): soft per-person budgets that alert the owner and never refuse or delete; a short list of approval-gated categories, held on the device as "waiting for approval"; a green/amber/red pool state that backs up into a capped R2 staging area and then pauses presigning. | Medium (design proposal) |
-| 8 | Alternatives: Workers Paid vs Free; R2 Standard vs IA for staging; part sizes; fewer large vs more small drives; new vs recertified | Paid (Free cannot run a seed); Standard (IA costs about 10× more for staging); part size is not a cost lever, so B6 should choose it on other grounds; drive count and recertified drives are C5 decisions and lack price data here (§Alternatives). | High / High / Medium / Low |
-| 9 | **New:** does any Cloudflare mechanism cap spend? | **No.** Budget alerts and usage notifications are informational only, and alerts are processed daily. Threshold billing only invoices early. The application must cap itself (§F4). | High |
-| 10 | **New:** which abuse costs are not bounded by per-device limits? | Unauthenticated floods against the Worker, which are billed per request. Also possibly bad-signature (403) requests against R2, since only 401 is documented as free. Both need `[SB]` checks (§F4). | Medium |
+| 1 | Line items: Workers Paid, requests, CPU, D1, DOs, Queues, R2 storage and Class A/B, email | Every unit price comes from a primary source (K2, K7, K11, K15; §F1). At family scale only four lines cost money: the $5 fee, R2 Class A in seed months, staged storage, and Queues in seed months. Workers Logs is a fifth line that matters only under floods, and its pricing changes on **2026-12-01**. | High on prices; Medium on volumes (A0 pending) |
+| 2 | Seed scenarios: 10 TB via R2 with 8/16/64 MiB parts, mostly USB, or legacy import; peak staging for a drain rate | 10 TB through R2 at 2 TB/month costs **$60.80** in total, or $210.80 with a 30-day warm cache (C4-S1). Part size is **not a cost lever**: at most $8.58 per 10 TB even if every byte went in parts (K9). Without an ISP cap, peak staging is set by homelab downtime and the warm cache. **With a cap**, it is set by the cap, and an unpaced R2 seed overruns the $50 seed ceiling (§F3). | Medium |
+| 3 | Home ISP: caps, hairpin, restore over uplink, puller throttle | A home upload crosses the home link twice. Pacing the puller to a cap is cheap **only if seed admission is paced too**. Otherwise the backlog sits in R2 at $15/TB-month. Restores are limited by the uplink: 1 TB takes 4.63 days at 20 Mbps (§F5). | High on arithmetic; Low on ISP terms |
+| 4 | Growth, dedup ratio, redundancy overhead, headroom, disk-purchase trigger | We have the method and three tiers (§F6). The trigger dates for the scenarios are computed (C4-S1). The family's own date is **no result** until H2 and E1 report. Dedup and engine overhead are also no result yet (A1/F3, A6). | High on method; no family data |
+| 5 | Homelab running costs | Formulas only (§F7). The drive AFR is **contested** (secondary sources only, K13). Power price, $/TB and UPS battery life are owner or C5 inputs. | Low |
+| 6 | Optional costs | Apple $99/yr; Azure Artifact Signing Basic $9.99/month (K14); Android $25 or $0; domain about $10–15/yr (estimate); email $0 within 3,000/month (K15) (§F8). Apple and Azure apply only if OD-01 or OD-09 changes the settled "no signing, iOS deferred". | High (domain Low) |
+| 7 | Storage governance | A proposal for OD-20 (§F9): soft per-person budgets; approval categories uploaded at **lowest priority** rather than withheld; green, amber and red pool states; no refusal without an owner decision. | Medium |
+| 8 | Alternatives | Workers Paid (K7). R2 Standard, never IA, for staging (K8). Part size chosen on non-cost grounds (K9). Mirror vs RAIDZ2 and new vs recertified drives go to C5 (§Alternatives). | High / High / Medium / Low |
+| 9 | **New:** does any Cloudflare mechanism cap spend? | **No** (K1). Alerts are informational and a day late. Threshold billing only invoices early. The per-Worker CPU limit caps CPU per call, not total spend. | High |
+| 10 | **New:** which abuse costs are not bounded by per-device limits? | Unauthenticated floods on the Worker ($276/day at 10k req/s, plus up to $518/day if logs are not sampled), and possibly requests straight to R2 that return 403, 412 or 429 (K6). Both need `[SB]` checks. | Medium |
+| 11 | **New (skeptics):** can abuse or ransomware churn consume **keep-forever capacity**? | Yes. Anything the homelab commits stays until the admin prunes it. 100 GB/day from one device adds about 3 TB/month. Proposal: per-device ingest caps and a homelab **quarantine** area (§F4.4). | Medium |
 
 ## Method
 
-- **Sweep:** two scouts (vendor docs and pricing; source code and similar work), then this analyst pass. The analyst re-fetched and read in full: R2 pricing, limits, presigned URLs, lifecycles, event notifications and the S3 compatibility table; Workers pricing and limits; the D1, Queues, Workers Logs and Durable Objects pricing partials; the DO SQLite-billing changelog; Email Service pricing; budget alerts, the 2026-07-20 budget-alert changelog, threshold billing and billing policy; WAF rate-limiting availability; the Workers rate-limit binding; Azure Artifact Signing SKU; the Android developer-verification FAQ; Proxmox `local-zfs.adoc`; and the rclone, Ente and Immich code lines cited below.
-- **Model:** a small Python calculation, run in the scratchpad (not committed). The formulas are written out in §Model so anyone can re-run them. The C4-S1 spike runner owns the committed script or CSV.
+- **Sweep:** two scouts (vendor docs and pricing; source code and similar work), an analyst deep read, the C4-S1 `[CT]` model run, three skeptics (sources, logic, adversary), and this synthesis. For the synthesis I re-fetched from `cloudflare-docs @ production` on 2026-10-06: Workers pricing (custom CPU limits), the Workers Logs pricing partial (2026-12-01 change), R2 metrics and analytics (GraphQL), R2 event notifications (overwrites fire `object-create`), the R2 S3 API table (PutObject headers; CompleteMultipartUpload conditionals), Workers limits (request body), R2 object lifecycles, R2 presigned URLs (temporary credentials), and the R2 Workers API reference (`onlyIf`).
+- **Model:** `spikes/C4-S1/c4_model.py` (Python stdlib), with CSVs in `spikes/C4-S1/out/` and the run log in `spikes/C4-S1/evidence/run_output.txt`. **The note now uses the spike's day-by-day simulator figures** throughout. They supersede the analyst's `I·(d+W)/30` approximation, which under-counted R2's daily-peak metric by about one day of inflow (K3, contested). Some figures that are new in this synthesis were computed in the scratchpad using the same unit prices: abuse with included allowances, replay including Queue operations, part sizes at b_mp = 0.6, the capped-ISP seed, and the Workers Logs flood term. Each formula is shown where it is used. They are labelled **(synthesis calc)**.
 - **Routes used:** `cloudflare/cloudflare-docs @ production` on raw.githubusercontent.com (primary mirror); `MicrosoftDocs/azure-docs @ main`; `proxmox/pve-docs @ master`; developer.android.com direct; GitHub raw for rclone, Ente and Immich.
-- **Blocked sources (report to H1):** developers.cloudflare.com (mirror used); azure.microsoft.com pricing page (docs mirror used); backblaze.com and ir.backblaze.com (Drive Stats: **secondary only**); xfinity.com (**secondary only**); eia.gov (electricity price: **no source**); diskprices.com and pcpartpicker.com ($/TB: **no source**); ente.com pricing (**secondary only**); support.google.com / play.google.com (Play fee: covered indirectly by the developer.android.com FAQ). Context7 returned "monthly quota exceeded". The WebSearch budget for this session was exhausted before the analyst pass, so no new searches ran.
-- **Stop rule:** every Cloudflare line item has a primary source. The remaining gaps (disk $/TB, power price, AFR raw data, ISP terms) need an allowlist change or owner input. More sweeping from here would not close them.
-- **Units:** R2 prices are per GB. The R2 limits page defines GB as 10^9 bytes (distinct from GiB), and the model uses that. The pricing page itself does not define GB. If Cloudflare meant GiB, storage figures shift by at most 7.4 %.
+- **Blocked sources (reported to H1):** developers.cloudflare.com (mirror used); azure.microsoft.com pricing (docs mirror used); backblaze.com and ir.backblaze.com (Drive Stats: **secondary only**; a skeptic re-confirmed a proxy 403 on 2026-10-06); xfinity.com (secondary only); eia.gov (electricity price: **no source**); diskprices.com and pcpartpicker.com ($/TB: **no source**); ente.com pricing (secondary only); support.google.com and play.google.com (Play fee covered indirectly by the developer.android.com FAQ). Context7 returned "monthly quota exceeded". The WebSearch budget was exhausted before the analyst pass.
+- **Stop rule:** every Cloudflare line item has a primary source. The remaining gaps (disk $/TB, power price, primary AFR data, ISP terms, billing of 4xx responses) need an allowlist change, owner input or a sandbox. More sweeping would not close them.
+- **Units:** R2 prices are per GB. The R2 limits page defines GB as 10^9 bytes, and the model uses that.
 
 ## Sources
 
 | # | Source | Publisher | Version date | Accessed | Primary? |
 |---|---|---|---|---|---|
-| S1 | R2 Pricing: `cloudflare/cloudflare-docs @ production : src/content/docs/r2/pricing.mdx` (renders at developers.cloudflare.com/r2/pricing/) | Cloudflare | production branch | 2026-09-29 | Yes |
+| S1 | R2 Pricing: `cloudflare/cloudflare-docs @ production : src/content/docs/r2/pricing.mdx` | Cloudflare | production | 2026-09-29; skeptics 2026-10-06 | Yes |
 | S2 | R2 Limits: `… : docs/r2/platform/limits.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S3 | R2 Presigned URLs: `… : docs/r2/api/s3/presigned-urls.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S4 | R2 Object lifecycles: `… : docs/r2/buckets/object-lifecycles.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S5 | R2 Event notifications: `… : docs/r2/buckets/event-notifications.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S6 | R2 S3 API compatibility: `… : docs/r2/api/s3/api.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S7 | Workers Pricing: `… : docs/workers/platform/pricing.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S8 | Workers Limits: `… : docs/workers/platform/limits.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S9 | Workers Logs pricing partial: `… : partials/workers/workers_logs_pricing.mdx` | Cloudflare | production | 2026-09-29 | Yes |
+| S3 | R2 Presigned URLs: `… : docs/r2/api/s3/presigned-urls.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| S4 | R2 Object lifecycles: `… : docs/r2/buckets/object-lifecycles.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| S5 | R2 Event notifications: `… : docs/r2/buckets/event-notifications.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| S6 | R2 S3 API compatibility: `… : docs/r2/api/s3/api.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| S7 | Workers Pricing: `… : docs/workers/platform/pricing.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| S8 | Workers Limits: `… : docs/workers/platform/limits.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| S9 | Workers Logs pricing partial: `… : partials/workers/workers_logs_pricing.mdx` | Cloudflare | production | 2026-10-06 | Yes |
 | S10 | D1 pricing partial: `… : partials/workers/d1-pricing.mdx` | Cloudflare | production | 2026-09-29 | Yes |
 | S11 | D1 Limits: `… : docs/d1/platform/limits.mdx` | Cloudflare | production | 2026-09-29 | Yes |
 | S12 | Queues pricing partial: `… : partials/workers/queues_pricing.mdx` | Cloudflare | production | 2026-09-29 | Yes |
 | S13 | Queues Limits: `… : docs/queues/platform/limits.mdx` | Cloudflare | production | 2026-09-29 | Yes |
 | S14 | Durable Objects pricing partial: `… : partials/durable-objects/durable-objects-pricing.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S15 | Changelog "Billing for SQLite Storage": `… : changelog/durable-objects/2025-12-12-durable-objects-sqlite-storage-billing.mdx` | Cloudflare | 2025-12-12 | 2026-09-29 | Yes |
+| S15 | Changelog "Billing for SQLite Storage": `… : changelog/durable-objects/2025-12-12-…` | Cloudflare | 2025-12-12 | 2026-09-29 | Yes |
 | S16 | Email Service Pricing: `… : docs/email-service/platform/pricing.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S17 | Budget alerts: `… : docs/billing/manage/budget-alerts.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S18 | Changelog "Budget alerts now on by default for Pay-as-you-go accounts": `… : changelog/billing/2026-06-15-budget-alerts-default-on.mdx` | Cloudflare | 2026-07-20 (frontmatter) | 2026-09-29 | Yes |
+| S17 | Budget alerts: `… : docs/billing/manage/budget-alerts.mdx` | Cloudflare | production | 2026-09-29; skeptics 2026-10-06 | Yes |
+| S18 | Changelog "Budget alerts now on by default…": `… : changelog/billing/2026-06-15-budget-alerts-default-on.mdx` | Cloudflare | 2026-07-20 (frontmatter) | 2026-09-29 | Yes |
 | S19 | Threshold billing: `… : docs/billing/threshold-billing.mdx` | Cloudflare | production | 2026-09-29 | Yes |
 | S20 | Billing policy: `… : docs/billing/understand/billing-policy.mdx` | Cloudflare | production | 2026-09-29 | Yes |
 | S21 | WAF rate limiting availability by plan: `… : partials/waf/rate-limiting-availability-by-plan.mdx` | Cloudflare | production | 2026-09-29 | Yes |
 | S22 | Workers Rate Limiting binding: `… : docs/workers/runtime-apis/bindings/rate-limit.mdx` | Cloudflare | production | 2026-09-29 | Yes |
-| S23 | Change an Artifact Signing account SKU: `MicrosoftDocs/azure-docs @ main : articles/artifact-signing/how-to-change-sku.md` | Microsoft | ms.date 2026-01-06 | 2026-09-29 | Yes |
-| S24 | Artifact Signing quickstart (individual eligibility: US/Canada): `… : articles/artifact-signing/quickstart.md` | Microsoft | main | 2026-09-29 (scout) | Yes |
-| S25 | Apple Developer Program, https://developer.apple.com/programs/ | Apple | undated | 2026-09-29 (scout; also H5 L07 "V") | Yes |
-| S26 | Android developer verification FAQ, https://developer.android.com/developer-verification/guides/faq | Google | entries updated 2026-03-25 and 2026-06-18 | 2026-09-29 | Yes |
-| S27 | Proxmox VE ZFS: `proxmox/pve-docs @ master : local-zfs.adoc` | Proxmox | master | 2026-09-29 | Yes |
-| S28 | rclone `backend/s3/s3.go` (lines 975–977) and `fs/chunksize/chunksize.go` | rclone | master | 2026-09-29 | Yes (code) |
-| S29 | Ente `server/pkg/controller/usage.go` (l. 33, 54–98) and `file.go` (l. 65) | Ente | main | 2026-09-29 | Yes (code) |
-| S30 | Ente help "Family plans": `ente-io/ente @ main : docs/docs/photos/features/account/family-plans.md` | Ente | main | 2026-09-29 (scout) | Yes |
-| S31 | Immich `server/src/services/asset-media.service.ts` `requireQuota` (l. 368–372) | Immich | main | 2026-09-29 | Yes (code) |
-| S32 | restic `internal/repository/repository.go` (pack sizes) | restic | master | 2026-09-29 (scout) | Yes (code) |
-| S33 | kopia `repo/format/content_format.go` (MaxPackSize) | kopia | master | 2026-09-29 (scout) | Yes (code) |
-| S34 | Backblaze Drive Stats for Q1 2026, https://www.backblaze.com/blog/backblaze-drive-stats-for-q1-2026/ | Backblaze | 2026 | 2026-09-29 (**search snippet only**) | No (primary blocked) |
-| S35 | Backblaze IR: 2025 Drive Stats report press release | Backblaze | 2026 | 2026-09-29 (**search snippet only**) | No (primary blocked) |
-| S36 | Xfinity data-usage plan FAQ, https://www.xfinity.com/support/articles/data-usage-plan | Comcast | undated | 2026-09-29 (**search snippet only**) | No |
-| S37 | Backblaze B2 pricing (via secondary sites' snippets) | Backblaze | unknown | 2026-09-29 (**snippet only**) | No |
-| S38 | Ente pricing via saasworthy.com aggregator | third party | "September 2026" | 2026-09-29 (**snippet only**) | No |
-| I1 | `docs/research/content-encryption-format.md` (T1 spike 2): default part P = 5,244,160 B; single PUT for files of at most one part | Reliquary | 2026-09-29 | 2026-09-29 | Internal |
-| I2 | `docs/research/owner-intake.md` §B (proposed BUD-CLOUD $25, seed $50, BUD-ABUSE $50) | Reliquary | 2026-09-29 | 2026-09-29 | Internal |
-| I3 | `docs/research/h5-long-lead-items.md` (L02 domain E $10–15/yr; L21 drive E $150–350; L31 postage E) | Reliquary | 2026-09-29 | 2026-09-29 | Internal (estimates marked E) |
+| S23 | Artifact Signing SKU: `MicrosoftDocs/azure-docs @ main : articles/artifact-signing/how-to-change-sku.md` | Microsoft | ms.date 2026-01-06 | 2026-09-29; skeptic 2026-10-06 | Yes |
+| S24 | Artifact Signing quickstart: `… : articles/artifact-signing/quickstart.md` | Microsoft | ms.date 2026-05-21 | 2026-10-06 (skeptic) | Yes |
+| S25 | Apple Developer Program, https://developer.apple.com/programs/ | Apple | undated | 2026-09-29 | Yes |
+| S26 | Android developer verification FAQ, https://developer.android.com/developer-verification/guides/faq | Google | entries 2026-03-25, 2026-06-18 | 2026-09-29 | Yes |
+| S27 | Proxmox VE ZFS: `proxmox/pve-docs @ master : local-zfs.adoc` | Proxmox | master | 2026-09-29; skeptics 2026-10-06 | Yes |
+| S28 | rclone `backend/s3/s3.go`, `fs/chunksize/chunksize.go` | rclone | master | 2026-09-29 | Yes (code) |
+| S29 | Ente `server/pkg/controller/usage.go`, `file.go` | Ente | main | 2026-09-29 | Yes (code) |
+| S30 | Ente help "Family plans": `ente-io/ente @ main : docs/docs/photos/features/account/family-plans.md` | Ente | main | 2026-09-29 | Yes |
+| S31 | Immich `server/src/services/asset-media.service.ts` `requireQuota` | Immich | main | 2026-09-29 | Yes (code) |
+| S32 | restic `internal/repository/repository.go` | restic | master | 2026-09-29 | Yes (code) |
+| S33 | kopia `repo/format/content_format.go` | kopia | master | 2026-09-29 | Yes (code) |
+| S34 | Backblaze Drive Stats Q1 2026, https://www.backblaze.com/blog/backblaze-drive-stats-for-q1-2026/ | Backblaze | 2026 | **snippet only** (blocked) | No |
+| S35 | Backblaze 2025 Drive Stats release, via BusinessWire: https://www.businesswire.com/news/home/20260212236512/en/ | Backblaze (publisher-issued release) | 2026-02-12 | 2026-10-06 (skeptic; not re-read in synthesis) | No (the primary data is blocked) |
+| S36 | Xfinity data-usage plan FAQ | Comcast | undated | snippet only | No |
+| S37 | Backblaze B2 pricing (secondary snippets) | Backblaze | unknown | snippet only | No |
+| S38 | Ente pricing via saasworthy.com | third party | "September 2026" | snippet only | No |
+| S39 | R2 Metrics and analytics (GraphQL `r2OperationsAdaptiveGroups`, `actionType`, `bucketName`): `… : docs/r2/platform/metrics-analytics.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| S40 | R2 Workers API reference (`R2PutOptions.onlyIf`, `R2Conditional`): `… : docs/r2/api/workers/workers-api-reference.mdx` | Cloudflare | production | 2026-10-06 | Yes |
+| I1 | `docs/research/content-encryption-format.md` (T1 spike 2): P = k × 65,552 B, k = 80·2^j; default 5,244,160 B | Reliquary | 2026-09-29 | 2026-10-06 | Internal |
+| I2 | `docs/research/owner-intake.md` §B (B1–B4 proposed defaults) | Reliquary | 2026-09-29 | 2026-10-06 | Internal |
+| I3 | `docs/research/h5-long-lead-items.md` (domain, drive estimates, marked E) | Reliquary | 2026-09-29 | 2026-09-29 | Internal |
+| I4 | `spikes/C4-S1/` (model, CSVs, run log) | Reliquary | 2026-09-29 run | 2026-10-06 | Internal (evidence) |
 
 ## Claims
 
-Skeptic columns are empty until the skeptic stage runs. "Derived" means arithmetic on primary numbers, and each derivation is shown in §Model.
+### Key claims (skeptic-reviewed)
 
-| # | Claim | Sources | Key? | Skeptic 1 | Skeptic 2 | Skeptic 3 | Verdict |
+Verdicts are the computed tally. A claim is **verified** if it has a primary source and at least 2 of 3 skeptics did not refute it, **secondary only** if it has no primary source, and **contested** otherwise. Where a verified claim's *figures* were corrected by the skeptics, the corrected figure is given and used in this note.
+
+| # | Claim (as reviewed) | Sources | Sources lens | Logic lens | Adversary lens | Verdict | Used in this note as |
 |---|---|---|---|---|---|---|---|
-| C1 | R2 Standard: $0.015/GB-month, Class A $4.50/M, Class B $0.36/M, no retrieval fee, free egress. IA: $0.01/GB-month, Class A $9.00/M, Class B $0.90/M, retrieval $0.01/GB, 30-day minimum. | S1 | Yes | | | | Pending |
-| C2 | R2 free tier per month: 10 GB-month, 1M Class A, 10M Class B, **Standard only**. Usage is rounded **up** to the next billing unit (1,000,001 ops → 2M). | S1 | Yes | | | | Pending |
-| C3 | R2 GB-month is the average of each day's **peak** storage over 30 days. | S1 | Yes | | | | Pending |
-| C4 | PutObject, CreateMultipartUpload, UploadPart, CompleteMultipartUpload, ListParts, ListMultipartUploads, ListObjects, CopyObject and lifecycle tier transitions are Class A. GetObject and HeadObject are Class B. DeleteObject and AbortMultipartUpload are free. Operations that return **401** are not billed. Nothing is documented for 403, 412 or 429. | S1 | Yes | | | | Pending |
-| C5 | Workers Paid: $5/month minimum; 10M requests then $0.30/M; 30M CPU-ms then $0.02/M; no duration charge; subrequests and Service Binding calls add no request fee. Free: 100,000 requests/day, 10 ms CPU. | S7, S8 | Yes | | | | Pending |
-| C6 | D1 on Paid: 25B rows read, 50M rows written and 5 GB included per month, then $0.001/M read, $1.00/M written, $0.75/GB-month. Each indexed column adds a written row. Free: 5M read/day, 100k written/day. | S10 | Yes | | | | Pending |
-| C7 | Queues on Paid: 1M operations/month included, then $0.40/M. One operation per 64 KB written, read or deleted. About 3 operations per message. Retries add reads. Free: 10,000 ops/day, 24 h retention. Paid retention: 4 days default, up to 14. | S12, S13 | Yes | | | | Pending |
-| C8 | R2 event notifications for `object-create` (PutObject, CopyObject, CompleteMultipartUpload) are delivered as Queue messages, so they incur Queues operations. | S5, S12 | Yes | | | | Pending |
-| C9 | Durable Objects on Paid: 1M requests then $0.15/M; 400,000 GB-s then $12.50/M GB-s, billed at 128 MB per object and rounded up to 1M GB-s; SQLite storage 5 GB-month then $0.20/GB-month, billable from a target date of 2026-01-07. | S14, S15 | No | | | | Pending |
-| C10 | Email Service sending to arbitrary recipients needs Workers Paid: 3,000/month included, then $0.35 per 1,000. Sends to verified destination addresses are free on every plan. | S16 | Yes | | | | Pending |
-| C11 | Cloudflare budget alerts are account-wide, informational only, and never pause or cap usage. Usage is processed once a day, so an alert fires the day after its threshold is crossed. Subscription fees (the $5 Workers Paid fee) are excluded. Eligible Pay-as-you-go accounts get a default $10 alert. | S17, S18 | **Yes** | | | | Pending |
-| C12 | Threshold billing raises one mid-cycle invoice at a threshold Cloudflare sets and the customer cannot change. If preauthorisation of the payment method fails, R2 buckets become inaccessible, and the data may be deleted if the payment method is not fixed within 30 days. | S19, S20 | Yes | | | | Pending |
-| C13 | A presigned URL is valid for 1 s to 7 days and can be reused until it expires. Signed headers such as Content-Type are enforced (a mismatch returns 403). Writes to one key are limited to 1 per second (HTTP 429 above that). R2 PutObject supports If-None-Match. | S2, S3, S6 | **Yes** | | | | Pending |
-| C14 | **Derived.** A small-object abuse stream costs about $8 per million junk objects: Class A $4.50, Queues 3 ops $1.20, Worker request $0.30, and about 2 D1 rows once past the 50M included ($2.00). At 1,000 objects/s that is about $690/day, which exhausts $50 in about 1.7 h. | C4–C8, §Model | **Yes** | | | | Pending |
-| C15 | **Derived.** Replaying a presigned PUT against its own key can create up to one billed write per second until expiry, so one URL with a 900 s expiry can cause up to 900 Class A operations. At 25,000 URLs/day that is about $101/day, compared with $6.75/day at a 60 s expiry. | C1, C13 | **Yes** | | | | Pending |
-| C16 | **Derived.** Steady state is $5.00–7.36/month for 0.5–2 TB/year of family growth, with or without a 30-day warm cache. A 2 TB seed month costs $11.16 (1-day dwell), $13.96 (14-day homelab outage) or $40.15 (30-day warm cache), at 250k files/TB and 2 R2 objects per file. | C1–C8, §Model | **Yes** | | | | Pending |
-| C17 | **Derived.** Across 8, 16 and 64 MiB part sizes, part operations for 10 TB cost $5.36, $2.68 and $0.67. At the T1 default of about 5.0 MiB they cost $8.58. Per-file operations dominate at a 4 MB mean file size. | C1, I1 | Yes | | | | Pending |
-| C18 | Workers Free cannot carry a seed: Queues allows 10,000 ops/day, about 1,667 files/day at 6 ops per file; D1 allows 100,000 rows written/day; the CPU limit is 10 ms per invocation; there is no email to arbitrary recipients. | C5–C7, C10 | Yes | | | | Pending |
-| C19 | Proxmox docs: mirror vdevs give 50 % usable; RAIDZ-P over N disks gives about N−P disks; ZFS needs at least 8 GB RAM, and ECC is recommended; ARC rule of thumb is 2 GiB plus 1 GiB per TiB of storage. | S27 | Yes | | | | Pending |
-| C20 | Backblaze AFR: 1.24 % (Q1 2026 quarter), 1.36 % (2025 annual), 1.30 % or 1.39 % lifetime (the snippets conflict). | S34, S35 | No | | | | **Secondary only** |
-| C21 | Azure Artifact Signing Basic costs $9.99/month with 5,000 signatures; Premium $99.99/month with 100,000; $0.005 per signature above quota. Individuals must be in the US or Canada. | S23, S24 | Yes (OD-09) | | | | Pending |
-| C22 | Android: $25 for a full-distribution Android Developer Console account, "similar to Play's $25 registration fee"; waived for limited distribution (≤ 20 devices). | S26, T2 item 7 | Yes (OD-10) | | | | Pending |
-| C23 | Precedents: Ente allows 50 MiB of overflow above a quota, uses a cached "can upload" answer below 100 MiB, and supports admin-set per-member limits in a family pool. Immich refuses uploads beyond a hard per-user quota. | S29, S30, S31 | No | | | | Pending |
+| K1 | Budget alerts are informational, never cap, are processed daily (they fire the next day) and exclude subscription fees, so Reliquary must enforce BUD-ABUSE itself | S17, S18 | Upheld | Upheld | Upheld | **Verified** | As stated |
+| K2 | R2 Standard: $0.015/GB-month, Class A $4.50/M, Class B $0.36/M; free tier 10 GB-month, 1M A, 10M B (Standard only); usage rounds up; GB-month = mean of daily peak | S1 | Upheld | Upheld | Upheld | **Verified** | As stated |
+| K3 | Steady state $5.00–7.36; 2 TB seed month $11.16 / $13.96 / $40.15 | analyst model | Refuted | Refuted | Refuted | **Contested** | **Superseded** by C4-S1: steady state central $5.00–7.52, maximum $11.16 over the full factorial; seed month $12.16 / $15.66 / $42.16. Not used as sole support for anything |
+| K4 | Junk small objects cost about $8/M, so 1,000/s exhausts $50 in about 1.7 h | S1, S7, S10, S12 | Upheld (caveats) | Refuted (allowances) | Upheld | **Verified** | Marginal rate $8.00/M **once all allowances are used**; from zero it is about 2.5 h to $50 and about $645 for a full day (synthesis calc, §F4) |
+| K5 | A presigned URL is reusable until expiry and same-key writes are limited to 1/s, so replay causes up to expiry-seconds billed writes | S2, S3 | Upheld | Upheld (+Queue ops) | Refuted (bound not established) | **Verified** | Restated as a **lower bound**, valid only if 412/429/403 responses are not billed. Each successful overwrite also fires `object-create` (S5), so the cost is $5.70/M per replayed write |
+| K6 | R2 documents only 401 as unbilled; 403/412/429 are undocumented; Worker floods are billed per request | S1, S3, S7 | Upheld | Upheld | Upheld | **Verified** | As stated |
+| K7 | Workers Free cannot carry a seed (Queues 10k ops/day, D1 100k rows/day, 10 ms CPU, no email to arbitrary recipients) | S10, S12, S16, S7 | Upheld | Upheld | Upheld | **Verified** | As stated. The 1,667 files/day figure assumes the event-notification queue design |
+| K8 | IA is about 10× Standard for short-dwell staging | S1 | Upheld (ratio wrong) | Upheld (ratio wrong) | Upheld (ratio wrong) | **Verified** | Conclusion kept. Figures restated: 2 TB for 2 days is about $51 in IA ($20 + $20 retrieval + $11 Class A) vs about $2; seed month $64.70 vs $12.16 |
+| K9 | Part size is not a cost lever; parts for 10 TB cost $8.58 at about 5.0 MiB and $0.67 at 64 MiB; about 81 % of Class A is per-file | S1, I1 | Upheld (b_mp inconsistent) | Upheld (invalid sizes) | Upheld | **Verified** | Conclusion kept. Figures recomputed at valid T1 sizes and b_mp = 0.6 (§F3) |
+| K10 | The warm cache is the largest controllable line: a 30-day warm cache turns a seed month from about $11 into about $40 | model, S1 | Upheld | Upheld | Upheld | **Verified** | Figures updated to C4-S1 ($12.16 → $42.16, sustained seed month) |
+| K11 | One always-on DO uses 324,000 GB-s/month; two exceed 400,000 and round up to $12.50 | S14 | Upheld | Upheld | Upheld | **Verified** | As stated |
+| K12 | Tier S reaches 80 % in about 1.9 y at L0 = 10, g = 1.5; tier M lasts about 7.8–10.4 y | S27, model | Upheld (zvol caveat) | Upheld (scenario-only) | Upheld (zvol caveat) | **Verified** | A scenario statement, not a family forecast. zvol, slop and dedup caveats added (§F6) |
+| K13 | Backblaze AFR is about 1.2–1.6 % | S34, S35 (secondary) | Upheld (secondary) | Refuted | Refuted | **Contested** (no primary) | Feeds only the low-confidence drive-replacement line. Not used for any recommendation |
+| K14 | Azure Artifact Signing Basic $9.99/month (5,000 signatures), Premium $99.99 (100k); individuals in the US or Canada | S23, S24 | Upheld | Upheld | Upheld | **Verified** | As stated. The US/Canada rule is for Public Trust individuals; organisations elsewhere are eligible |
+| K15 | Email Service: 3,000/month included on Paid, then $0.35/1,000; sends to verified addresses are free | S16 | Upheld | Upheld | Upheld | **Verified** | As stated, **plus** the dependency: verified destinations are an Email Routing feature that needs a zone on Cloudflare (the domain line) |
+
+### Supporting claims (primary, not separately in the tally)
+
+| # | Claim | Sources |
+|---|---|---|
+| C4 | Class A: PutObject, CreateMultipartUpload, UploadPart, CompleteMultipartUpload, List*, CopyObject. Class B: GetObject, HeadObject. DeleteObject and AbortMultipartUpload are free | S1 |
+| C5 | Workers Paid: $5 minimum; 10M requests then $0.30/M; 30M CPU-ms then $0.02/M. A per-invocation CPU limit can be set "to prevent accidental runaway bills or denial-of-wallet attacks" | S7 |
+| C6 | D1 Paid: 50M rows written included, then $1.00/M; Queues Paid: 1M ops included, then $0.40/M, about 3 ops per message, retention 4 days by default (14 max) | S10, S12, S13 |
+| C8 | `object-create` fires "when new objects are created or existing objects are overwritten" (PutObject, CopyObject, CompleteMultipartUpload) | S5 |
+| C9 | Workers Logs on Paid: 20M events/month included, then $0.60/M. "Beginning December 1, 2026, Workers Logs will use Cloudflare Observability pricing" | S9 |
+| C12 | Threshold billing invoices early at a threshold the customer cannot change. A failed preauthorisation can make R2 buckets inaccessible, and data may be deleted after 30 days | S19, S20 |
+| C13a | R2 PutObject supports If-None-Match, Content-MD5 and `x-amz-storage-class` (STANDARD **and STANDARD_IA**). UploadPart supports Content-MD5. **CompleteMultipartUpload lists no conditional headers** | S6 |
+| C13b | The R2 Workers binding `put()` takes `onlyIf` (R2Conditional or Headers); a failed condition returns null | S40 |
+| C13c | Request bodies to a Worker are limited to 100 MB on Free and Pro zones | S8 |
+| C13d | R2 bucket operations are queryable through GraphQL `r2OperationsAdaptiveGroups` by `actionType` and `bucketName` | S39 |
+| C19 | Proxmox: mirrors give 50 %; RAIDZ-P over N disks gives roughly N−P; ZVOLs on RAIDZ carry extra parity and padding (an 8k block on RAIDZ2 writes 16k); a 4-disk RAIDZ2 has the same usable space as 2 mirror vdevs | S27 |
+| C22 | Android: $25 for a full-distribution developer account; waived for limited distribution (≤ 20 devices) | S26 |
+| C23 | Ente: admin-set per-member limits in a family pool, 50 MiB overflow. Immich: hard per-user quota | S29–S31 |
 
 ## Model
 
 ### Parameters
 
-Values marked **P** are primary prices. **A** marks an assumption to be replaced by the named workstream. **O** marks an owner input.
+**P** marks a primary price. **A** marks an assumption that the named workstream will replace. **O** marks an owner input. The full list, with each parameter's owner, is in `spikes/C4-S1/out/params.csv`.
 
 | Parameter | Symbol | v0 value | Status |
 |---|---|---|---|
-| Mean file size | s̄ | 4 MB (so 250k files/TB); sensitivity 2 MB and 8 MB | **A**, the owner-intake figure (500k files per 2 TB); E1, A0 |
-| R2 objects per file (content + metadata record) | 1 + m | 2 (m = 1, one metadata object per file); m ≈ 0 if records are batched | **A**, A2/A3 |
+| Mean file size | s̄ | 4 MB (250k files/TB); range 2–8 MB | **A**, E1, A0 |
+| R2 objects per file | 1 + m | 2; m ≈ 0 if metadata records are batched | **A**, A2/A3 |
 | Share of bytes in multipart files | b_mp | 0.6 | **A**, E1/A5 |
-| Share of files that are multipart | f_mp | 0.01 | **A** |
-| Part size | P | 5,244,160 B (T1 default, I1) | B6 |
-| Queue messages per file | q | 2 (one `object-create` per object) | **A**, C1 |
-| Worker requests per file | r | 3 (amortised dedup check, presign, commit) | **A**, A0 |
-| CPU per request | c | 5 ms (BUD-CPU-REQ allows < 1 ms for auth) | **A**, D3-S1 |
-| D1 rows written per new file | w | 6 (claim + index, state change + index, metadata row) | **A**, A0/C1 |
-| Class B per file (homelab GET/HEAD) | b | 2 | **A**, A0 |
-| Staging dwell (upload → commit → delete) | d | 1 day nominal | **A**, A3/C1 |
-| Warm-cache window | W | 0 or 30 days (ADR-0001 §6, "optional") | C1 (traceability C-01) |
-| Library size, growth | L0, g | 2–10 TB; 0.5–2 TB/yr (scenario range only) | **O** (H2 F4), E1 |
-| Fill target | h | 80 % of usable | **O**, C5 (a common rule of thumb; no primary source was read) |
+| Part size | P | 5,244,160 B (T1 default; valid sizes are 80·2^j × 65,552 B ≈ 5, 10, 20, 40, 80 MiB) | B6 |
+| Queue messages per file | q | 2 | **A**, C1 |
+| Worker requests per file | r | 3 | **A**, A0 |
+| CPU per request | c | 5 ms | **A**, A0 / D3-S1 (**the largest single sensitivity**) |
+| D1 rows written per file | w | 6 | **A**, A0/C1 |
+| Staging dwell | d | 1 day nominal (range 1–14) | **A**, A3/C1; **the ISP cap overrides it** (§F3) |
+| Warm-cache window | W | 0 or 30 days | C1 (C-01) |
+| Library, growth | L0, g | 2–10 TB; 0.5–2 TB/yr (scenarios only) | **O** (H2 F4), E1 |
+| Fill target | h | 80 % of usable | **O**, C5 (rule of thumb; no primary source) |
 
-### Formulas (per calendar month)
+### Formulas
 
-- Class A = N·(1 + m) + B·b_mp / P + 2·N·f_mp. Cost = $4.50 × (⌈Class A / 1M⌉ − 1)⁺.
-- Staged GB-month = mean of daily peak staged GB. With inflow I GB/month and dwell d: ≈ I·(d + W)/30. Cost = $0.015 × (⌈GB-month⌉ − 10)⁺.
-- Queues = $0.40 × (⌈3·q·N / 1M⌉ − 1)⁺. Workers = $0.30 × (⌈r·N / 1M⌉ − 10)⁺ + $0.02 × (⌈r·N·c / 1M⌉ − 30)⁺. D1 = $1.00 × (⌈w·N / 1M⌉ − 50)⁺. Class B = $0.36 × (⌈b·N / 1M⌉ − 10)⁺.
-- Rounding: the model rounds usage up and then subtracts the free tier, which is the more expensive reading of S1's rule. S1 does not say which comes first. The difference is at most one unit per line per month: ≤ $4.50 Class A, $0.36 Class B, $0.40 Queues, $0.015 storage.
+- Class A per month = N·(1 + m) + B·b_mp/P + 2·N·f_mp, billed at $4.50 per started million above 1M.
+- Staged GB-month = mean over the month of each day's **peak** staged GB. The peak includes that day's uploads before that day's deletions (C4-S1 simulator, the literal reading of S1).
+- Queues = 3·q·N ops; Workers = r·N requests and r·N·c CPU-ms; D1 = w·N rows; each billed above its allowance, with usage rounded up (S1, S7, S10, S12).
+- Rounding order (free tier first or rounding first) made no difference in the 2 TB seed case (C4-S1).
 
-### Results
+### Results (C4-S1 simulator, `spikes/C4-S1/out/scenarios.csv`)
 
-| Scenario | Files/month | Class A | R2 A $ | Storage $ | Queues $ | Other usage $ | **Total $/month** |
-|---|---|---|---|---|---|---|---|
-| Steady, g = 0.5 TB/yr, W = 0 | 10k | 26k | 0 | 0 | 0 | 0 | **5.00** |
-| Steady, g = 1 TB/yr, W = 30 d | 21k | 52k | 0 | 1.11 | 0 | 0 | **6.11** |
-| Steady, g = 2 TB/yr, W = 30 d | 42k | 103k | 0 | 2.35 | 0 | 0 | **7.36** |
-| Seed month 2 TB, d = 1 d, W = 0 | 500k | 1.24M | 4.50 | 0.85 | 0.80 | 0 | **11.16** |
-| same, 14-day homelab outage mid-month | 500k | 1.24M | 4.50 | 3.66 | 0.80 | 0 | **13.96** |
-| same, **30-day warm cache left on** | 500k | 1.24M | 4.50 | 29.85 | 0.80 | 0 | **40.15** |
-| same, 2 MB mean file (1M files) | 1M | 2.25M | 9.00 | 0.85 | 2.00 | 0 | **16.86** |
-| same, 8 MB mean file | 250k | 0.73M | 0 | 0.85 | 0.40 | 0 | **6.26** |
-| same, metadata batched (m ≈ 0) | 500k | 0.74M | 0 | 0.85 | 0.80 | 0 | **6.66** |
-| same, P = 8 / 16 / 64 MiB | 500k | 1.15M / 1.08M / 1.03M | 4.50 | 0.85 | 0.80 | 0 | **11.16** (rounding hides the difference) |
-| Homelab down, whole library staged: 2 / 5 / 10 TB | — | — | — | 29.85 / 74.85 / 149.85 | — | — | **+$5 base** |
-| Whole-device restore, 500 GB staged 7 days (+1 day lifecycle lag) | ~125k objects | ~0.13M | 0 | ~1.9 | — | 0 | **< $2 extra** |
+| Scenario | Total $/month |
+|---|---|
+| Steady, g = 0.5 TB/yr, W = 0 / 30 d | 5.00 / 5.53 |
+| Steady, g = 1 TB/yr, W = 0 / 30 d | 5.00 / 6.19 |
+| Steady, g = 2 TB/yr, W = 0 / 30 d | 5.03 / 7.52 |
+| **Steady, highest value over the full factorial (59,049 combinations)** | **11.16** (g = 2, W = 30) |
+| Seed month 2 TB, 1-day dwell | 12.16 |
+| same, 14-day homelab outage | 15.66 |
+| same, 30-day warm cache on (sustained seed month) | 42.16 |
+| same, 2 MB / 8 MB mean file | 17.86 / 7.26 |
+| same, metadata batched (m = 0) | 7.66 |
+| same, P = 8 / 16 / 64 MiB | 12.16 (rounding hides the difference) |
+| same, staged in R2 Infrequent Access | 64.70 |
+| Homelab down all month, 2 / 5 / 10 TB staged | 34.85 / 79.85 / 154.85 |
+| Restore 500 GB staged 7 d + 1 d lifecycle lag | +2.10 over steady |
+| 10 TB seed via R2, 5 months (total) | 60.80; 210.80 with the warm cache |
+| **10 TB seed from a capped home, unpaced** (synthesis calc, §F3) | up to about $100/month; about $870 in total |
+| 10 TB seed from a capped home, **paced to the pull allowance** (synthesis calc) | about $5.50/month; about $88 in total over about 15 months |
 
-Break-even against a $25 BUD-CLOUD (a $20 usage allowance): about 1.34 TB staged on average, or about 5.4M Class A operations in a month.
+Break-even against a $25 BUD-CLOUD ($20 of usage): about 1.34 TB staged on average, or about 5.4M Class A operations in a month.
 
 ## Findings
 
 ### F1. Line items (Q1). Confidence: High on prices, Medium on volumes
 
-- All unit prices come from primary sources (C1–C10). T2's Cloudflare figures are confirmed, and so are the owner intake's unit prices.
-- Two small corrections to `owner-intake.md` §B:
-  1. **B2** gives "$2.25 for 1.5M Class A (0.5M above free)". Under S1's rounding rule, 1.5M bills as 2M, so the charge is **$4.50**. The seed-month total is about $11–14, not $12.
-  2. **B1** puts alerts at "$10 and $20". Cloudflare budget alerts exclude the $5 subscription (C11), so an alert at **$20 usage** means a **$25 bill**. Set usage-alert thresholds at BUD-CLOUD minus $5.
-- Always-on Durable Objects are a trap. One DO kept awake for a month uses 324,000 GB-s. Two exceed the 400,000 GB-s included, and because the overage rounds up to 1M GB-s, the first extra second costs $12.50 (C9). If C1 uses DOs, it should use hibernation and avoid holding WebSockets open.
-- Email costs $0 at family scale (25 people × a few nudges ≪ 3,000/month). **Owner alerts can go to a verified destination address for free, even on Workers Free** (C10). This makes a zero-cost admin alert channel.
-- D1 and Durable Object storage are small either way. Assuming about 200 B per index row, 5M dedup rows is about 1 GB, inside the 5 GB included and under D1's 10 GB database cap (S11). Cost does not decide D1 vs DO; C1 decides on design grounds.
+- All unit prices are primary (K2, K7, K11, K15, C4–C9). T2's figures and the owner intake's unit prices are confirmed.
+- Two corrections to `owner-intake.md` §B. (1) **B2:** 1.5M Class A bills as 2M under S1's rounding rule, so the charge is **$4.50**, not $2.25 (K2). (2) **B1:** budget alerts exclude the $5 fee (K1), so a **$20 usage alert means a $25 bill**. Usage-alert thresholds should be set at BUD-CLOUD − $5.
+- **Workers Logs** (C9) is zero at family scale but matters under floods: up to $0.60/M events beyond 20M. The pricing moves to Cloudflare Observability on **2026-12-01**, so this model expires on that line and must be re-checked then. Recommendation: head-sample logs on the public endpoint.
+- **Always-on Durable Objects are a trap** (K11). Two objects kept awake for a month cost $12.50. If C1 uses DOs, they should hibernate.
+- **Email** costs $0 at family scale (K15). Owner alerts to a verified destination are free, but that needs Email Routing on a Cloudflare zone (the domain line), and the channel fails together with the account (§F4.3).
+- D1 and DO storage are small: about 1 GB for 5M dedup rows, assuming about 200 B per row. Cost does not decide between D1 and DO.
 
 ### F2. Workers Paid vs Free (Q8). Confidence: High
 
-Use Paid. Free fails a seed on Queues (10k ops/day, about 1,667 files/day), D1 writes (100k/day), 24 h queue retention (ADR-0001's reconciliation still works, but homelab outages then turn into reconciliation events), the 10 ms CPU limit, and email (C18). Paid costs $5/month and makes up 70–100 % of the steady-state bill.
+Use Paid (K7). Free fails a seed on Queues (10k ops/day ≈ 1,667 files/day with event notifications), on D1 writes (100k/day, which would bind at about 16.7k files/day in a queue-less design), on 24 h queue retention, on the 10 ms CPU limit, and on email to the family (ADR-0002 signup). Paid costs $5/month and is 70–100 % of the steady-state bill.
 
-### F3. Seed scenarios and peak staging (Q2). Confidence: Medium
+### F3. Seed scenarios, peak staging and part size (Q2). Confidence: Medium
 
-- **10 TB via R2** takes about 5 months at 2 TB/month and costs about $55 in total, or about $30 above the base fee. It costs about $200 in total if the warm cache stays on through the seed.
-- **Part size is not a cost lever.** At 10 TB, parts cost $8.58 at the T1 default of about 5.0 MiB and $0.67 at 64 MiB (C17). At the assumed file mix, 81 % of Class A comes from the per-file floor N·(1 + m). The cheaper lever is **batching metadata records** (m → 0), which about halves Class A. Packing small files into restic- or kopia-style packs (16–128 MiB, S32, S33) would cut Class A further, but it conflicts with ADR-0001's "objects keyed by dedup ID", so it is not recommended. B6 should choose the part size on resume, memory and iOS-wake grounds, not on cost.
-- **Peak staging is set by homelab downtime and the warm cache, not by drain rate,** as long as the home downlink exceeds the family's combined upload. A 500 Mbps downlink drains 10 TB in 1.9 days, and a 100 Mbps downlink in 9.3 days. The worst case, the whole library staged because the homelab is down, costs $149.85/month at 10 TB. A 14-day outage in a 2 TB month adds $2.81.
-- **The warm cache is the largest controllable line.** Recommendation for C1 (traceability C-01): a warm cache of at most 30 days at steady state, **suspended automatically during seed months or above a staged-bytes cap**.
-- **IA for staging is worse on every line.** Using S1's own IA example: 2 TB staged for 2 days in IA costs about $40 (a 30-day minimum of $20 plus $20 retrieval), against about $2 in Standard (C1).
-- **USB-heavy or legacy import (A9)** costs about $0 in cloud charges. The choice between R2, USB and import is therefore about ISP caps, calendar time and owner effort (A4, A9, E5), not about the cloud bill.
+- **10 TB through R2, uncapped home link:** about 5 months at 2 TB/month and **$60.80** in total, or **$210.80** with the warm cache left on (C4-S1).
+- **Capped home link (new; logic skeptic).** If the puller is throttled to a cap (§F5) while the family uploads faster than the pull allowance, staged bytes grow every month. Illustration (synthesis calc; the cap is not the owner's): with a 1.2 TB/month cap, 0.3 TB baseline use and an 80 % alert, the pull allowance is about 0.66 TB/month. At 2 TB/month of inflow, staged bytes reach **6.7 TB** after 5 months, the bill peaks at **about $100/month**, the whole drain takes about 16 months, and the total is **about $870**. That overruns the $50 seed ceiling from month 2 and hits the §F9 staging cap. **Fix:** the Worker paces presigns for seed traffic to the homelab's announced pull allowance (seed admission control). Paced, the same seed costs about $5.50/month and about $88 in total, but takes about 15 months. Under a cap, large seeds should therefore go by **USB** (A4), and the $50 seed ceiling does not cover an unpaced capped R2 seed.
+- **Part size is not a cost lever** (K9, corrected). Recomputed at the valid T1 sizes with b_mp = 0.6, part operations for 10 TB cost **$5.15 / $2.57 / $1.29 / $0.64 / $0.32** at about 5 / 10 / 20 / 40 / 80 MiB. The all-multipart upper bound is $8.58 / $4.29 / $2.15 / $1.07 / $0.54. About 81 % of Class A comes from the per-file floor N·(1 + m). The larger lever is **batching metadata records** (m → 0), which takes a 2 TB seed month from $12.16 to $7.66. Batching must still satisfy ADR-0001's "encrypted metadata record per (device, file)"; A2/A3 decide. Packing small files restic-style would conflict with ADR-0001's dedup-ID-keyed objects, so it is not recommended. B6 should choose part size on resume, memory and iOS grounds.
+- **Peak staging, uncapped:** set by homelab downtime and the warm cache, as long as the home downlink exceeds the family's upload rate (500 Mbps drains 10 TB in 1.9 days). **Capped:** set by the cap (above).
+- **The warm cache is the largest controllable line** (K10): $12.16 → $42.16 in a sustained 2 TB seed month. The first month of a seed carries roughly half of that.
+- **IA staging is worse on every line** (K8, figures corrected): 2 TB held for 2 days costs about $51 in IA ($20 for the 30-day minimum, $20 retrieval and $11 of doubled Class A with no free tier) against about $2 in Standard. A whole seed month is $64.70 against $12.16.
+- **USB or legacy import (A9)** costs about $0 in cloud charges. Cloud cost does not choose the route; ISP caps, calendar time and owner effort do.
 
-### F4. Worst-case abuse cost and billing alerts (Q9, Q10). Confidence: High on mechanisms, Medium on figures
+### F4. Worst-case abuse cost, controls and billing alerts (Q9–Q11). Confidence: High on mechanisms, Medium on figures
 
-**Cloudflare will not stop spend.** Budget alerts are informational, day-lagged, account-wide and exclude subscriptions (C11). Per-product usage notifications need a Pro zone and are also informational. Threshold billing only invoices early (C12). The Workers rate-limit binding is "permissive, eventually consistent" and "not … an accurate accounting system" (S22), so it can throttle but cannot meter. A $50 BUD-ABUSE must therefore be enforced by Reliquary.
+#### F4.1 Cloudflare will not stop spend
 
-Abuse vectors and their cost rates:
+Budget alerts are informational, a day late, account-wide and exclude subscriptions (K1). Usage notifications need Pro and are informational. Threshold billing only invoices early (C12). The rate-limit binding is "not … an accurate accounting system" (S22). The per-invocation CPU limit (C5) bounds CPU per request but not the request count. **A hard-limit or prepaid payment card is not a safe backstop.** A declined preauthorisation can make R2 inaccessible and lead to data deletion (C12). That trades a cost risk for a data-loss risk, against "data integrity over everything", so it is rejected.
 
-| Vector | Who | Cost rate (derived) | Bounded by | Status |
+#### F4.2 Vectors and cost rates
+
+| Vector | Who | Cost rate | Bounded by | Status |
 |---|---|---|---|---|
-| Stream of small junk PUTs via presigned URLs | Holder of a stolen device credential | ~$8 per 1M objects (C14); $69/day at 100/s, $690/day at 1,000/s | Per-device presign cap per day; account-wide circuit breaker | Needs design (C2) |
-| Replay of one presigned PUT until it expires | same | Up to 1 write/s per key (C13): 900 Class A per URL at 15 min expiry | Short single-PUT expiry (≤ 60 s where the client can keep up), `If-None-Match: *` as a signed header, and auto-suspend on an overwrite event | Enforcement and billing of 412/429 unknown → `[SB]` |
-| Storage flood (large bodies; Content-Length not bound) | same | 1 Gbps ≈ 10.8 TB/day; each day that volume is held accrues ≈ $5.40 | Per-device cap on staged, uncommitted bytes (from declared sizes); homelab rejects declared/actual size mismatches **before** download; auto-delete (free) | Whether a signed Content-Length is enforced is unknown → `[SB]` |
-| Garbage pulled home | same | No dollars, but ISP cap and homelab bandwidth | Size check against the event message before GET | Design (A3) |
-| Unauthenticated flood on the Worker | Anyone | $0.30/M requests + CPU ($259/day at 10k req/s) | WAF rule on a Free zone: 1 rule, per-IP, 10 s period (S21). Keep rejection CPU < 1 ms. **Not bounded by per-device caps.** | Whether WAF-blocked requests are billed as Worker requests is unknown → `[SB]` |
-| Bad-signature requests direct to R2 | Anyone who knows the bucket host | 403 is not documented as free (only 401 is) | Unknown | `[SB]` |
+| Small junk objects via presigned URLs | Holder of a stolen device credential | $8.00/M once allowances are used (K4). From a zero-usage month: $50 at about 9.0M objects (**about 2.5 h** at 1,000/s); after a seed month's usage, about 2.4 h; with every allowance exhausted, 1.7 h. One full day at 1,000/s is about **$645** (synthesis calc). The rate is a floor: logs, consumer invocations and homelab GETs add to it | Per-device presign cap; homelab decrypt-failure detector; spend meters | Design (C2) |
+| Replay of a presigned PUT until expiry | same | At least one write/s per key while unexpired (K5, a lower bound), at **$5.70/M** per write including Queue ops on overwrite | **Mandatory create-only** (§F4.3); expiry ≤ 15 min (BUD-REVOKE) | Whether a signed If-None-Match is enforced, and whether 412/429 are billed: `[SB]` |
+| Storage flood with large bodies | same | Scales with **attacker bandwidth**, not k: 1 Gbps ≈ 10.8 TB/day ≈ $5.40 per day held. A day's peak is billed even if the objects are deleted at once (daily-peak rule, K2) | Signed Content-MD5 or Content-Length; per-device staged-byte cap; size check before GET | Enforcement: `[SB]` |
+| Writes in the IA storage class | same | 30-day minimum, 2× Class A, retrieval fee on every homelab GET | Sign `x-amz-storage-class: STANDARD`, or HEAD-check the class before pulling (C13a) | `[SB]` |
+| Incomplete multipart parts | same | Unknown whether parts are billed as storage until abort | Lifecycle `AbortIncompleteMultipartUpload` set well below the 7-day default (S4) | `[SB]` |
+| Garbage committed into keep-forever storage | same, or a ransomwared device | Capacity rather than dollars: 100 GB/day ≈ 3 TB/month, which brings the disk purchase forward and can turn the pool red | Per-device ingest cap and homelab quarantine (§F4.4) | Design (A3, D4) |
+| Unauthenticated flood on the Worker | Anyone | $0.30/M requests + CPU: **$276/day** at 10k req/s and 1 ms. With unsampled logs, **+$518/day** (C9); at 1 % sampling, +$5/day | WAF rule (Free zone: 1 rule, per IP, 10 s; S21); per-invocation CPU limit (C5); head-sampled logs. **Not bounded by per-device caps** | WAF-blocked billing: `[SB]` |
+| Bad-signature requests straight to R2 | Anyone who knows the bucket host | 403 is not documented as free (K6) | Unknown | `[SB]` |
 
-**A bound that meets BUD-ABUSE, to be confirmed in C2:** cost ≤ k·T·(U_d·E_eff·$4.5e-6 + U_d·$3.5e-6) + k·Q_d·$0.015/GB-month + flood cost. Here k is the number of compromised devices, T the days until auto-suspend, U_d the presigns per device per day, E_eff the effective writes per URL (1 with If-None-Match enforced, otherwise the expiry in seconds), and Q_d the staged-byte cap per device. **Example:** k = 3, T = 1 day, U_d = 25,000, E_eff = 1, Q_d = 100 GB gives **≈ $0.60 per day of exposure plus $4.50/month of storage**, far below $50. With E_eff = 900 it becomes about $304/day, which is the reason a short expiry or If-None-Match matters.
+#### F4.3 Required controls (input to C2/D3, ADR-0014)
 
-**Billing-alert list (a C4 deliverable).**
+1. **Create-only writes are mandatory, not an alternative to short expiry.** Reason: CLAUDE.md settles that devices "can only append backups, never delete or rewrite them". A replayable presigned PUT without a create-only condition lets a credential holder overwrite a staged object before the homelab pulls it. Options for C2/D3: (a) a signed `If-None-Match: *` on presigned PutObject (C13a; enforcement `[SB]`); (b) **Worker-mediated writes** through the R2 binding with `onlyIf` (C13b; whether a create-only condition can be expressed needs `[SB]`), which also removes replay, the storage-class trick and unbounded bodies, and fits the 100 MB request-body limit (C13c) at the cost of streaming through the Worker; (c) R2 temporary credentials scoped to a per-device prefix (S3). **Gap:** R2's CompleteMultipartUpload lists no conditional headers (C13a), so create-only for multipart objects (files larger than one part) needs a design answer from C2/A3. Expiry stays at the BUD-REVOKE 15 minutes. A 60 s expiry is **not** recommended: it conflicts with ADR-0001's batch-presign step and with intermittent connectivity, and R2 does not say whether expiry is checked at request start or at completion.
+2. **Per-device caps:** U_d presigns per day and Q_d staged, uncommitted bytes per device, from declared sizes **bound by a signed Content-MD5 or Content-Length** (`[SB]`).
+3. **Detectors with stated latency:** an overwrite event on a committed key (C8); declared vs actual size; **ciphertext that fails authentication at the homelab** (cheap junk cannot pass the homelab's AEAD check, but this detector is only as fast as the pull dwell); deviation from the device's own 30-day baseline (bytes/day, hours of activity). A credential holder who uploads valid, correctly sized ciphertext under the caps is **not** detectable by these. Only the meters bound that case.
+4. **Two independent spend meters.** (a) The Worker's own counters × S1/S7/S10/S12 prices, updated in minutes. (b) A **cron-triggered Worker** (or the homelab) that polls Cloudflare's GraphQL analytics (C13d) for R2 operations by action, including failed requests, plus Worker invocations, because (a) cannot see traffic that bypasses the Worker. Take the larger of the two. The analytics lag is unknown (`[SB]`). (The earlier draft's "always-on consumer Worker" was a misnomer: a consumer runs only when batches arrive.)
+5. **Suspension order: per device first.** Suspend the offending device automatically. Use a **global** presign stop only at a hard threshold (proposed BUD-CLOUD + BUD-ABUSE of usage in the month), because a global stop turns one stolen credential into a family-wide backup outage. Whether to allow the global stop at all is part of OD-14.
+6. **Kill switch:** rotate or revoke the R2 access key that signs presigned URLs, so every outstanding URL dies, not just new ones. Whether revocation invalidates already-issued SigV4 URLs, and how fast, needs `[SB]`. Enforce a hard maximum expiry in code.
+7. **Public-endpoint hygiene:** a per-invocation CPU limit (C5), head-sampled logs (C9), and a WAF rule on a device-auth header. mTLS (API Shield) is an option to check for plan availability.
+
+**Bound for credential-holder abuse** (C4-S1 grid, re-run with $5.70/M per replayed write; synthesis calc): cost ≤ k·T·(U_d·E_eff·$5.7e-6 + U_d·$3.5e-6) + k·Q_d·$0.015, plus a bandwidth-bounded storage-flood term, plus floods. **k is an assumption.** With U_d = 25,000/day, Q_d = 100 GB and T = 1 day:
+
+| Case | E_eff = 1 (create-only enforced) | E_eff = 60 | E_eff = 900 (15 min, no create-only) |
+|---|---|---|---|
+| k = 3 compromised devices | **$5.19** | $30.41 | $389.51 |
+| k = 25 (every device: a family-wide leak or a malicious update) | **$43.25** | — | — |
+| k = 3, T = 3 days (owner away) | $6.57 | — | — |
+| **Undetected for a whole month at the caps** (k·30·U_d·$8e-6) | k = 3: **$18/month**; k = 25: **$150/month** | | |
+
+The k = 25 case fits under $50 only because Q_d = 100 GB. In C4-S1's grid, only 21 of 81 all-device cap sets stay under $50. A month of undetected, cap-compliant abuse across all devices exceeds $50, so the spend meters, not the per-device caps, carry the bound in that case. **The whole bound is provisional** on four `[SB]` results: create-only enforcement, billing of 412/429/403, signed size enforcement, and incomplete-multipart storage billing.
+
+#### F4.4 Capacity abuse (new; adversary skeptic)
+
+Junk or ransomware churn that reaches the homelab becomes keep-forever data, and only a manual admin prune removes it. Proposal for A3/D4: a **per-device committed-bytes cap per day** enforced at ingest, and a **quarantine area** on the homelab where anomalous or over-budget uploads are held before they enter the keep-forever store. Nothing is deleted, which is consistent with "pruning is a manual admin action only". The owner releases or prunes quarantined data. Align the detection latency with D4-S3 (ransomware pause within 5 minutes and < 1 GB uploaded).
+
+#### F4.5 Billing-alert list (C4 deliverable)
 
 | # | Alert | Where | Threshold (proposed) | Latency |
 |---|---|---|---|---|
-| 1 | Cloudflare budget alert (default) | Billing → Billable Usage | $10 usage | Next day |
-| 2 | Cloudflare budget alert | same | BUD-CLOUD − $5 (e.g. $20) | Next day |
-| 3 | Cloudflare budget alert: seed month | same | Seed ceiling − $5 (e.g. $45); add it during planned seeds | Next day |
-| 4 | **App meter: per-device presigns, declared bytes, overwrite events** | Worker + consumer Worker (always on, not the homelab puller) | U_d, Q_d; any overwrite of a committed key suspends the device | Minutes |
-| 5 | **App meter: estimated account spend today** (from its own counters × S1/S7/S10/S12 prices) | Worker | BUD-ABUSE / 2 → owner email; BUD-ABUSE → global presign stop | Minutes |
-| 6 | Staged backlog GB and oldest-pending age | Homelab reconciliation + Worker | > 1.34 TB staged (the $20 break-even) or oldest message > retention − 2 days | Hourly |
-| 7 | Payment-method expiry reminder | Owner calendar | 30 days before card expiry (a failed preauthorisation can make R2 inaccessible, C12) | — |
-| 8 | Pool fill and disk-purchase trigger | Homelab (C7) | §F6 | Daily |
-| 9 | ISP month-to-date usage vs cap | Homelab puller | §F5 | Daily |
-
-Alerts 4–5 go to a verified destination address, which costs nothing (C10).
+| 1 | Cloudflare budget alert (default) | Billing | $10 usage | Next day |
+| 2 | Cloudflare budget alert | Billing | BUD-CLOUD − $5 (e.g. $20) | Next day |
+| 3 | Cloudflare budget alert, seed level | Billing | Seed ceiling − $5 (e.g. $45), **left on permanently** (it is harmless outside seeds and saves a manual step) | Next day |
+| 4 | App: per-device presigns, declared bytes, overwrite events, decrypt failures | Worker + homelab | U_d, Q_d; any overwrite or decrypt failure suspends that device | Minutes (decrypt failures: pull dwell) |
+| 5 | App meter A: estimated spend today and this month (own counters) | Worker | BUD-CLOUD − $5 → owner; "seed mode" (set by the owner) raises it to the seed ceiling automatically | Minutes |
+| 6 | App meter B: Cloudflare analytics poll | Cron Worker or homelab | Same thresholds; max(A, B); BUD-CLOUD + BUD-ABUSE → global stop, if OD-14 allows it | Analytics lag (`[SB]`) |
+| 7 | Staged backlog GB and oldest-pending age | Homelab + Worker | > 1.34 TB staged, or oldest message > queue retention − 2 days (then reconcile by listing) | Hourly |
+| 8 | Payment-method expiry | Owner calendar | 30 days before expiry (C12) | — |
+| 9 | Pool fill and disk-purchase trigger | Homelab (C7) | §F6 | Daily |
+| 10 | ISP month-to-date vs cap | Homelab puller | §F5 | Daily |
+| 11 | **Out-of-band channel** | Homelab, through a provider other than Cloudflare | Mirrors 5–7. It still works if the Cloudflare account is restricted (C12) or down | Minutes |
 
 ### F5. Home ISP (Q3). Confidence: High on arithmetic, Low on ISP terms
 
-- **Hairpin:** a home device that uploads to R2 uses the home uplink, and the homelab pull then uses the downlink. Whether an ISP counts both directions toward a cap is ISP-specific and unknown here.
-- **Throttle economics:** deferring 1 TB for a month in R2 costs $15. The one secondary figure found for overage (a legacy capped plan at $10 per 50 GB, up to $100/month, S36, low confidence) works out to about $200/TB. **Proposed puller schedule:** daily pull allowance = (cap − household baseline − margin) / days left in the cycle; let the backlog wait in R2; alert 9 fires at 80 % of the cap. Home devices should seed by USB or LAN (A4) when the owner reports a cap (H2 D2).
-- **Restore time is bound by the home uplink:** 1 TB takes 4.63 days at 20 Mbps, 1.85 at 50 Mbps and 0.93 at 100 Mbps. A8 should use these to set the whole-device default in BUD-RESTORE.
+- **Hairpin:** a home upload uses the uplink and then the homelab pull uses the downlink. Whether both directions count toward a cap depends on the ISP.
+- **Throttle:** daily pull allowance = (cap − household baseline − margin) / days left in the cycle; alert 10 fires at 80 % of the cap. Deferring 1 TB in R2 for a month costs $15. The one overage figure found (S36, secondary, low confidence) works out to about $200/TB. **The throttle is cheap only for short backlogs.** For a seed it must be paired with seed admission pacing (§F3), or the seed should go by USB.
+- **Restores are uplink-bound:** 1 TB takes 4.63 days at 20 Mbps, 1.85 at 50 Mbps and 0.93 at 100 Mbps. A8 should use this table for the BUD-RESTORE whole-device default.
 
-### F6. Capacity forecast and disk-purchase trigger (Q4). Confidence: High on the method; no data yet
+### F6. Capacity forecast and disk-purchase trigger (Q4). Confidence: High on method; no family data
 
-- Stored(t) = (L0 + g·t)·(1 − dedup)·(1 + o_engine + o_deriv) + snapshots + scratch. dedup comes from A1/F3; o_engine from A6-S2; o_deriv (preservation derivatives, OD-16) from A7. **All are no result today.** v0 uses dedup = 0 and o = 0, which is conservative for dedup and optimistic for overhead.
-- Usable = drives × size × layout efficiency: mirrors 50 %, RAIDZ-P over N disks ≈ (N − P)/N (C19). Drives are sold in TB; ZFS reports TiB (16 TB = 14.55 TiB). ZFS slop space is not modelled (C5).
-- **Trigger:** buy when Stored(t + lead + buffer) ≥ h·Usable. Lead is about 1–2 weeks to burned-in drives (H5 L21); a 90-day buffer is proposed.
+- Stored(t) = (L0 + g·t)·(1 − dedup)·(1 + o_engine + o_deriv + o_layout) + snapshots + scratch. dedup (A1/F3), o_engine (A6-S2) and o_deriv (A7, OD-16) are **no result**. v0 sets them to 0, which is conservative on dedup and optimistic on overhead.
+- **o_layout (new):** Proxmox warns that ZVOLs on RAIDZ carry extra parity and padding: an 8k block on RAIDZ2 writes 16k (C19). If the storage engine's data sits on a VM disk (a ZVOL), a 6-wide RAIDZ2 yields about 50 %, not 67 %, so tier L drops from 80 to about 60 TB. A 4-wide RAIDZ2 and mirrors are already at 50 %. ZFS also reserves slop space (not quantified from a primary source here), and drives are sold in TB while ZFS reports TiB (16 TB = 14.55 TiB). **A6/C5 should put the store on a dataset or bind mount, not a ZVOL**, or carry this overhead.
+- **Trigger:** buy when Stored(t + lead + buffer) ≥ h·Usable, with a lead of about 14 days (H5 L21) and a 90-day buffer.
 
-| Tier (C5 prices it) | Usable | L0 = 2, g = 0.5 | L0 = 5, g = 1 | L0 = 10, g = 1.5 | L0 = 10, g = 2 |
+| Tier (C5 prices it) | Usable (dataset) | L0 = 2, g = 0.5 | L0 = 5, g = 1 | L0 = 10, g = 1.5 | L0 = 10, g = 2 |
 |---|---|---|---|---|---|
-| S: 2 × 16 TB mirror | 16 TB | 21.6 y to 80 % | 7.8 y | **1.9 y** | **1.4 y** |
-| M: 4 × 16 TB RAIDZ2 (same usable as 2 mirrors, C19) | 32 TB | 47 y | 20.6 y | 10.4 y | 7.8 y |
-| L: 6 × 20 TB RAIDZ2 | 80 TB | > 100 y | 59 y | 36 y | 27 y |
-| Stored after 10 years (no dedup) | — | 7 TB | 15 TB | 25 TB | 30 TB |
+| S: 2 × 16 TB mirror | 16 TB | 21.6 y | 7.8 y | **1.87 y (trigger 2028-04-28)** | **1.4 y (2027-11-10)** |
+| M: 4 × 16 TB RAIDZ2 (any 2 drives may fail) | 32 TB | 47 y | 20.6 y | 10.4 y | 7.8 y (2034-04-04) |
+| M′: 2 × (2 × 16 TB) mirrors (1 drive per pair may fail) | 32 TB | same as M | | | |
+| L: 6 × 20 TB RAIDZ2 | 80 TB (about 60 TB on a ZVOL) | > 100 y | 59 y | 36 y | 27 y |
 
-- **Reading:** at the top of the settled 2–10 TB range, tier S needs expansion inside the first 2 years, so it only fits families near 2–5 TB. Tier M covers the settled range for about a decade. Because retention is keep-forever, tier L's advantage is mainly the 5–7 year refresh cycle, not headroom. Also, per C19, the ARC guidance scales with storage: 2 GiB + 1 GiB/TiB is about 31 GiB for tier M.
-- **Fewer large vs more small drives:** a mirror pair gives the lowest drive count and the best performance but a 50 % yield. RAIDZ2 over 6 drives yields 67 % and survives any two failures. Larger drives mean longer resilvers (C5-S3). No $/TB source was reachable (diskprices.com blocked), so cost per usable TB is left to C5 with the H5 estimate (E $150–350 per 8–20 TB drive) as a placeholder.
+Years to 80 % fill; trigger dates are from t0 = 2026-09-29 (C4-S1 `capacity.csv`). These are **scenario inputs, not the family's figures** (K12).
 
-### F7. Homelab running costs (Q5). Confidence: Low (inputs missing)
+- **When tier S fails early:** tier S reaches the trigger within 2 years when L0 ≥ 12.8 − 2.29·g TB: about 10.5 TB at g = 1, 9.4 TB at g = 1.5 and 8.2 TB at g = 2. So tier S only suits families clearly below about 8 TB.
+- **Fewer large vs more small drives:** M and M′ have the same usable space but different failure tolerance and resilver behaviour. M′ avoids the RAIDZ ZVOL padding issue. **C5 decides.** No $/TB source was reachable; the H5 estimate ($150–350 per drive) is a placeholder only.
 
-- **Power:** kWh/year = W × 8.766. Each 10 W of continuous draw is 87.7 kWh/year. The platform wattage (smart plug, `[OL]`) and the owner's tariff are **owner inputs**. EIA was blocked, so no default price is given.
-- **Drive replacements:** expected failures over the horizon ≈ n × AFR × years. With AFR ≈ 1.4 % (C20, secondary), 6 drives over 10 years ≈ 0.8 failures. Budget one spare drive per pool. Backblaze runs data-centre fleets, so home conditions may differ; treat this as a floor.
-- **Refresh:** a 5–7 year refresh (PLAN) means one full drive set inside a 10-year horizon: refresh cost ≈ drive-set price at the time.
-- **UPS battery:** replacement interval is a C5 input. No primary source was read.
-- **New vs recertified:** no primary AFR or price data for recertified drives → C5, with the owner's view.
+### F7. Homelab running costs (Q5). Confidence: Low
 
-### F8. Optional and fixed costs (Q6). Confidence: High, except the domain (Low)
+- **Power:** kWh/yr = W × 8.766 (87.7 kWh/yr per 10 W). Wattage (smart plug, `[OL]` via C5) and tariff are owner inputs. EIA was blocked.
+- **Drive replacements:** expected failures ≈ n × AFR × years. AFR is **contested** (K13, secondary only): at about 1.4 %, 6 drives over 10 years give about 0.8 failures. Data-centre AFR is a floor for home use. Budget one spare per pool. The primary Drive Stats CSV needs an allowlist change or an owner download.
+- **Refresh:** a 5–7 year refresh means one full drive set inside a 10-year horizon.
+- **UPS battery, new vs recertified:** no primary data. Left to C5.
+
+### F8. Optional and fixed costs (Q6). Confidence: High (domain Low)
 
 | Item | Cost | Needed when | Source |
 |---|---|---|---|
-| Workers Paid (production + sandbox accounts) | $5/month each | Always (production); sandbox during research | C5 |
-| Apple Developer Program | $99/year | OD-01 puts iOS in v1, or OD-09 buys Developer ID | S25 |
-| Azure Artifact Signing Basic | $9.99/month (5,000 signatures) | OD-09, if Smart App Control blocks unsigned builds and the owner is eligible (US/Canada individual) | C21 |
-| Google Play registration | $25 once | OD-10 = closed track | C22, T2 |
-| Android Developer Console, limited distribution | $0 | OD-10 = limited (≤ 20 devices) | C22 |
-| Domain | about $10–15/year (E) | Always | I3 (not verified) |
-| Email | $0 up to 3,000/month | OD-03 = cloud email | C10 |
-| Resend or Postmark fallback (B4 beta policy) | not checked | If Email Service stays in beta | — |
+| Workers Paid (production; sandbox during research) | $5/month each | Always | C5 |
+| Apple Developer Program | $99/yr | **Only if** OD-01 or OD-09 changes the settled "iOS deferred / no Apple signing" | S25 |
+| Azure Artifact Signing Basic | $9.99/month (5,000 signatures) | **Only if** OD-09 buys Windows signing, and the owner is eligible (Public Trust individual in the US or Canada, or an organisation) | K14 |
+| Google Play registration | $25 once | OD-10 = closed track | C22 |
+| Android limited distribution | $0 | OD-10 = limited (≤ 20 devices) | C22 |
+| Domain | about $10–15/yr (E) | Always; also needed for the free alert channel (K15) | I3 (not verified) |
+| Email | $0 up to 3,000/month | OD-03 = cloud email | K15 |
+| Resend or Postmark fallback (B4 beta policy) | not checked | If Email Service is still beta | C3 |
+| Second alert provider (alert 11) | not checked | Recommended | C7 |
 
-Annual fixed cost: **$60** (Workers Paid) + domain, about **$70–75**. With Apple and Azure Basic both bought it is about **$290–295**, plus $25 once for Play.
+Annual fixed cost: about **$70–75** (Workers Paid plus domain). **Conditional on OD-01/OD-09**, about $290–295 with Apple and Azure Basic; plus $25 once for Play.
 
 ### F9. Storage governance and fair share (Q7). Proposal for OD-20. Confidence: Medium
 
-Principles: nothing is ever deleted or refused silently (keep forever); users never configure anything; the owner decides centrally. Precedents: Ente uses admin-set per-member limits inside a family pool, with 50 MiB of overflow and a cached check for small files (C23). Immich refuses uploads at a hard quota. Reliquary should **not** copy the hard refusal, because a refused keepsake is an unprotected keepsake.
+Principles: nothing is ever deleted; no keepsake is refused **without an owner decision**; users configure nothing; the owner decides centrally. Precedents (C23): Ente uses admin-set per-member limits with overflow tolerance (borrow this); Immich refuses at a hard quota (avoid this).
 
-1. **Soft per-person budgets** (the owner sets them, e.g. equal shares of h·Usable). Crossing a budget alerts the **owner**, not the user, and never blocks core keepsakes (camera roll, documents, discovered keepsake folders). The health view never shows a quota to the user.
-2. **Approval-gated categories:** game captures, dashcam footage, VM or disk images, and any single file above a size threshold (e.g. 20 GB; owner sets it). The device hashes and counts them but does not upload, and shows "Waiting for [owner] to OK this". The owner approves from the admin CLI. The policy reaches devices as a **signed policy document fetched from the control plane**, so users touch nothing. The E4 discovery rules decide the category detection.
-3. **Pool-full states:**
-   - **Green:** below the trigger.
-   - **Amber:** the purchase trigger has fired (§F6). The owner is alerted; nothing changes for users.
-   - **Red:** h·Usable reached, e.g. 90 %. The homelab stops pulling approval-gated and over-budget uploads, then everything except core keepsakes. Staging absorbs the backlog up to a **staging cap** of (BUD-CLOUD − $5)/$0.015 GB-month ≈ 1.3 TB at $25.
-   - **Staging cap reached:** the Worker stops issuing presigned URLs with a "home storage full, retry later" code. Devices say plainly: "Your backups are waiting because home storage is full. [Owner] has been told." Hash caches keep "not yet backed up" accurate.
-   - **Emergency expansion runbook:** C5/C8.
-4. **Seasonal bursts** (holidays, trips): absorbed by staging. At 2 TB/month of inflow and a 1-day dwell, the cost is < $1. Suspend the warm cache automatically when staged bytes exceed 25 % of the staging cap.
+1. **Soft per-person budgets** set by the owner. Crossing a budget alerts the owner only and never blocks anything.
+2. **Approval categories, uploaded at lowest priority (revised).** These are game captures, dashcam footage, VM or disk images, and single files above an owner-set size. The earlier draft held them on the device until the owner approved, which leaves them unprotected (the same harm that rules out hard quotas). Revised default: they **upload after all core keepsakes** and the owner is alerted. Holding them on the device ("waiting for [owner] to OK this") is used only if the owner chooses it (option A in OD-20) or the pool is red. Policy reaches devices as a **signed policy document** from the control plane: C1 owns the endpoint and D2/D5 the signing key. E4 owns category detection.
+3. **Pool states.** Green: below the trigger. **Amber:** the purchase trigger has fired; the owner is alerted and nothing changes for users. **Red** (e.g. 90 % of usable): the homelab stops pulling non-core uploads first, and staging absorbs the backlog. Queue messages expire after 4 days by default and 14 at most (C6), so a red-state backlog is recovered by **reconciliation through ListObjects**, which A3 and G2 must cost and test. **Staging cap** ((BUD-CLOUD − $5)/$0.015 ≈ 1.3 TB at $25): once it is reached, the Worker answers "home storage full, retry later" and devices say "Your backups are waiting because home storage is full. [Owner] has been told." **Refusing at the staging cap needs the owner's OD-20 decision.** Without one, staging keeps growing and the cost alerts fire instead: up to $154.85/month at 10 TB, which the owner can stop by buying disks.
+4. **Seasonal bursts:** absorbed by staging (< $1 at a 1-day dwell). The warm cache is suspended automatically above 25 % of the staging cap.
 
 ### Alternatives compared
 
 | Option | Fit with settled requirements | Pros | Cons | Evidence |
 |---|---|---|---|---|
-| **Workers Paid** | Fits | Carries seeds; email; 14-day retention; CPU headroom | $5/month fixed | C5–C7, C10, C18 |
-| Workers Free | Fails seeds; no email to family (ADR-0002) | $0 | 1,667 files/day queue ceiling | C18 |
-| **R2 Standard for staging** | Fits | Free tier; no minimum duration; no retrieval fee | — | C1, C2 |
-| R2 IA for staging | Fits, but costly | Cheaper per GB-month when held ≥ 30 d | 30-day minimum, $0.01/GB retrieval, 2× Class A, no free tier: about 10× Standard for short dwell | C1 |
-| Part size 5 / 8 / 16 / 64 MiB | All fit | Larger parts → fewer operations | Savings ≤ $8 per 10 TB; larger parts cost memory and resume granularity (T1 E9) | C17, I1 |
-| Batch metadata records (m → 0) | Fits (A2/A3 decide) | About halves Class A in seed months | Changes the protocol shape | §Model |
-| Pack small files | **Conflicts** with ADR-0001's dedup-ID-keyed objects | Largest cut in operations | Would need a superseding ADR; not worth it at < $10/month | S32, S33 |
-| Mirror pair vs RAIDZ2 × 6 | Both fit | Mirror: fewer drives, simple; RAIDZ2: 67 % yield, two-failure tolerance | Mirror: 50 % yield; RAIDZ2: longer resilver, more drives | C19 |
-| New vs recertified drives | Both fit | Recertified: cheaper (unverified) | No AFR data | — |
+| **Workers Paid** | Fits | Carries seeds; email; 14-day retention; CPU headroom | $5/month | K7 |
+| Workers Free | Fails seeds and ADR-0002 email | $0 | Queue and D1 ceilings | K7 |
+| **R2 Standard for staging** | Fits | Free tier; no minimum duration; no retrieval fee | — | K2 |
+| R2 IA for staging | Fits, costly | Cheaper per GB-month for ≥ 30 days | $64.70 vs $12.16 per seed month | K8 |
+| Presigned PUT + signed If-None-Match | Fits **if enforced** | Direct upload; low Worker load | Enforcement unknown; no conditional on CompleteMultipartUpload | C13a, `[SB]` |
+| **Worker-mediated writes (R2 binding, `onlyIf`)** | Fits | No replay; exact metering; size and class controlled | Bytes stream through the Worker; 100 MB body limit (a 5 MiB part fits); more CPU | C13b, C13c |
+| R2 temporary credentials per device prefix | Fits | Standard S3 clients; scoped | Replay within TTL; prefix design vs dedup-ID keys | S3 |
+| Queue-less commit (Worker commit, homelab polls D1) | Fits (C1 decides) | Removes the Queues line; Free-plan ceiling moves to D1 | Loses push notification of staged objects | K7 |
+| Part size 5–80 MiB | All fit | Larger parts → fewer ops | Savings ≤ $5 per 10 TB; memory and resume granularity | K9, I1 |
+| Batch metadata records | Fits (A2/A3) | $12.16 → $7.66 per seed month | Protocol shape | C4-S1 |
+| Pack small files | **Conflicts** with ADR-0001 | Largest cut in ops | Superseding ADR; not worth it | S32, S33 |
+| Hard-limit or prepaid card as spend cap | **Conflicts** with data integrity | Hard stop | Failed preauthorisation can make R2 inaccessible and data deletable | C12 |
+| Mirror pairs vs RAIDZ2 | Both fit | See §F6 | See §F6 | C19 |
+| New vs recertified drives | Both fit | Cheaper (unverified) | No AFR data | — |
 
 ### Similar work and lessons
 
 | Project | What they do | Borrow or avoid | Source |
 |---|---|---|---|
-| rclone S3/R2 | 200 MiB single-PUT cutoff; 5 MiB chunks; 10,000-part cap; chunk size grows to fit the cap | Borrow the growth rule for huge files; the cutoff logic is similar to T1's "single PUT at ≤ 1 part" | S28 |
-| restic / kopia | Pack blobs into 4–128 MiB (restic) or 20 MiB (kopia) objects | Avoid for R2 staging (conflicts with ADR-0001); relevant to A6's storage engine | S32, S33 |
-| Ente family plans | Admin-set per-member limits in a shared pool; 50 MiB overflow; cached check below 100 MiB | Borrow central, admin-set budgets and the overflow tolerance; avoid hard refusal | S29, S30 |
-| Immich | Hard per-user quota at upload | Avoid hard refusal of keepsakes | S31 |
-| Ente / B2 prices | About $12/TB-month (Ente 1 TB plan) and about $6.95/TB-month (B2), secondary snippets only | Sanity check only: the homelab is a capital cost, not a per-TB rent | S37, S38 |
+| rclone S3/R2 | 200 MiB single-PUT cutoff; 5 MiB chunks; chunk size grows to stay within 10,000 parts | Borrow the growth rule | S28 |
+| restic / kopia | Pack blobs into larger objects | Avoid for staging; relevant to A6 | S32, S33 |
+| Ente family plans | Admin-set member limits; overflow tolerance | Borrow | S29, S30 |
+| Immich | Hard per-user quota | Avoid | S31 |
+| Ente / B2 prices | About $12 and $6.95 per TB-month (secondary snippets) | Sanity check only | S37, S38 |
 
 ### Tools and libraries
 
-| Name | Purpose | Notes |
-|---|---|---|
-| Python 3 (stdlib) | The v0 calculation | Committed version is the C4-S1 runner's deliverable |
-| Cloudflare billable-usage dashboard and GraphQL analytics | Checking the model against the sandbox bill | `[SB]`, needs H5 L01 |
-| Smart plug with energy metering | Platform wattage | `[OL]` kit (C5) |
+| Name | Purpose | Licence | Maturity | Source |
+|---|---|---|---|---|
+| `spikes/C4-S1/c4_model.py` | The v0 model, simulator, sensitivity, abuse grid, capacity | Repo | Throwaway research code, 2026-09-29 | I4 |
+| Cloudflare GraphQL Analytics (`r2OperationsAdaptiveGroups`) | Spend meter B; checking the model against the sandbox bill | Vendor API | Documented | S39 |
+| Smart plug with energy metering | Platform wattage | — | — | C5 `[OL]` |
 
 ## Spikes
 
-Placeholder. The C4-S1 spike runner works in parallel and fills in this table.
-
 | Spike | Hypothesis | Pass → / fail → (decision) | Exec tag | Budget IDs | Data class | Status | Result |
 |---|---|---|---|---|---|---|---|
-| C4-S1 Model v0, then v1 with A0 numbers | The steady-state bill is known within ±25 %; worst-case abuse is bounded below BUD-ABUSE; the disk-purchase trigger date is computed | Pass → set BUD-CLOUD and BUD-ABUSE (OD-14) and the alert list; fail → rerun with A0 and C2 numbers | CT | BUD-CLOUD, BUD-ABUSE | `SYN → results` | Running (separate runner) | *(runner fills in)* |
+| C4-S1 Model v0, then v1 with A0 numbers | The steady-state bill is known within ±25 %; worst-case abuse is bounded below BUD-ABUSE; the disk-purchase trigger date is computed | Pass → set BUD-CLOUD, BUD-ABUSE (OD-14) and the alert list. Fail → rerun as v1 with A0, E1, H2 and C2 `[SB]` numbers | CT | BUD-CLOUD, BUD-ABUSE (both unset; tested against the proposed $25 / $50) | `SYN → results` | **Ran 2026-09-29; inconclusive** | (1) **±25 %:** met only at g ≤ 0.5 TB/yr (21 %). At g = 1 it is 30–36 % and at g = 2 it is 48–72 %. The maximum anywhere is $11.16, under $25. Pinning CPU per request cuts g = 1 to 10 %; g = 2 needs CPU and mean file size. (2) **Abuse:** unbounded without app controls. With them, 131 of 243 cap sets stay under $50 (k = 3: $5.10 at E = 1); with all devices compromised, 21 of 81. The unauthenticated flood is not bounded by device caps. Four billing behaviours need `[SB]`. (3) **Trigger:** computed for scenarios (tier S 2028-04-28 at L0 = 10, g = 1.5); the family date waits on H2/E1. All 7 self-checks reproduce the vendors' worked examples. Evidence: `spikes/C4-S1/README.md`, `spikes/C4-S1/out/*.csv`, `spikes/C4-S1/evidence/run_output.txt` |
 
-Analyst view for the runner: ±25 % holds for steady state because $5 of about $5–7 is fixed. The abuse bound holds **only** with the app-level caps in §F4, and three billing behaviours are undocumented (items 1–3 in Open questions). The trigger date cannot be computed until H2 F4/C4 and E1 give L0 and g. §F6 gives scenario dates.
+No emulator was used. Miniflare cannot answer billing questions, so the four `[SB]` items go to C2's sandbox kit (H5 L01). No C4 kit is needed in this wave.
+
+**Reframed decision test (logic skeptic).** OD-14 does not need ±25 % precision. It needs the bill to stay below BUD-CLOUD over the plausible ranges. That property **holds** for the uncapped steady state (maximum $11.16 against $25). It **does not hold** for an unpaced seed from a capped home (§F3). The ±25 % criterion stays as the v1 target once A0 reports.
 
 ## Conflicts with settled text
 
-- None directly.
-- Packing small files would conflict with ADR-0001 §4 (objects keyed by dedup ID). It is not recommended.
-- The OD-20 proposal (§F9) keeps keep-forever and "users never touch configuration" intact. The owner should confirm that approval-gated categories are an acceptable reading of "auto-discovery proposes what to protect".
+None of the recommendations contradicts CLAUDE.md, ADR-0001 or ADR-0002. The skeptics found these tensions, which are resolved here or raised as decisions:
+
+1. **Append-only (CLAUDE.md).** The earlier draft offered "short expiry **or** If-None-Match", and expiry alone would let a credential holder overwrite a staged object. **Fixed:** create-only is mandatory (§F4.3). Open: R2's CompleteMultipartUpload has no conditional headers, so create-only for multipart objects needs a C2/D3/A3 design.
+2. **Intermittent connectivity and ADR-0001's batch presign.** A 60 s expiry would conflict with both. **Dropped:** expiry stays at 15 minutes (BUD-REVOKE).
+3. **Data integrity over everything.** The red state's staging-cap refusal, and withholding approval categories, both leave keepsakes unprotected. **Changed:** neither happens by default. Both are owner choices in OD-20.
+4. **"Auto-discovery proposes what to protect."** Approval categories now upload at lowest priority rather than being withheld. OD-20 asks the owner whether withholding is acceptable.
+5. **A global presign stop** would weaken the settled goals of tolerating intermittent connectivity and flagging problems plainly, by turning one stolen credential into a family-wide outage. It is per-device first, and the global stop is an OD-14 sub-decision.
+6. **"No Apple or Windows code signing for now; iOS deferred."** The Apple and Azure lines are conditional on OD-01/OD-09 and are not in the base fixed cost.
+7. Packing small files would conflict with ADR-0001 §4. It is not recommended.
 
 ## Open questions
 
-1. Does R2 bill requests that return 403 (bad signature, expired URL), 412 (If-None-Match failed) or 429 (same-key rate limit)? Only 401 is documented as free. **Owner:** C2 via an `[SB]` spike (sandbox, H5 L01).
-2. Does R2 enforce a signed `Content-Length` and a signed `If-None-Match: *` on presigned PUT and UploadPart? **Owner:** C2/D3 `[SB]`.
-3. Are Worker requests blocked by WAF rate-limiting rules billed? **Owner:** C2 `[SB]`.
-4. Operations per file (Class A, Class B, Worker requests, D1 rows, Queue messages), measured. **Owner:** A0 (v1 of this model).
-5. Mean file size, bytes in large files, growth per person per year. **Owner:** E1 census; H2 F4.
-6. Storage-engine and derivative overhead. **Owner:** A6-S2, A7.
-7. Disk $/TB (new and recertified), platform wattage, electricity tariff, UPS battery interval. **Owner:** C5 plus owner inputs. The price sites are blocked, so either allowlist diskprices.com or have the owner supply quotes.
-8. The owner's ISP cap and up/down speeds (H2 D1–D2). These set the throttle schedule and restore times.
-9. Whether incomplete multipart parts are billed as storage until the 7-day default abort. This is not stated in S1 or S4, and it affects the abuse storage bound. **Owner:** C2 `[SB]`.
+| # | Question | Owner | By |
+|---|---|---|---|
+| 1 | Does R2 bill 403 (bad signature or expired URL), 412 (If-None-Match) and 429 (same-key limit) responses? | C2 `[SB]` | Wave 2 |
+| 2 | Does R2 enforce a signed `If-None-Match: *`, `Content-MD5`/`Content-Length` and `x-amz-storage-class` on presigned PutObject and UploadPart? Can the binding's `onlyIf` express create-only? How is create-only achieved for multipart objects? | C2/D3 `[SB]`, A3 | Wave 2 |
+| 3 | Are WAF-blocked Worker requests billed? | C2 `[SB]` | Wave 2 |
+| 4 | Are incomplete multipart parts billed as storage until abort? | C2 `[SB]` | Wave 2 |
+| 5 | Does revoking the signing R2 key invalidate outstanding presigned URLs, and how fast? Is expiry checked at request start or at completion? | C2 `[SB]` | Wave 2 |
+| 6 | What is the lag of GraphQL analytics for R2 operations and Worker invocations? | C2 `[SB]` | Wave 2 |
+| 7 | Measured operations per file and **CPU per request** (the largest sensitivity) | A0 | v1 |
+| 8 | Mean file size, share of bytes in large files, growth per person | E1, H2 F4 | v1 |
+| 9 | Engine, derivative and layout overhead (dataset vs ZVOL); dedup ratio | A6-S2, A7, C5, A1/F3 | Gate A |
+| 10 | Disk $/TB, wattage, tariff, UPS interval, primary Drive Stats | C5 + owner; H1 allowlist | Gate C |
+| 11 | The owner's ISP cap and speeds | H2 D1–D2 | Wave 0 |
+| 12 | Workers Logs / Observability pricing after 2026-12-01 | C4 re-check | 2026-12 |
+| 13 | Resend/Postmark fallback pricing; second alert provider | C3, C7 | Gate C |
 
 ## Recommendation
 
-1. **Workers Paid, R2 Standard, no IA** for staging.
-2. **Set BUD-CLOUD at $25/month and a $50 seed-month ceiling** (the intake defaults). Modelled use is $5–7 at steady state and $11–17 in a seed month, so the defaults leave about 3× headroom. Set Cloudflare usage alerts at $10, $20 and (during seeds) $45, because the alerts exclude the $5 fee.
-3. **Set BUD-ABUSE at $50, conditional on the app-level controls** in §F4: per-device presign and staged-byte caps, a short single-PUT expiry or a signed If-None-Match, auto-suspend on overwrite and on declared/actual size mismatch, and an account-wide spend meter with a global presign stop. The meter runs in an always-on consumer Worker. Without these controls, no BUD-ABUSE value can be honoured, because Cloudflare will not cap spend.
-4. **Warm cache:** at most 30 days at steady state, suspended automatically during seeds and above 25 % of the staging cap.
-5. **Choose part size on non-cost grounds** (B6). Prefer batching metadata records if A2/A3 allow it.
-6. **Homelab tier M (4 × 16 TB RAIDZ2 or 2 mirror pairs) as the default** for C5 to price. Choose tier S only if the family library is at the 2–5 TB end.
-7. **Adopt the §F9 governance proposal** for OD-20.
+1. **Workers Paid and R2 Standard. Never use IA for staging** (K7, K8).
+2. **BUD-CLOUD $25/month and a $50 seed-month ceiling.** Support: the C4-S1 full-factorial maximum is $11.16 at steady state, and an uncapped 2 TB seed month is $12–18 (with K2 prices). Usage alerts at $10, $20 and $45, left on permanently, because the alerts exclude the $5 fee (K1). **Caveat:** the seed ceiling holds only if seed admission is paced to the homelab's pull allowance when the home ISP is capped. Otherwise large seeds go by USB.
+3. **BUD-ABUSE $50, provisional.** It is achievable only with the §F4.3 controls (mandatory create-only, per-device caps with signed size, decrypt-failure and overwrite detectors, two spend meters, per-device-first suspension, a key-rotation kill switch, public-endpoint hygiene) **and** only if the C2 `[SB]` results show that 403/412/429 responses are unbilled and that the signed conditions are enforced. The bound assumes k = 3 compromised devices ($5.19). With all 25 compromised it is $43.25, and only because the staged-byte cap is 100 GB. A month of undetected, cap-compliant abuse across all devices would reach $150, so the meters must carry the bound. Cloudflare will not cap spend (K1).
+4. **Warm cache ≤ 30 days**, suspended automatically during seeds and above 25 % of the staging cap (K10).
+5. **Part size on non-cost grounds** (B6). Batch metadata records if A2/A3 allow (K9).
+6. **C5 should price the 32 TB tier (M or M′) as the reference case.** Tier S suits only libraries clearly below about 8 TB. C5 chooses between RAIDZ2 and mirror pairs, and the store should sit on a dataset, not a ZVOL (K12, C19).
+7. **Adopt the revised §F9 proposal** for OD-20.
+8. **Add an ingest-side per-device cap and quarantine** (§F4.4) to A3/D4.
 
-What would change this: A0 measuring more than about 5 R2 objects per file; E1 finding a mean file size below 2 MB; or the `[SB]` checks showing that 403, 412 or 429 responses are billed, which would make unauthenticated R2 floods an unbounded cost.
+What would change this: A0 measuring more than about 5 R2 objects per file, or CPU well above 5 ms per request; E1 finding a mean file size below 2 MB; the `[SB]` checks showing that 403/412/429 are billed or that signed conditions are not enforced (then Worker-mediated writes become necessary, not optional); an owner ISP cap below family inflow (then the default seed route becomes USB).
 
 ## Decision requests
 
-### OD-14: Cost ceilings (BUD-CLOUD, BUD-ABUSE) and alert thresholds
-- **Needed by:** Wave 0 / H2 intake (already overdue per the queue)
-- **Evidence:** this note §Model, §F4; `owner-intake.md` §B
+### OD-14: Cost ceilings, abuse controls and beta-feature policy
+- **Needed by:** Wave 0 / H2 intake (overdue in the queue)
+- **Evidence:** this note §Model, §F3, §F4; `spikes/C4-S1/`; `owner-intake.md` B1–B4
 - **Options:**
   | Option | What it means for the family | Cost (money and owner time) | Reversibility | Risks |
   |---|---|---|---|---|
-  | A. $25 steady / $50 seed / $50 abuse, with app-level caps | Nothing visible | $5–7/month modelled; build effort for the meters (C2) | Easy | Caps set too tight could throttle a legitimate seed; mitigate with an owner "seed mode" |
-  | B. $15 steady / $30 seed / $20 abuse | Seeds go slower or mostly by USB | Lower ceiling; more USB work for the owner | Easy | Too little headroom for outage backlogs (+$3.66) plus a warm cache |
-  | C. No abuse cap, rely on Cloudflare alerts | Nothing visible | $0 build | Easy | Alerts are a day late and never cap: $690/day is possible (C14) |
-- **Recommendation:** A. The modelled bill is about a quarter of the ceiling, and the $50 abuse figure is achievable once the §F4 controls exist.
-- **Touches settled text:** none
-- **If no decision by the deadline:** the run assumes A as *provisional*. C2 designs the caps against $50.
+  | A. $25 steady / $50 seed / $50 abuse, with the §F4.3 controls; provisional on the C2 `[SB]` results | Nothing visible; a stolen device is suspended on its own | $5–8/month modelled; C2 build effort | Easy | The bound depends on four unverified billing behaviours; a capped seed must be paced or go by USB |
+  | B. $15 steady / $30 seed / $20 abuse | Seeds go slower or mostly by USB | Lower ceiling; more USB work | Easy | Little headroom for outage backlogs; $20 abuse needs tighter caps that could throttle a real seed |
+  | C. No abuse cap; rely on Cloudflare alerts | Nothing visible | $0 build | Easy | Alerts are a day late and never cap; about $645/day is possible |
+- **Sub-decisions:** (i) May the account-wide meter stop **all** presigning at BUD-CLOUD + BUD-ABUSE (a family-wide outage), or only alert? Recommend: allow it, only after per-device suspension has failed. (ii) **Beta-feature policy:** adopt owner-intake B4 ("only with a documented, tested fallback that needs no client update"). Note that the free alert channel and signup mail depend on Email Service, and that the Workers Logs pricing changes on 2026-12-01.
+- **Recommendation:** A with both sub-decisions as stated. The value of k (3 vs 25) is an assumption the owner should see (§F4.3 table).
+- **Touches settled text:** no. The create-only control implements the settled append-only property.
+- **If no decision by the deadline:** A is assumed *provisionally*. C2 designs against $50 with global stop allowed.
 
-### OD-20: Per-person storage budgets and categories that need approval
+### OD-20: Per-person storage budgets and approval categories
 - **Needed by:** Wave 2
 - **Evidence:** this note §F9; precedents C23
 - **Options:**
   | Option | What it means for the family | Cost | Reversibility | Risks |
   |---|---|---|---|---|
-  | A. Soft budgets (owner alerts only) + approval-gated categories + pool-full states (§F9) | Core keepsakes are never blocked; big odd files wait for the owner's OK | Owner approves occasional items (fits BUD-SUPPORT) | Easy | Category detection errors (E4) |
-  | B. No budgets; everything is uploaded | Simplest | Capacity risk: dashcam and game captures can dominate | Easy | Pool fills early; tier S fails sooner |
-  | C. Hard per-person quotas (Immich-style) | Uploads refused at the quota | Low | Easy | Unprotected keepsakes, and users see configuration-like messages |
-- **Recommendation:** A.
-- **Touches settled text:** possibly CLAUDE.md "auto-discovery proposes what to protect" (the gating is owner-side). Keep-forever is untouched: nothing is deleted.
-- **If no decision by the deadline:** B, with the pool-full states from A, because they are safety behaviour.
+  | A′. Soft budgets + approval categories **uploaded at lowest priority** + pool states; refusing at the staging cap only with this approval | Everything is protected eventually; big odd files go last | Occasional owner review (fits BUD-SUPPORT) | Easy | Pool fills faster than with A; category detection errors (E4) |
+  | A. As A′, but approval categories **held on the device** until the owner says yes | Big odd files wait, unprotected | More owner workload | Easy | Unprotected files; tension with "auto-discovery proposes" |
+  | B. No budgets; everything is uploaded; amber alerts only; no refusal | Simplest | Staging cost can grow if the pool fills | Easy | Pool fills early; up to $154.85/month at 10 TB staged |
+  | C. Hard per-person quotas (Immich-style) | Uploads refused at the quota | Low | Easy | Unprotected keepsakes; users see configuration-like messages |
+- **Recommendation:** A′.
+- **Touches settled text:** A touches "auto-discovery proposes what to protect" and "data integrity over everything". A′ and B do not. Keep-forever is untouched by all of them.
+- **If no decision by the deadline:** B. Nothing is refused or withheld; the cost and pool alerts fire instead.
 
 ## Hand-offs
 
 | To | What | Why |
 |---|---|---|
-| C2 / D3 | §F4 cap set (U_d, Q_d, expiry, If-None-Match, overwrite and size-mismatch auto-suspend, account spend meter) and Open questions 1–3 and 9 as `[SB]` spikes | BUD-ABUSE is not enforceable otherwise |
-| C1 | Warm-cache policy (traceability C-01); always-on consumer Worker for meters; avoid always-on DOs; staging-cap "retry later" code | Largest variable cost line; DO rounding trap |
-| A0 | Measure the §Model **A** parameters (objects, Class A/B, requests, D1 rows and queue messages per file) | Turns v0 into v1 |
-| A2 / A3 | Consider batching metadata records; size check against the event message before GET | About halves seed Class A; avoids pulling garbage home |
-| B6 | Part size is not a cost lever; choose it on resume, memory and iOS grounds | C17 |
-| C5 | Tiers S/M/L, the trigger formula, AFR (secondary), ARC sizing; supply $/TB, wattage, UPS | BOM (ADR-0030) |
-| C7 | Alerts 6, 8 and 9 | Monitoring |
-| A8 | Restore-time table (§F5) for the BUD-RESTORE whole-device default | Uplink-bound |
-| A4 / A9 / E5 | Home devices on capped ISPs seed by USB or LAN; the cloud cost is neutral | §F3, §F5 |
-| H1 | Blocked sources: backblaze.com, xfinity.com, eia.gov, diskprices.com, azure.microsoft.com pricing, ente.com; WebSearch budget exhausted | PLAN §5.4 |
-| E1 | Mean file size, bytes in large files, growth per person | Model inputs |
+| C2 / D3 | §F4.3 controls; Open questions 1–6 as `[SB]` items; multipart create-only design; Worker-mediated vs presigned comparison | BUD-ABUSE is unenforceable otherwise; append-only |
+| C1 | Warm-cache policy (C-01); seed admission paced to the pull allowance; cron meter B; avoid always-on DOs; policy-document endpoint; queue-less design option; staging-cap "retry later" code | Largest variable cost line; capped seeds |
+| A0 | Measure the §Model A parameters, **CPU per request first** | Turns v0 into v1; ±25 % |
+| A2 / A3 | Batch metadata records; size check before GET; decrypt-failure detector; red-state reconciliation by listing; ingest cap and quarantine | Cost, abuse, capacity |
+| D4 | Ingest quarantine and T aligned with D4-S3 | Capacity abuse |
+| D2 / D5 | Policy-document signing key | §F9 |
+| B6 | Part size is not a cost lever (valid T1 sizes) | K9 |
+| A6 / C5 | Tiers S/M/M′/L, the L0 threshold for tier S, dataset vs ZVOL, slop; supply $/TB, wattage, UPS; primary AFR | ADR-0030 |
+| C7 | Alerts 7, 9, 10 and the out-of-band channel 11 | Monitoring |
+| C3 | The free alert channel needs Email Routing on a zone; fallback pricing | K15 |
+| A8 | Restore-time table (§F5) | BUD-RESTORE |
+| A4 / A9 / E5 | Capped homes seed by USB; cloud cost is neutral | §F3 |
+| E1 | Mean file size, bytes in large files, growth | Model inputs |
+| H1 | Blocked sources (backblaze.com, xfinity.com, eia.gov, diskprices.com, azure.microsoft.com pricing, ente.com); budget sheet: record the corrected B1/B2 figures; model expiry 2026-12-01 (Workers Logs) | PLAN §5.4 |

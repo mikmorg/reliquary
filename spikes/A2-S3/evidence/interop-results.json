@@ -1,0 +1,4337 @@
+{
+ "results": [
+  {
+   "check": "keys:go:recipient-is-age1pq",
+   "pass": true,
+   "detail": "len=1959"
+  },
+  {
+   "check": "keys:go:recipient-is-age1pq",
+   "pass": true,
+   "detail": "len=1959"
+  },
+  {
+   "check": "keys:rust:recipient-is-age1pq",
+   "pass": true,
+   "detail": "len=1959"
+  },
+  {
+   "check": "keys:rust:recipient-is-age1pq",
+   "pass": true,
+   "detail": "len=1959"
+  },
+  {
+   "check": "keys:typage:recipient-is-age1pq",
+   "pass": true,
+   "detail": "len=1959"
+  },
+  {
+   "check": "keys:typage:recipient-is-age1pq",
+   "pass": true,
+   "detail": "len=1959"
+  },
+  {
+   "check": "keys:go:rust-and-go-derive-same-recipient",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "keys:rust:rust-and-go-derive-same-recipient",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "keys:typage:rust-and-go-derive-same-recipient",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:go-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:rust-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:0B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:1pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:1B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:1pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65535B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:1pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65536B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:1pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:65537B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:1pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:196615B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:1pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:1pq:5242883B",
+   "pass": true,
+   "detail": "1627"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:1pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:rust:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:rust->rust:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->go:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->typage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:rust->kage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:go:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:go->rust:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->go:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->typage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:go->kage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:typage:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:typage->rust:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->go:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->typage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:typage->kage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:0B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:2pq:0B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:1B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:2pq:1B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65535B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:2pq:65535B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65536B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:2pq:65536B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:65537B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:2pq:65537B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:196615B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:2pq:196615B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "header-len:kage:2pq:5242883B",
+   "pass": true,
+   "detail": "3184"
+  },
+  {
+   "check": "interop:kage->rust:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->go:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->typage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "interop:kage->kage:typage-keys:2pq:5242883B",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "mixing:go-refuses",
+   "pass": true,
+   "detail": "age: error: incompatible recipients: can't mix post-quantum and classic recipients, or the file would be vulnerable to q"
+  },
+  {
+   "check": "mixing:rust-refuses",
+   "pass": true,
+   "detail": "error: E_MIXED_RECIPIENTS: can't mix post-quantum and classic recipients"
+  },
+  {
+   "check": "mixing:typage-behaviour-recorded",
+   "pass": true,
+   "detail": "typage exit=0 "
+  },
+  {
+   "check": "mixing:kage-behaviour-recorded",
+   "pass": true,
+   "detail": "kage exit=1 at kage.Age.encryptInternal(Age.kt:296)\n\tat kage.Age.encryptInternal$default(Age.kt:291)\n\tat kage.Age.encryptStream(Age.kt:74)\n\tat kage.Age.encryptStream(Age.kt:92)\n\tat KageTool.main(KageTool.java:35)"
+  }
+ ],
+ "matrix": {
+  "go->go": {
+   "ok": 42,
+   "fail": 0
+  },
+  "go->kage": {
+   "ok": 42,
+   "fail": 0
+  },
+  "go->rust": {
+   "ok": 42,
+   "fail": 0
+  },
+  "go->typage": {
+   "ok": 42,
+   "fail": 0
+  },
+  "kage->go": {
+   "ok": 42,
+   "fail": 0
+  },
+  "kage->kage": {
+   "ok": 42,
+   "fail": 0
+  },
+  "kage->rust": {
+   "ok": 42,
+   "fail": 0
+  },
+  "kage->typage": {
+   "ok": 42,
+   "fail": 0
+  },
+  "rust->go": {
+   "ok": 42,
+   "fail": 0
+  },
+  "rust->kage": {
+   "ok": 42,
+   "fail": 0
+  },
+  "rust->rust": {
+   "ok": 42,
+   "fail": 0
+  },
+  "rust->typage": {
+   "ok": 42,
+   "fail": 0
+  },
+  "typage->go": {
+   "ok": 42,
+   "fail": 0
+  },
+  "typage->kage": {
+   "ok": 42,
+   "fail": 0
+  },
+  "typage->rust": {
+   "ok": 42,
+   "fail": 0
+  },
+  "typage->typage": {
+   "ok": 42,
+   "fail": 0
+  }
+ },
+ "passed": 853,
+ "failed": 0
+}

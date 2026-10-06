@@ -1,0 +1,7 @@
+// V1: Workers Logs on, invocation logs off; only the Worker's own console.* lines are kept.
+{
+  "name": "d6s2-probe",
+  "main": "probe-worker.js",
+  "compatibility_date": "2026-09-01",
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } }
+}

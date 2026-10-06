@@ -1,0 +1,820 @@
+{
+  "started": "2026-10-06T15:40:56+0000",
+  "variants": {
+    "A-classic-sealed-slip39-128": {
+      "kind": "classic",
+      "slip39_secret_bits": 128,
+      "recipient_lengths": {
+        "ingest": 62,
+        "recovery": 62
+      },
+      "recovery_fingerprint_printed_on_card": "5ed09052971f3e6e",
+      "share_count": 3,
+      "words_per_share": [
+        20
+      ],
+      "seal_seconds": 2.284,
+      "sealed_identity_bytes": 366,
+      "sealed_identity_inspect": {
+        "version": "age-encryption.org/v1",
+        "postquantum": "yes",
+        "armor": false,
+        "stanza_types": [
+          "scrypt"
+        ],
+        "sizes": {
+          "header": 150,
+          "armor": 0,
+          "overhead": 32,
+          "min_payload": 184,
+          "max_payload": 184,
+          "min_padding": 0,
+          "max_padding": 0
+        }
+      },
+      "header_bytes_per_object": [
+        266
+      ],
+      "object_inspect_sample": {
+        "version": "age-encryption.org/v1",
+        "postquantum": "no",
+        "armor": false,
+        "stanza_types": [
+          "X25519",
+          "X25519"
+        ],
+        "sizes": {
+          "header": 266,
+          "armor": 0,
+          "overhead": 64,
+          "min_payload": 180025,
+          "max_payload": 180025,
+          "min_padding": 0,
+          "max_padding": 0
+        }
+      },
+      "slip39_recover_seconds": 0.096,
+      "unseal_interactive_seconds": 0.964,
+      "unseal_prompt_seen": [
+        "Enter passphrase: "
+      ],
+      "decrypt_10_seconds": 0.101,
+      "debian_age_1_1_1_decrypts": 10,
+      "debian_age_1_1_1_error_sample": [],
+      "unseal_secret_echoed_in_pty_transcript": false
+    },
+    "B-pq-sealed-slip39-256": {
+      "kind": "pq",
+      "slip39_secret_bits": 256,
+      "recipient_lengths": {
+        "ingest": 1959,
+        "recovery": 1959
+      },
+      "recovery_fingerprint_printed_on_card": "e5062cf727a964dd",
+      "share_count": 3,
+      "words_per_share": [
+        33
+      ],
+      "seal_seconds": 1.525,
+      "sealed_identity_bytes": 2266,
+      "sealed_identity_inspect": {
+        "version": "age-encryption.org/v1",
+        "postquantum": "yes",
+        "armor": false,
+        "stanza_types": [
+          "scrypt"
+        ],
+        "sizes": {
+          "header": 150,
+          "armor": 0,
+          "overhead": 32,
+          "min_payload": 2084,
+          "max_payload": 2084,
+          "min_padding": 0,
+          "max_padding": 0
+        }
+      },
+      "header_bytes_per_object": [
+        3184
+      ],
+      "object_inspect_sample": {
+        "version": "age-encryption.org/v1",
+        "postquantum": "yes",
+        "armor": false,
+        "stanza_types": [
+          "mlkem768x25519",
+          "mlkem768x25519"
+        ],
+        "sizes": {
+          "header": 3184,
+          "armor": 0,
+          "overhead": 64,
+          "min_payload": 180025,
+          "max_payload": 180025,
+          "min_padding": 0,
+          "max_padding": 0
+        }
+      },
+      "slip39_recover_seconds": 0.06,
+      "unseal_interactive_seconds": 0.989,
+      "unseal_prompt_seen": [
+        "Enter passphrase: "
+      ],
+      "decrypt_10_seconds": 0.111,
+      "debian_age_1_1_1_decrypts": 0,
+      "debian_age_1_1_1_error_sample": [
+        "age: error: reading \"/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/D2-S2/work2/B-pq-sealed-slip39-256/recovered.key\": failed to read \"/tmp/claude-0/-home-user-reli"
+      ],
+      "unseal_secret_echoed_in_pty_transcript": false
+    },
+    "C1-classic-raw-slip39": {
+      "kind": "classic",
+      "identity_hrp": "AGE-SECRET-KEY-",
+      "identity_secret_bytes": 32,
+      "words_per_share": [
+        33
+      ],
+      "non_stock_step": "bech32-encode the recovered 32 bytes with HRP AGE-SECRET-KEY- (about 40 lines of Python; not in any stock tool checked)"
+    },
+    "C2-pq-raw-slip39": {
+      "kind": "pq",
+      "identity_hrp": "AGE-SECRET-KEY-PQ-",
+      "identity_secret_bytes": 32,
+      "words_per_share": [
+        33
+      ],
+      "non_stock_step": "bech32-encode the recovered 32 bytes with HRP AGE-SECRET-KEY-PQ- (about 40 lines of Python; not in any stock tool checked)"
+    },
+    "D1-classic-age-plugin-sss": {
+      "kind": "classic",
+      "plugin": "age-plugin-sss v0.4.0 (experimental per its README)",
+      "sss_recipient_length": 325,
+      "header_bytes_per_object": [
+        631,
+        633,
+        634,
+        635,
+        637,
+        638
+      ],
+      "object_inspect_sample": {
+        "version": "age-encryption.org/v1",
+        "postquantum": "no",
+        "armor": false,
+        "stanza_types": [
+          "X25519",
+          "sss"
+        ],
+        "sizes": {
+          "header": 635,
+          "armor": 0,
+          "overhead": 64,
+          "min_payload": 180025,
+          "max_payload": 180025,
+          "min_padding": 0,
+          "max_padding": 0
+        }
+      },
+      "sss_inspect": "sss (t=2)\n \u251c\u2500 x25519 [id=1]\n \u251c\u2500 x25519 [id=2]\n \u2514\u2500 x25519 [id=3]\n",
+      "decrypt_10_seconds": 0.259
+    },
+    "D2-pq-age-plugin-sss": {
+      "kind": "pq",
+      "plugin": "age-plugin-sss v0.4.0 (experimental per its README)",
+      "sss_recipient_length": 6050,
+      "header_bytes_per_object": [
+        6548,
+        6549,
+        6550,
+        6552,
+        6553
+      ],
+      "object_inspect_sample": {
+        "version": "age-encryption.org/v1",
+        "postquantum": "yes",
+        "armor": false,
+        "stanza_types": [
+          "mlkem768x25519",
+          "sss"
+        ],
+        "sizes": {
+          "header": 6548,
+          "armor": 0,
+          "overhead": 64,
+          "min_payload": 180025,
+          "max_payload": 180025,
+          "min_padding": 0,
+          "max_padding": 0
+        }
+      },
+      "sss_inspect": "sss (t=2)\n \u251c\u2500 mlkem768x25519 [id=1]\n \u251c\u2500 mlkem768x25519 [id=2]\n \u2514\u2500 mlkem768x25519 [id=3]\n",
+      "decrypt_10_seconds": 0.287
+    }
+  },
+  "rewrap": {
+    "inmem_classic_w4_1M": {
+      "kind": "classic",
+      "n_rewraps": 1000000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 96.963345101,
+      "rewraps_per_s": 10313.175550599757,
+      "unwrap_only_n": 100000,
+      "unwrap_only_elapsed_s": 3.4942195209999998,
+      "unwrap_only_per_s": 28618.6942174089,
+      "header_bytes_before": 168,
+      "header_bytes_after": 266,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "1.52 0.60 0.22 1/113 11715",
+      "loadavg_after": "3.81 1.69 0.66 4/161 12771",
+      "go_version": "go1.24.7"
+    },
+    "inmem_classic_w1_100k_rep1": {
+      "kind": "classic",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 1,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 34.701336081,
+      "rewraps_per_s": 2881.7334227875144,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 1.174966733,
+      "unwrap_only_per_s": 8510.879260783293,
+      "header_bytes_before": 168,
+      "header_bytes_after": 266,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "3.81 1.69 0.66 1/160 12784",
+      "loadavg_after": "2.62 1.63 0.68 2/117 12971",
+      "go_version": "go1.24.7"
+    },
+    "inmem_classic_w1_100k_rep2": {
+      "kind": "classic",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 1,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 34.233810118,
+      "rewraps_per_s": 2921.0888199505553,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 1.228029514,
+      "unwrap_only_per_s": 8143.126762016895,
+      "header_bytes_before": 168,
+      "header_bytes_after": 266,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "2.49 1.62 0.68 2/120 12981",
+      "loadavg_after": "2.56 1.71 0.75 6/139 13412",
+      "go_version": "go1.24.7"
+    },
+    "inmem_classic_w1_100k_rep3": {
+      "kind": "classic",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 1,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 34.69740448,
+      "rewraps_per_s": 2882.059955165845,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 1.163011461,
+      "unwrap_only_per_s": 8598.367544376246,
+      "header_bytes_before": 168,
+      "header_bytes_after": 266,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "2.56 1.71 0.75 7/140 13521",
+      "loadavg_after": "2.97 1.92 0.85 1/132 14343",
+      "go_version": "go1.24.7"
+    },
+    "inmem_classic_w4_100k_rep1": {
+      "kind": "classic",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 9.713177364,
+      "rewraps_per_s": 10295.292287221124,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 0.412413178,
+      "unwrap_only_per_s": 24247.527803294393,
+      "header_bytes_before": 168,
+      "header_bytes_after": 266,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "3.21 1.98 0.88 1/131 14350",
+      "loadavg_after": "4.02 2.20 0.96 4/131 14462",
+      "go_version": "go1.24.7"
+    },
+    "inmem_classic_w4_100k_rep2": {
+      "kind": "classic",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 9.481874038,
+      "rewraps_per_s": 10546.438351662902,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 0.304253494,
+      "unwrap_only_per_s": 32867.33002974158,
+      "header_bytes_before": 168,
+      "header_bytes_after": 266,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "4.02 2.20 0.96 1/131 14469",
+      "loadavg_after": "4.63 2.39 1.04 1/132 14534",
+      "go_version": "go1.24.7"
+    },
+    "inmem_classic_w4_100k_rep3": {
+      "kind": "classic",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 8.743230697,
+      "rewraps_per_s": 11437.419812599965,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 0.297081475,
+      "unwrap_only_per_s": 33660.79961734403,
+      "header_bytes_before": 168,
+      "header_bytes_after": 266,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "4.63 2.39 1.04 1/132 14550",
+      "loadavg_after": "5.15 2.58 1.11 1/131 14556",
+      "go_version": "go1.24.7"
+    },
+    "inmem_pq_w4_1M": {
+      "kind": "pq",
+      "n_rewraps": 1000000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 186.005045191,
+      "rewraps_per_s": 5376.198258349101,
+      "unwrap_only_n": 100000,
+      "unwrap_only_elapsed_s": 10.662683611,
+      "unwrap_only_per_s": 9378.502040221514,
+      "header_bytes_before": 1627,
+      "header_bytes_after": 3184,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "5.15 2.58 1.11 2/131 14565",
+      "loadavg_after": "8.66 5.33 2.46 7/147 20854",
+      "go_version": "go1.24.7"
+    },
+    "inmem_pq_w1_100k_rep1": {
+      "kind": "pq",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 1,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 41.674704767,
+      "rewraps_per_s": 2399.5370947218976,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 1.856808547,
+      "unwrap_only_per_s": 5385.584860731471,
+      "header_bytes_before": 1627,
+      "header_bytes_after": 3184,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "8.61 5.37 2.49 8/147 20872",
+      "loadavg_after": "7.50 5.54 2.68 7/147 22246",
+      "go_version": "go1.24.7"
+    },
+    "inmem_pq_w1_100k_rep2": {
+      "kind": "pq",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 1,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 41.142387846,
+      "rewraps_per_s": 2430.5832800543767,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 1.9186736930000001,
+      "unwrap_only_per_s": 5211.933658382629,
+      "header_bytes_before": 1627,
+      "header_bytes_after": 3184,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "7.50 5.54 2.68 7/146 22283",
+      "loadavg_after": "7.57 5.80 2.89 6/151 23217",
+      "go_version": "go1.24.7"
+    },
+    "inmem_pq_w1_100k_rep3": {
+      "kind": "pq",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 1,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 41.554035256,
+      "rewraps_per_s": 2406.5051536856695,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 2.163485015,
+      "unwrap_only_per_s": 4622.172065286988,
+      "header_bytes_before": 1627,
+      "header_bytes_after": 3184,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "7.53 5.82 2.92 6/147 23276",
+      "loadavg_after": "6.96 5.91 3.09 6/149 23803",
+      "go_version": "go1.24.7"
+    },
+    "inmem_pq_w4_100k_rep1": {
+      "kind": "pq",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 24.632490856,
+      "rewraps_per_s": 4059.6787626794926,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 0.944263806,
+      "unwrap_only_per_s": 10590.260832257294,
+      "header_bytes_before": 1627,
+      "header_bytes_after": 3184,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "6.96 5.91 3.09 6/150 23830",
+      "loadavg_after": "7.44 6.10 3.22 9/155 24267",
+      "go_version": "go1.24.7"
+    },
+    "inmem_pq_w4_100k_rep2": {
+      "kind": "pq",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 24.079968164,
+      "rewraps_per_s": 4152.829410692571,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 1.254108747,
+      "unwrap_only_per_s": 7973.7901708455265,
+      "header_bytes_before": 1627,
+      "header_bytes_after": 3184,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "7.44 6.10 3.22 6/155 24296",
+      "loadavg_after": "8.27 6.43 3.43 9/153 24689",
+      "go_version": "go1.24.7"
+    },
+    "inmem_pq_w4_100k_rep3": {
+      "kind": "pq",
+      "n_rewraps": 100000,
+      "distinct_headers_in_pool": 1024,
+      "workers": 4,
+      "gomaxprocs": 4,
+      "num_cpu": 4,
+      "elapsed_s": 23.078512269,
+      "rewraps_per_s": 4333.034938925594,
+      "unwrap_only_n": 10000,
+      "unwrap_only_elapsed_s": 1.2865086780000001,
+      "unwrap_only_per_s": 7772.9751621621,
+      "header_bytes_before": 1627,
+      "header_bytes_after": 3184,
+      "verified_roundtrips": 1024,
+      "verify_note": "each pool object: rewrapped header + untouched payload decrypts to the original plaintext with the recovery identity alone and with the ingest identity alone (age.Decrypt v1.3.1); a 1-bit flip in the header is rejected",
+      "loadavg_before": "8.27 6.43 3.43 7/147 24727",
+      "loadavg_after": "8.71 6.68 3.59 7/153 25061",
+      "go_version": "go1.24.7"
+    },
+    "files_whole_object_rewrite": {
+      "files": 500,
+      "bytes_read": 524508000,
+      "bytes_written": 524557000,
+      "header_bytes_written": 133000,
+      "elapsed_s": 1.284566149,
+      "loadavg_after": "8.49 6.67 3.60 8/156 28111",
+      "object_plaintext_bytes": 1048576,
+      "storage": "tmpfs (/dev/shm): excludes disk I/O; homelab disks not measured"
+    },
+    "files_header_sidecar_only": {
+      "files": 500,
+      "bytes_read": 524508000,
+      "bytes_written": 133000,
+      "header_bytes_written": 133000,
+      "elapsed_s": 0.548078385,
+      "loadavg_after": "8.49 6.67 3.60 10/155 28118",
+      "object_plaintext_bytes": 1048576,
+      "storage": "tmpfs (/dev/shm): excludes disk I/O; homelab disks not measured"
+    }
+  },
+  "throughput": {
+    "bytes": 1073741824,
+    "storage": "tmpfs (/dev/shm)",
+    "loadavg_after": "8.58 6.84 3.76 3/128 28822",
+    "runs_s": {
+      "encrypt": [
+        1.469,
+        1.452,
+        1.478
+      ],
+      "decrypt": [
+        2.048,
+        2.206,
+        2.799
+      ],
+      "reencrypt_pipe": [
+        3.156,
+        2.909,
+        3.522
+      ],
+      "copy": [
+        0.499,
+        0.466,
+        0.575
+      ]
+    },
+    "median_MiB_per_s": {
+      "encrypt": 697.0,
+      "decrypt": 464.2,
+      "reencrypt_pipe": 324.4,
+      "copy": 2050.9
+    }
+  },
+  "env": {
+    "age": "v1.3.1",
+    "distro_age": "1.1.1",
+    "shamir_mnemonic": "0.3.0 (pip, [cli] extra)",
+    "age_plugin_sss": "v0.4.0 (go install from proxy.golang.org)",
+    "go": "go version go1.24.7 linux/amd64",
+    "python": "3.11.15",
+    "nproc": 4,
+    "loadavg_start": "1.28 0.51 0.19 4/103 9797",
+    "host": "shared cloud container (other agents running; timings are noisy upper bounds)"
+  },
+  "photos": {
+    "count": 10,
+    "total_bytes": 22600250,
+    "class": "SYN (random bytes with a JPEG-like prefix)"
+  },
+  "mixing_pq_classic": {
+    "rc": 1,
+    "stderr": "age: error: incompatible recipients: can't mix post-quantum and classic recipients, or the file would be vulnerable to quantum computers\nage: report unexpected or unhelpful errors at https://filippo.io/age/report"
+  },
+  "mixing_passphrase_plus_recipient": {
+    "rc": 1,
+    "stderr": "age: error: -p/--passphrase can't be combined with -r/--recipient\nage: report unexpected or unhelpful errors at https://filippo.io/age/report"
+  },
+  "finished": "2026-10-06T15:52:48+0000",
+  "loadavg_end": "8.58 6.84 3.76 3/128 28822",
+  "checks": [
+    {
+      "check": "mixing: age v1.3.1 refuses X25519 + ML-KEM hybrid recipients in one file",
+      "pass": true,
+      "detail": "age: error: incompatible recipients: can't mix post-quantum and classic recipients, or the file would be vulnerable to quantum computers\nage: report unexpected "
+    },
+    {
+      "check": "mixing: age refuses a passphrase (-p) together with a recipient",
+      "pass": true,
+      "detail": "age: error: -p/--passphrase can't be combined with -r/--recipient\nage: report unexpected or unhelpful errors at https://filippo.io/age/report"
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: sealed identity is a single native scrypt stanza",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: recovery.key destroyed after sealing",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: ingest identity decrypts all 10 objects before destruction",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: ingest key destroyed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: one share alone does not recover",
+      "pass": true,
+      "detail": "Enter a recovery share:"
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: SLIP-39 2-of-3 (shares 1+3) reconstructs the secret",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: wrong secret is rejected by age (scrypt stanza MAC)",
+      "pass": true,
+      "detail": "age: error: batchpass plugin: incorrect passphrase\nage: report unexpected or unhelpful errors at https://filippo.io/age/"
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: stock `age -d` unseals the recovery identity via its interactive passphrase prompt (pty)",
+      "pass": true,
+      "detail": "rc=0"
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: recovered identity matches the fingerprint printed on the card",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: recovery identity alone decrypts all 10 photos, SHA-256 identical",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "A-classic-sealed-slip39-128: distro age 1.1.1 also decrypts classic objects",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: sealed identity is a single native scrypt stanza",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: recovery.key destroyed after sealing",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: ingest identity decrypts all 10 objects before destruction",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: ingest key destroyed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: one share alone does not recover",
+      "pass": true,
+      "detail": "Enter a recovery share:"
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: SLIP-39 2-of-3 (shares 1+3) reconstructs the secret",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: wrong secret is rejected by age (scrypt stanza MAC)",
+      "pass": true,
+      "detail": "age: error: batchpass plugin: incorrect passphrase\nage: report unexpected or unhelpful errors at https://filippo.io/age/"
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: stock `age -d` unseals the recovery identity via its interactive passphrase prompt (pty)",
+      "pass": true,
+      "detail": "rc=0"
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: recovered identity matches the fingerprint printed on the card",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: recovery identity alone decrypts all 10 photos, SHA-256 identical",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "B-pq-sealed-slip39-256: (expected) distro age 1.1.1 cannot decrypt PQ objects",
+      "pass": true,
+      "detail": "age: error: reading \"/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/D2-S2/work2/B-pq-sealed-slip39-256/recovered.key\": failed to read \"/tmp/claude-0/-home-user-reli"
+    },
+    {
+      "check": "C1-classic-raw-slip39: re-encoded identity parses and matches the recovery recipient",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "C1-classic-raw-slip39: raw-identity SLIP-39 recovery decrypts all 10 photos (non-stock bech32 step needed)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "C2-pq-raw-slip39: re-encoded identity parses and matches the recovery recipient",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "C2-pq-raw-slip39: raw-identity SLIP-39 recovery decrypts all 10 photos (non-stock bech32 step needed)",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "D1-classic-age-plugin-sss: holders 1+3 decrypt all 10 photos via age-plugin-sss after ingest key destroyed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "D1-classic-age-plugin-sss: one holder alone cannot decrypt",
+      "pass": true,
+      "detail": "age: error: no identity matched any of the recipients\nage: report unexpected or unhelpful errors at https://filippo.io/age/report"
+    },
+    {
+      "check": "D2-pq-age-plugin-sss: holders 1+3 decrypt all 10 photos via age-plugin-sss after ingest key destroyed",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "D2-pq-age-plugin-sss: one holder alone cannot decrypt",
+      "pass": true,
+      "detail": "age: error: no identity matched any of the recipients\nage: report unexpected or unhelpful errors at https://filippo.io/age/report"
+    },
+    {
+      "check": "rewrap inmem_classic_w4_1M: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_classic_w1_100k_rep1: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_classic_w1_100k_rep2: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_classic_w1_100k_rep3: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_classic_w4_100k_rep1: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_classic_w4_100k_rep2: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_classic_w4_100k_rep3: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_pq_w4_1M: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_pq_w1_100k_rep1: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_pq_w1_100k_rep2: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_pq_w1_100k_rep3: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_pq_w4_100k_rep1: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_pq_w4_100k_rep2: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "rewrap inmem_pq_w4_100k_rep3: every pool object verified after rewrap",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "check": "file rewrap: 10 sampled rewritten objects decrypt with the recovery key under age v1.3.1 and distro age 1.1.1",
+      "pass": true,
+      "detail": "10/10"
+    },
+    {
+      "check": "file rewrap: payload bytes after the header are byte-identical",
+      "pass": true,
+      "detail": "10/10"
+    }
+  ],
+  "checks_passed": 48,
+  "checks_total": 48,
+  "redaction_note": "Throwaway test passphrase echoed by the pty harness was redacted on 2026-10-06 before copying into the repo."
+}

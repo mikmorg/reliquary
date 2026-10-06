@@ -1,0 +1,695 @@
+{
+ "stanzas": 2,
+ "kills": 20,
+ "slow_us": "3000",
+ "per_kill": [
+  {
+   "file": "a",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    16
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    8
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    19
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    26
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    37
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 5,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    50
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    1
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    11
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    20
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    23
+   ]
+  },
+  {
+   "file": "e",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    2
+   ]
+  },
+  {
+   "file": "e",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    3
+   ]
+  },
+  {
+   "file": "e",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    20
+   ]
+  },
+  {
+   "file": "x0",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    6
+   ]
+  },
+  {
+   "file": "x0",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    17
+   ]
+  },
+  {
+   "file": "x0",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    26
+   ]
+  },
+  {
+   "file": "x1",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    8
+   ]
+  },
+  {
+   "file": "x1",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    18
+   ]
+  },
+  {
+   "file": "x1",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    30
+   ]
+  },
+  {
+   "file": "x1",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    31
+   ]
+  }
+ ],
+ "edit_trials": [
+  {
+   "trial": 1,
+   "edited_chunk": 9,
+   "stat_check_bypassed": false,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+   "wire_consistent": true
+  },
+  {
+   "trial": 2,
+   "edited_chunk": 8,
+   "stat_check_bypassed": true,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED in chunk 8 (part 3): refusing to re-encrypt under the same key",
+   "wire_consistent": true
+  },
+  {
+   "trial": 3,
+   "edited_chunk": 8,
+   "stat_check_bypassed": false,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+   "wire_consistent": true
+  },
+  {
+   "trial": 4,
+   "edited_chunk": 10,
+   "stat_check_bypassed": true,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED in chunk 10 (part 3): refusing to re-encrypt under the same key",
+   "wire_consistent": true
+  },
+  {
+   "trial": 5,
+   "edited_chunk": 10,
+   "stat_check_bypassed": false,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+   "wire_consistent": true
+  },
+  {
+   "trial": 6,
+   "edited_chunk": 16,
+   "stat_check_bypassed": true,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED in chunk 16 (part 5): refusing to re-encrypt under the same key",
+   "wire_consistent": true
+  }
+ ],
+ "uploads": [
+  {
+   "name": "a",
+   "upload_id": "83d99c1c418dd6a50acae7439e80db09",
+   "object_key": "staging/70f8de4015e6d12bf8798421edb57a210e5960b424176482564548f603615af4/83d99c1c418dd6a50acae7439e80db09",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work2/r2/staging/70f8de4015e6d12bf8798421edb57a210e5960b424176482564548f603615af4/83d99c1c418dd6a50acae7439e80db09/object",
+   "kills": 1,
+   "payload_nonce": "0a9e968064c454acd3df54e94ee22278",
+   "header_mac": "qcBjaLirdRSQhIORx0mXnqnPueSHljNYvV94iNZfNDA"
+  },
+  {
+   "name": "b",
+   "upload_id": "981bea8c97828c86351071b17d5eaaea",
+   "object_key": "staging/d5242e0ef0f2a159e6ce7bf7548d8a228bd093c9b1eeb77a5ddcefd5f2eb0397/981bea8c97828c86351071b17d5eaaea",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work2/r2/staging/d5242e0ef0f2a159e6ce7bf7548d8a228bd093c9b1eeb77a5ddcefd5f2eb0397/981bea8c97828c86351071b17d5eaaea/object",
+   "kills": 5,
+   "payload_nonce": "b55f5452ad75e9f5526da5e7ea679efb",
+   "header_mac": "rxRI+XmkhyOLkL/I/ng2e4gTacWSvU0RJLz0ILnYrv4"
+  },
+  {
+   "name": "c",
+   "upload_id": "77a7a2b2a34a85f89b322d22f2c2cc56",
+   "object_key": "staging/1956223a072dd63a5fc441dd6a15696ab7ee9aaa7a916c88766c3c770d21612e/77a7a2b2a34a85f89b322d22f2c2cc56",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work2/r2/staging/1956223a072dd63a5fc441dd6a15696ab7ee9aaa7a916c88766c3c770d21612e/77a7a2b2a34a85f89b322d22f2c2cc56/object",
+   "kills": 0,
+   "payload_nonce": "e0c4bd3729fa4f69d3155f6696ef6a99",
+   "header_mac": "dBZJAOd137CM8b3CVTJpQi4huNLfxagcBKi/A3qE5ZU"
+  },
+  {
+   "name": "d",
+   "upload_id": "4219bad2abdf43b5d0eba5cec9540163",
+   "object_key": "staging/fd49d51512d2ba86ca62ba324fd72da2b64ccac4aaaf57d5c21b9a671fb76a78/4219bad2abdf43b5d0eba5cec9540163",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work2/r2/staging/fd49d51512d2ba86ca62ba324fd72da2b64ccac4aaaf57d5c21b9a671fb76a78/4219bad2abdf43b5d0eba5cec9540163/object",
+   "kills": 4,
+   "payload_nonce": "cb17a0e39bc1f9283a59d82fd1d578ea",
+   "header_mac": "Ej/2dfxpatC2/T6hELnqG3cezG2Zi3eEa18FiboDS8Q"
+  },
+  {
+   "name": "e",
+   "upload_id": "16e9236bd14b898e687f722c6fe432fd",
+   "object_key": "staging/750bfa21d4758cbed2a475126a064e7ec9693282529e926a677fbfc3bc2790e3/16e9236bd14b898e687f722c6fe432fd",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work2/r2/staging/750bfa21d4758cbed2a475126a064e7ec9693282529e926a677fbfc3bc2790e3/16e9236bd14b898e687f722c6fe432fd/object",
+   "kills": 3,
+   "payload_nonce": "af832a74383edbeb33e11edf7b8bfd8b",
+   "header_mac": "ArLs02VPFagS+oQGyKiwRode/Dz+VhCiuZidvmZ99Sw"
+  },
+  {
+   "name": "x0",
+   "upload_id": "7c079718919ed2e8c0d99561c26ab92d",
+   "object_key": "staging/c807a6696c81f2c5ae4b085369ed248c8a282bcee898033d766ca5626f86777b/7c079718919ed2e8c0d99561c26ab92d",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work2/r2/staging/c807a6696c81f2c5ae4b085369ed248c8a282bcee898033d766ca5626f86777b/7c079718919ed2e8c0d99561c26ab92d/object",
+   "kills": 3,
+   "payload_nonce": "c334276fe672048ccfa5402cab681c71",
+   "header_mac": "ub+3J+HnVZn/YDYhNbl5Gcix3djyvnqzjiDzuW9pf1Q"
+  },
+  {
+   "name": "x1",
+   "upload_id": "054e61d371702ee451cef2a821dec900",
+   "object_key": "staging/7fee33578183121748300e737e9ae6a1089a758deeb7ab525830f14d30fd54f2/054e61d371702ee451cef2a821dec900",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work2/r2/staging/7fee33578183121748300e737e9ae6a1089a758deeb7ab525830f14d30fd54f2/054e61d371702ee451cef2a821dec900/object",
+   "kills": 4,
+   "payload_nonce": "ceb6a63af17e40bb14ea6b417a7b3ab5",
+   "header_mac": "sWd+eRN3PLLjtws4WMx7mIaDMw6IMOMA5NprazDGPsc"
+  }
+ ],
+ "results": [
+  {
+   "check": "a:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=26"
+  },
+  {
+   "check": "a:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:prefix-len",
+   "pass": true,
+   "detail": 3200
+  },
+  {
+   "check": "a:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "b:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=59"
+  },
+  {
+   "check": "b:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:prefix-len",
+   "pass": true,
+   "detail": 3200
+  },
+  {
+   "check": "b:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "c:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=11"
+  },
+  {
+   "check": "c:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:prefix-len",
+   "pass": true,
+   "detail": 3200
+  },
+  {
+   "check": "c:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "d:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=29"
+  },
+  {
+   "check": "d:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:prefix-len",
+   "pass": true,
+   "detail": 3200
+  },
+  {
+   "check": "d:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "e:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=37"
+  },
+  {
+   "check": "e:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:prefix-len",
+   "pass": true,
+   "detail": 3200
+  },
+  {
+   "check": "e:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x0:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=36"
+  },
+  {
+   "check": "x0:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:prefix-len",
+   "pass": true,
+   "detail": 3200
+  },
+  {
+   "check": "x0:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x1:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=37"
+  },
+  {
+   "check": "x1:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:prefix-len",
+   "pass": true,
+   "detail": 3200
+  },
+  {
+   "check": "x1:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "all-uploads:payload-nonces-unique",
+   "pass": true,
+   "detail": 7
+  },
+  {
+   "check": "all-uploads:header-macs-unique",
+   "pass": true,
+   "detail": 7
+  },
+  {
+   "check": "per-kill:at-most-one-segment-re-encrypted",
+   "pass": true,
+   "detail": {
+    "kills": 20,
+    "max_resent_parts_per_kill": 1,
+    "total_resent": 20
+   }
+  },
+  {
+   "check": "kills:count",
+   "pass": true,
+   "detail": 20
+  },
+  {
+   "check": "edit-after-kill:refused-with-exit-65",
+   "pass": true,
+   "detail": [
+    {
+     "trial": 1,
+     "edited_chunk": 9,
+     "stat_check_bypassed": false,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+     "wire_consistent": true
+    },
+    {
+     "trial": 2,
+     "edited_chunk": 8,
+     "stat_check_bypassed": true,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED in chunk 8 (part 3): refusing to re-encrypt under the same key",
+     "wire_consistent": true
+    },
+    {
+     "trial": 3,
+     "edited_chunk": 8,
+     "stat_check_bypassed": false,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+     "wire_consistent": true
+    },
+    {
+     "trial": 4,
+     "edited_chunk": 10,
+     "stat_check_bypassed": true,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED in chunk 10 (part 3): refusing to re-encrypt under the same key",
+     "wire_consistent": true
+    },
+    {
+     "trial": 5,
+     "edited_chunk": 10,
+     "stat_check_bypassed": false,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+     "wire_consistent": true
+    },
+    {
+     "trial": 6,
+     "edited_chunk": 16,
+     "stat_check_bypassed": true,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED in chunk 16 (part 5): refusing to re-encrypt under the same key",
+     "wire_consistent": true
+    }
+   ]
+  },
+  {
+   "check": "edit-after-kill:journal-guard-alone-refuses",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "edit-after-kill:wire-consistent",
+   "pass": true,
+   "detail": ""
+  }
+ ],
+ "passed": 63,
+ "failed": 0
+}

@@ -1,0 +1,45 @@
+### scenario 1: clean store (fresh ingest of the 200-record x25519 corpus)
+catalog deleted; 376 canonical rows before
+rebuild: 176 blobs, 200 records in 0.53s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (manifest + records) wall s: 0.542
+RESULT byte-identical canonical export: YES (d2bd46d408570f7b...)
+rebuild: 176 blobs, 200 records in 1.21s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (object files only, manifest ignored) wall s: 1.223
+files-only rebuild: rows 376 of 376 ; fields that differ from the original catalog: {'blob.epoch': 176, 'blob.committed_at': 176, 'record.meta_sha256': 200, 'record.committed_at': 200}
+
+### scenario: store left by the crashpoints-cas run (100 self-kills incl. torn manifest lines and quarantines); ingest killed again, catalog deleted mid-ingest, rebuilt, ingest resumed; then catalog deleted again and rebuilt
+second concurrent ingest while the first runs: a6cas: database is locked (5) (SQLITE_BUSY)
+killed ingest after 500 ACKs
+catalog deleted mid-ingest; rebuilding
+rebuild: 440 blobs, 500 records in 1.46s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 148
+resume: 100 new ACKs, 500 dup ACKs (stored receipt path)
+catalog deleted; 1135 canonical rows before
+rebuild: 535 blobs, 600 records in 1.62s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 148
+rebuild (manifest + records) wall s: 1.628
+RESULT byte-identical canonical export: YES (5f001362b337ab3e...)
+rebuild: 535 blobs, 600 records in 2.00s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (object files only, manifest ignored) wall s: 2.012
+files-only rebuild: rows 1135 of 1135 ; fields that differ from the original catalog: {'blob.epoch': 535, 'blob.committed_at': 535, 'record.meta_sha256': 600, 'record.committed_at': 600}
+truth check:
+ rebuilt catalog has 600 records; all 600 truth records present with correct sha256: True
+
+### scenario: store left by the crashpoints-ocfl run (100 self-kills incl. torn manifest lines and quarantines); ingest killed again, catalog deleted mid-ingest, rebuilt, ingest resumed; then catalog deleted again and rebuilt
+second concurrent ingest while the first runs: a6cas: database is locked (5) (SQLITE_BUSY)
+killed ingest after 379 ACKs
+catalog deleted mid-ingest; rebuilding
+a6cas: open /dev/shm/a6crash/work-crashpoints-ocfl/store/records/e6/e6fc51573c4f456ea8f0d4ea8d50c6a2.age: no such file or directory
+resume: 236 new ACKs, 364 dup ACKs (stored receipt path)
+catalog deleted; 1135 canonical rows before
+a6cas: open /dev/shm/a6crash/work-crashpoints-ocfl/store/records/e6/e6fc51573c4f456ea8f0d4ea8d50c6a2.age: no such file or directory
+rebuild (manifest + records) wall s: 1.106
+RESULT byte-identical: NO
+540d539
+< {"t":"record","record_id":"026cd9071d27de28e6480fda26149a9f","device_id":"dev-04","person":"person-b","dedup_id":"4f5e93fa9106514e95fb2d2819167005dc26329f0151130e57b5c13821f45909","sha256":"6ba9851e54c7bdb849f9ed8aa3c9f6fc5d21f681c011c0a40fc2c19942f6f7b3","size":261161,"header_mac":"6N4JcATwWITWXetR0JvzRLppEiMv/7moTr5Ty1xsbt4","path":"DCIM/Camera","name":"IMG_00565.JPG","mtime_ns":1700000565000000000,"meta_sha256":"a61bbae4f072cc87b02f3f694102a81f72d3cbcd60b5dbf9475f072eb78e7d8b","stored_sha256":"24b28ca7d115c0952cd8ff7614d480954eb3289e7ad3a76b5a8ea8f82648e5bf","stored_size":877,"committed_at":1791303723389994737}
+547d545
+< {"t":"record","record_id":"06bc4523e6deb05623fc43942273cbae","device_id":"dev-02","person":"person-c","dedup_id":"d81ff2b147a08ebbdcbc5899d72e5467a696a248a40d18af07b2a661b57cc82f","sha256":"42832a46e11ec0ee4ecff5cc72129d79ccd8fc38f5c36638e888e6b3def38744","size":96015,"header_mac":"/fs5yxKKHFzSQQfaIzRAWTWoRi1A21cHZvJARUbNs2I","path":"DCIM/Camera","name":"IMG_00513.JPG","mtime_ns":1700000513000000000,"meta_sha256":"bca0a83c201c4bb21147d149419ec21a45bba96e7c4d844300385bc220f94434","stored_sha256":"852ca028c57bf2fc9fb19796ee2ab3994998302bebed2dd638ef60e9d5a92fa5","stored_size":876,"committed_at":1791303722866499205}
+551d548
+rebuild: 534 blobs, 595 records in 2.86s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (object files only, manifest ignored) wall s: 2.868
+files-only rebuild: rows 1129 of 1135 ; fields that differ from the original catalog: {'blob.epoch': 534, 'blob.committed_at': 534, '(row missing)': 6, 'record.meta_sha256': 595, 'record.committed_at': 595}
+truth check:
+ rebuilt catalog has 364 records; all 600 truth records present with correct sha256: False

@@ -1,0 +1,86 @@
+{"vector":"header_crlf","expect":"header failure","got":"error","result":"pass","error":"invalid non-ASCII byte in header"}
+{"vector":"hmac_bad","expect":"HMAC failure","got":"error","result":"pass","error":"invalid header HMAC"}
+{"vector":"hmac_extra_space","expect":"header failure","got":"error","result":"pass","error":"Unknown letter \" \". Allowed: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"}
+{"vector":"hmac_garbage","expect":"header failure","got":"error","result":"pass","error":"invalid header HMAC"}
+{"vector":"hmac_missing","expect":"header failure","got":"error","result":"pass","error":"invalid header HMAC"}
+{"vector":"hmac_no_space","expect":"header failure","got":"error","result":"pass","error":"invalid header"}
+{"vector":"hmac_not_canonical","expect":"header failure","got":"error","result":"pass","error":"Non-zero padding: 64"}
+{"vector":"hmac_trailing_space","expect":"header failure","got":"error","result":"pass","error":"Unknown letter \" \". Allowed: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"}
+{"vector":"hmac_truncated","expect":"header failure","got":"error","result":"pass","error":"invalid header HMAC"}
+{"vector":"hybrid","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_and_x25519","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_bad_tag","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"hybrid_currupted_enc_mlkem","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"hybrid_currupted_enc_x25519","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"hybrid_extra_argument","expect":"header failure","got":"error","result":"pass","error":"invalid mlkem768x25519 stanza"}
+{"vector":"hybrid_grease","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_identity","expect":"header failure","got":"error","result":"pass","error":"invalid private or public key received"}
+{"vector":"hybrid_long_file_key","expect":"header failure","got":"error","result":"pass","error":"invalid mlkem768x25519 stanza"}
+{"vector":"hybrid_long_share","expect":"header failure","got":"error","result":"pass","error":"invalid mlkem768x25519 stanza"}
+{"vector":"hybrid_low_order","expect":"header failure","got":"error","result":"pass","error":"invalid private or public key received"}
+{"vector":"hybrid_multiple_recipients","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_no_match","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"hybrid_not_canonical_body","expect":"header failure","got":"error","result":"pass","error":"Non-zero padding: 64"}
+{"vector":"hybrid_not_canonical_enc","expect":"header failure","got":"error","result":"pass","error":"Non-zero padding: 16"}
+{"vector":"hybrid_short_share","expect":"header failure","got":"error","result":"pass","error":"invalid mlkem768x25519 stanza"}
+{"vector":"hybrid_uppercase","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"hybrid_x25519_arg","expect":"header failure","got":"error","result":"pass","error":"invalid X25519 stanza"}
+{"vector":"scrypt_and_x25519","expect":"header failure","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"stanza_bad_start","expect":"header failure","got":"error","result":"pass","error":"invalid header"}
+{"vector":"stanza_base64_padding","expect":"header failure","got":"error","result":"pass","error":"Unknown letter \"=\". Allowed: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"}
+{"vector":"stanza_empty_argument","expect":"header failure","got":"error","result":"pass","error":"invalid stanza"}
+{"vector":"stanza_empty_body","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stanza_empty_last_line","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stanza_invalid_character","expect":"header failure","got":"error","result":"pass","error":"invalid non-ASCII byte in header"}
+{"vector":"stanza_long_line","expect":"header failure","got":"error","result":"pass","error":"invalid stanza"}
+{"vector":"stanza_missing_body","expect":"header failure","got":"error","result":"pass","error":"Unknown letter \"-\". Allowed: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"}
+{"vector":"stanza_missing_final_line","expect":"header failure","got":"error","result":"pass","error":"Unknown letter \"-\". Allowed: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"}
+{"vector":"stanza_multiple_short_lines","expect":"header failure","got":"error","result":"pass","error":"invalid header"}
+{"vector":"stanza_no_arguments","expect":"header failure","got":"error","result":"pass","error":"invalid header"}
+{"vector":"stanza_not_canonical","expect":"header failure","got":"error","result":"pass","error":"Non-zero padding: 64"}
+{"vector":"stanza_spurious_cr","expect":"header failure","got":"error","result":"pass","error":"invalid non-ASCII byte in header"}
+{"vector":"stanza_valid_characters","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_257_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_257_chunks_full","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_258_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_bad_tag","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_bad_tag_second_chunk","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_bad_tag_second_chunk_full","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_empty_payload","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_last_chunk_empty","expect":"payload failure","got":"error","result":"pass","error":"final chunk is empty"}
+{"vector":"stream_last_chunk_full","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_last_chunk_full_second","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_missing_tag","expect":"payload failure","got":"error","result":"pass","error":"\"ciphertext\" expected length >= tagLength=16"}
+{"vector":"stream_no_chunks","expect":"payload failure","got":"error","result":"pass","error":"\"ciphertext\" expected length >= tagLength=16"}
+{"vector":"stream_no_final","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_no_final_full","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_no_final_two_chunks","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_no_final_two_chunks_full","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_no_nonce","expect":"header failure","got":"error","result":"pass","error":"stream ended before reading 16 bytes"}
+{"vector":"stream_short_chunk","expect":"payload failure","got":"error","result":"pass","error":"\"ciphertext\" expected length >= tagLength=16"}
+{"vector":"stream_short_nonce","expect":"header failure","got":"error","result":"pass","error":"stream ended before reading 16 bytes"}
+{"vector":"stream_short_second_chunk","expect":"payload failure","got":"error","result":"pass","error":"\"ciphertext\" expected length >= tagLength=16"}
+{"vector":"stream_three_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_trailing_garbage_long","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_trailing_garbage_short","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_two_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_two_final_chunks","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_two_final_chunks_full","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_two_final_chunks_second","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"stream_two_final_chunks_short","expect":"payload failure","got":"error","result":"pass","error":"invalid tag"}
+{"vector":"version_unsupported","expect":"header failure","got":"error","result":"pass","error":"invalid version age-encryption.org/v1234"}
+{"vector":"x25519","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"x25519_bad_tag","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"x25519_extra_argument","expect":"header failure","got":"error","result":"pass","error":"invalid X25519 stanza"}
+{"vector":"x25519_grease","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"x25519_identity","expect":"header failure","got":"error","result":"pass","error":"The operation failed for an operation-specific reason"}
+{"vector":"x25519_long_file_key","expect":"header failure","got":"error","result":"pass","error":"invalid stanza"}
+{"vector":"x25519_long_share","expect":"header failure","got":"error","result":"pass","error":"invalid X25519 stanza"}
+{"vector":"x25519_low_order","expect":"header failure","got":"error","result":"pass","error":"The operation failed for an operation-specific reason"}
+{"vector":"x25519_lowercase","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"x25519_multiple_recipients","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"x25519_no_match","expect":"no match","got":"error","result":"pass","error":"no identity matched any of the file's recipients"}
+{"vector":"x25519_not_canonical_body","expect":"header failure","got":"error","result":"pass","error":"Non-zero padding: 64"}
+{"vector":"x25519_not_canonical_share","expect":"header failure","got":"error","result":"pass","error":"Non-zero padding: 64"}
+{"vector":"x25519_short_share","expect":"header failure","got":"error","result":"pass","error":"invalid X25519 stanza"}
+{"summary":{"pass":85,"fail":0,"na":62,"failed":[]}}

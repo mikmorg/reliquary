@@ -1,0 +1,47 @@
+{
+ "mode": "powercut(LazyFS clear-cache)",
+ "nofsync": true,
+ "layout": "cas",
+ "kills": 10,
+ "cycles_completed": 2,
+ "violations": {
+  "acked_not_in_manifest": 4663,
+  "catalog_rows_without_store": 9326
+ },
+ "quarantined": 2190,
+ "torn_manifest_events": 0,
+ "tmp_removed": 5,
+ "acks_total": 1266,
+ "final_checks": [
+  {
+   "cycle": 0,
+   "acked": 569,
+   "truth_items": 600,
+   "catalog_matches_truth": false,
+   "verify_fail_counts": {},
+   "violations_at_end": {
+    "acked_not_in_catalog": 0,
+    "acked_not_in_manifest": 442,
+    "catalog_rows_without_store": 884,
+    "audit_mismatch": 0,
+    "audit_missing": 0
+   }
+  },
+  {
+   "cycle": 1,
+   "acked": 574,
+   "truth_items": 600,
+   "catalog_matches_truth": false,
+   "verify_fail_counts": {},
+   "violations_at_end": {
+    "acked_not_in_catalog": 0,
+    "acked_not_in_manifest": 571,
+    "catalog_rows_without_store": 1142,
+    "audit_mismatch": 0,
+    "audit_missing": 0
+   }
+  }
+ ],
+ "self_crash_points": {},
+ "iterations": 12
+}

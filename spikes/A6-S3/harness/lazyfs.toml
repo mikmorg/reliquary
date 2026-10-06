@@ -1,0 +1,10 @@
+[faults]
+fifo_path="/dev/shm/lfs.fifo"
+[cache]
+apply_eviction=false
+[cache.simple]
+custom_size="2gb"
+blocks_per_page=1
+[filesystem]
+log_all_operations=false
+logfile="/dev/shm/lfs.log"

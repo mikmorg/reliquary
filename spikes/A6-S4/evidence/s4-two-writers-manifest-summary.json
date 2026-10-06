@@ -1,0 +1,54 @@
+{
+ "manifest_lines": 1505,
+ "keys_written_more_than_once": 370,
+ "example": [
+  {
+   "t": "blob",
+   "key": "8cca9a46e5d18f0c2eccae2a75430979be675989d3591c05a14a8ccf31127d19",
+   "line_numbers": [
+    765,
+    788
+   ],
+   "stored_sha256": [
+    "1a9aebb50d62c1e26ceb6be5baa8890584699dfa76e68a1069a6cc330ed19a94",
+    "f45ac36495f7a60a7d5cd0ac8695a934092cda532290df49093adf1a59e28131"
+   ],
+   "at_ns": [
+    1791303476965774054,
+    1791303477061458144
+   ]
+  },
+  {
+   "t": "record",
+   "key": "f8ecba752e7b8a4f3a76bfce10b45383",
+   "line_numbers": [
+    766,
+    791
+   ],
+   "stored_sha256": [
+    "24c27a650cfec3a70080ef1eeea56158c98f7c7b7ba8d3bd6e953a85474f59e6",
+    "21ecd534a45c6ee4eeac5557de5a5f9c672b09d17aa9d110eaf4731a473b9577"
+   ],
+   "at_ns": [
+    1791303476967104817,
+    1791303477069431217
+   ]
+  },
+  {
+   "t": "blob",
+   "key": "89cb6be29505ccb0a7ee59e784911d5f853e107ba253efb4f5a4218b6a48dea5",
+   "line_numbers": [
+    767,
+    793
+   ],
+   "stored_sha256": [
+    "58cd32b733b9c33047d839084f570ef158a61a1cf34a686a78fc24a8f557279e",
+    "12d38df3b0a4fa258906748acf6192a6804ab326e0db5e52e8a47126d754da2e"
+   ],
+   "at_ns": [
+    1791303476969748460,
+    1791303477071800295
+   ]
+  }
+ ]
+}

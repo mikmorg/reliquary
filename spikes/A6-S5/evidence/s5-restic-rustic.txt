@@ -1,0 +1,20 @@
+input: 176 files, 196375916 bytes
+== A: restic writes, rustic reads
+  [rc=0, 2.401844715 s] /tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A6/bin/restic -r /dev/shm/a6fmt/rr/repo-restic init -q
+  [rc=0, 1.767501958 s] /tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A6/bin/restic -r /dev/shm/a6fmt/rr/repo-restic backup -q /dev/shm/a6fmt/plain --host spike
+repo format: "version": 2
+rustic check --read-data on restic repo: rc=0
+rustic restore rc=0
+rustic-restored: 176 ok, 0 bad
+rustic dump single file: OK
+== B: rustic writes, restic reads
+rustic init rc=0
+rustic backup rc=0
+restic check --read-data on rustic repo: rc=0
+restic restore rc=0
+restic-restored: 176 ok, 0 bad
+restic dump single file: OK
+== sizes
+196431682	/dev/shm/a6fmt/rr/repo-restic
+196432858	/dev/shm/a6fmt/rr/repo-rustic
+pack files: restic 13, rustic 7

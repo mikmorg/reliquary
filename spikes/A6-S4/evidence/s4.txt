@@ -1,0 +1,42 @@
+### scenario 1: clean store (fresh ingest of the 200-record x25519 corpus)
+catalog deleted; 376 canonical rows before
+rebuild: 176 blobs, 200 records in 0.28s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (manifest + records) wall s: 0.293
+RESULT byte-identical canonical export: YES (a1d9a857ea82c99d...)
+rebuild: 176 blobs, 200 records in 1.10s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (object files only, manifest ignored) wall s: 1.104
+files-only rebuild: rows 376 of 376 ; fields that differ from the original catalog: {'blob.epoch': 176, 'blob.committed_at': 176, 'record.meta_sha256': 200, 'record.committed_at': 200}
+
+### scenario: store left by the crashpoints-cas run (100 self-kills incl. torn manifest lines and quarantines); ingest killed again, catalog deleted mid-ingest, rebuilt, ingest resumed; then catalog deleted again and rebuilt
+second concurrent ingest while the first runs: a6cas: store is locked by another writer: resource temporarily unavailable
+killed ingest after 333 ACKs
+catalog deleted mid-ingest; rebuilding
+rebuild: 289 blobs, 333 records in 0.56s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+resume: 267 new ACKs, 333 dup ACKs (stored receipt path)
+catalog deleted; 1135 canonical rows before
+rebuild: 535 blobs, 600 records in 0.90s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (manifest + records) wall s: 0.903
+RESULT byte-identical canonical export: YES (a763be0268632e4c...)
+rebuild: 535 blobs, 600 records in 2.09s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (object files only, manifest ignored) wall s: 2.095
+files-only rebuild: rows 1135 of 1135 ; fields that differ from the original catalog: {'blob.epoch': 535, 'blob.committed_at': 535, 'record.meta_sha256': 600, 'record.committed_at': 600}
+truth check:
+ rebuilt catalog has 600 records; all 600 truth records present with correct sha256: True
+{"MBps":315.15566551784536,"bytes_read":230029293,"mismatch":0,"missing":0,"objects_ok":1135,"problems":null,"seconds":0.729891029}
+
+### scenario: store left by the crashpoints-ocfl run (100 self-kills incl. torn manifest lines and quarantines); ingest killed again, catalog deleted mid-ingest, rebuilt, ingest resumed; then catalog deleted again and rebuilt
+second concurrent ingest while the first runs: a6cas: store is locked by another writer: resource temporarily unavailable
+killed ingest after 300 ACKs
+catalog deleted mid-ingest; rebuilding
+rebuild: 263 blobs, 300 records in 0.43s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+resume: 300 new ACKs, 300 dup ACKs (stored receipt path)
+catalog deleted; 1135 canonical rows before
+rebuild: 535 blobs, 600 records in 0.91s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (manifest + records) wall s: 0.918
+RESULT byte-identical canonical export: YES (38eac01b6d148eae...)
+rebuild: 535 blobs, 600 records in 2.06s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (object files only, manifest ignored) wall s: 2.069
+files-only rebuild: rows 1135 of 1135 ; fields that differ from the original catalog: {'blob.epoch': 535, 'blob.committed_at': 535, 'record.meta_sha256': 600, 'record.committed_at': 600}
+truth check:
+ rebuilt catalog has 600 records; all 600 truth records present with correct sha256: True
+{"MBps":325.41443692324174,"bytes_read":230029293,"mismatch":0,"missing":0,"objects_ok":1135,"problems":null,"seconds":0.706881032}

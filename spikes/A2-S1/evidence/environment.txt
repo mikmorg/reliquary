@@ -1,0 +1,7 @@
+model name	: Intel(R) Xeon(R) Processor @ 2.10GHz
+vCPUs: 4
+flags: avx2 avx512f sha_ni 
+Linux 6.18.44-fc-v70
+rustc 1.94.1 (e408947bf 2026-03-25)
+binary sha256 (default build): c1b72e30c289b023b718b5fc3846dde3592e6e05f6a76f246f365ee977e4187c
+soft build RUSTFLAGS: --cfg sha2_backend="soft" --cfg chacha20_backend="soft" --cfg poly1305_backend="soft"

@@ -2,7 +2,7 @@
 
 - **Spike:** D2-S1 (workstream D2, see `docs/research/PLAN.md`, section "D2.")
 - **Exec tag:** CT/OL. The CT half (plugin-protocol overhead with a software plugin, no YubiKey) was run
-  by an agent on 2026-09-29: see `spikes/D2-S1/README.md`. This kit is the OL half, which needs a real YubiKey.
+  by an agent (code 2026-09-29, evidence-keeping run 2026-10-06, emulated with a software plugin): see `spikes/D2-S1/README.md`. This kit is the OL half, which needs a real YubiKey.
 - **Prepared by / date:** D2 spike runner (agent), 2026-09-29
 - **Who runs it:** Owner
 - **Time needed:** about 1.5 h hands-on, plus an optional 30 min unattended soak

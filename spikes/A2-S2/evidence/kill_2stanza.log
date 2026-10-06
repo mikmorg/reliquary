@@ -1,0 +1,64 @@
+PASS a:complete
+PASS a:wire-consistent (no offset ever sent with two values) :: attempt files=26
+PASS a:go-age-decrypts-exact-sha256
+PASS a:rust-decrypts-exact-sha256
+PASS a:prefix-len :: 3200
+PASS a:ingest
+PASS a:receipt-valid
+PASS a:no-key-survives-commit :: {'hits': [], 'leftover_files': []}
+PASS b:complete
+PASS b:wire-consistent (no offset ever sent with two values) :: attempt files=59
+PASS b:go-age-decrypts-exact-sha256
+PASS b:rust-decrypts-exact-sha256
+PASS b:prefix-len :: 3200
+PASS b:ingest
+PASS b:receipt-valid
+PASS b:no-key-survives-commit :: {'hits': [], 'leftover_files': []}
+PASS c:complete
+PASS c:wire-consistent (no offset ever sent with two values) :: attempt files=11
+PASS c:go-age-decrypts-exact-sha256
+PASS c:rust-decrypts-exact-sha256
+PASS c:prefix-len :: 3200
+PASS c:ingest
+PASS c:receipt-valid
+PASS c:no-key-survives-commit :: {'hits': [], 'leftover_files': []}
+PASS d:complete
+PASS d:wire-consistent (no offset ever sent with two values) :: attempt files=29
+PASS d:go-age-decrypts-exact-sha256
+PASS d:rust-decrypts-exact-sha256
+PASS d:prefix-len :: 3200
+PASS d:ingest
+PASS d:receipt-valid
+PASS d:no-key-survives-commit :: {'hits': [], 'leftover_files': []}
+PASS e:complete
+PASS e:wire-consistent (no offset ever sent with two values) :: attempt files=37
+PASS e:go-age-decrypts-exact-sha256
+PASS e:rust-decrypts-exact-sha256
+PASS e:prefix-len :: 3200
+PASS e:ingest
+PASS e:receipt-valid
+PASS e:no-key-survives-commit :: {'hits': [], 'leftover_files': []}
+PASS x0:complete
+PASS x0:wire-consistent (no offset ever sent with two values) :: attempt files=36
+PASS x0:go-age-decrypts-exact-sha256
+PASS x0:rust-decrypts-exact-sha256
+PASS x0:prefix-len :: 3200
+PASS x0:ingest
+PASS x0:receipt-valid
+PASS x0:no-key-survives-commit :: {'hits': [], 'leftover_files': []}
+PASS x1:complete
+PASS x1:wire-consistent (no offset ever sent with two values) :: attempt files=37
+PASS x1:go-age-decrypts-exact-sha256
+PASS x1:rust-decrypts-exact-sha256
+PASS x1:prefix-len :: 3200
+PASS x1:ingest
+PASS x1:receipt-valid
+PASS x1:no-key-survives-commit :: {'hits': [], 'leftover_files': []}
+PASS all-uploads:payload-nonces-unique :: 7
+PASS all-uploads:header-macs-unique :: 7
+PASS per-kill:at-most-one-segment-re-encrypted :: {'kills': 20, 'max_resent_parts_per_kill': 1, 'total_resent': 20}
+PASS kills:count :: 20
+PASS edit-after-kill:refused-with-exit-65 :: [{'trial': 1, 'edited_chunk': 9, 'stat_check_bypassed': False, 'resume_exit': 65, 'stderr': 'error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file', 'wire_consistent': True}, {'trial': 2, 'edited_chunk': 8, 'stat_check_bypassed': True, 'resume_exit': 65, 'stderr': 'error: SOURCE CHANGED in chunk 8 (part 3): refusing to re-encrypt under the same key', 'wire_consistent': True}, {'trial': 3, 'edited_chunk': 8, 'stat_check_bypassed': False, 'resume_exit': 65, 'stderr': 'error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file', 'wire_consistent': True}, {'trial': 4, 'edited_chunk': 10, 'stat_check_bypassed': True, 'resume_exit': 65, 'stderr': 'error: SOURCE CHANGED in chunk 10 (part 3): refusing to re-encrypt under the same key', 'wire_consistent': True}, {'trial': 5, 'edited_chunk': 10, 'stat_check_bypassed': False, 'resume_exit': 65, 'stderr': 'error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file', 'wire_consistent': True}, {'trial': 6, 'edited_chunk': 16, 'stat_check_bypassed': True, 'resume_exit': 65, 'stderr': 'error: SOURCE CHANGED in chunk 16 (part 5): refusing to re-encrypt under the same key', 'wire_consistent': True}]
+PASS edit-after-kill:journal-guard-alone-refuses
+PASS edit-after-kill:wire-consistent
+{"stanzas": 2, "kills": 20, "passed": 63, "failed": 0}

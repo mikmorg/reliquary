@@ -1,0 +1,9 @@
+# go test -v -run TestVectors in a copy of filippo.io/age@v1.3.2 (pins c2sp.org/CCTV/age@v0.0.0-20260829155415-4448f2097b2d, byte-identical testdata to 20260925130909-50a8ecf2a220); go version go1.27.0 linux/amd64; GOTOOLCHAIN=auto; run 2026-10-06T16:16:46Z
+      1 --- PASS:
+      1 ok filippo.io/age
+ok  	filippo.io/age	1.730s
+subtest results (all depths):
+    572 --- PASS
+    244 --- SKIP
+vector-level (TestVectors/<name>) results:
+    147 PASS:

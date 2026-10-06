@@ -1,0 +1,40 @@
+{
+ "mode": "kill -9",
+ "nofsync": false,
+ "layout": "ocfl",
+ "kills": 100,
+ "cycles_completed": 1,
+ "violations": {},
+ "quarantined": 38,
+ "torn_manifest_events": 14,
+ "tmp_removed": 37,
+ "acks_total": 693,
+ "final_checks": [
+  {
+   "cycle": 0,
+   "acked": 593,
+   "truth_items": 600,
+   "catalog_matches_truth": true,
+   "verify_fail_counts": {},
+   "violations_at_end": {
+    "acked_not_in_catalog": 0,
+    "acked_not_in_manifest": 0,
+    "catalog_rows_without_store": 0,
+    "audit_mismatch": 0,
+    "audit_missing": 0
+   }
+  }
+ ],
+ "self_crash_points": {
+  "after-ack": 8,
+  "catalog-before-ack": 7,
+  "manifest-before-catalog": 9,
+  "manifest-torn": 14,
+  "ocfl-objdir-built": 8,
+  "renamed-before-dirsync": 16,
+  "renamed-before-manifest": 8,
+  "tmp-synced": 13,
+  "tmp-written-unsynced": 13
+ },
+ "iterations": 101
+}

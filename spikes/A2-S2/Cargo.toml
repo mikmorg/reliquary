@@ -1,0 +1,32 @@
+[package]
+name = "a2-envelope-spike"
+version = "0.2.0"
+edition = "2021"
+publish = false
+description = "THROWAWAY SPIKE (A2-S1..S4): age v1 envelope with mlkem768x25519 stanzas, signed-note records, strict ingest. Not production code."
+
+[dependencies]
+# RustCrypto 2026 generation: sha2 0.11 detects the ARMv8 SHA-2 extension at
+# runtime, chacha20 0.10 uses NEON on aarch64 by default. poly1305 0.9 still has
+# no ARM SIMD backend (see the research note).
+sha2 = "0.11"
+hmac = "0.13"
+hkdf = "0.13"
+chacha20poly1305 = "0.11"
+aes-gcm = "0.11"
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+ed25519-dalek = "2"
+base64 = "0.22"
+bech32 = "0.9"
+rand = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+hex = "0.4"
+zeroize = "1"
+# X-Wing (MLKEM768-X25519) HPKE for the age mlkem768x25519 stanza.
+hpke = "=0.14.1"
+shake = "0.1"
+flate2 = "1"
+
+[profile.release]
+debug = false

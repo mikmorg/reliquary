@@ -1,0 +1,1379 @@
+{
+ "stanzas": 1,
+ "kills": 50,
+ "slow_us": "3000",
+ "per_kill": [
+  {
+   "file": "a",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    12
+   ]
+  },
+  {
+   "file": "a",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    21
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    10
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    20
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    23
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    26
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 5,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    30
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 6,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    31
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 7,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    33
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 8,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    43
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 9,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    43
+   ]
+  },
+  {
+   "file": "b",
+   "kill": 10,
+   "phase": "resume-after-kill",
+   "resent_parts": 0,
+   "parts": []
+  },
+  {
+   "file": "b",
+   "kill": 11,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    52
+   ]
+  },
+  {
+   "file": "c",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    8
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    3
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    3
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    12
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    20
+   ]
+  },
+  {
+   "file": "d",
+   "kill": 5,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    20
+   ]
+  },
+  {
+   "file": "e",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    4
+   ]
+  },
+  {
+   "file": "e",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    15
+   ]
+  },
+  {
+   "file": "e",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    25
+   ]
+  },
+  {
+   "file": "x0",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    17
+   ]
+  },
+  {
+   "file": "x0",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    18
+   ]
+  },
+  {
+   "file": "x0",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    19
+   ]
+  },
+  {
+   "file": "x0",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    28
+   ]
+  },
+  {
+   "file": "x1",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    15
+   ]
+  },
+  {
+   "file": "x1",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    31
+   ]
+  },
+  {
+   "file": "x2",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    15
+   ]
+  },
+  {
+   "file": "x2",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    26
+   ]
+  },
+  {
+   "file": "x3",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    1
+   ]
+  },
+  {
+   "file": "x3",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    1
+   ]
+  },
+  {
+   "file": "x3",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    9
+   ]
+  },
+  {
+   "file": "x3",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    18
+   ]
+  },
+  {
+   "file": "x3",
+   "kill": 5,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    31
+   ]
+  },
+  {
+   "file": "x4",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    16
+   ]
+  },
+  {
+   "file": "x4",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    27
+   ]
+  },
+  {
+   "file": "x5",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    17
+   ]
+  },
+  {
+   "file": "x5",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    24
+   ]
+  },
+  {
+   "file": "x5",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    25
+   ]
+  },
+  {
+   "file": "x6",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    13
+   ]
+  },
+  {
+   "file": "x6",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    18
+   ]
+  },
+  {
+   "file": "x6",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    26
+   ]
+  },
+  {
+   "file": "x6",
+   "kill": 4,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    28
+   ]
+  },
+  {
+   "file": "x7",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    11
+   ]
+  },
+  {
+   "file": "x7",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    24
+   ]
+  },
+  {
+   "file": "x8",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    8
+   ]
+  },
+  {
+   "file": "x8",
+   "kill": 2,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    15
+   ]
+  },
+  {
+   "file": "x8",
+   "kill": 3,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    25
+   ]
+  },
+  {
+   "file": "x9",
+   "kill": 1,
+   "phase": "resume-after-kill",
+   "resent_parts": 1,
+   "parts": [
+    14
+   ]
+  }
+ ],
+ "edit_trials": [
+  {
+   "trial": 1,
+   "edited_chunk": 12,
+   "stat_check_bypassed": false,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+   "wire_consistent": true
+  },
+  {
+   "trial": 2,
+   "edited_chunk": 16,
+   "stat_check_bypassed": true,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED in chunk 16 (part 5): refusing to re-encrypt under the same key",
+   "wire_consistent": true
+  },
+  {
+   "trial": 3,
+   "edited_chunk": 15,
+   "stat_check_bypassed": false,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+   "wire_consistent": true
+  },
+  {
+   "trial": 4,
+   "edited_chunk": 2,
+   "stat_check_bypassed": true,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED in chunk 2 (part 1): refusing to re-encrypt under the same key",
+   "wire_consistent": true
+  },
+  {
+   "trial": 5,
+   "edited_chunk": 6,
+   "stat_check_bypassed": false,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+   "wire_consistent": true
+  },
+  {
+   "trial": 6,
+   "edited_chunk": 12,
+   "stat_check_bypassed": true,
+   "resume_exit": 65,
+   "stderr": "error: SOURCE CHANGED in chunk 12 (part 4): refusing to re-encrypt under the same key",
+   "wire_consistent": true
+  }
+ ],
+ "uploads": [
+  {
+   "name": "a",
+   "upload_id": "8697249369b916fb2b77fbaf87ccf2e2",
+   "object_key": "staging/bdaf05b8d182b9266b54bc65c9b5567df27c47353024946ec676cfafde21298f/8697249369b916fb2b77fbaf87ccf2e2",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/bdaf05b8d182b9266b54bc65c9b5567df27c47353024946ec676cfafde21298f/8697249369b916fb2b77fbaf87ccf2e2/object",
+   "kills": 2,
+   "payload_nonce": "3ff2b4a77c1f0be4558678eaf4a7af2f",
+   "header_mac": "BGhlyi60e8eSyhqeENbB1zwwoU5mRlOonznccuquY8A"
+  },
+  {
+   "name": "b",
+   "upload_id": "00d82b010c72856c7f65eafa188745fb",
+   "object_key": "staging/8595bb001910b93590ed78bc2dfffc33acd1e47f5c7705b50e83176b8862c78f/00d82b010c72856c7f65eafa188745fb",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/8595bb001910b93590ed78bc2dfffc33acd1e47f5c7705b50e83176b8862c78f/00d82b010c72856c7f65eafa188745fb/object",
+   "kills": 11,
+   "payload_nonce": "2cbbf32a236084fa74d09c529459c76f",
+   "header_mac": "a8ScDVal4iIbRnuUh3MC98uK3K6gMIK/qTc7qp7A/Jg"
+  },
+  {
+   "name": "c",
+   "upload_id": "3cf0238d7c4f83a80fc3e7d061da537e",
+   "object_key": "staging/594eb7b188d8e1f69c07abdbace900775b191d31437843523b959b6bee72ce7a/3cf0238d7c4f83a80fc3e7d061da537e",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/594eb7b188d8e1f69c07abdbace900775b191d31437843523b959b6bee72ce7a/3cf0238d7c4f83a80fc3e7d061da537e/object",
+   "kills": 1,
+   "payload_nonce": "32687ca6591aa83bb07de500937f50b2",
+   "header_mac": "S2Up8iLCYBJEcgFoxlZNOOZJ22WKmtZkYcOdpX9uTWI"
+  },
+  {
+   "name": "d",
+   "upload_id": "5a4c8111a9847239cdb2262efa83d1fe",
+   "object_key": "staging/95bd422b2244f244db007cb4fdef1b284c5761d83f1dc1a13eea91777032014f/5a4c8111a9847239cdb2262efa83d1fe",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/95bd422b2244f244db007cb4fdef1b284c5761d83f1dc1a13eea91777032014f/5a4c8111a9847239cdb2262efa83d1fe/object",
+   "kills": 5,
+   "payload_nonce": "ca2615f396257c036e9b0f50609a6b4e",
+   "header_mac": "d4c9c6c04R5yhhc46XkZnt+Y1SIqmQ5pjWGcxw6RiWk"
+  },
+  {
+   "name": "e",
+   "upload_id": "bec8f8a6e5766e245866aaf13b395155",
+   "object_key": "staging/936876264d2393ed556e813efc05f3786b141a7a233a49cbfb9f047bbdd60486/bec8f8a6e5766e245866aaf13b395155",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/936876264d2393ed556e813efc05f3786b141a7a233a49cbfb9f047bbdd60486/bec8f8a6e5766e245866aaf13b395155/object",
+   "kills": 3,
+   "payload_nonce": "1d30c49aa6d521f69b030ccf90c13a65",
+   "header_mac": "nieJiv7JlfoFNVzsXNG86jUoQZNfqRfrYQYiumYRb14"
+  },
+  {
+   "name": "x0",
+   "upload_id": "7ef2522574c54459bc3ca653703c7e9d",
+   "object_key": "staging/f05e94325106457637aa7371c9a669e23a24ccb56d5f4cde170a86fa57d7ce6c/7ef2522574c54459bc3ca653703c7e9d",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/f05e94325106457637aa7371c9a669e23a24ccb56d5f4cde170a86fa57d7ce6c/7ef2522574c54459bc3ca653703c7e9d/object",
+   "kills": 4,
+   "payload_nonce": "1d575aa67e2c2bfd7647a2b9a4c1acd4",
+   "header_mac": "qkCUXMBy+Y8ySnSBpu/TBSKMr8N9BbeFlRKPuSqaXS8"
+  },
+  {
+   "name": "x1",
+   "upload_id": "0a6d77b26118ab5244f04d3397b718c9",
+   "object_key": "staging/1a8c7280dd0523e59ffe9944f0226bc141404d5136dd4a001e986a7a1e870acd/0a6d77b26118ab5244f04d3397b718c9",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/1a8c7280dd0523e59ffe9944f0226bc141404d5136dd4a001e986a7a1e870acd/0a6d77b26118ab5244f04d3397b718c9/object",
+   "kills": 2,
+   "payload_nonce": "772dbf59054149b0e4d47919ea668f29",
+   "header_mac": "g+1xJf+Nf9aZ4JTMa8vAKCh92qubQPYdMcN7M4DA1hE"
+  },
+  {
+   "name": "x2",
+   "upload_id": "dfefe22110b6dec7a0de0c017e7de335",
+   "object_key": "staging/87577e67c4c46d1319e04c1a5c1d62bbacc1e5ae73b57b420d117d82751680e1/dfefe22110b6dec7a0de0c017e7de335",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/87577e67c4c46d1319e04c1a5c1d62bbacc1e5ae73b57b420d117d82751680e1/dfefe22110b6dec7a0de0c017e7de335/object",
+   "kills": 2,
+   "payload_nonce": "d937530d7a51a8933cad6beedde827c6",
+   "header_mac": "1c85Sy/anZ8pz/P/n9doVDEnG8vzjUpDzmS0hqHgOAk"
+  },
+  {
+   "name": "x3",
+   "upload_id": "9c06f1daf5a57aa9527db54b06bc5280",
+   "object_key": "staging/123fb64d8a42689d850ff9e78bec9f037500091bce6e5a2641e2579591e04364/9c06f1daf5a57aa9527db54b06bc5280",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/123fb64d8a42689d850ff9e78bec9f037500091bce6e5a2641e2579591e04364/9c06f1daf5a57aa9527db54b06bc5280/object",
+   "kills": 5,
+   "payload_nonce": "a36cca913a4833cfd62724b7148784fb",
+   "header_mac": "hcM0d40ycqSfvvXy0qErNH1HMFNB1z1HB5nXn+7BdtY"
+  },
+  {
+   "name": "x4",
+   "upload_id": "3d988a2bc75c0acac6ad96373c631aa1",
+   "object_key": "staging/a83c0186ca3edce2d553ca8ffa5cd777160f3f854d65387d66acf77c2b981b05/3d988a2bc75c0acac6ad96373c631aa1",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/a83c0186ca3edce2d553ca8ffa5cd777160f3f854d65387d66acf77c2b981b05/3d988a2bc75c0acac6ad96373c631aa1/object",
+   "kills": 2,
+   "payload_nonce": "78f169dbc257d89890cd5b657453b801",
+   "header_mac": "uE6VghUsGGYj4ZVt/9kFLVs3NclUs7XMsC4lEf8mhbY"
+  },
+  {
+   "name": "x5",
+   "upload_id": "90451cd246dc967dcdcefb34583450af",
+   "object_key": "staging/3d77934256cd2db37a28697472ca2f61d487a9b36a35ccdf601ee1b8e871dac3/90451cd246dc967dcdcefb34583450af",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/3d77934256cd2db37a28697472ca2f61d487a9b36a35ccdf601ee1b8e871dac3/90451cd246dc967dcdcefb34583450af/object",
+   "kills": 3,
+   "payload_nonce": "ea99c7a0e29c96a16adbda61c78459bd",
+   "header_mac": "f/HxsVjTtdNa8GL0YByGg+VIoVcZ/PgfAVSNiV84IJg"
+  },
+  {
+   "name": "x6",
+   "upload_id": "c951f093cd09e94235dc282d246a62f8",
+   "object_key": "staging/25546dcd964837988bb0fe7c54f74987e3649dd3c4e6fa26c8d9a7f6400947c5/c951f093cd09e94235dc282d246a62f8",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/25546dcd964837988bb0fe7c54f74987e3649dd3c4e6fa26c8d9a7f6400947c5/c951f093cd09e94235dc282d246a62f8/object",
+   "kills": 4,
+   "payload_nonce": "5099c178233eb3a28bc850fe18326ff8",
+   "header_mac": "l1J+YDHuZhDFGaW4ABBJdPRyZRAuEBKjgwkjd3LmXCY"
+  },
+  {
+   "name": "x7",
+   "upload_id": "dfa23101e49ccc37704261d6e841bc4a",
+   "object_key": "staging/5a0221ac8a71afb858a2bf3008c8b0c5047d1032e5c0dc49010e120cfc0b2cc9/dfa23101e49ccc37704261d6e841bc4a",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/5a0221ac8a71afb858a2bf3008c8b0c5047d1032e5c0dc49010e120cfc0b2cc9/dfa23101e49ccc37704261d6e841bc4a/object",
+   "kills": 2,
+   "payload_nonce": "5e02ffe0a94da74e6beface22cdece6b",
+   "header_mac": "w8XONY8rkdB0pniq5dTtfMa2ZINNekFe68SHSVNO+Zw"
+  },
+  {
+   "name": "x8",
+   "upload_id": "0f347fe5e10b2a52cf483f22f41c8412",
+   "object_key": "staging/1c1dc1b804222dcf6c0c074afd78f1ce1ee4fc19b89ae807f9a446d3d853fe99/0f347fe5e10b2a52cf483f22f41c8412",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/1c1dc1b804222dcf6c0c074afd78f1ce1ee4fc19b89ae807f9a446d3d853fe99/0f347fe5e10b2a52cf483f22f41c8412/object",
+   "kills": 3,
+   "payload_nonce": "def3339b03d5f9931af5fe90b33ee10c",
+   "header_mac": "zETeyjwz+zTQ9JWNzSOR4piJ+xszt0PB+mOwdN0sBLI"
+  },
+  {
+   "name": "x9",
+   "upload_id": "fcd24257898b71b6c696702e5180ad44",
+   "object_key": "staging/012791051ef2b33359861f8f833a7dfbf7cb20fddbbc8c4fe3f0e48e25622c14/fcd24257898b71b6c696702e5180ad44",
+   "object": "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A2-S2/work1/r2/staging/012791051ef2b33359861f8f833a7dfbf7cb20fddbbc8c4fe3f0e48e25622c14/fcd24257898b71b6c696702e5180ad44/object",
+   "kills": 1,
+   "payload_nonce": "81699948281455021e581d874823f9b8",
+   "header_mac": "f1os3vvnWb+17q/PICn3rI6P4wh8T40ZT1P+YEgl/8A"
+  }
+ ],
+ "results": [
+  {
+   "check": "a:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=27"
+  },
+  {
+   "check": "a:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "a:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "a:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "b:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=64"
+  },
+  {
+   "check": "b:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "b:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "b:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "c:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=12"
+  },
+  {
+   "check": "c:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "c:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "c:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "d:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=30"
+  },
+  {
+   "check": "d:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "d:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "d:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "e:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=36"
+  },
+  {
+   "check": "e:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "e:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "e:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x0:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=37"
+  },
+  {
+   "check": "x0:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x0:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x0:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x1:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=35"
+  },
+  {
+   "check": "x1:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x1:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x1:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x2:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x2:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=35"
+  },
+  {
+   "check": "x2:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x2:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x2:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x2:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x2:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x2:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x3:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x3:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=38"
+  },
+  {
+   "check": "x3:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x3:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x3:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x3:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x3:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x3:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x4:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x4:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=35"
+  },
+  {
+   "check": "x4:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x4:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x4:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x4:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x4:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x4:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x5:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x5:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=36"
+  },
+  {
+   "check": "x5:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x5:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x5:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x5:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x5:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x5:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x6:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x6:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=37"
+  },
+  {
+   "check": "x6:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x6:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x6:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x6:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x6:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x6:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x7:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x7:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=35"
+  },
+  {
+   "check": "x7:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x7:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x7:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x7:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x7:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x7:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x8:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x8:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=36"
+  },
+  {
+   "check": "x8:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x8:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x8:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x8:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x8:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x8:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "x9:complete",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x9:wire-consistent (no offset ever sent with two values)",
+   "pass": true,
+   "detail": "attempt files=34"
+  },
+  {
+   "check": "x9:go-age-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x9:rust-decrypts-exact-sha256",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x9:prefix-len",
+   "pass": true,
+   "detail": 1643
+  },
+  {
+   "check": "x9:ingest",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x9:receipt-valid",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "x9:no-key-survives-commit",
+   "pass": true,
+   "detail": {
+    "hits": [],
+    "leftover_files": []
+   }
+  },
+  {
+   "check": "all-uploads:payload-nonces-unique",
+   "pass": true,
+   "detail": 15
+  },
+  {
+   "check": "all-uploads:header-macs-unique",
+   "pass": true,
+   "detail": 15
+  },
+  {
+   "check": "per-kill:at-most-one-segment-re-encrypted",
+   "pass": true,
+   "detail": {
+    "kills": 50,
+    "max_resent_parts_per_kill": 1,
+    "total_resent": 49
+   }
+  },
+  {
+   "check": "kills:count",
+   "pass": true,
+   "detail": 50
+  },
+  {
+   "check": "edit-after-kill:refused-with-exit-65",
+   "pass": true,
+   "detail": [
+    {
+     "trial": 1,
+     "edited_chunk": 12,
+     "stat_check_bypassed": false,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+     "wire_consistent": true
+    },
+    {
+     "trial": 2,
+     "edited_chunk": 16,
+     "stat_check_bypassed": true,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED in chunk 16 (part 5): refusing to re-encrypt under the same key",
+     "wire_consistent": true
+    },
+    {
+     "trial": 3,
+     "edited_chunk": 15,
+     "stat_check_bypassed": false,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+     "wire_consistent": true
+    },
+    {
+     "trial": 4,
+     "edited_chunk": 2,
+     "stat_check_bypassed": true,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED in chunk 2 (part 1): refusing to re-encrypt under the same key",
+     "wire_consistent": true
+    },
+    {
+     "trial": 5,
+     "edited_chunk": 6,
+     "stat_check_bypassed": false,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED since the pass-1 snapshot: abort this upload, re-queue the file",
+     "wire_consistent": true
+    },
+    {
+     "trial": 6,
+     "edited_chunk": 12,
+     "stat_check_bypassed": true,
+     "resume_exit": 65,
+     "stderr": "error: SOURCE CHANGED in chunk 12 (part 4): refusing to re-encrypt under the same key",
+     "wire_consistent": true
+    }
+   ]
+  },
+  {
+   "check": "edit-after-kill:journal-guard-alone-refuses",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "edit-after-kill:wire-consistent",
+   "pass": true,
+   "detail": ""
+  }
+ ],
+ "passed": 127,
+ "failed": 0
+}

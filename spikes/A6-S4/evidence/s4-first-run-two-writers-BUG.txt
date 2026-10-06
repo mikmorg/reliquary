@@ -1,0 +1,48 @@
+### scenario 1: clean store (x25519 S5/S6 store, 200 records)
+catalog deleted; 376 canonical rows before
+rebuild: 176 blobs, 200 records in 0.47s; meta_sha256 reconstruction mismatches: 0
+rebuild (manifest + records) wall s: 0.493
+RESULT byte-identical canonical export: YES (bd39209c71b102dd...)
+rebuild: 176 blobs, 200 records in 1.32s; meta_sha256 reconstruction mismatches: 0
+rebuild (object files only, manifest ignored) wall s: 1.352
+files-only rebuild: rows 376 of 376 ; fields that differ from the original catalog: {'blob.epoch': 176, 'blob.committed_at': 176, 'record.meta_sha256': 200, 'record.committed_at': 200}
+
+### scenario: store left by the crashpoints-cas run (100 self-kills incl. torn manifest lines and quarantines), then ingest killed again, catalog deleted mid-ingest, rebuilt, ingest resumed
+killed ingest after 317 ACKs
+catalog deleted mid-ingest; rebuilding
+rebuild: 280 blobs, 321 records in 1.07s; meta_sha256 reconstruction mismatches: 0
+resume: 279 new ACKs, 321 dup ACKs (stored receipt path)
+catalog deleted; 1135 canonical rows before
+rebuild: 713 blobs, 792 records in 2.11s; meta_sha256 reconstruction mismatches: 0
+rebuild (manifest + records) wall s: 2.118
+RESULT byte-identical: NO
+1c1
+< {"t":"blob","sha256":"000fd35695c6fcd2ab66556b87e9a996f164cf4b2e0573cfe87db3bfb7b86fa7","size":184765,"stored_sha256":"16bd0589f1798ae92cd58a3a5ba5f492afaad3b54f2e24ea692b42009a6ccbe5","stored_size":185095,"epoch":1,"committed_at":1791303478629697371}
+---
+> {"t":"blob","sha256":"000fd35695c6fcd2ab66556b87e9a996f164cf4b2e0573cfe87db3bfb7b86fa7","size":184765,"stored_sha256":"e6719c8fe25f8f34fae6bd0d751b6bdbfd36155c101ff0521943294abd940c18","stored_size":185095,"epoch":1,"committed_at":1791303478205140918}
+5c5
+rebuild: 535 blobs, 600 records in 2.49s; meta_sha256 reconstruction mismatches: 0
+rebuild (object files only, manifest ignored) wall s: 2.505
+files-only rebuild: rows 1135 of 1135 ; fields that differ from the original catalog: {'blob.epoch': 535, 'blob.committed_at': 535, 'record.meta_sha256': 600, 'record.committed_at': 600}
+truth check:
+ rebuilt catalog has 600 records; all 600 truth records present with correct sha256: True
+
+### scenario: store left by the crashpoints-ocfl run (100 self-kills incl. torn manifest lines and quarantines), then ingest killed again, catalog deleted mid-ingest, rebuilt, ingest resumed
+killed ingest after 255 ACKs
+catalog deleted mid-ingest; rebuilding
+rebuild: 231 blobs, 259 records in 1.02s; meta_sha256 reconstruction mismatches: 0
+resume: 341 new ACKs, 259 dup ACKs (stored receipt path)
+catalog deleted; 1135 canonical rows before
+rebuild: 781 blobs, 868 records in 2.38s; meta_sha256 reconstruction mismatches: 0
+rebuild (manifest + records) wall s: 2.399
+RESULT byte-identical: NO
+1c1
+< {"t":"blob","sha256":"000fd35695c6fcd2ab66556b87e9a996f164cf4b2e0573cfe87db3bfb7b86fa7","size":184765,"stored_sha256":"fe50cd4f44232a095afc8415e0786e2d071b2ef0da8da61a861a5ac02880150d","stored_size":185095,"epoch":1,"committed_at":1791303490707747421}
+---
+> {"t":"blob","sha256":"000fd35695c6fcd2ab66556b87e9a996f164cf4b2e0573cfe87db3bfb7b86fa7","size":184765,"stored_sha256":"93c45e04db56dd32480d13d297669880e1b4bf430b6c09a778a5b78bc0a870f5","stored_size":185095,"epoch":1,"committed_at":1791303490334501080}
+5c5
+rebuild: 535 blobs, 600 records in 3.07s; meta_sha256 reconstruction mismatches: 0
+rebuild (object files only, manifest ignored) wall s: 3.082
+files-only rebuild: rows 1135 of 1135 ; fields that differ from the original catalog: {'blob.epoch': 535, 'blob.committed_at': 535, 'record.meta_sha256': 600, 'record.committed_at': 600, 'record.stored_sha256': 1}
+truth check:
+ rebuilt catalog has 600 records; all 600 truth records present with correct sha256: True

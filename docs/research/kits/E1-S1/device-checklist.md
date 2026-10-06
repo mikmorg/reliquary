@@ -32,6 +32,8 @@ The fields follow the E1 note §4. Rules:
 | D13 | Accessibility settings in use | See below | |
 | D14 | Notifications: are app notifications generally allowed or mostly off? | Ask, then glance at Settings > Notifications | |
 | D15 | Languages: device display language | Settings > Language | |
+| D16 | Hidden or separate spaces on this device: Android **Private space** (Android 15+) or Samsung **Secure Folder**, Google Photos **Locked Folder**, a work profile; on a PC, other user accounts. Do they hold photos? | Ask ("Do you use a private or secure space for photos?"); never open it | yes / no / unsure |
+| D17 | macOS only: macOS version (older than Sonoma? iCloud Drive may then keep hidden `.icloud` stub files that the census cannot size; unverified) | Apple menu > About This Mac | |
 
 **D11: cloud services (tick all that apply)**
 
@@ -50,7 +52,8 @@ The fields follow the E1 note §4. Rules:
 - ☐ Bold text
 - ☐ Display zoom or magnifier
 - ☐ VoiceOver / TalkBack
-- ☐ Assistive Access (iPhone/iPad; set up by a supporter)
+- ☐ Assistive Access (iPhone/iPad; set up by a supporter). If on, who is the supporter (role)?
+- ☐ Android simplified or easy mode / simple home screen (maker-specific)
 - ☐ Hearing aids paired, or captions
 - ☐ Other ___
 
@@ -73,3 +76,5 @@ The fields follow the E1 note §4. Rules:
 | P11 | Observed: installed an app? Scanned a QR code? Typed a 12-character code? (these run as E2/E5 tasks at the same visit; record observed success, not self-report) | Observe | |
 | P12 | Attitude to the admin seeing everything (comfortable / uneasy / against; theme in a few words) | Interview section 6 | |
 | P13 | Categories they would want excluded (types only, e.g. "medical scans") | Interview section 6 | |
+| P14 | Main capture device platform (iPhone/iPad / Android / camera / other) and whether they have a computer they use: own / with help (who, as a role) / none. Bridge indicator for OD-01 | Ask | |
+| P15 | Debrief: single-copy findings (types only) and the interim action agreed (owner's action list; not exported) | Interview debrief | |

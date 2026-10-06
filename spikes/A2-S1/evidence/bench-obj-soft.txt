@@ -1,0 +1,255 @@
+== size 16384 round 1 load: 7.26 6.70 5.51
+{
+  "object_size": 16384,
+  "objects": 2000,
+  "pqx1": {
+    "MB_per_s": 70.9,
+    "objects_per_sec": 4327.1
+  },
+  "pqx2": {
+    "MB_per_s": 38.8,
+    "objects_per_sec": 2368.2
+  },
+  "x25519x1": {
+    "MB_per_s": 122.3,
+    "objects_per_sec": 7465.7
+  }
+}
+== size 16384 round 2 load: 7.16 6.69 5.51
+{
+  "object_size": 16384,
+  "objects": 2000,
+  "pqx1": {
+    "MB_per_s": 68.2,
+    "objects_per_sec": 4160.1
+  },
+  "pqx2": {
+    "MB_per_s": 40.8,
+    "objects_per_sec": 2487.3
+  },
+  "x25519x1": {
+    "MB_per_s": 128.1,
+    "objects_per_sec": 7816.7
+  }
+}
+== size 16384 round 3 load: 7.22 6.71 5.53
+{
+  "object_size": 16384,
+  "objects": 2000,
+  "pqx1": {
+    "MB_per_s": 70.2,
+    "objects_per_sec": 4287.5
+  },
+  "pqx2": {
+    "MB_per_s": 37.2,
+    "objects_per_sec": 2268.6
+  },
+  "x25519x1": {
+    "MB_per_s": 123.5,
+    "objects_per_sec": 7539.5
+  }
+}
+== size 102400 round 1 load: 7.37 6.75 5.55
+{
+  "object_size": 102400,
+  "objects": 1000,
+  "pqx1": {
+    "MB_per_s": 214.8,
+    "objects_per_sec": 2097.8
+  },
+  "pqx2": {
+    "MB_per_s": 159.1,
+    "objects_per_sec": 1553.6
+  },
+  "x25519x1": {
+    "MB_per_s": 281.8,
+    "objects_per_sec": 2751.5
+  }
+}
+== size 102400 round 2 load: 7.50 6.78 5.57
+{
+  "object_size": 102400,
+  "objects": 1000,
+  "pqx1": {
+    "MB_per_s": 215.3,
+    "objects_per_sec": 2102.8
+  },
+  "pqx2": {
+    "MB_per_s": 156.2,
+    "objects_per_sec": 1525.6
+  },
+  "x25519x1": {
+    "MB_per_s": 272.5,
+    "objects_per_sec": 2661.2
+  }
+}
+== size 102400 round 3 load: 8.26 6.95 5.63
+{
+  "object_size": 102400,
+  "objects": 1000,
+  "pqx1": {
+    "MB_per_s": 213.0,
+    "objects_per_sec": 2080.0
+  },
+  "pqx2": {
+    "MB_per_s": 147.2,
+    "objects_per_sec": 1437.3
+  },
+  "x25519x1": {
+    "MB_per_s": 276.3,
+    "objects_per_sec": 2697.9
+  }
+}
+== size 1048576 round 1 load: 8.32 6.99 5.65
+{
+  "object_size": 1048576,
+  "objects": 300,
+  "pqx1": {
+    "MB_per_s": 328.2,
+    "objects_per_sec": 313.0
+  },
+  "pqx2": {
+    "MB_per_s": 335.2,
+    "objects_per_sec": 319.7
+  },
+  "x25519x1": {
+    "MB_per_s": 372.1,
+    "objects_per_sec": 354.9
+  }
+}
+== size 1048576 round 2 load: 8.05 6.95 5.64
+{
+  "object_size": 1048576,
+  "objects": 300,
+  "pqx1": {
+    "MB_per_s": 338.0,
+    "objects_per_sec": 322.3
+  },
+  "pqx2": {
+    "MB_per_s": 328.2,
+    "objects_per_sec": 313.0
+  },
+  "x25519x1": {
+    "MB_per_s": 362.4,
+    "objects_per_sec": 345.6
+  }
+}
+== size 1048576 round 3 load: 7.91 6.96 5.66
+{
+  "object_size": 1048576,
+  "objects": 300,
+  "pqx1": {
+    "MB_per_s": 345.9,
+    "objects_per_sec": 329.9
+  },
+  "pqx2": {
+    "MB_per_s": 324.6,
+    "objects_per_sec": 309.6
+  },
+  "x25519x1": {
+    "MB_per_s": 372.6,
+    "objects_per_sec": 355.3
+  }
+}
+== size 4194304 round 1 load: 7.83 6.97 5.68
+{
+  "object_size": 4194304,
+  "objects": 80,
+  "pqx1": {
+    "MB_per_s": 363.2,
+    "objects_per_sec": 86.6
+  },
+  "pqx2": {
+    "MB_per_s": 336.4,
+    "objects_per_sec": 80.2
+  },
+  "x25519x1": {
+    "MB_per_s": 357.3,
+    "objects_per_sec": 85.2
+  }
+}
+== size 4194304 round 2 load: 7.73 6.98 5.69
+{
+  "object_size": 4194304,
+  "objects": 80,
+  "pqx1": {
+    "MB_per_s": 372.6,
+    "objects_per_sec": 88.8
+  },
+  "pqx2": {
+    "MB_per_s": 358.1,
+    "objects_per_sec": 85.4
+  },
+  "x25519x1": {
+    "MB_per_s": 361.6,
+    "objects_per_sec": 86.2
+  }
+}
+== size 4194304 round 3 load: 8.23 7.09 5.74
+{
+  "object_size": 4194304,
+  "objects": 80,
+  "pqx1": {
+    "MB_per_s": 360.4,
+    "objects_per_sec": 85.9
+  },
+  "pqx2": {
+    "MB_per_s": 382.4,
+    "objects_per_sec": 91.2
+  },
+  "x25519x1": {
+    "MB_per_s": 360.3,
+    "objects_per_sec": 85.9
+  }
+}
+== size 26214400 round 1 load: 8.50 7.19 5.78
+{
+  "object_size": 26214400,
+  "objects": 12,
+  "pqx1": {
+    "MB_per_s": 366.6,
+    "objects_per_sec": 14.0
+  },
+  "pqx2": {
+    "MB_per_s": 351.5,
+    "objects_per_sec": 13.4
+  },
+  "x25519x1": {
+    "MB_per_s": 367.4,
+    "objects_per_sec": 14.0
+  }
+}
+== size 26214400 round 2 load: 8.20 7.17 5.79
+{
+  "object_size": 26214400,
+  "objects": 12,
+  "pqx1": {
+    "MB_per_s": 355.7,
+    "objects_per_sec": 13.6
+  },
+  "pqx2": {
+    "MB_per_s": 336.2,
+    "objects_per_sec": 12.8
+  },
+  "x25519x1": {
+    "MB_per_s": 373.1,
+    "objects_per_sec": 14.2
+  }
+}
+== size 26214400 round 3 load: 8.10 7.16 5.80
+{
+  "object_size": 26214400,
+  "objects": 12,
+  "pqx1": {
+    "MB_per_s": 362.6,
+    "objects_per_sec": 13.8
+  },
+  "pqx2": {
+    "MB_per_s": 348.0,
+    "objects_per_sec": 13.3
+  },
+  "x25519x1": {
+    "MB_per_s": 364.0,
+    "objects_per_sec": 13.9
+  }
+}

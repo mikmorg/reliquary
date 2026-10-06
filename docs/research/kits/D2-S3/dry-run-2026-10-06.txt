@@ -1,0 +1,27 @@
+# D2-S3 kit dry run 2026-10-06T15:54:09Z; age v1.3.1; shamir-mnemonic 0.3.0; Linux 6.18.44-fc-v70 x86_64; agent in research container; SYN data
+## dry-run-check.py 
+PASS make-drill-disk.sh ran
+PASS 3 share texts printed -- words per share: [20]
+PASS no share text written to the disk
+PASS step 3: shamir recover with cards 3 and 1
+PASS step 4: age -d unseals the recovery identity at its passphrase prompt -- Enter passphrase: 
+PASS step 5: public key matches the card check line
+PASS step 6: catalog decrypts and lists the 10 named photos among decoys -- 50 rows
+PASS step 7: all 10 photos recovered byte-identical -- 10/10; mechanical run took 1.1 s
+PASS negative: one card alone does not recover
+PASS negative: a wrong secret is refused by age -- age: report unexpected or unhelpful errors at https://filippo.io/age/report
+10/10 checks passed
+exit=0
+## dry-run-check.py --pq --bits 256
+PASS make-drill-disk.sh ran
+PASS 3 share texts printed -- words per share: [33]
+PASS no share text written to the disk
+PASS step 3: shamir recover with cards 3 and 1
+PASS step 4: age -d unseals the recovery identity at its passphrase prompt -- Enter passphrase: 
+PASS step 5: public key matches the card check line
+PASS step 6: catalog decrypts and lists the 10 named photos among decoys -- 50 rows
+PASS step 7: all 10 photos recovered byte-identical -- 10/10; mechanical run took 1.2 s
+PASS negative: one card alone does not recover
+PASS negative: a wrong secret is refused by age -- age: report unexpected or unhelpful errors at https://filippo.io/age/report
+10/10 checks passed
+exit=0

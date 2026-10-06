@@ -1,0 +1,71 @@
+PASS mixing: age v1.3.1 refuses X25519 + ML-KEM hybrid recipients in one file -- age: error: incompatible recipients: can't mix post-quantum and classic recipients, or the file would be vulnerable to quantum computers
+age: report unexpected 
+PASS mixing: age refuses a passphrase (-p) together with a recipient -- age: error: -p/--passphrase can't be combined with -r/--recipient
+age: report unexpected or unhelpful errors at https://filippo.io/age/report
+PASS A-classic-sealed-slip39-128: sealed identity is a single native scrypt stanza
+PASS A-classic-sealed-slip39-128: recovery.key destroyed after sealing
+PASS A-classic-sealed-slip39-128: ingest identity decrypts all 10 objects before destruction
+PASS A-classic-sealed-slip39-128: ingest key destroyed
+PASS A-classic-sealed-slip39-128: one share alone does not recover -- Enter a recovery share:
+PASS A-classic-sealed-slip39-128: SLIP-39 2-of-3 (shares 1+3) reconstructs the secret
+PASS A-classic-sealed-slip39-128: wrong secret is rejected by age (scrypt stanza MAC) -- age: error: batchpass plugin: incorrect passphrase
+age: report unexpected or unhelpful errors at https://filippo.io/age/
+PASS A-classic-sealed-slip39-128: stock `age -d` unseals the recovery identity via its interactive passphrase prompt (pty) -- rc=0
+PASS A-classic-sealed-slip39-128: recovered identity matches the fingerprint printed on the card
+PASS A-classic-sealed-slip39-128: recovery identity alone decrypts all 10 photos, SHA-256 identical
+PASS A-classic-sealed-slip39-128: distro age 1.1.1 also decrypts classic objects
+PASS B-pq-sealed-slip39-256: sealed identity is a single native scrypt stanza
+PASS B-pq-sealed-slip39-256: recovery.key destroyed after sealing
+PASS B-pq-sealed-slip39-256: ingest identity decrypts all 10 objects before destruction
+PASS B-pq-sealed-slip39-256: ingest key destroyed
+PASS B-pq-sealed-slip39-256: one share alone does not recover -- Enter a recovery share:
+PASS B-pq-sealed-slip39-256: SLIP-39 2-of-3 (shares 1+3) reconstructs the secret
+PASS B-pq-sealed-slip39-256: wrong secret is rejected by age (scrypt stanza MAC) -- age: error: batchpass plugin: incorrect passphrase
+age: report unexpected or unhelpful errors at https://filippo.io/age/
+PASS B-pq-sealed-slip39-256: stock `age -d` unseals the recovery identity via its interactive passphrase prompt (pty) -- rc=0
+PASS B-pq-sealed-slip39-256: recovered identity matches the fingerprint printed on the card
+PASS B-pq-sealed-slip39-256: recovery identity alone decrypts all 10 photos, SHA-256 identical
+PASS B-pq-sealed-slip39-256: (expected) distro age 1.1.1 cannot decrypt PQ objects -- age: error: reading "/tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/D2-S2/work2/B-pq-sealed-slip39-256/recovered.key": failed to read "/tmp/claude-0/-home-user-reli
+PASS C1-classic-raw-slip39: re-encoded identity parses and matches the recovery recipient
+PASS C1-classic-raw-slip39: raw-identity SLIP-39 recovery decrypts all 10 photos (non-stock bech32 step needed)
+PASS C2-pq-raw-slip39: re-encoded identity parses and matches the recovery recipient
+PASS C2-pq-raw-slip39: raw-identity SLIP-39 recovery decrypts all 10 photos (non-stock bech32 step needed)
+PASS D1-classic-age-plugin-sss: holders 1+3 decrypt all 10 photos via age-plugin-sss after ingest key destroyed
+PASS D1-classic-age-plugin-sss: one holder alone cannot decrypt -- age: error: no identity matched any of the recipients
+age: report unexpected or unhelpful errors at https://filippo.io/age/report
+PASS D2-pq-age-plugin-sss: holders 1+3 decrypt all 10 photos via age-plugin-sss after ingest key destroyed
+PASS D2-pq-age-plugin-sss: one holder alone cannot decrypt -- age: error: no identity matched any of the recipients
+age: report unexpected or unhelpful errors at https://filippo.io/age/report
+rewrap inmem_classic_w4_1M: 1000000 in 97.0s = 10313/s; unwrap-only 28619/s; header 168->266 B; load 1.52 0.60 0.22 1/113 11715 -> 3.81 1.69 0.66 4/161 12771
+PASS rewrap inmem_classic_w4_1M: every pool object verified after rewrap
+rewrap inmem_classic_w1_100k_rep1: 100000 in 34.7s = 2882/s; unwrap-only 8511/s; header 168->266 B; load 3.81 1.69 0.66 1/160 12784 -> 2.62 1.63 0.68 2/117 12971
+PASS rewrap inmem_classic_w1_100k_rep1: every pool object verified after rewrap
+rewrap inmem_classic_w1_100k_rep2: 100000 in 34.2s = 2921/s; unwrap-only 8143/s; header 168->266 B; load 2.49 1.62 0.68 2/120 12981 -> 2.56 1.71 0.75 6/139 13412
+PASS rewrap inmem_classic_w1_100k_rep2: every pool object verified after rewrap
+rewrap inmem_classic_w1_100k_rep3: 100000 in 34.7s = 2882/s; unwrap-only 8598/s; header 168->266 B; load 2.56 1.71 0.75 7/140 13521 -> 2.97 1.92 0.85 1/132 14343
+PASS rewrap inmem_classic_w1_100k_rep3: every pool object verified after rewrap
+rewrap inmem_classic_w4_100k_rep1: 100000 in 9.7s = 10295/s; unwrap-only 24248/s; header 168->266 B; load 3.21 1.98 0.88 1/131 14350 -> 4.02 2.20 0.96 4/131 14462
+PASS rewrap inmem_classic_w4_100k_rep1: every pool object verified after rewrap
+rewrap inmem_classic_w4_100k_rep2: 100000 in 9.5s = 10546/s; unwrap-only 32867/s; header 168->266 B; load 4.02 2.20 0.96 1/131 14469 -> 4.63 2.39 1.04 1/132 14534
+PASS rewrap inmem_classic_w4_100k_rep2: every pool object verified after rewrap
+rewrap inmem_classic_w4_100k_rep3: 100000 in 8.7s = 11437/s; unwrap-only 33661/s; header 168->266 B; load 4.63 2.39 1.04 1/132 14550 -> 5.15 2.58 1.11 1/131 14556
+PASS rewrap inmem_classic_w4_100k_rep3: every pool object verified after rewrap
+rewrap inmem_pq_w4_1M: 1000000 in 186.0s = 5376/s; unwrap-only 9379/s; header 1627->3184 B; load 5.15 2.58 1.11 2/131 14565 -> 8.66 5.33 2.46 7/147 20854
+PASS rewrap inmem_pq_w4_1M: every pool object verified after rewrap
+rewrap inmem_pq_w1_100k_rep1: 100000 in 41.7s = 2400/s; unwrap-only 5386/s; header 1627->3184 B; load 8.61 5.37 2.49 8/147 20872 -> 7.50 5.54 2.68 7/147 22246
+PASS rewrap inmem_pq_w1_100k_rep1: every pool object verified after rewrap
+rewrap inmem_pq_w1_100k_rep2: 100000 in 41.1s = 2431/s; unwrap-only 5212/s; header 1627->3184 B; load 7.50 5.54 2.68 7/146 22283 -> 7.57 5.80 2.89 6/151 23217
+PASS rewrap inmem_pq_w1_100k_rep2: every pool object verified after rewrap
+rewrap inmem_pq_w1_100k_rep3: 100000 in 41.6s = 2407/s; unwrap-only 4622/s; header 1627->3184 B; load 7.53 5.82 2.92 6/147 23276 -> 6.96 5.91 3.09 6/149 23803
+PASS rewrap inmem_pq_w1_100k_rep3: every pool object verified after rewrap
+rewrap inmem_pq_w4_100k_rep1: 100000 in 24.6s = 4060/s; unwrap-only 10590/s; header 1627->3184 B; load 6.96 5.91 3.09 6/150 23830 -> 7.44 6.10 3.22 9/155 24267
+PASS rewrap inmem_pq_w4_100k_rep1: every pool object verified after rewrap
+rewrap inmem_pq_w4_100k_rep2: 100000 in 24.1s = 4153/s; unwrap-only 7974/s; header 1627->3184 B; load 7.44 6.10 3.22 6/155 24296 -> 8.27 6.43 3.43 9/153 24689
+PASS rewrap inmem_pq_w4_100k_rep2: every pool object verified after rewrap
+rewrap inmem_pq_w4_100k_rep3: 100000 in 23.1s = 4333/s; unwrap-only 7773/s; header 1627->3184 B; load 8.27 6.43 3.43 7/147 24727 -> 8.71 6.68 3.59 7/153 25061
+PASS rewrap inmem_pq_w4_100k_rep3: every pool object verified after rewrap
+file rewrap whole_object_rewrite: 500 x 1 MiB in 1.28s, wrote 524557000 B
+file rewrap header_sidecar_only: 500 x 1 MiB in 0.55s, wrote 133000 B
+PASS file rewrap: 10 sampled rewritten objects decrypt with the recovery key under age v1.3.1 and distro age 1.1.1 -- 10/10
+PASS file rewrap: payload bytes after the header are byte-identical -- 10/10
+throughput MiB/s (median of 3): {'encrypt': 697.0, 'decrypt': 464.2, 'reencrypt_pipe': 324.4, 'copy': 2050.9}; load 8.58 6.84 3.76 3/128 28822

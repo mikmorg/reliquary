@@ -1,0 +1,575 @@
+{
+ "started": "2026-10-06T16:30:04+0000",
+ "N": 200,
+ "scale": "0.1",
+ "variants": {
+  "x25519": {
+   "ingest_stderr": "ingest: 200 records committed, 176 new blobs, 196375916 plaintext bytes in 1.87s (104.8 MB/s)",
+   "acks": 200,
+   "verify_go_lib": {
+    "counts": {
+     "blob_decrypt_ok_archive": 176,
+     "blob_decrypt_ok_recovery": 176,
+     "blob_h0_mac_verifies_with_stored_file_key": 176,
+     "blob_ingest_key_refused": 176,
+     "blob_original_reconstructed_and_decrypts": 176,
+     "record_content_h0_matches_signed_header_mac": 176,
+     "record_original_bytes_reconstructed_meta_sha256_ok": 200,
+     "record_sig_ok": 200
+    },
+    "original_header_h0": "min 168 / max 168 bytes",
+    "stored_header": "min 266 / max 266 bytes"
+   },
+   "payload_identical": 176,
+   "payload_differs": 0,
+   "stored_header_bytes": [
+    266
+   ],
+   "original_header_bytes": [
+    168
+   ],
+   "blob_overhead_bytes": 99072,
+   "blob_overhead_pct": 0.0505,
+   "record_files_bytes": 174043,
+   "manifest_bytes": 227839,
+   "catalog_bytes": 4337312,
+   "independent_decryptors": {
+    "age-1.1.1-debian": {
+     "archive_ok": 176,
+     "archive_fail": 0,
+     "recovery_ok": 176,
+     "recovery_fail": 0,
+     "ingest_refused": 176,
+     "ingest_DECRYPTED": 0,
+     "records_ok": 200,
+     "records_fail": 0,
+     "errors": [],
+     "seconds": 5.47
+    },
+    "age-1.3.1-go": {
+     "archive_ok": 176,
+     "archive_fail": 0,
+     "recovery_ok": 176,
+     "recovery_fail": 0,
+     "ingest_refused": 176,
+     "ingest_DECRYPTED": 0,
+     "records_ok": 200,
+     "records_fail": 0,
+     "errors": [],
+     "seconds": 5.84
+    },
+    "rage-0.12.1-rust": {
+     "archive_ok": 176,
+     "archive_fail": 0,
+     "recovery_ok": 176,
+     "recovery_fail": 0,
+     "ingest_refused": 176,
+     "ingest_DECRYPTED": 0,
+     "records_ok": 200,
+     "records_fail": 0,
+     "errors": [],
+     "seconds": 3.79
+    }
+   },
+   "procedure": {
+    "age-1.1.1-debian": {
+     "all_rc": 0,
+     "all_out": "restored and verified 176 blobs",
+     "all_err": "",
+     "all_seconds": 3.11,
+     "all_byte_identical": 176,
+     "all_expected": 176,
+     "by_name": [
+      {
+       "size": 748526,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.522,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.023
+      },
+      {
+       "size": 1940507,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.581,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.027
+      },
+      {
+       "size": 8479286,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.642,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.066
+      }
+     ]
+    },
+    "age-1.3.1-go": {
+     "all_rc": 0,
+     "all_out": "restored and verified 176 blobs",
+     "all_err": "",
+     "all_seconds": 3.05,
+     "all_byte_identical": 176,
+     "all_expected": 176,
+     "by_name": [
+      {
+       "size": 748526,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.967,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.019
+      },
+      {
+       "size": 1940507,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.755,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.022
+      },
+      {
+       "size": 8479286,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.851,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.072
+      }
+     ]
+    },
+    "rage-0.12.1-rust": {
+     "all_rc": 0,
+     "all_out": "restored and verified 176 blobs",
+     "all_err": "",
+     "all_seconds": 2.4,
+     "all_byte_identical": 176,
+     "all_expected": 176,
+     "by_name": [
+      {
+       "size": 748526,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.404,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.028
+      },
+      {
+       "size": 1940507,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.358,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.023
+      },
+      {
+       "size": 8479286,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.267,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.059
+      }
+     ]
+    }
+   },
+   "get_by_sha256": [
+    {
+     "bytes": 15366349,
+     "seconds": 0.0412,
+     "ok": true
+    },
+    {
+     "bytes": 14957877,
+     "seconds": 0.0672,
+     "ok": true
+    },
+    {
+     "bytes": 14954156,
+     "seconds": 0.0428,
+     "ok": true
+    },
+    {
+     "bytes": 9656243,
+     "seconds": 0.0522,
+     "ok": true
+    },
+    {
+     "bytes": 9251863,
+     "seconds": 0.0298,
+     "ok": true
+    },
+    {
+     "bytes": 157702,
+     "seconds": 0.0013,
+     "ok": true
+    },
+    {
+     "bytes": 292393,
+     "seconds": 0.0011,
+     "ok": true
+    },
+    {
+     "bytes": 734652,
+     "seconds": 0.0029,
+     "ok": true
+    },
+    {
+     "bytes": 3942824,
+     "seconds": 0.0146,
+     "ok": true
+    },
+    {
+     "bytes": 202058,
+     "seconds": 0.0012,
+     "ok": true
+    },
+    {
+     "bytes": 39771,
+     "seconds": 0.0008,
+     "ok": true
+    },
+    {
+     "bytes": 449422,
+     "seconds": 0.0016,
+     "ok": true
+    },
+    {
+     "bytes": 65536,
+     "seconds": 0.0006,
+     "ok": true
+    },
+    {
+     "bytes": 25525,
+     "seconds": 0.0006,
+     "ok": true
+    },
+    {
+     "bytes": 34072,
+     "seconds": 0.0005,
+     "ok": true
+    },
+    {
+     "bytes": 721651,
+     "seconds": 0.003,
+     "ok": true
+    },
+    {
+     "bytes": 3501316,
+     "seconds": 0.0206,
+     "ok": true
+    },
+    {
+     "bytes": 720820,
+     "seconds": 0.0044,
+     "ok": true
+    },
+    {
+     "bytes": 12439,
+     "seconds": 0.0004,
+     "ok": true
+    },
+    {
+     "bytes": 813576,
+     "seconds": 0.0039,
+     "ok": true
+    }
+   ],
+   "empty_plaintext_dash_o_quirk": {
+    "age-1.1.1-debian": {
+     "rc": 0,
+     "output_file_created": false
+    },
+    "age-1.3.1-go": {
+     "rc": 0,
+     "output_file_created": true
+    },
+    "rage-0.12.1-rust": {
+     "rc": 0,
+     "output_file_created": false
+    }
+   }
+  },
+  "pq": {
+   "ingest_stderr": "ingest: 200 records committed, 176 new blobs, 196375916 plaintext bytes in 2.11s (92.9 MB/s)",
+   "acks": 200,
+   "verify_go_lib": {
+    "counts": {
+     "blob_decrypt_ok_archive": 176,
+     "blob_decrypt_ok_recovery": 176,
+     "blob_h0_mac_verifies_with_stored_file_key": 176,
+     "blob_ingest_key_refused": 176,
+     "blob_original_reconstructed_and_decrypts": 176,
+     "record_content_h0_matches_signed_header_mac": 176,
+     "record_original_bytes_reconstructed_meta_sha256_ok": 200,
+     "record_sig_ok": 200
+    },
+    "original_header_h0": "min 168 / max 168 bytes",
+    "stored_header": "min 3184 / max 3184 bytes"
+   },
+   "payload_identical": 176,
+   "payload_differs": 0,
+   "stored_header_bytes": [
+    3184
+   ],
+   "original_header_bytes": [
+    168
+   ],
+   "blob_overhead_bytes": 612640,
+   "blob_overhead_pct": 0.312,
+   "record_files_bytes": 757643,
+   "manifest_bytes": 228042,
+   "catalog_bytes": 4337312,
+   "independent_decryptors": {
+    "age-1.1.1-debian": {
+     "archive_ok": 0,
+     "archive_fail": 176,
+     "recovery_ok": 0,
+     "recovery_fail": 176,
+     "ingest_refused": 176,
+     "ingest_DECRYPTED": 0,
+     "records_ok": 0,
+     "records_fail": 200,
+     "errors": [
+      "age: error: reading \"/dev/shm/a6fmt/pq/keys/archive.key\": failed to read \"/dev/shm/a6fmt/pq/keys/archive.key\": error at line 1: unknown identity type\nage: report unexpected or unhelpful errors at http",
+      "age: error: reading \"/dev/shm/a6fmt/pq/keys/recovery.key\": failed to read \"/dev/shm/a6fmt/pq/keys/recovery.key\": error at line 1: unknown identity type\nage: report unexpected or unhelpful errors at ht",
+      "age: error: reading \"/dev/shm/a6fmt/pq/keys/archive.key\": failed to read \"/dev/shm/a6fmt/pq/keys/archive.key\": error at line 1: unknown identity type\nage: report unexpected or unhelpful errors at http"
+     ],
+     "seconds": 3.16
+    },
+    "age-1.3.1-go": {
+     "archive_ok": 176,
+     "archive_fail": 0,
+     "recovery_ok": 176,
+     "recovery_fail": 0,
+     "ingest_refused": 176,
+     "ingest_DECRYPTED": 0,
+     "records_ok": 200,
+     "records_fail": 0,
+     "errors": [],
+     "seconds": 4.8
+    },
+    "rage-0.12.1-rust": {
+     "archive_ok": 0,
+     "archive_fail": 176,
+     "recovery_ok": 0,
+     "recovery_fail": 176,
+     "ingest_refused": 176,
+     "ingest_DECRYPTED": 0,
+     "records_ok": 0,
+     "records_fail": 200,
+     "errors": [
+      "Error: identity file contains non-identity data on line 1\n\n[ Did rage not do what you expected? Could an error be more useful? ]\n[ Tell us: https://str4d.xyz/rage/report                            ]",
+      "Error: identity file contains non-identity data on line 1\n\n[ Did rage not do what you expected? Could an error be more useful? ]\n[ Tell us: https://str4d.xyz/rage/report                            ]",
+      "Error: identity file contains non-identity data on line 1\n\n[ Did rage not do what you expected? Could an error be more useful? ]\n[ Tell us: https://str4d.xyz/rage/report                            ]"
+     ],
+     "seconds": 1.87
+    }
+   },
+   "procedure": {
+    "age-1.1.1-debian": {
+     "all_rc": 1,
+     "all_out": "",
+     "all_err": "age: error: reading \"/dev/shm/a6fmt/pq/keys/archive.key\": failed to read \"/dev/shm/a6fmt/pq/keys/archive.key\": error at line 1: unknown identity type\nage: report unexpected or unhelpful errors at https://filippo.io/age/report",
+     "all_seconds": 0.02,
+     "all_byte_identical": 0,
+     "all_expected": 176,
+     "by_name": [
+      {
+       "size": 748526,
+       "no_catalog_ok": false,
+       "no_catalog_s": 0.014,
+       "with_sqlite3_catalog_ok": false,
+       "with_catalog_s": 0.015
+      },
+      {
+       "size": 1940507,
+       "no_catalog_ok": false,
+       "no_catalog_s": 0.012,
+       "with_sqlite3_catalog_ok": false,
+       "with_catalog_s": 0.014
+      },
+      {
+       "size": 8479286,
+       "no_catalog_ok": false,
+       "no_catalog_s": 0.016,
+       "with_sqlite3_catalog_ok": false,
+       "with_catalog_s": 0.021
+      }
+     ]
+    },
+    "age-1.3.1-go": {
+     "all_rc": 0,
+     "all_out": "restored and verified 176 blobs",
+     "all_err": "",
+     "all_seconds": 2.57,
+     "all_byte_identical": 176,
+     "all_expected": 176,
+     "by_name": [
+      {
+       "size": 748526,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.56,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.025
+      },
+      {
+       "size": 1940507,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.69,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.029
+      },
+      {
+       "size": 8479286,
+       "no_catalog_ok": true,
+       "no_catalog_s": 1.854,
+       "with_sqlite3_catalog_ok": true,
+       "with_catalog_s": 0.054
+      }
+     ]
+    },
+    "rage-0.12.1-rust": {
+     "all_rc": 1,
+     "all_out": "",
+     "all_err": "Error: identity file contains non-identity data on line 1\n\n[ Did rage not do what you expected? Could an error be more useful? ]\n[ Tell us: https://str4d.xyz/rage/report                            ]",
+     "all_seconds": 0.02,
+     "all_byte_identical": 0,
+     "all_expected": 176,
+     "by_name": [
+      {
+       "size": 748526,
+       "no_catalog_ok": false,
+       "no_catalog_s": 0.012,
+       "with_sqlite3_catalog_ok": false,
+       "with_catalog_s": 0.013
+      },
+      {
+       "size": 1940507,
+       "no_catalog_ok": false,
+       "no_catalog_s": 0.012,
+       "with_sqlite3_catalog_ok": false,
+       "with_catalog_s": 0.013
+      },
+      {
+       "size": 8479286,
+       "no_catalog_ok": false,
+       "no_catalog_s": 0.011,
+       "with_sqlite3_catalog_ok": false,
+       "with_catalog_s": 0.016
+      }
+     ]
+    }
+   },
+   "get_by_sha256": [
+    {
+     "bytes": 15366349,
+     "seconds": 0.0585,
+     "ok": true
+    },
+    {
+     "bytes": 14957877,
+     "seconds": 0.0503,
+     "ok": true
+    },
+    {
+     "bytes": 14954156,
+     "seconds": 0.0644,
+     "ok": true
+    },
+    {
+     "bytes": 9656243,
+     "seconds": 0.0454,
+     "ok": true
+    },
+    {
+     "bytes": 9251863,
+     "seconds": 0.0442,
+     "ok": true
+    },
+    {
+     "bytes": 157702,
+     "seconds": 0.0018,
+     "ok": true
+    },
+    {
+     "bytes": 292393,
+     "seconds": 0.0019,
+     "ok": true
+    },
+    {
+     "bytes": 734652,
+     "seconds": 0.0052,
+     "ok": true
+    },
+    {
+     "bytes": 3942824,
+     "seconds": 0.0273,
+     "ok": true
+    },
+    {
+     "bytes": 202058,
+     "seconds": 0.0019,
+     "ok": true
+    },
+    {
+     "bytes": 39771,
+     "seconds": 0.0008,
+     "ok": true
+    },
+    {
+     "bytes": 449422,
+     "seconds": 0.0022,
+     "ok": true
+    },
+    {
+     "bytes": 65536,
+     "seconds": 0.0009,
+     "ok": true
+    },
+    {
+     "bytes": 25525,
+     "seconds": 0.0006,
+     "ok": true
+    },
+    {
+     "bytes": 34072,
+     "seconds": 0.0009,
+     "ok": true
+    },
+    {
+     "bytes": 721651,
+     "seconds": 0.0052,
+     "ok": true
+    },
+    {
+     "bytes": 3501316,
+     "seconds": 0.0117,
+     "ok": true
+    },
+    {
+     "bytes": 720820,
+     "seconds": 0.0041,
+     "ok": true
+    },
+    {
+     "bytes": 12439,
+     "seconds": 0.0006,
+     "ok": true
+    },
+    {
+     "bytes": 813576,
+     "seconds": 0.0045,
+     "ok": true
+    }
+   ],
+   "empty_plaintext_dash_o_quirk": {
+    "age-1.1.1-debian": {
+     "rc": 1,
+     "output_file_created": false
+    },
+    "age-1.3.1-go": {
+     "rc": 0,
+     "output_file_created": true
+    },
+    "rage-0.12.1-rust": {
+     "rc": 1,
+     "output_file_created": false
+    }
+   }
+  }
+ }
+}

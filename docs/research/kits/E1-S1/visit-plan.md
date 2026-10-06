@@ -1,7 +1,8 @@
 # E1 schedule and visit running order
 
-This is E1's proposal. E2 owns the consolidated family test plan, and it will fold this running
-order into it together with the other FM tests. The weeks are counted from "go", as in the E1
+This is E1's **input to E2**, not the plan. E2 owns the consolidated family test plan and will
+fold this proposed running order into it together with the other FM tests; where E2's plan
+differs, E2's plan wins. The weeks are counted from "go", as in the E1
 note §7 and H5 (L26, L27). Nothing here has been scheduled with the family yet.
 
 ## Schedule
@@ -32,11 +33,22 @@ primed by the prototype tests.
 | 5 | E1-S2b re-read of the phone's storage screens | 5–10 | `E1-S2/README.md` |
 | 6 | Interview sections 6–8: admin access, exclusions, help network, accessibility. The owner leaves the room if a facilitator runs it. | 10–15 | `E1-S3/interview-guide.md` |
 | 7 | E2 and E5 observed tasks (installing an app, QR code, typing a code, prototypes), run by their own kits | per E2 | E2 test plan |
-| 8 | Thanks. Say what happens next. Offer a copy of their own census totals. | 5 | — |
+| 8 | **Debrief** (interview guide, "Debrief"): what the check showed, any single-copy keepsakes, the E2-S3 stopgap offered or booked. Thanks; what happens next; offer a printed copy of their own census summary. | 5–10 | `E1-S3/interview-guide.md` |
 
-**Break rule:** offer a break after part 3, and stop at any sign of fatigue. For older relatives,
-split the visit over two short sittings rather than rushing. E2 decides how that affects the other
-tests.
+**Break rule:** offer a break after part 3, and stop at any sign of fatigue.
+
+**Length cap (proposal, unmeasured):** about 90 minutes of E1 parts plus E2/E5 tasks may come to
+2–3 hours, which is likely too long for older relatives. Proposed cap: about 60–75 minutes per
+sitting, checked at the week-3 pilot visit (record the real duration). When a visit must be split:
+
+- **Sitting 1:** parts 1–6 (all of E1). These must come before any prototype, so they stay
+  together.
+- **Sitting 2:** part 7 (E2/E5 observed tasks), then the debrief (part 8). Nothing in E1 primes
+  these tasks beyond what the interview already does, but E2 decides whether a gap of days
+  matters for its tests.
+
+Fallback for relatives who cannot be visited (H5 L26): a video-call interview and a relative
+running the census from a printed guide.
 
 ## What the owner brings
 

@@ -1,0 +1,86 @@
+{"vector":"header_crlf","expect":"header failure","got":"error","result":"pass","error":"InvalidVersionException: Version line is not correct: age-encryption.org/v1"}
+{"vector":"hmac_bad","expect":"HMAC failure","got":"error","result":"pass","error":"IncorrectHMACException: bad header MAC"}
+{"vector":"hmac_extra_space","expect":"header failure","got":"error","result":"pass","error":"InvalidFooterException: Footer line does not contain MAC"}
+{"vector":"hmac_garbage","expect":"header failure","got":"error","result":"pass","error":"InvalidHMACHeaderException: invalid header mac"}
+{"vector":"hmac_missing","expect":"header failure","got":"error","result":"pass","error":"InvalidFooterException: Footer line does not contain MAC"}
+{"vector":"hmac_no_space","expect":"header failure","got":"error","result":"pass","error":"InvalidFooterException: Footer line does not start with '---': ---WyJp9F/9FOZh7gJdheq2WIJcwHgYc8NIVh3ddwhrcNg"}
+{"vector":"hmac_not_canonical","expect":"header failure","got":"error","result":"pass","error":"InvalidBase64StringException: null"}
+{"vector":"hmac_trailing_space","expect":"header failure","got":"error","result":"pass","error":"InvalidFooterException: Footer line does not contain MAC"}
+{"vector":"hmac_truncated","expect":"header failure","got":"error","result":"pass","error":"InvalidHMACHeaderException: invalid header mac"}
+{"vector":"hybrid","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_and_x25519","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_bad_tag","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"hybrid_currupted_enc_mlkem","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"hybrid_currupted_enc_x25519","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"hybrid_extra_argument","expect":"header failure","got":"error","result":"pass","error":"MlKem768X25519IdentityException: invalid mlkem768x25519 recipient block"}
+{"vector":"hybrid_grease","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_identity","expect":"header failure","got":"error","result":"pass","error":"X25519LowOrderPointException: Low order point"}
+{"vector":"hybrid_long_file_key","expect":"header failure","got":"error","result":"pass","error":"IncorrectCipherTextSizeException: Incorrect cipher text size"}
+{"vector":"hybrid_long_share","expect":"header failure","got":"error","result":"pass","error":"MlKem768X25519IdentityException: invalid mlkem768x25519 recipient block"}
+{"vector":"hybrid_low_order","expect":"header failure","got":"error","result":"pass","error":"X25519LowOrderPointException: Low order point"}
+{"vector":"hybrid_multiple_recipients","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"hybrid_no_match","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"hybrid_not_canonical_body","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: error occurred while decoding"}
+{"vector":"hybrid_not_canonical_enc","expect":"header failure","got":"error","result":"pass","error":"MlKem768X25519IdentityException: invalid mlkem768x25519 recipient block"}
+{"vector":"hybrid_short_share","expect":"header failure","got":"error","result":"pass","error":"MlKem768X25519IdentityException: invalid mlkem768x25519 recipient block"}
+{"vector":"hybrid_uppercase","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"hybrid_x25519_arg","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: invalid x25519 recipient block"}
+{"vector":"scrypt_and_x25519","expect":"header failure","got":"error","result":"pass","error":"ScryptIdentityException: an scrypt identity must be the only one"}
+{"vector":"stanza_bad_start","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: Unexpected line found: -- stanza"}
+{"vector":"stanza_base64_padding","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: error occurred while decoding"}
+{"vector":"stanza_empty_argument","expect":"header failure","got":"error","result":"pass","error":"InvalidArbitraryStringException: Arbitrary string should not be empty"}
+{"vector":"stanza_empty_body","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stanza_empty_last_line","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stanza_invalid_character","expect":"header failure","got":"error","result":"pass","error":"InvalidArbitraryStringException: Argument: '?' is not a valid arbitrary string"}
+{"vector":"stanza_long_line","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: Body line is too long: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}
+{"vector":"stanza_missing_body","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: Encountered the footer while parsing the current stanza"}
+{"vector":"stanza_missing_final_line","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: Encountered the footer while parsing the current stanza"}
+{"vector":"stanza_multiple_short_lines","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: Unexpected line found: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}
+{"vector":"stanza_no_arguments","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: Recipient line does not contain any type: ->"}
+{"vector":"stanza_not_canonical","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: error occurred while decoding"}
+{"vector":"stanza_spurious_cr","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: error occurred while decoding"}
+{"vector":"stanza_valid_characters","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_257_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_257_chunks_full","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_258_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_bad_tag","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_bad_tag_second_chunk","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_bad_tag_second_chunk_full","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_empty_payload","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_last_chunk_empty","expect":"payload failure","got":"error","result":"pass","error":"StreamException: last chunk is empty"}
+{"vector":"stream_last_chunk_full","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_last_chunk_full_second","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_missing_tag","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_no_chunks","expect":"payload failure","got":"error","result":"pass","error":"StreamException: Unexpected EOF. File ended without a marked chunk"}
+{"vector":"stream_no_final","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_no_final_full","expect":"payload failure","got":"error","result":"pass","error":"StreamException: Unexpected EOF. File ended without a marked chunk"}
+{"vector":"stream_no_final_two_chunks","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_no_final_two_chunks_full","expect":"payload failure","got":"error","result":"pass","error":"StreamException: Unexpected EOF. File ended without a marked chunk"}
+{"vector":"stream_no_nonce","expect":"header failure","got":"error","result":"pass","error":"InvalidNonceException: could not read payload nonce: stream truncated"}
+{"vector":"stream_short_chunk","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_short_nonce","expect":"header failure","got":"error","result":"pass","error":"InvalidNonceException: could not read payload nonce: stream truncated"}
+{"vector":"stream_short_second_chunk","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"stream_three_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_trailing_garbage_long","expect":"payload failure","got":"error","result":"pass","error":"StreamException: trailing data after end of encrypted file"}
+{"vector":"stream_trailing_garbage_short","expect":"payload failure","got":"error","result":"pass","error":"StreamException: trailing data after end of encrypted file"}
+{"vector":"stream_two_chunks","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"stream_two_final_chunks","expect":"payload failure","got":"error","result":"pass","error":"StreamException: trailing data after end of encrypted file"}
+{"vector":"stream_two_final_chunks_full","expect":"payload failure","got":"error","result":"pass","error":"StreamException: trailing data after end of encrypted file"}
+{"vector":"stream_two_final_chunks_second","expect":"payload failure","got":"error","result":"pass","error":"StreamException: trailing data after end of encrypted file"}
+{"vector":"stream_two_final_chunks_short","expect":"payload failure","got":"error","result":"pass","error":"StreamException: error occurred while decrypting stream"}
+{"vector":"version_unsupported","expect":"header failure","got":"error","result":"pass","error":"InvalidVersionException: Version line is not correct: age-encryption.org/v1234"}
+{"vector":"x25519","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"x25519_bad_tag","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"x25519_extra_argument","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: invalid x25519 recipient block"}
+{"vector":"x25519_grease","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"x25519_identity","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: Error occurred while unwrapping stanza"}
+{"vector":"x25519_long_file_key","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: Error occurred while unwrapping stanza"}
+{"vector":"x25519_long_share","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: invalid x25519 recipient block"}
+{"vector":"x25519_low_order","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: Error occurred while unwrapping stanza"}
+{"vector":"x25519_lowercase","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"x25519_multiple_recipients","expect":"success","got":"success","result":"pass","error":null}
+{"vector":"x25519_no_match","expect":"no match","got":"error","result":"pass","error":"IncorrectIdentityException: incorrect identity for recipient block"}
+{"vector":"x25519_not_canonical_body","expect":"header failure","got":"error","result":"pass","error":"InvalidRecipientException: error occurred while decoding"}
+{"vector":"x25519_not_canonical_share","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: Error occurred while unwrapping stanza"}
+{"vector":"x25519_short_share","expect":"header failure","got":"error","result":"pass","error":"X25519IdentityException: invalid x25519 recipient block"}
+{"summary":{"pass":85,"fail":0,"na":62,"failed":""}}

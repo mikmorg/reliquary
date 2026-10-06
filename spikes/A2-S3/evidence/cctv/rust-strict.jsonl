@@ -1,0 +1,148 @@
+{"expect":"armor failure","result":"n/a","vector":"armor_cr_between_padding","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_cr_in_body","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_cr_line_start","why":"armor not in profile"}
+{"expect":"success","result":"n/a","vector":"armor_crlf","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_double_crlf","why":"armor not in profile"}
+{"expect":"header failure","result":"n/a","vector":"armor_empty","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_empty_last_line","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_empty_line_begin","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_empty_line_end","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_eol_between_padding","why":"armor not in profile"}
+{"expect":"success","result":"n/a","vector":"armor_full_last_line","why":"armor not in profile"}
+{"expect":"payload failure","result":"n/a","vector":"armor_garbage_encoded","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_garbage_leading","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_garbage_trailing","why":"armor not in profile"}
+{"expect":"header failure","result":"n/a","vector":"armor_header_crlf","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_headers","why":"armor not in profile"}
+{"expect":"success","result":"n/a","vector":"armor_hybrid","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_invalid_character_header","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_invalid_character_payload","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_long_line","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_lowercase","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_no_end_line","why":"armor not in profile"}
+{"expect":"success","result":"n/a","vector":"armor_no_eol","why":"armor not in profile"}
+{"expect":"no match","result":"n/a","vector":"armor_no_match","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_no_padding","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_not_canonical","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_pgp_checksum","why":"armor not in profile"}
+{"expect":"success","result":"n/a","vector":"armor_scrypt","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_short_line","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_whitespace_begin","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_whitespace_end","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_whitespace_eol","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_whitespace_last_line","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_whitespace_line_start","why":"armor not in profile"}
+{"expect":"success","result":"n/a","vector":"armor_whitespace_outside","why":"armor not in profile"}
+{"expect":"armor failure","result":"n/a","vector":"armor_wrong_type","why":"armor not in profile"}
+{"expect":"success","result":"n/a","vector":"armor_x25519","why":"armor not in profile"}
+{"expect":"header failure","result":"n/a","vector":"empty","why":"passphrase-only (scrypt not in profile)"}
+{"error":"header failure: unsupported version","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"header_crlf"}
+{"error":"bad header MAC","expect":"HMAC failure","got":"HMAC failure","note":"","result":"pass","vector":"hmac_bad"}
+{"error":"header failure: MAC: base64: Invalid symbol 32, offset 0.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hmac_extra_space"}
+{"error":"header failure: MAC length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hmac_garbage"}
+{"error":"header failure: MAC length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hmac_missing"}
+{"error":"header failure: unexpected line in header","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hmac_no_space"}
+{"error":"header failure: MAC: base64: Invalid last symbol 104, offset 42.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hmac_not_canonical"}
+{"error":"header failure: MAC: base64: Invalid symbol 32, offset 43.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hmac_trailing_space"}
+{"error":"header failure: MAC length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hmac_truncated"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"hybrid"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"hybrid_and_x25519"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"hybrid_bad_tag"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"hybrid_currupted_enc_mlkem"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"hybrid_currupted_enc_x25519"}
+{"error":"header failure: invalid mlkem768x25519 stanza arguments","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_extra_argument"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"hybrid_grease"}
+{"error":"header failure: mlkem768x25519 X25519 share is low-order (all-zero shared secret)","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_identity"}
+{"error":"header failure: mlkem768x25519 stanza body length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_long_file_key"}
+{"error":"header failure: mlkem768x25519 enc length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_long_share"}
+{"error":"header failure: mlkem768x25519 X25519 share is low-order (all-zero shared secret)","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_low_order"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"hybrid_multiple_recipients"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"hybrid_no_match"}
+{"error":"header failure: stanza body: base64: Invalid last symbol 100, offset 42.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_not_canonical_body"}
+{"error":"header failure: mlkem768x25519 enc: base64: Invalid last symbol 120, offset 1493.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_not_canonical_enc"}
+{"error":"header failure: mlkem768x25519 enc length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_short_share"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"hybrid_uppercase"}
+{"error":"header failure: X25519 share length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"hybrid_x25519_arg"}
+{"expect":"success","result":"n/a","vector":"scrypt","why":"passphrase-only (scrypt not in profile)"}
+{"error":"header failure: an scrypt stanza must be the only stanza","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"scrypt_and_x25519"}
+{"expect":"no match","result":"n/a","vector":"scrypt_bad_tag","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_double","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_extra_argument","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_long_file_key","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"no match","result":"n/a","vector":"scrypt_no_match","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_not_canonical_body","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_not_canonical_salt","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_salt_long","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_salt_missing","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_salt_short","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"no match","result":"n/a","vector":"scrypt_uppercase","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_23","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_hex","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_leading_garbage","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_leading_plus","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_leading_zero_decimal","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_leading_zero_octal","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_missing","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_negative","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_overflow","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_trailing_garbage","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"no match","result":"n/a","vector":"scrypt_work_factor_wrong","why":"passphrase-only (scrypt not in profile)"}
+{"expect":"header failure","result":"n/a","vector":"scrypt_work_factor_zero","why":"passphrase-only (scrypt not in profile)"}
+{"error":"header failure: unexpected line in header","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_bad_start"}
+{"error":"header failure: stanza body: base64: Invalid padding","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_base64_padding"}
+{"error":"header failure: invalid stanza argument","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_empty_argument"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stanza_empty_body"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stanza_empty_last_line"}
+{"error":"header failure: header is not ASCII","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_invalid_character"}
+{"error":"header failure: stanza body line too long","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_long_line"}
+{"error":"header failure: stanza body: base64: Invalid symbol 45, offset 0.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_missing_body"}
+{"error":"header failure: stanza body: base64: Invalid symbol 45, offset 0.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_missing_final_line"}
+{"error":"header failure: unexpected line in header","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_multiple_short_lines"}
+{"error":"header failure: unexpected line in header","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_no_arguments"}
+{"error":"header failure: stanza body: base64: Invalid last symbol 70, offset 2.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_not_canonical"}
+{"error":"header failure: stanza body: base64: Invalid symbol 13, offset 32.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stanza_spurious_cr"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stanza_valid_characters"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_257_chunks"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_257_chunks_full"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_258_chunks"}
+{"error":"payload failure: chunk authentication failed","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_bad_tag"}
+{"error":"payload failure: chunk authentication failed","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_bad_tag_second_chunk"}
+{"error":"payload failure: chunk authentication failed","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_bad_tag_second_chunk_full"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_empty_payload"}
+{"error":"payload failure: final chunk is empty","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_last_chunk_empty"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_last_chunk_full"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_last_chunk_full_second"}
+{"error":"payload failure: chunk shorter than a tag","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_missing_tag"}
+{"error":"payload failure: no chunks","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_no_chunks"}
+{"error":"payload failure: chunk authentication failed","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_no_final"}
+{"error":"payload failure: missing final chunk (truncated at a chunk boundary)","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_no_final_full"}
+{"error":"payload failure: chunk authentication failed","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_no_final_two_chunks"}
+{"error":"payload failure: missing final chunk (truncated at a chunk boundary)","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_no_final_two_chunks_full"}
+{"error":"header failure: missing or short payload nonce","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stream_no_nonce"}
+{"error":"payload failure: chunk shorter than a tag","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_short_chunk"}
+{"error":"header failure: missing or short payload nonce","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"stream_short_nonce"}
+{"error":"payload failure: chunk shorter than a tag","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_short_second_chunk"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_three_chunks"}
+{"error":"payload failure: trailing data after the final chunk","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_trailing_garbage_long"}
+{"error":"payload failure: trailing data after the final chunk","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_trailing_garbage_short"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"stream_two_chunks"}
+{"error":"payload failure: trailing data after the final chunk","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_two_final_chunks"}
+{"error":"payload failure: trailing data after the final chunk","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_two_final_chunks_full"}
+{"error":"payload failure: trailing data after the final chunk","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_two_final_chunks_second"}
+{"error":"payload failure: chunk authentication failed","expect":"payload failure","got":"payload failure","note":"","result":"pass","vector":"stream_two_final_chunks_short"}
+{"error":"header failure: unsupported version","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"version_unsupported"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"x25519"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"x25519_bad_tag"}
+{"error":"header failure: invalid X25519 stanza arguments","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_extra_argument"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"x25519_grease"}
+{"error":"header failure: X25519 low-order share (all-zero shared secret)","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_identity"}
+{"error":"header failure: X25519 stanza body length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_long_file_key"}
+{"error":"header failure: X25519 share length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_long_share"}
+{"error":"header failure: X25519 low-order share (all-zero shared secret)","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_low_order"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"x25519_lowercase"}
+{"error":null,"expect":"success","got":"success","note":"","result":"pass","vector":"x25519_multiple_recipients"}
+{"error":"no identity matched any of the recipients","expect":"no match","got":"no match","note":"","result":"pass","vector":"x25519_no_match"}
+{"error":"header failure: stanza body: base64: Invalid last symbol 70, offset 42.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_not_canonical_body"}
+{"error":"header failure: X25519 share: base64: Invalid last symbol 100, offset 42.","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_not_canonical_share"}
+{"error":"header failure: X25519 share length","expect":"header failure","got":"header failure","note":"","result":"pass","vector":"x25519_short_share"}
+{"summary":{"fail":0,"failed":[],"n/a":62,"pass":85,"strict_low_order":true,"total":147}}

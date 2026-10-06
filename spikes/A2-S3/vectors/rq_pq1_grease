@@ -1,0 +1,15 @@
+expect: success
+payload: c5a359521f8cf4d30d425ed7927e17baf4f8481ab7cfaafca6132bfa58839452
+file key: 6b0350c477c0d88d9ffa976fcfc34bc5
+identity: AGE-SECRET-KEY-PQ-1XYYAMMZERU3362F83MHKJMY2HFFFZT06AVWAFEVSA9LFRKYU7EKQFRSN4L
+comment: extra unknown stanza: valid age, not in the Reliquary profile (ingest: E_PROFILE)
+comment: seed=810c627f7c10eb1826ccb1fc9e4816f30066936ca75e7afc44813d17880effe2 context=900d8cef3fd6065053c4b622dc14cd87e2fb207f6f4c5ec2cfd2cd48aafdfda0 (Reliquary encoder, hedged HKDF labels reliquary/v1/hedge/*)
+
+age-encryption.org/v1
+-> mlkem768x25519 XLO9i9Ch/iWfzNzIO34yot7rfbVreh+m+FB1KcP49u1nlf5/ayCSubvFGdX49DaEtMcYRwU6SgePyXFPgYNbYxNpCR7V1WT0ykGXWcxqYgbNCJUwhyoK6Gl0q9Ax+MC9Jq01ETpc8BPgHhDL3AuWfqJjV6Kt9PEP1yg+Y2fh/N6jPDPe78V62khnhKnIe9IFbUjR7WG7DwnjE5kvuPlITZwCX4t23ZDpnVtCooaB/mjFmfXAwD4gKECVtI49NWPqjNwYd7nSamP1zwqVB08EJXXf1BHa0RNZbk3Tr94xOYOPWVyc6hFlqL+zTiAxHPxZw077R1yL5o1cAiI0lRR0uL165ORXoQJxNpIO7dalJTX7xzToozFm8EqsKsWpmgY6se5wZCXlihrpqvIdIW/QDmaSmSJudbB3WRg2tBpb2HumjfuJbdHUDY/DRXnkw23KA9jgojTHobIK4kcaHQNgP3JuPJ4n+3QxEXZ6TTqNCnzwWUpi7mnU+e+56en9mI8nGV+vrISBcqyJ8riTHnfJOLytfMiqgXUBp+0wPyv+2SSpKDmJl5A0OoytkLLdc+kU/rf3/faBfZJX904rlS3aXg+adX/+xdNbNTQnn8OrGUmirxihZl6i8CYciuYe4AWsvuJLrobBHDA2NKlK3l0bztWYzxw4MdNN60CLr6936nVG+2YllGCtoba6DofpuGX+pbP3v+0OmSc6y2rYVXRd11EqLlfvSb9T4qj6CdiTdAOEr20XbzsL3NMpN8nvm7oG2h5lzI/oC/4y3qc0tj9gJJdD2Ud2SUIQZk8CHBO/Z1ySwGSb97t8N23ZRJ+p/GJm2eQpgwqfdCmELsqMnmMqWFDh8iw3QE2jZV9rSdO80NNUiGEUM90fePNuovLWKTAEWsELHaoI8ZG/nFkp3ITRy4QSJMqSNhb8l2C+PPUQ5F7I1nNooZlglqNwimglt1vza5V0bWldQ8sxFkkGkNDC4uTwX08pCxmHzCvnYXiyNrgw3R55YVt7HIUx+7MrwWIzFuwBHviwTRqUojsh+i504uW2h0/M3iUmmo5Nk144TR917PCXfXJ3pXs/DWQ9gjKSJFjmn9qsnvnxho3QOGn4Q5IQRhzt8cZFvjSBc9nRIMhEYtURcBff5bQ0mWT5EjyHIx7Qo8yi1iwOfQoJgD98T7qbT691UqCXxEjwPb0doDQp4jBFWZhEYJyguTgpzT/ZKuMQ548aXQipVB1PcwsqzCyn7JnQi1jIeWQZiix2UEOhOzu4hMuFfpNkSb5nxk3d3A9n6MaTAJh1ntBM9YBREl6g6l46SkT+QdmmrummNFnpJUw7JjovkJ/R0HRa/fBU5/W9WJ8zV0lr4BhgLHYraNOH5i7u8AwX/bGjkXscUiZqZhJTUQNjKBNK3D/Y4ZkFRWxc9RBGQ/ztXIzhKYZEbHBUmcoAiKJkgKh2UIREwS9Bs3zyn+oPAEAjDHFhea2htYuMBN5DrnK5PvSi65ENBA
+e29w5glstl2sGhQH1qN2kIBPd2CpYbvEf8ggjqhxLL4
+-> reliquary-grease x
+QkJCQkJCQg
+--- g+mliq2OGGltVi4iTdEBAg51vatVssTZSgcSsedRscc
+¯”Jî-D¬kwÓÁNc«¿á`=·#BK«ô™,ëcœh{i½¯Ó8>•¿
+Ëxß#6ìW’ïæS×S›0=éAÇüM+A”™Á>´Âæz©oÈž<%róg¯8ÕÌÛ‘âÀ=ðCÅÊÀ½Ã(sån%ßúº¼[C~zŸNÙ¦GÞ¦òBOA¹;#ìÈð¾Ñ¦ÞÍRû®˜†±¨=˜9•úlOâ1Û5(‚•¯¬ña’XkeW[d¿o¬¼tÏù¥b•½9nÆ£ìcédNºÏjÈWM¶yTˆÙˆÌE¦è
