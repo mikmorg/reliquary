@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>org.reliquary.b7s1probe.helper</string>
+  <!-- Relative to the app bundle; used by SMAppService-registered agents. -->
+  <key>BundleProgram</key><string>Contents/MacOS/ReliquaryProbe</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>Contents/MacOS/ReliquaryProbe</string>
+    <string>--helper</string>
+  </array>
+  <!-- Apple DTS: add this if TCC does not attribute the agent to its app (research note C11). -->
+  <key>AssociatedBundleIdentifiers</key>
+  <array><string>org.reliquary.b7s1probe</string></array>
+  <key>RunAtLoad</key><true/>
+  <key>ProcessType</key><string>Background</string>
+</dict>
+</plist>

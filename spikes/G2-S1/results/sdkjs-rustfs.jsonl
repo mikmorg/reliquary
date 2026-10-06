@@ -1,0 +1,7 @@
+{"id":"S1","title":"PutObject 4 KiB Buffer, SDK defaults","ok":true,"ms":160,"roundtrip":true}
+{"id":"S2","title":"PutObject 6 MiB Buffer, SDK defaults (includes the SDK expect-continue middleware)","ok":true,"ms":360,"roundtrip":true}
+{"id":"S3","title":"PutObject stream body with ContentLength, SDK default checksum setting (wire encoding not captured)","ok":true,"ms":39,"roundtrip":true}
+{"id":"S4","title":"Same as S3 with requestChecksumCalculation WHEN_REQUIRED","ok":true,"ms":24,"roundtrip":true}
+{"id":"S5","title":"Same as S2 with the expect-continue middleware removed","ok":true,"ms":415,"roundtrip":true}
+{"id":"S6","title":"getSignedUrl PutObject + UploadPart (path-prefixed endpoint), fetch() upload, SDK Complete","ok":true,"ms":413,"put_status":200,"url_path_prefix_kept":"/staging/sdk/mumixrvt/s6","mpu_roundtrip":true}
+{"id":"S7","title":"PutObject IfNoneMatch '*' via SDK on existing key","ok":true,"ms":11,"status":412,"code":"PreconditionFailed"}

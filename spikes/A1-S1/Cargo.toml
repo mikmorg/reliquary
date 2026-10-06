@@ -1,0 +1,32 @@
+[package]
+name = "a1-hashbench"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+# THROWAWAY spike code (Reliquary A1-S1). Not production code.
+
+[dependencies]
+sha2 = "=0.11.0"
+hmac = "=0.13.0"
+blake3 = { version = "=1.8.7", features = ["rayon"] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[features]
+# "pure" = BLAKE3 without C/asm, but it still uses Rust SIMD intrinsics.
+blake3-pure = ["blake3/pure"]
+# No SIMD at all: BLAKE3's portable scalar code (a stand-in for "no usable SIMD", x86 only).
+blake3-portable = ["blake3/pure", "blake3/no_sse2", "blake3/no_sse41", "blake3/no_avx2", "blake3/no_avx512"]
+blake3-no-avx512 = ["blake3/no_avx512"]
+blake3-sse41-only = ["blake3/no_avx512", "blake3/no_avx2"]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+debug = false
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(sha2_backend, values("soft"))', 'cfg(sha2_256_backend, values("soft"))'] }

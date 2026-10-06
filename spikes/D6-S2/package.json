@@ -1,0 +1,6 @@
+{
+  "name": "d6-s2-log-audit-spike",
+  "private": true,
+  "description": "THROWAWAY D6-S2 log-audit probe (emulated run + real-sandbox kit). See README.md.",
+  "devDependencies": { "wrangler": "4.143.0" }
+}

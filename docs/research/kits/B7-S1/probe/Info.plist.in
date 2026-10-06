@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleDevelopmentRegion</key><string>en</string>
+  <key>CFBundleExecutable</key><string>ReliquaryProbe</string>
+  <key>CFBundleIdentifier</key><string>org.reliquary.b7s1probe</string>
+  <key>CFBundleName</key><string>ReliquaryProbe</string>
+  <key>CFBundleDisplayName</key><string>Reliquary Probe</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleShortVersionString</key><string>@VERSION@</string>
+  <key>CFBundleVersion</key><string>@VERSION@</string>
+  <key>LSMinimumSystemVersion</key><string>13.0</string>
+  <key>NSPhotoLibraryUsageDescription</key><string>B7-S1 test: checks whether Photos access survives an update.</string>
+  <key>NSDesktopFolderUsageDescription</key><string>B7-S1 test: checks whether Desktop access survives an update.</string>
+  <key>NSDocumentsFolderUsageDescription</key><string>B7-S1 test: checks whether Documents access survives an update.</string>
+  <key>NSDownloadsFolderUsageDescription</key><string>B7-S1 test: checks whether Downloads access survives an update.</string>
+  <key>NSRemovableVolumesUsageDescription</key><string>B7-S1 test: checks whether USB-drive access survives an update.</string>
+</dict>
+</plist>

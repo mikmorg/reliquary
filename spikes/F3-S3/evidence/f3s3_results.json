@@ -1,0 +1,1054 @@
+{
+ "snapshot_sha256_16": {
+  "/home/user/reliquary/docs/research/f3-security-literature.md": "9b0eb5f457087d8b",
+  "/home/user/reliquary/docs/research/d1-threat-model.md": "b9a1b7d0d2779bac"
+ },
+ "matrix_rows_found": [
+  "M-01",
+  "M-02",
+  "M-03",
+  "M-04",
+  "M-05",
+  "M-06",
+  "M-07",
+  "M-08",
+  "M-09",
+  "M-10",
+  "M-11",
+  "M-12",
+  "M-13",
+  "M-14",
+  "M-15",
+  "M-16",
+  "M-17",
+  "M-18",
+  "M-19",
+  "M-20",
+  "M-21",
+  "M-22",
+  "M-23",
+  "M-24",
+  "M-25"
+ ],
+ "n_attacks": 65,
+ "tally": {
+  "MAPPED": 36,
+  "D1-ONLY": 7,
+  "MAPPED-OPEN": 8,
+  "UNMAPPED": 14
+ },
+ "verdict": "FAIL",
+ "attacks": [
+  {
+   "id": "RT-01",
+   "clause": "\u00a71 commit status",
+   "attacker": "AP2",
+   "attack": "Cloud reports \"committed\" for an object the homelab never saw",
+   "refs": [
+    "M-10",
+    "SR-05"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-10": "mitigated",
+    "SR-05": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-02",
+   "clause": "\u00a71 queue retention / staging",
+   "attacker": "AP2",
+   "attack": "Cloud deletes staged objects before pull, or drops queue messages past retention",
+   "refs": [
+    "M-10",
+    "SR-12",
+    "AR-04"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-10": "mitigated",
+    "SR-12": "mitigated",
+    "AR-04": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-03",
+   "clause": "\u00a71 queue",
+   "attacker": "AP2",
+   "attack": "Forged or replayed object-created events",
+   "refs": [
+    "M-09",
+    "SR-12"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-09": "mitigated",
+    "SR-12": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-04",
+   "clause": "\u00a71 reconcile by listing",
+   "attacker": "AP2",
+   "attack": "Cloud hides or invents pending entries in the reconciliation listing",
+   "refs": [
+    "M-09",
+    "M-10",
+    "SR-13"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-09": "mitigated",
+    "M-10": "mitigated",
+    "SR-13": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-05",
+   "clause": "\u00a71 Worker API",
+   "attacker": "AP1",
+   "attack": "Unauthenticated floods of enrollment/presence endpoints to run up cost",
+   "refs": [
+    "M-24",
+    "SR-21",
+    "SR-24",
+    "T-15"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-24": "mitigated",
+    "SR-21": "mitigated",
+    "SR-24": "mitigated",
+    "T-15": "threat-listed"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-06",
+   "clause": "\u00a71 Worker secrets",
+   "attacker": "AP2",
+   "attack": "Worker-held secret (R2 parent token, invite pepper) leaks: full R2 read/write",
+   "refs": [
+    "SR-23"
+   ],
+   "note": "Covered by D1 (A12, SR-23) but has no F3 matrix row",
+   "source": "",
+   "ref_status": {
+    "SR-23": "mitigated"
+   },
+   "cls": "D1-ONLY"
+  },
+  {
+   "id": "RT-07",
+   "clause": "\u00a71 homelab pull credential",
+   "attacker": "AP8/AP1",
+   "attack": "Homelab Cloudflare API token stolen from the homelab: read ciphertext, delete staged objects",
+   "refs": [
+    "M-10",
+    "AR-04"
+   ],
+   "note": "Effect covered (no receipt => re-upload); token scope (least privilege, no bucket admin) is specified nowhere",
+   "source": "",
+   "ref_status": {
+    "M-10": "mitigated",
+    "AR-04": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-08",
+   "clause": "\u00a71 status freshness",
+   "attacker": "AP2",
+   "attack": "Worker timestamps freeze or fake \"last backup\" freshness",
+   "refs": [
+    "M-10",
+    "SR-18",
+    "SR-19"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-10": "mitigated",
+    "SR-18": "mitigated",
+    "SR-19": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-09",
+   "clause": "\u00a72 dedup ID",
+   "attacker": "AP2",
+   "attack": "Cloud tests known files against IDs (plain hash)",
+   "refs": [
+    "M-01"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-01": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-10",
+   "clause": "\u00a72/\u00a74 presence answer",
+   "attacker": "AP3/AP4/AP5",
+   "attack": "Compromised device: confirmation-of-a-file across the family",
+   "refs": [
+    "M-02"
+   ],
+   "note": "",
+   "source": "Tahoe convergence-secret; F3-S2",
+   "ref_status": {
+    "M-02": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-11",
+   "clause": "\u00a72/\u00a74 presence answer",
+   "attacker": "AP3/AP4/AP5",
+   "attack": "Compromised device: learn-the-remaining-information on a family document",
+   "refs": [
+    "M-03"
+   ],
+   "note": "",
+   "source": "Tahoe; F3-S2",
+   "ref_status": {
+    "M-03": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-12",
+   "clause": "\u00a72 no forward secrecy",
+   "attacker": "AP2+AP3",
+   "attack": "Leaked dedup secret + cloud ID history: offline test of every historical ID",
+   "refs": [
+    "M-04",
+    "AR-06"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-04": "accepted",
+    "AR-06": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-13",
+   "clause": "\u00a72 object size",
+   "attacker": "AP2",
+   "attack": "Exact-size fingerprinting of staged objects",
+   "refs": [
+    "M-05"
+   ],
+   "note": "",
+   "source": "F3-S1",
+   "ref_status": {
+    "M-05": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-14",
+   "clause": "\u00a72 metadata record",
+   "attacker": "AP2",
+   "attack": "Length of the encrypted metadata record leaks filename/path length, EXIF presence, sidecar count",
+   "refs": [],
+   "note": "M-05 pads objects only; SR-26 minimises plaintext fields but not ciphertext length. Proposed row M-26: pad records to fixed size classes",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-15",
+   "clause": "\u00a74 multipart layout",
+   "attacker": "AP2",
+   "attack": "Part count, part sizes, Content-Length and SR-24 declared size reveal the exact size even if the payload is padded",
+   "refs": [
+    "M-05"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-05": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-16",
+   "clause": "\u00a72 transport",
+   "attacker": "network observer",
+   "attack": "ISP / Wi-Fi observer infers object sizes from TLS traffic volume",
+   "refs": [
+    "M-05",
+    "M-06"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-05": "open",
+    "M-06": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-17",
+   "clause": "\u00a72 metadata",
+   "attacker": "AP2",
+   "attack": "Timing, per-device volume, IPs, ID equality across devices",
+   "refs": [
+    "M-06",
+    "AR-05"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-06": "accepted",
+    "AR-05": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-18",
+   "clause": "\u00a72 age public-key recipients",
+   "attacker": "AP2/AP3",
+   "attack": "Forge objects/records in another device's name (age has no sender authentication)",
+   "refs": [
+    "M-07",
+    "SR-03"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-07": "mitigated",
+    "SR-03": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-19",
+   "clause": "\u00a72/\u00a74",
+   "attacker": "AP2",
+   "attack": "Swap object and record, or reuse a record in another context",
+   "refs": [
+    "M-08",
+    "SR-04"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-08": "mitigated",
+    "SR-04": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-20",
+   "clause": "\u00a72 multi-recipient",
+   "attacker": "malicious encryptor",
+   "attack": "Header decrypts to different plaintexts for homelab and recovery identities (key commitment)",
+   "refs": [
+    "M-13"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-13": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-21",
+   "clause": "\u00a72/\u00a76",
+   "attacker": "future quantum adversary",
+   "attack": "Harvest-now-decrypt-later on X25519 wraps in staging, warm cache, restore prefix and USB",
+   "refs": [
+    "M-15"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-15": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-22",
+   "clause": "\u00a72 recipients",
+   "attacker": "design error",
+   "attack": "PQ + classical recipients mixed, or scrypt recovery stanza, voiding PQ",
+   "refs": [
+    "M-16"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-16": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-23",
+   "clause": "\u00a72 device holds plaintext",
+   "attacker": "AP3/AP4",
+   "attack": "A compromised device discloses the plaintext files it holds (before encryption)",
+   "refs": [],
+   "note": "Inherent and trivial, but not listed as an accepted risk. Proposed AR: \"a compromised device discloses its own local files\"",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-24",
+   "clause": "\u00a72 dedup secret custody on device",
+   "attacker": "AP2-like (Apple/Google)",
+   "attack": "Dedup secret and device keys copied into OS cloud backups (iCloud device backup, Android Auto Backup) or synced keychains, putting the family secret in a second cloud",
+   "refs": [],
+   "note": "SR-15 covers only the Cloudflare path; M-18 covers only the CE journal. Proposed SR: secrets and keys non-backup, non-syncing, device-bound (e.g. iOS ThisDeviceOnly keychain classes, Android allowBackup/dataExtractionRules exclusions); verify per platform in B-track",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-25",
+   "clause": "\u00a72 device identity",
+   "attacker": "AP3/ops",
+   "attack": "Device credential and signing key cloned by restoring a device backup onto a new phone: two devices share one identity and sequence",
+   "refs": [],
+   "note": "Same proposed SR as RT-24; SR-13 would show sequence conflicts only if it detects forks",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-26",
+   "clause": "\u00a72 A1 digest form",
+   "attacker": "AP2+AP3",
+   "attack": "After a leak, IDs testable from SHA-256 hash lists without the files",
+   "refs": [
+    "M-04",
+    "M-25"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-04": "accepted",
+    "M-25": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-27",
+   "clause": "\u00a72 rotation",
+   "attacker": "AP2 + old secret",
+   "attack": "Linking old- and new-epoch IDs during re-keying",
+   "refs": [
+    "M-14"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-14": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-28",
+   "clause": "\u00a72 secret distribution",
+   "attacker": "AP1/AP5",
+   "attack": "Rogue enrollment with a stolen or replayed QR/invite: the new device receives the dedup secret and becomes an oracle user",
+   "refs": [
+    "SR-14",
+    "SR-15",
+    "T-19"
+   ],
+   "note": "D1 covers key authenticity (SR-14, OD-05 open); no F3 matrix row links enrollment abuse to M-02",
+   "source": "",
+   "ref_status": {
+    "SR-14": "mitigated",
+    "SR-15": "mitigated",
+    "T-19": "threat-listed"
+   },
+   "cls": "D1-ONLY"
+  },
+  {
+   "id": "RT-29",
+   "clause": "\u00a72 revocation",
+   "attacker": "AP3",
+   "attack": "A revoked device still knows the dedup secret",
+   "refs": [
+    "M-04",
+    "M-25",
+    "SR-17"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-04": "accepted",
+    "M-25": "mitigated",
+    "SR-17": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-30",
+   "clause": "\u00a73 hash cache",
+   "attacker": "AP4",
+   "attack": "Local malware rewrites the hash cache so a file maps to the ID of an already-receipted file: shown \"safe\", never uploaded (silent loss)",
+   "refs": [],
+   "note": "Receipts (SR-05) prove the ID is stored, not that the local file has that ID. Proposed: \"safe\" requires the ID to have been computed from the current bytes; periodic re-hash sampling (B6/A1)",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-31",
+   "clause": "\u00a73 hash cache at rest",
+   "attacker": "AP3",
+   "attack": "Thief reads the cache: SHA-256, dedup IDs and locators of all files, including ones deleted from the device",
+   "refs": [],
+   "note": "Proposed: cache encrypted with an OS-keystore key; prune entries of deleted files after receipt (D6 minimisation)",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-32",
+   "clause": "\u00a74 claims",
+   "attacker": "AP3/AP4/AP5",
+   "attack": "Claim squatting; garbage or oversized uploads",
+   "refs": [
+    "M-24",
+    "SR-10",
+    "SR-24"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-24": "mitigated",
+    "SR-10": "mitigated",
+    "SR-24": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-33",
+   "clause": "\u00a74 dedup index",
+   "attacker": "AP3/AP4/AP5",
+   "attack": "Dedup poisoning: upload garbage under another person's ID so their upload is skipped",
+   "refs": [
+    "SR-04",
+    "SR-06",
+    "SR-11",
+    "T-05"
+   ],
+   "note": "D1 covers it (T-05); the F3 matrix has no explicit row",
+   "source": "",
+   "ref_status": {
+    "SR-04": "mitigated",
+    "SR-06": "mitigated",
+    "SR-11": "mitigated",
+    "T-05": "threat-listed"
+   },
+   "cls": "D1-ONLY"
+  },
+  {
+   "id": "RT-34",
+   "clause": "\u00a74 claim conflict answer",
+   "attacker": "AP3/AP4/AP5",
+   "attack": "The \"someone else is uploading this ID now\" claim-conflict answer is itself a cross-person presence oracle, even under per-person scope",
+   "refs": [],
+   "note": "Proposed: claims scoped per person like presence answers (M-02 addition)",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-35",
+   "clause": "\u00a74 receipt path",
+   "attacker": "AP3/AP4/AP5",
+   "attack": "Receipt latency (or staging deletion timing) reveals that the homelab already held the content, defeating per-person scope",
+   "refs": [],
+   "note": "Measured in F3-S2 config C3L: scope alone fails if receipts are faster for known content. Proposed: receipt path identical whether or not the homelab already has the content",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-36",
+   "clause": "\u00a74 per-person usage",
+   "attacker": "AP5",
+   "attack": "Per-person storage usage or quota (OD-20) does not grow when the uploaded file is already stored by someone else: dedup oracle via the UI",
+   "refs": [],
+   "note": "Proposed: charge each person for their own uploads regardless of dedup",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-37",
+   "clause": "\u00a74 upload IDs",
+   "attacker": "AP3/AP5",
+   "attack": "Worker IDOR on another device's upload ID or claim",
+   "refs": [
+    "SR-07",
+    "T-17"
+   ],
+   "note": "D1 only; no F3 matrix row",
+   "source": "",
+   "ref_status": {
+    "SR-07": "mitigated",
+    "T-17": "threat-listed"
+   },
+   "cls": "D1-ONLY"
+  },
+  {
+   "id": "RT-38",
+   "clause": "\u00a74 presigned URLs",
+   "attacker": "AP1",
+   "attack": "Leaked presigned URL (logs, crash reports, proxies) reused to overwrite or add cost",
+   "refs": [
+    "M-24",
+    "SR-07",
+    "SR-09"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-24": "mitigated",
+    "SR-07": "mitigated",
+    "SR-09": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-39",
+   "clause": "\u00a74 presigned PUT headers",
+   "attacker": "AP3/AP1",
+   "attack": "Unsigned Content-Length/Type on presigned PUT (Cure53/Ente checklist item)",
+   "refs": [
+    "M-24",
+    "SR-09",
+    "SR-24"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-24": "mitigated",
+    "SR-09": "mitigated",
+    "SR-24": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-40",
+   "clause": "\u00a74 homelab parsers",
+   "attacker": "AP2/AP3",
+   "attack": "Crafted age headers, records, receipts against homelab parsers",
+   "refs": [
+    "M-22",
+    "SR-22"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-22": "mitigated",
+    "SR-22": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-41",
+   "clause": "\u00a74 homelab download",
+   "attacker": "AP2",
+   "attack": "Cloud serves objects far larger than the signed size so the homelab downloads without bound",
+   "refs": [
+    "SR-22",
+    "SR-24"
+   ],
+   "note": "D1 only; add \"abort download past the signed padded size\" to M-22 or M-24",
+   "source": "",
+   "ref_status": {
+    "SR-22": "mitigated",
+    "SR-24": "mitigated"
+   },
+   "cls": "D1-ONLY"
+  },
+  {
+   "id": "RT-42",
+   "clause": "\u00a74 keep-forever store",
+   "attacker": "AP4",
+   "attack": "Ransomware uploads encrypted copies of every file: valid new content that doubles the keep-forever store",
+   "refs": [
+    "T-15"
+   ],
+   "note": "Only cost-side coverage (T-15, BUD-ABUSE). Homelab storage exhaustion is covered by PLAN D4-S3 (ransomware pause) but by no SR, AR or matrix row",
+   "source": "",
+   "ref_status": {
+    "T-15": "threat-listed"
+   },
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-43",
+   "clause": "\u00a74 attribution",
+   "attacker": "AP3/AP4",
+   "attack": "Stolen device uploads objectionable or illegal content signed as the victim device; stored forever",
+   "refs": [],
+   "note": "Proposed AR (attribution is device-level, not person-level) plus an admin quarantine/prune procedure under SR-20",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-44",
+   "clause": "\u00a74 \"no read rights\"",
+   "attacker": "AP3/AP5",
+   "attack": "Use a dedup hit as proof of possession to obtain another person's file",
+   "refs": [
+    "M-19"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-19": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-45",
+   "clause": "\u00a75 USB",
+   "attacker": "finder/thief",
+   "attack": "Lost USB stick: ciphertext, manifest, sizes, device IDs; harvest-now",
+   "refs": [
+    "M-05",
+    "M-15"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-05": "open",
+    "M-15": "open"
+   },
+   "cls": "MAPPED-OPEN"
+  },
+  {
+   "id": "RT-46",
+   "clause": "\u00a75 USB",
+   "attacker": "AP3/AP5",
+   "attack": "Crafted USB stick fed to the homelab: malicious filesystem image, symlinks, oversized manifests",
+   "refs": [
+    "M-22"
+   ],
+   "note": "Parser coverage only; mount hardening (read-only, nosuid/noexec, no automount, parse in a disposable VM) is specified nowhere",
+   "source": "",
+   "ref_status": {
+    "M-22": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-47",
+   "clause": "\u00a75 USB",
+   "attacker": "AP3",
+   "attack": "Old bundle re-imported (replay)",
+   "refs": [
+    "M-09",
+    "SR-12"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-09": "mitigated",
+    "SR-12": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-48",
+   "clause": "\u00a75 LAN direct",
+   "attacker": "LAN device (IoT, guest)",
+   "attack": "If LAN direct is built, the homelab gains an inbound listener reachable by any LAN device",
+   "refs": [],
+   "note": "Proposed for ADR-0037: device-key mutual auth, same parsers and limits, VLAN isolation; or do not build",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-49",
+   "clause": "\u00a76 restore staging",
+   "attacker": "AP2",
+   "attack": "Substitute restored content",
+   "refs": [
+    "M-11",
+    "SR-16",
+    "T-10"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-11": "mitigated",
+    "SR-16": "mitigated",
+    "T-10": "threat-listed"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-50",
+   "clause": "\u00a76 restore target",
+   "attacker": "AP2",
+   "attack": "Substitute the device key so the admin restores to the cloud",
+   "refs": [
+    "M-11",
+    "SR-14"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-11": "mitigated",
+    "SR-14": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-51",
+   "clause": "\u00a76 retention windows",
+   "attacker": "AP2",
+   "attack": "Restore prefix (7 days) and warm cache (30 days) lengthen ciphertext exposure",
+   "refs": [
+    "M-15",
+    "AR-05"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-15": "open",
+    "AR-05": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-52",
+   "clause": "\u00a76 restore authorization",
+   "attacker": "AP5",
+   "attack": "A relative talks the admin into restoring another person's files to their device",
+   "refs": [],
+   "note": "Proposed A8/E7 rule: restore only to the owning person's devices unless an admin override is logged",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-53",
+   "clause": "\u00a76 restore replay",
+   "attacker": "AP2",
+   "attack": "Replay an old restore manifest and objects",
+   "refs": [
+    "M-21",
+    "SR-16"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-21": "mitigated",
+    "SR-16": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-54",
+   "clause": "all",
+   "attacker": "AP2",
+   "attack": "Downgrade: Worker supplies recipients, versions, or empty lists",
+   "refs": [
+    "M-12"
+   ],
+   "note": "",
+   "source": "Nextcloud GHSA-jh3g",
+   "ref_status": {
+    "M-12": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-55",
+   "clause": "all",
+   "attacker": "AP2",
+   "attack": "Key substitution of homelab recipient or receipt key",
+   "refs": [
+    "M-11",
+    "SR-02"
+   ],
+   "note": "",
+   "source": "Hofmann-Truong; MEGA",
+   "ref_status": {
+    "M-11": "mitigated",
+    "SR-02": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-56",
+   "clause": "content encryption",
+   "attacker": "bug",
+   "attack": "Nonce/keystream reuse on resume (Tarsnap 2011 class)",
+   "refs": [
+    "M-17"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-17": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-57",
+   "clause": "content encryption",
+   "attacker": "bug/ops",
+   "attack": "Journal rollback re-releases keystream (Borg 1.x class)",
+   "refs": [
+    "M-18"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-18": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-58",
+   "clause": "age",
+   "attacker": "AP2",
+   "attack": "Partitioning oracle against homelab identities",
+   "refs": [
+    "M-23"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-23": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-59",
+   "clause": "homelab engine",
+   "attacker": "store observer",
+   "attack": "CDC parameter recovery (2025 attacks)",
+   "refs": [
+    "M-20"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-20": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-60",
+   "clause": "restore / range reads",
+   "attacker": "AP2",
+   "attack": "Truncated or extended object on restore",
+   "refs": [
+    "M-21"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-21": "mitigated"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-61",
+   "clause": "ingest VM",
+   "attacker": "AP8",
+   "attack": "Compromised ingest VM with an online key",
+   "refs": [
+    "AR-08"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "AR-08": "accepted"
+   },
+   "cls": "D1-ONLY"
+  },
+  {
+   "id": "RT-62",
+   "clause": "updates",
+   "attacker": "AP2/AP7",
+   "attack": "Malicious or frozen app update (legal compulsion of the vendor, compromised CI)",
+   "refs": [],
+   "note": "D1 V22 defers this to D5 (Wave 2); no SR, AR or matrix row yet",
+   "source": "",
+   "ref_status": {},
+   "cls": "UNMAPPED"
+  },
+  {
+   "id": "RT-63",
+   "clause": "nudges",
+   "attacker": "AP2/AP6",
+   "attack": "Phishing-grade fake nudges",
+   "refs": [
+    "SR-25",
+    "T-20"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "SR-25": "mitigated",
+    "T-20": "threat-listed"
+   },
+   "cls": "D1-ONLY"
+  },
+  {
+   "id": "RT-64",
+   "clause": "\u00a72 cloud ID retention",
+   "attacker": "AP2",
+   "attack": "Cloud keeps every dedup ID forever for global dedup, maximising what a later leak exposes",
+   "refs": [
+    "M-04"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-04": "accepted"
+   },
+   "cls": "MAPPED"
+  },
+  {
+   "id": "RT-65",
+   "clause": "\u00a72 epochs",
+   "attacker": "AP3",
+   "attack": "Stale-epoch IDs still accepted after rotation",
+   "refs": [
+    "M-14",
+    "M-25"
+   ],
+   "note": "",
+   "source": "",
+   "ref_status": {
+    "M-14": "open",
+    "M-25": "mitigated"
+   },
+   "cls": "MAPPED"
+  }
+ ]
+}

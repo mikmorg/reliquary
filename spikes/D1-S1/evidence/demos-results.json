@@ -1,0 +1,127 @@
+{
+ "generated": "2026-09-29T09:08:16Z",
+ "age_version": "1.1.1",
+ "python": "3.11.15",
+ "results": [
+  {
+   "id": "A1",
+   "attack": "Cloud creates a content object for the homelab key without any device secret",
+   "expected": "decrypts cleanly",
+   "observed": "decrypts cleanly",
+   "match": true,
+   "detail": "age -d exit 0; plaintext=b'object made by the cloud, which holds on'. Encryption to the homelab key proves nothing about origin; ingest must bind every object to a device-signed record (header MAC) before it counts."
+  },
+  {
+   "id": "A2a",
+   "attack": "Worker substitutes the homelab recipient; device has no pin",
+   "expected": "cloud reads plaintext",
+   "observed": "cloud reads plaintext",
+   "match": true,
+   "detail": "Device encrypted to the key the Worker supplied; the cloud decrypted with its own identity. Every upload after enrollment is readable by the cloud."
+  },
+  {
+   "id": "A2b",
+   "attack": "Same substitution; device checks SHA-256(bundle) against the kit pin",
+   "expected": "refused",
+   "observed": "refused",
+   "match": true,
+   "detail": "pin=be8ec387db65a959..., offered=2f1c9aad0a5bb2df..."
+  },
+  {
+   "id": "A3a",
+   "attack": "Dedup secret delivered in plaintext through the Worker; cloud tests a known file",
+   "expected": "cloud confirms file",
+   "observed": "cloud confirms file",
+   "match": true,
+   "detail": "Breaks ADR-0001's 'the cloud cannot test for known files'."
+  },
+  {
+   "id": "A3b",
+   "attack": "Holder of the dedup secret + the ID index recovers a 6-digit field of a templated document",
+   "expected": "field recovered",
+   "observed": "field recovered",
+   "match": true,
+   "detail": "482914 HMACs over a 1001-byte document in 2.83 s (one core, CPython hashlib; x86_64). Tahoe-LAFS 'learn-the-remaining-information' attack."
+  },
+  {
+   "id": "A3c",
+   "attack": "Secret sealed to the device X25519 key and signed by the homelab; cloud tries to read and to swap it",
+   "expected": "cloud cannot read; swap detected; device reads",
+   "observed": "cloud cannot read; swap detected; device reads",
+   "match": true,
+   "detail": "Needs the device key to reach the homelab authentically first (A5), or the cloud swaps the device key instead."
+  },
+  {
+   "id": "A4a",
+   "attack": "Cloud forges a receipt with its own key",
+   "expected": "rejected",
+   "observed": "rejected",
+   "match": true,
+   "detail": "Ed25519 over 'reliquary-commit-v1\\n' || JSON; binding fields device_id, dedup_id, size, meta_sha256."
+  },
+  {
+   "id": "A4b",
+   "attack": "Cloud replays H1's genuine receipt to H2",
+   "expected": "rejected",
+   "observed": "rejected",
+   "match": true,
+   "detail": "Ed25519 over 'reliquary-commit-v1\\n' || JSON; binding fields device_id, dedup_id, size, meta_sha256."
+  },
+  {
+   "id": "A4c",
+   "attack": "Cloud replays a genuine receipt for another file",
+   "expected": "rejected",
+   "observed": "rejected",
+   "match": true,
+   "detail": "Ed25519 over 'reliquary-commit-v1\\n' || JSON; binding fields device_id, dedup_id, size, meta_sha256."
+  },
+  {
+   "id": "A4d",
+   "attack": "Cloud edits the size in a genuine receipt",
+   "expected": "rejected",
+   "observed": "rejected",
+   "match": true,
+   "detail": "Ed25519 over 'reliquary-commit-v1\\n' || JSON; binding fields device_id, dedup_id, size, meta_sha256."
+  },
+  {
+   "id": "A4e",
+   "attack": "Genuine receipt, correct device and file",
+   "expected": "accepted",
+   "observed": "accepted",
+   "match": true,
+   "detail": "Ed25519 over 'reliquary-commit-v1\\n' || JSON; binding fields device_id, dedup_id, size, meta_sha256."
+  },
+  {
+   "id": "A4f",
+   "attack": "Unpinned: device trusts the receipt key the Worker supplies; cloud forges",
+   "expected": "accepted",
+   "observed": "accepted",
+   "match": true,
+   "detail": "Ed25519 over 'reliquary-commit-v1\\n' || JSON; binding fields device_id, dedup_id, size, meta_sha256."
+  },
+  {
+   "id": "A5a",
+   "attack": "Worker substitutes H1's restore key; homelab re-encrypts the restore to it",
+   "expected": "cloud reads restore",
+   "observed": "cloud reads restore",
+   "match": true,
+   "detail": "ADR-0001 \u00a76 re-encrypts to 'the requesting device's own public key'; if the homelab learns that key from the Worker, a restore is disclosed."
+  },
+  {
+   "id": "A5b",
+   "attack": "Same substitution; homelab admits device keys only with a signature by a key the cloud lacks",
+   "expected": "substitute refused; genuine admitted",
+   "observed": "substitute refused; genuine admitted",
+   "match": true,
+   "detail": "Tailnet-Lock analogue. Who holds the admitting key (admin, homelab, or an existing device) is D3/OD-05."
+  },
+  {
+   "id": "A6",
+   "attack": "Cloud holds the stored hash of a 50-bit invite code (fast hash); offline search cost",
+   "expected": "measured",
+   "observed": "measured",
+   "match": true,
+   "detail": "measured 1,024,717 SHA-256/s on one core in CPython; 2^50 at that rate = 35 core-years. This is a single-core CPython floor, not a GPU figure: GPU rates are orders of magnitude higher and were not measured. Relevant only if a homelab-verified secret is derived from the invite code (D3)."
+  }
+ ]
+}

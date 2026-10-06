@@ -1,0 +1,76 @@
+{
+ "1_first_copy": {
+  "rc": 0,
+  "counts": {
+   "ok": 6,
+   "not-a-regular-file": 1
+  },
+  "expected_regular_files": 6,
+  "ds_store_skipped": true,
+  "symlink_status": [
+   "not-a-regular-file"
+  ],
+  "seconds": 2.74,
+  "bytes": 271453648,
+  "mb_per_s": 99.0,
+  "note": "container virtual disk; not representative of USB or NAS speed"
+ },
+ "1_hash_and_mtime": {
+  "files": 6,
+  "hash_match": 6,
+  "mtime_match": 6
+ },
+ "2_verify": {
+  "rc": 0,
+  "verified": 6,
+  "failed": 0,
+  "first_failures": []
+ },
+ "3_rerun": {
+  "rc": 0,
+  "counts": {
+   "already-present": 6,
+   "not-a-regular-file": 1
+  },
+  "files_in_dest": 6
+ },
+ "4_changed_between_visits": {
+  "rc": 0,
+  "counts": {
+   "already-present": 5,
+   "not-a-regular-file": 1,
+   "conflict-kept-both": 1
+  },
+  "files_in_folder": [
+   "IMG_0001.JPG",
+   "IMG_0001.JPG.conflict-3507492f"
+  ],
+  "original_kept": true
+ },
+ "5_bitflip_detected": {
+  "rc": 1,
+  "verified": 6,
+  "failed": 1,
+  "first_failures": [
+   "1-Pictures/emoji 🎂 birthday.heic"
+  ]
+ },
+ "6_changed_during_copy": {
+  "status": "changed-during-copy"
+ },
+ "7_placeholder_check_linux": {
+  "is_placeholder": false,
+  "note": "Windows and macOS attribute checks not exercised in CT"
+ }
+}
+{
+ "exif_writeback": {
+  "exiftool": "12.76",
+  "file_sha256_changed": true,
+  "size_before": 124,
+  "size_after": 436,
+  "image_data_hash_before": "b88ae1cce8d429b24f3226bcdd4843eabc08530427da3dd0d8ddd8425bde94ad",
+  "image_data_hash_after": "b88ae1cce8d429b24f3226bcdd4843eabc08530427da3dd0d8ddd8425bde94ad",
+  "image_data_unchanged": true
+ }
+}

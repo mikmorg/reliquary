@@ -1,0 +1,19 @@
+ 09:08:50 up  2:09,  0 user,  load average: 10.19, 11.46, 6.92
+{"mode":"info","arch":"x86_64","os":"linux","threads":4,"cpu_features":{"sha":true,"sse4.1":true,"avx2":true,"avx512f":true,"avx512vl":true},"sha2_forced_soft":false,"blake3_features":[]}
+{"mode":"file","cache":"cold","global_drop_caches_ok":true,"workload":"read_only","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":1974,"cpu_s_per_gb_median":0.209}
+{"mode":"file","cache":"cold","global_drop_caches_ok":true,"workload":"C1_sha256+hmac_sha256_content","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":460,"cpu_s_per_gb_median":1.906}
+{"mode":"file","cache":"cold","global_drop_caches_ok":true,"workload":"C2_sha256_then_hmac_digest","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":680,"cpu_s_per_gb_median":1.141}
+{"mode":"file","cache":"cold","global_drop_caches_ok":true,"workload":"C3_blake3+keyed_blake3_content","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":551,"cpu_s_per_gb_median":1.440}
+{"mode":"file","cache":"cold","global_drop_caches_ok":true,"workload":"C4_blake3_then_keyed_digest","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":2194,"cpu_s_per_gb_median":0.385}
+{"mode":"file","cache":"cold","global_drop_caches_ok":true,"workload":"C5_sha256+keyed_blake3_content","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":801,"cpu_s_per_gb_median":1.207}
+{"mode":"file","cache":"cold","global_drop_caches_ok":true,"workload":"C4_rayon_all_cores","bytes":1073741824,"runs":3,"read_buf":16777216,"mb_per_s_median":1590,"cpu_s_per_gb_median":0.418}
+ 09:09:47 up  2:10,  0 user,  load average: 10.86, 11.46, 7.18
+{"mode":"info","arch":"x86_64","os":"linux","threads":4,"cpu_features":{"sha":true,"sse4.1":true,"avx2":true,"avx512f":true,"avx512vl":true},"sha2_forced_soft":false,"blake3_features":[]}
+{"mode":"file","cache":"warm","global_drop_caches_ok":false,"workload":"read_only","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":6127,"cpu_s_per_gb_median":0.152}
+{"mode":"file","cache":"warm","global_drop_caches_ok":false,"workload":"C1_sha256+hmac_sha256_content","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":617,"cpu_s_per_gb_median":1.558}
+{"mode":"file","cache":"warm","global_drop_caches_ok":false,"workload":"C2_sha256_then_hmac_digest","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":1197,"cpu_s_per_gb_median":0.799}
+{"mode":"file","cache":"warm","global_drop_caches_ok":false,"workload":"C3_blake3+keyed_blake3_content","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":1913,"cpu_s_per_gb_median":0.492}
+{"mode":"file","cache":"warm","global_drop_caches_ok":false,"workload":"C4_blake3_then_keyed_digest","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":2908,"cpu_s_per_gb_median":0.344}
+{"mode":"file","cache":"warm","global_drop_caches_ok":false,"workload":"C5_sha256+keyed_blake3_content","bytes":1073741824,"runs":3,"read_buf":1048576,"mb_per_s_median":954,"cpu_s_per_gb_median":1.021}
+{"mode":"file","cache":"warm","global_drop_caches_ok":false,"workload":"C4_rayon_all_cores","bytes":1073741824,"runs":3,"read_buf":16777216,"mb_per_s_median":2732,"cpu_s_per_gb_median":0.413}
+ 09:10:02 up  2:10,  0 user,  load average: 11.41, 11.55, 7.30

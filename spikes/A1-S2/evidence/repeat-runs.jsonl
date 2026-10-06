@@ -1,0 +1,15 @@
+# repeat; /proc/pressure/cpu before:
+some avg10=82.55 avg60=64.62 avg300=49.57 total=732310713
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":50000,"bytes":204800000,"secs":5.943,"cpu_secs":2.439,"us_per_file":118.9,"mb_per_s":34.5,"sink":152}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":50000,"bytes":204800000,"secs":5.308,"cpu_secs":2.205,"us_per_file":106.2,"mb_per_s":38.6,"sink":152}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":50000,"bytes":204800000,"secs":5.661,"cpu_secs":2.483,"us_per_file":113.2,"mb_per_s":36.2,"sink":152}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":1,"bytes":1073741824,"secs":11.644,"cpu_secs":7.134,"us_per_file":11644326.5,"mb_per_s":92.2,"sink":80}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":1,"bytes":1073741824,"secs":1.472,"cpu_secs":0.965,"us_per_file":1472144.0,"mb_per_s":729.4,"sink":80}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":1,"bytes":1073741824,"secs":2.115,"cpu_secs":1.665,"us_per_file":2115230.3,"mb_per_s":507.6,"sink":80}
+{"cmd":"rotate","mode":"inplace","new_epoch":4,"rows":1000000,"secs":5.86,"cpu_secs":3.52,"rchar":303808755,"wchar":304304320,"disk_read_bytes":167940096,"disk_write_bytes":305057792,"spot_check_ok":true,"db_bytes_after":229576704}
+{"cmd":"rotate","mode":"inplace","new_epoch":5,"rows":1000000,"secs":3.70,"cpu_secs":2.11,"rchar":303808750,"wchar":304304320,"disk_read_bytes":4096,"disk_write_bytes":305012736,"spot_check_ok":true,"db_bytes_after":229576704}
+{"cmd":"rotate","mode":"inplace","new_epoch":6,"rows":1000000,"secs":3.22,"cpu_secs":2.04,"rchar":303808750,"wchar":304304320,"disk_read_bytes":4096,"disk_write_bytes":305012736,"spot_check_ok":true,"db_bytes_after":229576704}
+# /proc/pressure/cpu after:
+some avg10=77.84 avg60=73.18 avg300=54.29 total=771219087
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0

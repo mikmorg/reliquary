@@ -1,0 +1,9 @@
+name = "g2s1-queues"
+main = "../src/index.js"
+compatibility_date = "2026-09-01"
+[[queues.producers]]
+binding = "Q"
+queue = "staged"
+[[queues.consumers]]
+queue = "staged"
+type = "http_pull"

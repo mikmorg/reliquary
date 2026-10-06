@@ -1,0 +1,11 @@
+{"check":"blake3-official-vectors","impl":"noble-hashes 2.4.0","cases_pass":35,"cases_fail":0}
+P22 len=4294967295 389.971s ok=true
+P23 len=4294967296 500.724s ok=true
+P24 len=4294967297 622.886s ok=true
+{"impl":"node v22.22.2 (node:crypto/OpenSSL + @noble/hashes 2.4.0)","pass":51,"fail":0,"failures":[],"secs":1515.764}
+
+real	25m16.265s
+user	14m38.853s
+sys	0m6.438s
+
+[exited with code 0]

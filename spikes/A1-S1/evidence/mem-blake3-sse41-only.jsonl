@@ -1,0 +1,14 @@
+ 09:01:19 up  2:01,  0 user,  load average: 2.09, 3.38, 2.35
+{"mode":"info","arch":"x86_64","os":"linux","threads":4,"cpu_features":{"sha":true,"sse4.1":true,"avx2":true,"avx512f":true,"avx512vl":true},"sha2_forced_soft":false,"blake3_features":["sse41_only"]}
+{"mode":"mem","workload":"sha256","bytes":1073741824,"runs":5,"mb_per_s_median":1089,"mb_per_s_min":1036,"mb_per_s_max":1110,"cpu_s_per_gb_median":0.915,"sink":0}
+{"mode":"mem","workload":"hmac_sha256_content","bytes":1073741824,"runs":5,"mb_per_s_median":1050,"mb_per_s_min":893,"mb_per_s_max":1087,"cpu_s_per_gb_median":0.952,"sink":0}
+{"mode":"mem","workload":"C1_sha256+hmac_sha256_content","bytes":1073741824,"runs":5,"mb_per_s_median":572,"mb_per_s_min":569,"mb_per_s_max":584,"cpu_s_per_gb_median":1.712,"sink":0}
+{"mode":"mem","workload":"C2_sha256_then_hmac_digest","bytes":1073741824,"runs":5,"mb_per_s_median":1046,"mb_per_s_min":965,"mb_per_s_max":1083,"cpu_s_per_gb_median":0.942,"sink":0}
+{"mode":"mem","workload":"blake3","bytes":1073741824,"runs":5,"mb_per_s_median":1471,"mb_per_s_min":1226,"mb_per_s_max":1533,"cpu_s_per_gb_median":0.658,"sink":0}
+{"mode":"mem","workload":"blake3_keyed","bytes":1073741824,"runs":5,"mb_per_s_median":1291,"mb_per_s_min":1206,"mb_per_s_max":1364,"cpu_s_per_gb_median":0.707,"sink":0}
+{"mode":"mem","workload":"C3_blake3+keyed_blake3_content","bytes":1073741824,"runs":5,"mb_per_s_median":683,"mb_per_s_min":650,"mb_per_s_max":703,"cpu_s_per_gb_median":1.310,"sink":0}
+{"mode":"mem","workload":"C4_blake3_then_keyed_digest","bytes":1073741824,"runs":5,"mb_per_s_median":1411,"mb_per_s_min":1218,"mb_per_s_max":1526,"cpu_s_per_gb_median":0.677,"sink":0}
+{"mode":"mem","workload":"C5_sha256+keyed_blake3_content","bytes":1073741824,"runs":5,"mb_per_s_median":561,"mb_per_s_min":532,"mb_per_s_max":586,"cpu_s_per_gb_median":1.602,"sink":0}
+{"mode":"mem","workload":"blake3_rayon_all_cores","bytes":1073741824,"runs":5,"mb_per_s_median":1245,"mb_per_s_min":1077,"mb_per_s_max":1697,"cpu_s_per_gb_median":0.759,"sink":0}
+{"mode":"mem","workload":"C4_rayon_all_cores","bytes":1073741824,"runs":5,"mb_per_s_median":1147,"mb_per_s_min":884,"mb_per_s_max":1466,"cpu_s_per_gb_median":0.787,"sink":0}
+ 09:02:37 up  2:03,  0 user,  load average: 9.68, 5.15, 3.03

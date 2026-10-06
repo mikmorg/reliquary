@@ -1,0 +1,11 @@
+[package]
+name = "census"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+infer = "0.22.0"
+nom-exif = "3.8.0"
+
+[features]
+emulate-placeholders = []

@@ -1,0 +1,91 @@
+C4-S1 model v0 run 2026-09-29T09:16:31+00:00
+
+== self-checks against primary worked examples ==
+  PASS  R2 Standard worked example = $14.85 (S1): model=14.85
+  PASS  R2 IA worked example = $29.90 (S1): model=29.9
+  PASS  R2 asset-hosting example = $104.40 (S1): model=104.4
+  PASS  R2 GB-month example = 2.66 (S1, truncated): model=2.6667
+  PASS  simulator: 1 GB/day, hold 1 d -> 2.0 GB-month (conservative peak): model=2.0
+  PASS  Workers pricing example 1 = $8.00 (S7): model=8.0
+  PASS  Queues formula, 10M messages = $11.60 (S12): model=11.6
+
+== monthly scenarios (USD) ==
+  steady g=0.5 TB/yr warm_cache=0d                                   total=    5.00  classA=0.03M  stagedGBm=3
+  steady g=0.5 TB/yr warm_cache=30d                                  total=    5.53  classA=0.03M  stagedGBm=44
+  steady g=1.0 TB/yr warm_cache=0d                                   total=    5.00  classA=0.05M  stagedGBm=6
+  steady g=1.0 TB/yr warm_cache=30d                                  total=    6.19  classA=0.05M  stagedGBm=89
+  steady g=2.0 TB/yr warm_cache=0d                                   total=    5.03  classA=0.10M  stagedGBm=11
+  steady g=2.0 TB/yr warm_cache=30d                                  total=    7.52  classA=0.10M  stagedGBm=178
+  seed 2 TB/month dwell=1d                                           total=   12.16  classA=1.24M  stagedGBm=133
+  seed 2 TB/month + 14-day homelab outage                            total=   15.66  classA=1.24M  stagedGBm=367
+  seed 2 TB/month + 30-day warm cache                                total=   42.16  classA=1.24M  stagedGBm=2133
+  seed 2 TB/month mean file 2 MB                                     total=   17.86  classA=2.24M  stagedGBm=133
+  seed 2 TB/month mean file 8 MB                                     total=    7.26  classA=0.73M  stagedGBm=133
+  seed 2 TB/month metadata batched (m=0)                             total=    7.66  classA=0.73M  stagedGBm=133
+  seed 2 TB/month part=8 MiB                                         total=   12.16  classA=1.15M  stagedGBm=133
+  seed 2 TB/month part=16 MiB                                        total=   12.16  classA=1.08M  stagedGBm=133
+  seed 2 TB/month part=64 MiB                                        total=   12.16  classA=1.02M  stagedGBm=133
+  seed 2 TB/month in R2 Infrequent Access (staging)                  total=   64.70  classA=1.24M  stagedGBm=133
+  seed 2 TB/month, free tier subtracted before rounding              total=   12.16  classA=1.24M  stagedGBm=133
+  homelab down all month, 2 TB staged                                total=   34.85  stagedGBm=2000
+  homelab down all month, 5 TB staged                                total=   79.85  stagedGBm=5000
+  homelab down all month, 10 TB staged                               total=  154.85  stagedGBm=10000
+  restore 500 GB staged 7 d (+1 d lifecycle lag), steady month       total=    2.10 (extra over steady)  classA=0.12M  stagedGBm=150
+  10 TB seed via R2 over 5 months (total)                            total=   60.80
+  10 TB seed via R2 over 5 months, warm cache 30 d left on (total)   total=  210.80
+
+== steady-state sensitivity (full factorial of assumption ranges) ==
+  g=0.5 W= 0: central $5.00, range $5.00-$6.07, max dev 21 %
+  g=0.5 W=30: central $5.53, range $5.53-$6.70, max dev 21 %
+  g=1.0 W= 0: central $5.00, range $5.00-$6.80, max dev 36 %
+  g=1.0 W=30: central $6.19, range $6.19-$8.04, max dev 30 %
+  g=2.0 W= 0: central $5.03, range $5.03-$8.67, max dev 72 %
+  g=2.0 W=30: central $7.52, range $7.52-$11.16, max dev 48 %
+  g=1.0 W=0, spread left after pinning one parameter (best three): cpu_ms_per_req -> 10 %; heartbeat_per_dev_day -> 16 %; mean_file_bytes -> 24 %
+  g=2.0 W=0, spread left after pinning one parameter (best three): cpu_ms_per_req -> 29 %; mean_file_bytes -> 39 %; worker_req_per_file -> 49 %
+  largest one-at-a-time swings:
+    g=2.0 W=0 dwell_days [1..14]: $5.03..$6.11 (21 %)
+    g=2.0 W=30 dwell_days [1..14]: $7.52..$8.60 (14 %)
+    g=1.0 W=0 dwell_days [1..14]: $5.00..$5.48 (10 %)
+    g=1.0 W=30 dwell_days [1..14]: $6.19..$6.72 (9 %)
+    g=0.5 W=30 dwell_days [1..14]: $5.53..$5.79 (5 %)
+    g=0.5 W=0 dwell_days [1..14]: $5.00..$5.17 (3 %)
+
+== abuse (per junk object past free tiers: $8.00 per million) ==
+  junk small PUTs via presigned URLs, 10/s (stolen credential)           $/day=6.91  hours to $50=173.6
+  junk small PUTs via presigned URLs, 100/s (stolen credential)          $/day=69.12  hours to $50=17.4
+  junk small PUTs via presigned URLs, 1000/s (stolen credential)         $/day=691.2  hours to $50=1.7
+  replay one presigned PUT to its key until expiry (60 s)                $/day=6.75  hours to $50=177.8
+  replay one presigned PUT to its key until expiry (900 s)               $/day=101.25  hours to $50=11.9
+  replay one presigned PUT to its key until expiry (604800 s)            $/day=68040.0  hours to $50=0.0
+  storage flood at 0.1 Gbps (Content-Length not bound)                   $/day=0.54
+  storage flood at 1.0 Gbps (Content-Length not bound)                   $/day=5.4
+  unauthenticated flood on the Worker 1000/s, 1 ms CPU                   $/day=27.65  hours to $50=43.4
+  unauthenticated flood on the Worker 10000/s, 1 ms CPU                  $/day=276.48  hours to $50=4.3
+  unauthenticated flood on the Worker 10000/s, 5 ms CPU                  $/day=345.6  hours to $50=3.5
+  bad-signature requests direct to R2 (403)                              $/day=
+  cap-set grid: 131/243 combinations bound credential-holder abuse below $50
+    k=3 T=1d U=25k Q=100GB E=  1: $5.10 -> below BUD-ABUSE
+    k=3 T=1d U=25k Q=100GB E= 60: $25.01 -> below BUD-ABUSE
+    k=3 T=1d U=25k Q=100GB E=900: $308.51 -> ABOVE BUD-ABUSE
+    all 25 devices compromised: 21 of 81 cap sets stay below
+
+== capacity / disk-purchase trigger (t0 = 2026-09-29, scenario inputs, not the family's) ==
+  S: 2x16 TB mirror        usable  16.0 TB  L0= 2 g=0.5:   21.6 y to 80 %  trigger 2048-01-22
+  S: 2x16 TB mirror        usable  16.0 TB  L0= 5 g=1.0:    7.8 y to 80 %  trigger 2034-04-04
+  S: 2x16 TB mirror        usable  16.0 TB  L0=10 g=1.5:   1.87 y to 80 %  trigger 2028-04-28
+  S: 2x16 TB mirror        usable  16.0 TB  L0=10 g=2.0:    1.4 y to 80 %  trigger 2027-11-10
+  M: 4x16 TB RAIDZ2        usable  32.0 TB  L0= 2 g=0.5:   47.2 y to 80 %  trigger 2073-08-28
+  M: 4x16 TB RAIDZ2        usable  32.0 TB  L0= 5 g=1.0:   20.6 y to 80 %  trigger 2047-01-22
+  M: 4x16 TB RAIDZ2        usable  32.0 TB  L0=10 g=1.5:   10.4 y to 80 %  trigger 2036-11-09
+  M: 4x16 TB RAIDZ2        usable  32.0 TB  L0=10 g=2.0:    7.8 y to 80 %  trigger 2034-04-04
+  M': 2x(2x16 TB) mirrors  usable  32.0 TB  L0= 2 g=0.5:   47.2 y to 80 %  trigger 2073-08-28
+  M': 2x(2x16 TB) mirrors  usable  32.0 TB  L0= 5 g=1.0:   20.6 y to 80 %  trigger 2047-01-22
+  M': 2x(2x16 TB) mirrors  usable  32.0 TB  L0=10 g=1.5:   10.4 y to 80 %  trigger 2036-11-09
+  M': 2x(2x16 TB) mirrors  usable  32.0 TB  L0=10 g=2.0:    7.8 y to 80 %  trigger 2034-04-04
+  L: 6x20 TB RAIDZ2        usable  80.0 TB  L0= 2 g=0.5:  124.0 y to 80 %  trigger 2150-06-18
+  L: 6x20 TB RAIDZ2        usable  80.0 TB  L0= 5 g=1.0:   59.0 y to 80 %  trigger 2085-06-16
+  L: 6x20 TB RAIDZ2        usable  80.0 TB  L0=10 g=1.5:   36.0 y to 80 %  trigger 2062-06-17
+  L: 6x20 TB RAIDZ2        usable  80.0 TB  L0=10 g=2.0:   27.0 y to 80 %  trigger 2053-06-16
+
+CSV written to /tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/C4-S1/out

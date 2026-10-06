@@ -1,0 +1,6 @@
+# wrangler dev 4.143.0 log excerpt, 2026-09-29 ~09:40-09:41 UTC, run 1 of the AWS JS SDK checks (sdk/sdk_quirks.mjs). Stack-frame lines removed; paths shortened.
+✘ [ERROR] TypeError: Provided readable stream must have a known length (request/response body or readable half of FixedLengthStream)
+      at Object.handle (file://<scratch>/mf/node_modules/miniflare/src/workers/r2/s3/operations.worker.ts:661:32)
+✘ [ERROR] Error inside ProxyWorker (the affected request failed; the dev server continues): PUT http://127.0.0.1:8787/cdn-cgi/local/r2/s3/staging/sdk/mumhkcgl/s4?x-id=PutObject (failed after 1 attempt): Network connection lost.
+[wrangler:warn] The Workers runtime crashed unexpectedly and is being restarted (crash #1). Any additional runtime output above may indicate the cause.
+🪵  Logs were written to "/root/.config/.wrangler/logs/wrangler-2026-09-29_09-27-50_459.log"

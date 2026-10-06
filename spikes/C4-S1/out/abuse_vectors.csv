@@ -1,0 +1,13 @@
+vector,usd_per_day,hours_to_BUD_ABUSE,bounded_by,undocumented_behaviour,usd_per_url,tb_per_day,note
+"junk small PUTs via presigned URLs, 10/s (stolen credential)",6.9120,173.6111,per-device presign cap/day + account spend meter (C2),,,,
+"junk small PUTs via presigned URLs, 100/s (stolen credential)",69.1200,17.3611,per-device presign cap/day + account spend meter (C2),,,,
+"junk small PUTs via presigned URLs, 1000/s (stolen credential)",691.2000,1.7361,per-device presign cap/day + account spend meter (C2),,,,
+replay one presigned PUT to its key until expiry (60 s),6.7500,177.7778,short expiry or signed If-None-Match; overwrite -> suspend,SB: are 412/429 responses billed? is If-None-Match enforced on presigned PUT?,0.0003,,
+replay one presigned PUT to its key until expiry (900 s),101.2500,11.8519,short expiry or signed If-None-Match; overwrite -> suspend,SB: are 412/429 responses billed? is If-None-Match enforced on presigned PUT?,0.0040,,
+replay one presigned PUT to its key until expiry (604800 s),68040.0000,0.0176,short expiry or signed If-None-Match; overwrite -> suspend,SB: are 412/429 responses billed? is If-None-Match enforced on presigned PUT?,2.7216,,
+storage flood at 0.1 Gbps (Content-Length not bound),0.5400,,per-device staged-byte cap; delete (free) on size mismatch,SB: is signed Content-Length enforced? are incomplete multipart parts billed as storage?,,1.0800,USD per day of holding ONE day of flood; accrues daily while kept
+storage flood at 1.0 Gbps (Content-Length not bound),5.4000,,per-device staged-byte cap; delete (free) on size mismatch,SB: is signed Content-Length enforced? are incomplete multipart parts billed as storage?,,10.8000,USD per day of holding ONE day of flood; accrues daily while kept
+"unauthenticated flood on the Worker 1000/s, 1 ms CPU",27.6480,43.4028,"NOT by per-device caps. Free-zone WAF: 1 rule, per-IP, 10 s",SB: are WAF-blocked requests billed as Worker requests?,,,
+"unauthenticated flood on the Worker 10000/s, 1 ms CPU",276.4800,4.3403,"NOT by per-device caps. Free-zone WAF: 1 rule, per-IP, 10 s",SB: are WAF-blocked requests billed as Worker requests?,,,
+"unauthenticated flood on the Worker 10000/s, 5 ms CPU",345.6000,3.4722,"NOT by per-device caps. Free-zone WAF: 1 rule, per-IP, 10 s",SB: are WAF-blocked requests billed as Worker requests?,,,
+bad-signature requests direct to R2 (403),,,unknown,SB: only 401 is documented as free,,,

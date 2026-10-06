@@ -1,0 +1,3 @@
+ ⛅️ wrangler 4.143.0
+✘ [ERROR] Processing q/wrangler.toml configuration:
+    - "queues.consumers[0].type" has an invalid value "http_pull". Only "worker" consumers can be configured in your Wrangler configuration.

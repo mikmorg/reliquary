@@ -1,0 +1,18 @@
+[package]
+name = "a1-vectors"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+# THROWAWAY spike code (Reliquary A1-S3). Not production code.
+
+[dependencies]
+sha2 = "=0.11.0"
+hmac = "=0.13.0"
+hkdf = "=0.13.0"
+blake3 = "=1.8.7"
+serde_json = "1"
+hex = "0.4"
+
+[profile.release]
+opt-level = 3

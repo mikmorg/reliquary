@@ -1,0 +1,6 @@
+ 09:15:19 up  2:15,  0 user,  load average: 7.90, 8.60, 7.22
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":50000,"bytes":204800000,"secs":0.685,"cpu_secs":0.606,"us_per_file":13.7,"mb_per_s":299.2,"sink":152}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":50000,"bytes":204800000,"secs":0.809,"cpu_secs":0.523,"us_per_file":16.2,"mb_per_s":253.0,"sink":152}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":1,"bytes":1073741824,"secs":9.417,"cpu_secs":6.360,"us_per_file":9417269.6,"mb_per_s":114.0,"sink":80}
+{"cmd":"reread","construction":"A: HMAC(dk_new, content)","cache":"cold (drop_caches attempted)","files":1,"bytes":1073741824,"secs":2.005,"cpu_secs":1.102,"us_per_file":2004993.6,"mb_per_s":535.5,"sink":80}
+ 09:15:34 up  2:16,  0 user,  load average: 8.37, 8.67, 7.27

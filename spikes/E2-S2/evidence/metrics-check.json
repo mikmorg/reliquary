@@ -1,0 +1,316 @@
+[
+  {
+    "metric": "M1",
+    "name": "Time to first protected keepsake",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "redeemed_at",
+        "route": "cloud_plain",
+        "cloud_basis": "ADR-0002 s2: hash of the invite code, its expiry and state unused->redeemed",
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "first_receipt_verified_mono",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "receipt_ledger",
+        "route": "homelab_local",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M2",
+    "name": "Coverage (bytes and items) at 7 and 30 days",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "discovered_accepted_items_bytes",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "cloud_only_items_bytes",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "receipted_items_bytes",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "receipt_ledger",
+        "route": "homelab_local",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M3",
+    "name": "Surprise gaps found in an audit",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "audit_surprise_gaps",
+        "route": "owner_log",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M4",
+    "name": "Owner support minutes",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "support_minutes_by_cause",
+        "route": "owner_log",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M5",
+    "name": "Unaided enrollment",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "enrollment_observation",
+        "route": "session_paper",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "redeemed_at",
+        "route": "cloud_plain",
+        "cloud_basis": "ADR-0002 s2: hash of the invite code, its expiry and state unused->redeemed",
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "receipt_ledger",
+        "route": "homelab_local",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "support_minutes_by_cause",
+        "route": "owner_log",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M6",
+    "name": "Nudge action vs mute rate",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "email_nudge_sent_at",
+        "route": "cloud_plain",
+        "cloud_basis": "ADR-0002 s2: the Worker sends nudge email, so it knows that and when it sent one",
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "nudge_shown_snoozed_muted",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": 2,
+        "violations": []
+      },
+      {
+        "field": "receipt_ledger",
+        "route": "homelab_local",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "device_last_seen_at",
+        "route": "cloud_plain",
+        "cloud_basis": "ADR-0002 s2: per-device activity timestamps stored in plain text",
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M7",
+    "name": "Restore-drill success and time",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "restore_drill_log",
+        "route": "homelab_local",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "restore_check_result",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M8",
+    "name": "SUS and SEQ",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "sus_seq_sheet",
+        "route": "session_paper",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M9",
+    "name": "False-safe count",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "shown_stored_digest",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      },
+      {
+        "field": "receipt_ledger",
+        "route": "homelab_local",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M10",
+    "name": "Gone-before-safe count",
+    "compliant": true,
+    "fields": [
+      {
+        "field": "gone_before_safe_count",
+        "route": "enc_homelab",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": []
+      }
+    ]
+  },
+  {
+    "metric": "M2-bad",
+    "name": "Coverage computed in the Worker",
+    "compliant": false,
+    "fields": [
+      {
+        "field": "X_cloud_discovered_counts",
+        "route": "cloud_plain",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": [
+          "R2 content-derived data in cloud plaintext (ADR-0001 s2: metadata is ciphertext only)",
+          "R3 cloud plaintext not covered by ADR-0001/0002 accepted categories"
+        ]
+      }
+    ]
+  },
+  {
+    "metric": "M6-bad-click",
+    "name": "Nudge action by email click",
+    "compliant": false,
+    "fields": [
+      {
+        "field": "X_email_link_click",
+        "route": "cloud_plain",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": [
+          "R3 cloud plaintext not covered by ADR-0001/0002 accepted categories",
+          "R6 no email click tracking (PLAN s3)"
+        ]
+      }
+    ]
+  },
+  {
+    "metric": "M6-bad-body",
+    "name": "Nudge email quoting counts",
+    "compliant": false,
+    "fields": [
+      {
+        "field": "X_email_body_with_counts",
+        "route": "email_body",
+        "cloud_basis": null,
+        "consent_since": null,
+        "violations": [
+          "R2 content-derived data in cloud plaintext (ADR-0001 s2: metadata is ciphertext only)",
+          "R3 cloud plaintext not covered by ADR-0001/0002 accepted categories"
+        ]
+      }
+    ]
+  },
+  {
+    "metric": "M6-bad-sdk",
+    "name": "Engagement via hosted analytics",
+    "compliant": false,
+    "fields": [
+      {
+        "field": "X_hosted_analytics",
+        "route": "third_party",
+        "cloud_basis": null,
+        "consent_since": 2,
+        "violations": [
+          "R1 no third-party analytics (PLAN E2; CLAUDE.md trust model)"
+        ]
+      }
+    ]
+  },
+  {
+    "metric": "M9-bad",
+    "name": "False-safe check with plaintext ID list",
+    "compliant": false,
+    "fields": [
+      {
+        "field": "X_shown_stored_id_list_plain",
+        "route": "cloud_plain",
+        "cloud_basis": "ADR-0001 s2/s4: opaque dedup IDs, claim/commit state",
+        "consent_since": null,
+        "violations": [
+          "R4 per-file identifiers in cloud plaintext beyond what the ingest protocol needs"
+        ]
+      }
+    ]
+  }
+]

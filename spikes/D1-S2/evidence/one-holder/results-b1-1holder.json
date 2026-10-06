@@ -1,0 +1,1517 @@
+{
+ "budget": 1,
+ "holders": 1,
+ "ttl": 2,
+ "max_attempts": 3,
+ "dedup_id_F": "c50125f4bd266252",
+ "dedup_id_G": "e75c962b2220c571",
+ "variants": [
+  {
+   "name": "V0-ADR-0001-literal",
+   "per_upload_keys": false,
+   "create_only": false,
+   "receipts": false,
+   "pinned_trust": false,
+   "ttl": true,
+   "staged_state": false,
+   "reset_on_reject": false,
+   "requery": false,
+   "attribution": false,
+   "homelab_verify": true,
+   "registry_auth": false,
+   "reconcile_missing": false
+  },
+  {
+   "name": "V1-proposed",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1+create_only",
+   "per_upload_keys": true,
+   "create_only": true,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-per_upload_keys",
+   "per_upload_keys": false,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-receipts",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": false,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-pinned_trust",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": false,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-ttl",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": false,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-staged_state",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": false,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-reset_on_reject",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": false,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-requery",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": false,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-attribution",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": false,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-homelab_verify",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": false,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-registry_auth",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": false,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-reconcile_missing",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": false
+  },
+  {
+   "name": "V1-no-per_upload_keys+create_only",
+   "per_upload_keys": false,
+   "create_only": true,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  }
+ ],
+ "results": [
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "none",
+   "budget": 0,
+   "states": 8,
+   "L1_checked": true,
+   "violations": [
+    "S1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "device",
+   "budget": 1,
+   "states": 25,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "M:claim IDF",
+     "H1:query->pending",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "L1": [
+     "M:claim IDF",
+     "H1:query->pending",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', None, 0), ('noF', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'M')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 29,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "S3",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "LEAK:PUT G over st/c50125",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "S3": [
+     "H1:query->upload",
+     "LEAK:PUT G over st/c50125",
+     "homelab:REJECT st/c50125 flag=('H1', 'rejected-upload')",
+     "=> honest device flagged [('H1', 'rejected-upload')]"
+    ],
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "LEAK:PUT G over st/c50125",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', 'st/c50125', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "H1",
+     "rejected-upload"
+    ]
+   ],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 11,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "FAULT:staged object vanishes st/c50125",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "FAULT:staged object vanishes st/c50125",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', 'st/c50125', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 80,
+   "L1_checked": false,
+   "violations": [
+    "S1",
+    "SL",
+    "S3"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->present(cloud lie)",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->present(cloud lie)",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "S3": [
+     "H1:query->upload",
+     "CLOUD:inject G as c50125",
+     "homelab:REJECT st/c50125/CLOUD flag=('H1', 'rejected-upload')",
+     "=> honest device flagged [('H1', 'rejected-upload')]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "rejected-upload"
+    ],
+    [
+     "H1",
+     "rejected-upload"
+    ]
+   ],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-proposed",
+   "adversary": "none",
+   "budget": 0,
+   "states": 167,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.05
+  },
+  {
+   "variant": "V1-proposed",
+   "adversary": "device",
+   "budget": 1,
+   "states": 368,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.12
+  },
+  {
+   "variant": "V1-proposed",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 948,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.27
+  },
+  {
+   "variant": "V1-proposed",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 352,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.08
+  },
+  {
+   "variant": "V1-proposed",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1024,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.25
+  },
+  {
+   "variant": "V1+create_only",
+   "adversary": "none",
+   "budget": 0,
+   "states": 172,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.04
+  },
+  {
+   "variant": "V1+create_only",
+   "adversary": "device",
+   "budget": 1,
+   "states": 377,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.08
+  },
+  {
+   "variant": "V1+create_only",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 652,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.16
+  },
+  {
+   "variant": "V1+create_only",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 377,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.1
+  },
+  {
+   "variant": "V1+create_only",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1114,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.3
+  },
+  {
+   "variant": "V1-no-per_upload_keys",
+   "adversary": "none",
+   "budget": 0,
+   "states": 80,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-per_upload_keys",
+   "adversary": "device",
+   "budget": 1,
+   "states": 192,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.02
+  },
+  {
+   "variant": "V1-no-per_upload_keys",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 324,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.05
+  },
+  {
+   "variant": "V1-no-per_upload_keys",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 163,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.03
+  },
+  {
+   "variant": "V1-no-per_upload_keys",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 528,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.09
+  },
+  {
+   "variant": "V1-no-receipts",
+   "adversary": "none",
+   "budget": 0,
+   "states": 7,
+   "L1_checked": true,
+   "violations": [
+    "S1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-receipts",
+   "adversary": "device",
+   "budget": 1,
+   "states": 23,
+   "L1_checked": true,
+   "violations": [
+    "S1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-receipts",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 20,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "LEAK:PUT G over st/c50125/H11",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "LEAK:PUT G over st/c50125/H11",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-receipts",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 9,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "FAULT:staged object vanishes st/c50125/H11",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "FAULT:staged object vanishes st/c50125/H11",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-receipts",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 60,
+   "L1_checked": false,
+   "violations": [
+    "S1",
+    "SL"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->present(cloud lie)",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->present(cloud lie)",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-pinned_trust",
+   "adversary": "none",
+   "budget": 0,
+   "states": 167,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.05
+  },
+  {
+   "variant": "V1-no-pinned_trust",
+   "adversary": "device",
+   "budget": 1,
+   "states": 368,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.1
+  },
+  {
+   "variant": "V1-no-pinned_trust",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 948,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.25
+  },
+  {
+   "variant": "V1-no-pinned_trust",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 352,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.09
+  },
+  {
+   "variant": "V1-no-pinned_trust",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 3643,
+   "L1_checked": false,
+   "violations": [
+    "S1",
+    "SL"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "CLOUD:relay receipt H1/c50125 signed CLOUD",
+     "H1:receipt verified -> GREEN",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->present(cloud lie)",
+     "CLOUD:relay receipt H1/c50125 signed CLOUD",
+     "H1:dedup-hit meta PUT",
+     "H1:receipt verified -> GREEN",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 1.52
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "none",
+   "budget": 0,
+   "states": 16,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "device",
+   "budget": 1,
+   "states": 18,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "M:claim IDF",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('idle', None, 0), ('noF', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'M')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 104,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 42,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 114,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "none",
+   "budget": 0,
+   "states": 179,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.05
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "device",
+   "budget": 1,
+   "states": 389,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.09
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 1016,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.35
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 392,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.05
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1160,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.31
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "none",
+   "budget": 0,
+   "states": 167,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.04
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "device",
+   "budget": 1,
+   "states": 368,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.09
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 959,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.29
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 352,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.08
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1036,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.27
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "none",
+   "budget": 0,
+   "states": 8,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "device",
+   "budget": 1,
+   "states": 25,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "M:claim IDF",
+     "H1:query->pending",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('waiting', None, 0), ('noF', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'M')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 24,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "LEAK:PUT G over st/c50125/H11",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('awaiting', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 10,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "FAULT:staged object vanishes st/c50125/H11",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('awaiting', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.0
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 61,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-attribution",
+   "adversary": "none",
+   "budget": 0,
+   "states": 167,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.03
+  },
+  {
+   "variant": "V1-no-attribution",
+   "adversary": "device",
+   "budget": 1,
+   "states": 368,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.13
+  },
+  {
+   "variant": "V1-no-attribution",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 948,
+   "L1_checked": true,
+   "violations": [
+    "S3"
+   ],
+   "counterexamples": {
+    "S3": [
+     "H1:query->upload",
+     "LEAK:PUT G over st/c50125/H11",
+     "homelab:REJECT st/c50125/H11 flag=('H1', 'rejected-upload')",
+     "=> honest device flagged [('H1', 'rejected-upload')]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "H1",
+     "rejected-upload"
+    ]
+   ],
+   "seconds": 0.3
+  },
+  {
+   "variant": "V1-no-attribution",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 352,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.09
+  },
+  {
+   "variant": "V1-no-attribution",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1116,
+   "L1_checked": false,
+   "violations": [
+    "S3"
+   ],
+   "counterexamples": {
+    "S3": [
+     "H1:query->upload",
+     "CLOUD:inject G as c50125",
+     "homelab:REJECT st/c50125/CLOUD flag=('H1', 'rejected-upload')",
+     "=> honest device flagged [('H1', 'rejected-upload')]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "rejected-upload"
+    ],
+    [
+     "H1",
+     "rejected-upload"
+    ]
+   ],
+   "seconds": 0.38
+  },
+  {
+   "variant": "V1-no-homelab_verify",
+   "adversary": "none",
+   "budget": 0,
+   "states": 167,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.05
+  },
+  {
+   "variant": "V1-no-homelab_verify",
+   "adversary": "device",
+   "budget": 1,
+   "states": 368,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.11
+  },
+  {
+   "variant": "V1-no-homelab_verify",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 1048,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "S2",
+    "L1"
+   ],
+   "counterexamples": {
+    "S2": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "LEAK:PUT G over st/c50125/H11",
+     "homelab:commit st/c50125/H11 (signer H1)",
+     "=> store holds content under an ID it does not hash to"
+    ],
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "LEAK:PUT G over st/c50125/H11",
+     "homelab:commit st/c50125/H11 (signer H1)",
+     "H1:receipt verified -> GREEN",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "LEAK:PUT G over st/c50125/H11",
+     "homelab:commit st/c50125/H11 (signer H1)",
+     "H1:receipt verified -> GREEN",
+     "=> SILENT LOSS: ['H1'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "LEAK:PUT G over st/c50125/H11",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('awaiting', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.35
+  },
+  {
+   "variant": "V1-no-homelab_verify",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 352,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.14
+  },
+  {
+   "variant": "V1-no-homelab_verify",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1029,
+   "L1_checked": false,
+   "violations": [
+    "S2"
+   ],
+   "counterexamples": {
+    "S2": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "CLOUD:swap content at st/c50125/H11",
+     "homelab:commit st/c50125/H11 (signer H1)",
+     "=> store holds content under an ID it does not hash to"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.4
+  },
+  {
+   "variant": "V1-no-registry_auth",
+   "adversary": "none",
+   "budget": 0,
+   "states": 167,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.06
+  },
+  {
+   "variant": "V1-no-registry_auth",
+   "adversary": "device",
+   "budget": 1,
+   "states": 368,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.14
+  },
+  {
+   "variant": "V1-no-registry_auth",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 948,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.35
+  },
+  {
+   "variant": "V1-no-registry_auth",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 352,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.1
+  },
+  {
+   "variant": "V1-no-registry_auth",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1176,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ],
+    [
+     "CLOUD",
+     "signed-bad-content"
+    ]
+   ],
+   "seconds": 0.2
+  },
+  {
+   "variant": "V1-no-reconcile_missing",
+   "adversary": "none",
+   "budget": 0,
+   "states": 167,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.03
+  },
+  {
+   "variant": "V1-no-reconcile_missing",
+   "adversary": "device",
+   "budget": 1,
+   "states": 368,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.06
+  },
+  {
+   "variant": "V1-no-reconcile_missing",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 948,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.32
+  },
+  {
+   "variant": "V1-no-reconcile_missing",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 352,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125/H11+Complete",
+     "FAULT:staged object vanishes st/c50125/H11",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('awaiting', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.1
+  },
+  {
+   "variant": "V1-no-reconcile_missing",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1024,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.18
+  },
+  {
+   "variant": "V1-no-per_upload_keys+create_only",
+   "adversary": "none",
+   "budget": 0,
+   "states": 82,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-per_upload_keys+create_only",
+   "adversary": "device",
+   "budget": 1,
+   "states": 190,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.02
+  },
+  {
+   "variant": "V1-no-per_upload_keys+create_only",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 240,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.03
+  },
+  {
+   "variant": "V1-no-per_upload_keys+create_only",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 172,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V1-no-per_upload_keys+create_only",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 558,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.07
+  }
+ ]
+}

@@ -1,0 +1,536 @@
+{
+ "budget": 1,
+ "holders": 2,
+ "ttl": 2,
+ "max_attempts": 3,
+ "dedup_id_F": "c50125f4bd266252",
+ "dedup_id_G": "e75c962b2220c571",
+ "variants": [
+  {
+   "name": "V0-ADR-0001-literal",
+   "per_upload_keys": false,
+   "create_only": false,
+   "receipts": false,
+   "pinned_trust": false,
+   "ttl": true,
+   "staged_state": false,
+   "reset_on_reject": false,
+   "requery": false,
+   "attribution": false,
+   "homelab_verify": true,
+   "registry_auth": false,
+   "reconcile_missing": false
+  },
+  {
+   "name": "V1-proposed",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1+create_only",
+   "per_upload_keys": true,
+   "create_only": true,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-per_upload_keys",
+   "per_upload_keys": false,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-receipts",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": false,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-pinned_trust",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": false,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-ttl",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": false,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-staged_state",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": false,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-reset_on_reject",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": false,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-requery",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": false,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-attribution",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": false,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-homelab_verify",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": false,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-registry_auth",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": false,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-reconcile_missing",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": false
+  },
+  {
+   "name": "V1-no-per_upload_keys+create_only",
+   "per_upload_keys": false,
+   "create_only": true,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  }
+ ],
+ "results": [
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "none",
+   "budget": 0,
+   "states": 325,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.03
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "device",
+   "budget": 1,
+   "states": 329,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "M:claim IDF",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('idle', None, 0), ('idle', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'M')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.06
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 2968,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.45
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 1275,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 0.19
+  },
+  {
+   "variant": "V1-no-ttl",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 1062,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.13
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "none",
+   "budget": 0,
+   "states": 35613,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 16.55
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "device",
+   "budget": 1,
+   "states": 71679,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 37.7
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 287328,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 199.23
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 88013,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 59.08
+  },
+  {
+   "variant": "V1-no-staged_state",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 134249,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 69.94
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "none",
+   "budget": 0,
+   "states": 35322,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 16.24
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "device",
+   "budget": 1,
+   "states": 71118,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 41.5
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 284931,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 237.08
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 86549,
+   "L1_checked": true,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [],
+   "seconds": 54.67
+  },
+  {
+   "variant": "V1-no-reset_on_reject",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 127329,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 67.74
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "none",
+   "budget": 0,
+   "states": 73,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "H1:query->upload",
+     "H2:query->pending",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('can_upload', 'st/c50125/H11', 1), ('waiting', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.03
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "device",
+   "budget": 1,
+   "states": 181,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "H1:query->upload",
+     "H2:query->pending",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('can_upload', 'st/c50125/H11', 1), ('waiting', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.04
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "leak",
+   "budget": 1,
+   "states": 306,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "H1:query->upload",
+     "H2:query->pending",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('can_upload', 'st/c50125/H11', 1), ('waiting', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.06
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "fault",
+   "budget": 1,
+   "states": 103,
+   "L1_checked": true,
+   "violations": [
+    "L1"
+   ],
+   "counterexamples": {
+    "L1": [
+     "H1:query->upload",
+     "H2:query->pending",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('can_upload', 'st/c50125/H11', 1), ('waiting', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.02
+  },
+  {
+   "variant": "V1-no-requery",
+   "adversary": "cloud",
+   "budget": 1,
+   "states": 502,
+   "L1_checked": false,
+   "violations": [],
+   "counterexamples": {},
+   "flags_seen": [
+    [
+     "-",
+     "tamper-in-transit"
+    ]
+   ],
+   "seconds": 0.08
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "notes": "B7-S2 SAC kit test update",
+  "pub_date": "2026-10-01T00:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "<paste the full CONTENT of reliquary-sac-probe_0.2.0_x64-setup.exe.sig here>",
+      "url": "http://<LAN IP of the update server>:8000/reliquary-sac-probe_0.2.0_x64-setup.exe"
+    }
+  }
+}

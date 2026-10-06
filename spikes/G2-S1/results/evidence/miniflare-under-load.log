@@ -1,0 +1,24 @@
+[miniflare] T01 PutObject (header SigV4) then GetObject round-trip: {"status": 200, "code": null, "roundtrip": true}
+[miniflare] T02 Presigned PUT then header GET round-trip: {"status": 200, "code": null, "roundtrip": true}
+[miniflare] T03 Presigned GET and HEAD: {"get": {"status": 200, "code": null, "ok": true}, "head": {"status": 200, "code": null}}
+[miniflare] T04 Presigned PUT with tampered signature: {"status": 403, "code": "SignatureDoesNotMatch"}
+[miniflare] T05 Presigned PUT URL replayed against a different key: {"status": 500, "code": null}
+[miniflare] T06 Presigned PUT URL used with GET: {"status": 403, "code": "SignatureDoesNotMatch"}
+[miniflare] T07 Presigned URL with expiry changed after signing: {"status": 403, "code": "SignatureDoesNotMatch"}
+[miniflare] ERR-basic group basic aborted: {"exception": "TimeoutError: timed out"}
+[miniflare] ERR-conditional group conditional aborted: {"exception": "TimeoutError: timed out"}
+[miniflare] ERR-race group race aborted: {"exception": "TimeoutError: timed out"}
+[miniflare] ERR-multipart group multipart aborted: {"exception": "TimeoutError: timed out"}
+[miniflare] ERR-integrity group integrity aborted: {"exception": "TimeoutError: timed out"}
+[miniflare] T45 Expect: 100-continue (waits 3 s for 100, then sends body anyway): {"got_100_continue": false, "seconds_waited_for_100": 3.0, "final_status": null, "sent_body_without_100": true}
+[miniflare] T46 PUT with Transfer-Encoding: chunked (unknown length), UNSIGNED-PAYLOAD: {"status": null, "code": null, "stored_equals_payload": false, "raw_head": "<TimeoutError>"}
+[miniflare] T50 ListObjectsV2 with prefix: {"status": 200, "code": null, "keys_found": 2}
+[miniflare] T51 DeleteObject (header auth), then HEAD: {"delete": {"status": 204, "code": null}, "head_after": 404}
+[miniflare] T52 Presigned DELETE: {"status": 204, "code": null}
+[miniflare] T53 Presigned POST (form upload) to bucket: {"status": 501, "code": "NotImplemented"}
+[miniflare] T54 PutBucketLifecycleConfiguration (abort 7 d on staging/, expire 3 d on restore/) then Get: {"put": {"status": 501, "code": "NotImplemented"}, "get": {"status": 501, "code": "NotImplemented", "has_rules": false}}
+[miniflare] W01 Worker-minted (aws4fetch) presigned PUT; object visible to the Worker's R2 binding: {"status": 200, "code": null, "binding_sees_same_bytes": true}
+[miniflare] W02 Binding put(onlyIf If-None-Match:*) on key written over S3: {"status": 412, "stored": false, "etag": null}
+[miniflare] W03 S3 PutObject If-None-Match:* on key written by binding: {"binding": 200, "status": 412, "code": "PreconditionFailed"}
+[miniflare] W04 Binding createMultipartUpload -> Worker-presigned S3 UploadPart x3 -> binding complete: {"complete": 200, "sha_match": true, "size": 10486994}
+[miniflare] W05 D1 claim (INSERT .. ON CONFLICT DO NOTHING): sequential, then 16-way race x10: {"first": {"won": true}, "second": {"won": false}, "winners_per_round": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}

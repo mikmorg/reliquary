@@ -1,0 +1,19 @@
+[package]
+name = "a1-rotate"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+# THROWAWAY spike code (Reliquary A1-S2). Not production code.
+
+[dependencies]
+sha2 = "=0.11.0"
+hmac = "=0.13.0"
+hkdf = "=0.13.0"
+rusqlite = { version = "=0.40.2", features = ["bundled"] }
+libc = "0.2"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1

@@ -1,0 +1,16 @@
+location_class,state,category,count,bytes
+app-data-or-cache,local,app-or-system,12000,285285466
+apple-photos-library,local,library-internal,1000,324006188
+apple-photos-library,local,photo,500,1384619003
+cloud-sync-folder,cloud-only,document,100,45806783
+cloud-sync-folder,cloud-only,other,50,62160187
+cloud-sync-folder,cloud-only,photo,400,1416070821
+cloud-sync-folder,local,photo,200,665688612
+documents,local,document,1500,599051224
+documents,local,genealogy,5,16316938
+downloads,local,photo,800,159494054
+messaging-app,local,photo,1200,248449191
+other,local,other,200,18044515
+other,local,photo,900,2620048363
+pictures,local,photo,4650,13788972080
+videos,local,video,300,38042180596

@@ -1,0 +1,1 @@
+{"check":"blake3-official-vectors","impl":"rust blake3 1.8.7","cases_pass":35,"cases_fail":0}

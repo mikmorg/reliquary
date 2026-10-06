@@ -1,0 +1,217 @@
+[
+  {
+    "app": "Immich",
+    "package": "app.alextran.immich",
+    "repo": "https://github.com/immich-app/immich",
+    "commit": "6cd746ad22a9730699f94f9b8696d6aa52e6fd55",
+    "commit_date": "2026-09-29T10:37:39+02:00",
+    "play_build_manifests": [
+      "mobile/android/app/src/main/AndroidManifest.xml"
+    ],
+    "removed_by_overlay": [],
+    "watched_permissions": {
+      "android.permission.READ_MEDIA_IMAGES": {},
+      "android.permission.READ_MEDIA_VIDEO": {},
+      "android.permission.READ_MEDIA_VISUAL_USER_SELECTED": {},
+      "android.permission.ACCESS_MEDIA_LOCATION": {},
+      "android.permission.READ_EXTERNAL_STORAGE": {
+        "maxSdkVersion": "32"
+      },
+      "android.permission.WRITE_EXTERNAL_STORAGE": {
+        "maxSdkVersion": "32"
+      },
+      "android.permission.MANAGE_MEDIA": {},
+      "android.permission.FOREGROUND_SERVICE": {},
+      "android.permission.FOREGROUND_SERVICE_DATA_SYNC": {},
+      "android.permission.FOREGROUND_SERVICE_LOCATION": {},
+      "android.permission.ACCESS_BACKGROUND_LOCATION": {},
+      "android.permission.POST_NOTIFICATIONS": {}
+    },
+    "fgs_services": [
+      {
+        "service": "androidx.work.impl.foreground.SystemForegroundService",
+        "types": "dataSync|shortService",
+        "tools_node": null,
+        "special_use_subtype": null,
+        "file": "mobile/android/app/src/main/AndroidManifest.xml"
+      }
+    ],
+    "play_presence_evidence": "mobile/android/fastlane/Appfile package_name app.alextran.immich + Fastfile upload_to_play_store (track 'beta' and default) of release AAB"
+  },
+  {
+    "app": "Ente Photos",
+    "package": "io.ente.photos",
+    "repo": "https://github.com/ente-io/ente",
+    "commit": "7a5993c007398d085e0481df48638b324a12697f",
+    "commit_date": "2026-09-29T13:54:07+05:30",
+    "play_build_manifests": [
+      "mobile/apps/photos/android/app/src/main/AndroidManifest.xml",
+      "mobile/apps/photos/android/app/src/playstore/AndroidManifest.xml"
+    ],
+    "removed_by_overlay": [
+      "android.permission.RECORD_AUDIO"
+    ],
+    "watched_permissions": {
+      "android.permission.READ_MEDIA_IMAGES": {},
+      "android.permission.READ_MEDIA_VIDEO": {},
+      "android.permission.ACCESS_MEDIA_LOCATION": {},
+      "android.permission.READ_EXTERNAL_STORAGE": {
+        "maxSdkVersion": "32"
+      },
+      "android.permission.WRITE_EXTERNAL_STORAGE": {
+        "maxSdkVersion": "29",
+        "tools:ignore": "ScopedStorage"
+      },
+      "android.permission.MANAGE_MEDIA": {},
+      "android.permission.RECEIVE_BOOT_COMPLETED": {},
+      "android.permission.POST_NOTIFICATIONS": {},
+      "android.permission.SCHEDULE_EXACT_ALARM": {}
+    },
+    "fgs_services": [],
+    "play_presence_evidence": "README Play link id=io.ente.photos; Gradle 'playstore' flavour keeps the unsuffixed applicationId"
+  },
+  {
+    "app": "Nextcloud",
+    "package": "com.nextcloud.client",
+    "repo": "https://github.com/nextcloud/android",
+    "commit": "3c70807a0fc8300b4e452a6a76ed2c29f7da2e52",
+    "commit_date": "2026-09-29T09:36:34+02:00",
+    "play_build_manifests": [
+      "app/src/main/AndroidManifest.xml",
+      "app/src/gplay/AndroidManifest.xml"
+    ],
+    "removed_by_overlay": [
+      "android.permission.REQUEST_INSTALL_PACKAGES"
+    ],
+    "watched_permissions": {
+      "android.permission.READ_MEDIA_IMAGES": {
+        "tools:ignore": "PhotoAndVideoPolicy"
+      },
+      "android.permission.READ_MEDIA_VIDEO": {
+        "tools:ignore": "PhotoAndVideoPolicy"
+      },
+      "android.permission.READ_MEDIA_VISUAL_USER_SELECTED": {},
+      "android.permission.ACCESS_MEDIA_LOCATION": {},
+      "android.permission.READ_EXTERNAL_STORAGE": {
+        "maxSdkVersion": "32"
+      },
+      "android.permission.WRITE_EXTERNAL_STORAGE": {
+        "maxSdkVersion": "29",
+        "tools:ignore": "ScopedStorage"
+      },
+      "android.permission.MANAGE_EXTERNAL_STORAGE": {
+        "tools:ignore": "ScopedStorage"
+      },
+      "android.permission.FOREGROUND_SERVICE": {},
+      "android.permission.FOREGROUND_SERVICE_DATA_SYNC": {},
+      "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS": {},
+      "android.permission.RECEIVE_BOOT_COMPLETED": {},
+      "android.permission.POST_NOTIFICATIONS": {},
+      "android.permission.WAKE_LOCK": {}
+    },
+    "fgs_services": [
+      {
+        "service": "com.nextcloud.client.player.media3.PlaybackService",
+        "types": "mediaPlayback",
+        "tools_node": null,
+        "special_use_subtype": null,
+        "file": "app/src/main/AndroidManifest.xml"
+      },
+      {
+        "service": "androidx.work.impl.foreground.SystemForegroundService",
+        "types": "dataSync",
+        "tools_node": null,
+        "special_use_subtype": null,
+        "file": "app/src/main/AndroidManifest.xml"
+      },
+      {
+        "service": "com.nextcloud.client.jobs.transfer.FileTransferService",
+        "types": "dataSync",
+        "tools_node": null,
+        "special_use_subtype": null,
+        "file": "app/src/main/AndroidManifest.xml"
+      }
+    ],
+    "play_presence_evidence": "README Play link id=com.nextcloud.client; Gradle 'gplay' flavour"
+  },
+  {
+    "app": "Proton Drive",
+    "package": "me.proton.android.drive",
+    "repo": "https://github.com/ProtonDriveApps/android-drive",
+    "commit": "d1c81cd2eab6c2d0715ad92c86428a4ef50b1825",
+    "commit_date": "2026-09-22T14:51:00+02:00",
+    "play_build_manifests": [
+      "app/src/main/AndroidManifest.xml",
+      "app-lock/src/main/AndroidManifest.xml",
+      "drive/base/data/src/main/AndroidManifest.xml",
+      "drive/backup/data/src/main/AndroidManifest.xml",
+      "drive/documentsprovider/data/src/main/AndroidManifest.xml",
+      "drive/drivelink-download/data/src/main/AndroidManifest.xml",
+      "photos/presentation/src/main/AndroidManifest.xml"
+    ],
+    "removed_by_overlay": [],
+    "watched_permissions": {
+      "android.permission.READ_MEDIA_IMAGES": {},
+      "android.permission.READ_MEDIA_VIDEO": {},
+      "android.permission.READ_MEDIA_VISUAL_USER_SELECTED": {},
+      "android.permission.ACCESS_MEDIA_LOCATION": {},
+      "android.permission.READ_EXTERNAL_STORAGE": {},
+      "android.permission.FOREGROUND_SERVICE_DATA_SYNC": {},
+      "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS": {},
+      "android.permission.POST_NOTIFICATIONS": {}
+    },
+    "fgs_services": [
+      {
+        "service": "androidx.work.impl.foreground.SystemForegroundService",
+        "types": "dataSync",
+        "tools_node": "merge",
+        "special_use_subtype": null,
+        "file": "app/src/main/AndroidManifest.xml"
+      }
+    ],
+    "play_presence_evidence": "app/build.gradle.kts depends on libs.google.play.review and writes src/main/play/release-notes with a comment on the 'Google Play console' 500-char limit (namespace me.proton.android.drive; prod flavour has no manifest overlay)"
+  },
+  {
+    "app": "Seafile (seadroid)",
+    "package": "com.seafile.seadroid2",
+    "repo": "https://github.com/haiwen/seadroid",
+    "commit": "9d6d49055297991391758d56f3f211e759e2ee8c",
+    "commit_date": "2026-09-28T14:59:34+08:00",
+    "play_build_manifests": [
+      "app/src/main/AndroidManifest.xml"
+    ],
+    "removed_by_overlay": [],
+    "watched_permissions": {
+      "android.permission.READ_MEDIA_IMAGES": {},
+      "android.permission.READ_MEDIA_VIDEO": {},
+      "android.permission.READ_EXTERNAL_STORAGE": {
+        "maxSdkVersion": "32"
+      },
+      "android.permission.WRITE_EXTERNAL_STORAGE": {},
+      "android.permission.MANAGE_EXTERNAL_STORAGE": {
+        "tools:ignore": "ScopedStorage"
+      },
+      "android.permission.FOREGROUND_SERVICE": {},
+      "android.permission.FOREGROUND_SERVICE_DATA_SYNC": {},
+      "android.permission.RECEIVE_BOOT_COMPLETED": {},
+      "android.permission.POST_NOTIFICATIONS": {}
+    },
+    "fgs_services": [
+      {
+        "service": "androidx.work.impl.foreground.SystemForegroundService",
+        "types": "dataSync",
+        "tools_node": "merge",
+        "special_use_subtype": null,
+        "file": "app/src/main/AndroidManifest.xml"
+      },
+      {
+        "service": ".framework.file_monitor.FileDaemonService",
+        "types": "dataSync",
+        "tools_node": null,
+        "special_use_subtype": null,
+        "file": "app/src/main/AndroidManifest.xml"
+      }
+    ],
+    "play_presence_evidence": "README 'Get it on Google Play' badge id=com.seafile.seadroid2; no store flavours"
+  }
+]

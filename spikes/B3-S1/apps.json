@@ -1,0 +1,17 @@
+[
+ {"name":"Immich","package":"app.alextran.immich","repo":"https://github.com/immich-app/immich","root":"immich",
+  "manifests":["mobile/android/app/src/main/AndroidManifest.xml"],
+  "play_evidence":"mobile/android/fastlane/Appfile package_name app.alextran.immich + Fastfile upload_to_play_store (track 'beta' and default) of release AAB"},
+ {"name":"Ente Photos","package":"io.ente.photos","repo":"https://github.com/ente-io/ente","root":"ente",
+  "manifests":["mobile/apps/photos/android/app/src/main/AndroidManifest.xml","mobile/apps/photos/android/app/src/playstore/AndroidManifest.xml"],
+  "play_evidence":"README Play link id=io.ente.photos; Gradle 'playstore' flavour keeps the unsuffixed applicationId"},
+ {"name":"Nextcloud","package":"com.nextcloud.client","repo":"https://github.com/nextcloud/android","root":"nextcloud",
+  "manifests":["app/src/main/AndroidManifest.xml","app/src/gplay/AndroidManifest.xml"],
+  "play_evidence":"README Play link id=com.nextcloud.client; Gradle 'gplay' flavour"},
+ {"name":"Proton Drive","package":"me.proton.android.drive","repo":"https://github.com/ProtonDriveApps/android-drive","root":"proton",
+  "manifests":["app/src/main/AndroidManifest.xml","app-lock/src/main/AndroidManifest.xml","drive/base/data/src/main/AndroidManifest.xml","drive/backup/data/src/main/AndroidManifest.xml","drive/documentsprovider/data/src/main/AndroidManifest.xml","drive/drivelink-download/data/src/main/AndroidManifest.xml","photos/presentation/src/main/AndroidManifest.xml"],
+  "play_evidence":"app/build.gradle.kts depends on libs.google.play.review and writes src/main/play/release-notes with a comment on the 'Google Play console' 500-char limit (namespace me.proton.android.drive; prod flavour has no manifest overlay)"},
+ {"name":"Seafile (seadroid)","package":"com.seafile.seadroid2","repo":"https://github.com/haiwen/seadroid","root":"seadroid",
+  "manifests":["app/src/main/AndroidManifest.xml"],
+  "play_evidence":"README 'Get it on Google Play' badge id=com.seafile.seadroid2; no store flavours"}
+]

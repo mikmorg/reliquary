@@ -1,0 +1,6 @@
+run 2026-09-29T10:20:25 Miniflare 5.20260926.0-alpha; presigned PUT for key a sent to key b (T05 shape), 50 tries per body size
+body 0 B: {'403 SignatureDoesNotMatch': 50}
+body 1 B: {'403 SignatureDoesNotMatch': 48, '500 None': 2}
+body 64 KiB: {'403 SignatureDoesNotMatch': 21, '500 None': 29}
+body 1 MiB: {'403 SignatureDoesNotMatch': 38, '500 None': 12}
+key b stored afterwards: False

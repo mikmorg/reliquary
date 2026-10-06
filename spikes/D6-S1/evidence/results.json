@@ -1,0 +1,183 @@
+{
+  "label": "EMULATED, not real R2/Cloudflare: wrangler dev --local (workerd + Miniflare local D1/R2/send_email); email REST endpoint is a local mock",
+  "wrangler_version": "4.143.0",
+  "age_version": "1.1.1",
+  "sim_period": [
+    "2026-10-05T00:00Z",
+    "2026-10-31T00:00Z"
+  ],
+  "stale_after_days": 14.0,
+  "homelab_outage": [
+    "2026-10-25T00:00Z",
+    "2026-10-27T06:00Z"
+  ],
+  "wall_clock_seconds": 60.5,
+  "http_requests_to_worker_approx": 3494,
+  "checks": {
+    "local_pin_blocks_non_owner_recipient": {
+      "http": 200,
+      "sent": false,
+      "code": null,
+      "message": "email to zz-d6s1-not-owner@example.invalid not allowed"
+    },
+    "local_send_with_to_omitted": {
+      "http": 200,
+      "sent": false,
+      "code": null,
+      "message": "Cannot read properties of undefined (reading 'email')"
+    },
+    "plaintext_roster_blob_rejected": {
+      "http": 400,
+      "response": {
+        "error": "roster_blob_must_be_age_ciphertext"
+      },
+      "pass": true
+    }
+  },
+  "d1_schema": [
+    "CREATE TABLE _cf_METADATA (\n        key INTEGER PRIMARY KEY,\n        value BLOB\n      );",
+    "CREATE TABLE accounts (\n  account_id   TEXT PRIMARY KEY,         -- opaque, random\n  created_hour INTEGER NOT NULL\n);",
+    "CREATE TABLE commits (\n  seq            INTEGER PRIMARY KEY AUTOINCREMENT,\n  device_id      TEXT NOT NULL,\n  object_id      TEXT NOT NULL,          -- opaque dedup ID (HMAC), never a filename\n  committed_hour INTEGER NOT NULL\n);",
+    "CREATE TABLE \"d1_migrations\"(\n\t\tid         INTEGER PRIMARY KEY AUTOINCREMENT,\n\t\tname       TEXT UNIQUE,\n\t\tapplied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL\n);",
+    "CREATE TABLE devices (\n  device_id        TEXT PRIMARY KEY,     -- opaque, random\n  account_id       TEXT NOT NULL,\n  token_hash       TEXT NOT NULL,\n  pubkey           TEXT NOT NULL,        -- device age recipient (public)\n  enrolled_hour    INTEGER NOT NULL,\n  last_seen_hour   INTEGER,              -- coarse: floored to the hour\n  last_commit_hour INTEGER\n);",
+    "CREATE TABLE invites (\n  invite_id   TEXT PRIMARY KEY,          -- opaque, random\n  code_hash   TEXT NOT NULL UNIQUE,      -- SHA-256 of the invite code (ADR-0002 section 2)\n  expires_at  INTEGER NOT NULL,\n  state       TEXT NOT NULL DEFAULT 'unused',\n  account_id  TEXT\n);",
+    "CREATE TABLE meta (\n  k TEXT PRIMARY KEY,\n  v TEXT NOT NULL\n);",
+    "CREATE TABLE _cf_ALARM (\n      actor_id TEXT PRIMARY KEY,\n      scheduled_time INTEGER,\n      actor_name TEXT\n    ) WITHOUT ROWID;"
+  ],
+  "family_markers_in_d1_export": [],
+  "owner_markers_in_d1_export": [],
+  "family_markers_in_local_cloud_state_files": {},
+  "family_markers_in_worker_dot_wrangler": {},
+  "owner_markers_in_worker_dot_wrangler": {},
+  "family_markers_in_wrangler_dev_log": [],
+  "family_markers_in_local_observability": [],
+  "local_observability_rows": {
+    "logs": 2930,
+    "spans": 10000
+  },
+  "local_observability_log_message_samples": [
+    "\"POST http://127.0.0.1:8799/v1/admin/invites\"",
+    "\"POST http://127.0.0.1:8799/v1/commit\"",
+    "\"POST http://127.0.0.1:8799/v1/device/add\"",
+    "\"POST http://127.0.0.1:8799/v1/heartbeat\"",
+    "\"POST http://127.0.0.1:8799/v1/homelab/ack\"",
+    "\"POST http://127.0.0.1:8799/v1/homelab/pull\"",
+    "\"POST http://127.0.0.1:8799/v1/inbox\"",
+    "\"POST http://127.0.0.1:8799/v1/redeem\"",
+    "\"POST http://127.0.0.1:8799/v1/sim/now\"",
+    "\"POST http://127.0.0.1:8799/v1/sim/run-dms\"",
+    "\"POST http://127.0.0.1:8799/v1/sim/try-send-other\""
+  ],
+  "positive_control_family_markers_in_homelab_roster_db": [
+    "Synthperson",
+    "Zzalpha",
+    "Zzalpha Synthperson",
+    "Zzbeta",
+    "Zzbeta Synthperson",
+    "Zzdelta",
+    "Zzdelta Synthperson",
+    "Zzgamma",
+    "Zzgamma Synthperson",
+    "zz-d6s1-alpha",
+    "zz-d6s1-alpha@example.invalid",
+    "zz-d6s1-beta",
+    "zz-d6s1-beta@example.invalid",
+    "zz-d6s1-delta",
+    "zz-d6s1-delta@example.invalid",
+    "zz-d6s1-gamma",
+    "zz-d6s1-gamma@example.invalid"
+  ],
+  "emails_sent_by_homelab": {
+    "verify": 4,
+    "nudge": 3
+  },
+  "nudge_rows": [
+    {
+      "device": "alpha-laptop",
+      "stale_at": null,
+      "note": "not stale within the run"
+    },
+    {
+      "device": "alpha-phone",
+      "last_commit": "2026-10-11T14:00Z",
+      "stale_at": "2026-10-25T14:00Z",
+      "nudge_sent_at": "2026-10-27T06:00Z",
+      "delay_hours": 40.0,
+      "homelab_down_at_crossing": true,
+      "person_verified": true
+    },
+    {
+      "device": "beta-laptop",
+      "last_commit": "2026-10-08T21:00Z",
+      "stale_at": "2026-10-22T21:00Z",
+      "nudge_sent_at": "2026-10-22T21:00Z",
+      "delay_hours": 0.0,
+      "homelab_down_at_crossing": false,
+      "person_verified": true
+    },
+    {
+      "device": "gamma-phone",
+      "last_commit": "2026-10-13T12:00Z",
+      "stale_at": "2026-10-27T12:00Z",
+      "nudge_sent_at": "2026-10-27T12:00Z",
+      "delay_hours": 0.0,
+      "homelab_down_at_crossing": false,
+      "person_verified": true
+    },
+    {
+      "device": "delta-laptop",
+      "last_commit": "2026-10-07T17:00Z",
+      "stale_at": "2026-10-21T17:00Z",
+      "nudge_sent_at": null,
+      "delay_hours": null,
+      "homelab_down_at_crossing": false,
+      "person_verified": false
+    }
+  ],
+  "dead_mans_switch_fired": [
+    {
+      "sim_now": "2026-10-25T05:00Z",
+      "silent_hours": 6
+    }
+  ],
+  "owner_alert_email_files": [
+    "email-text__Nx1HNFAybN605vdb5yfSyxjcvXgWgxovbAR7@notify.d6s1.example.invalid.txt"
+  ],
+  "family_markers_in_owner_alert_emails": {},
+  "owner_markers_in_owner_alert_emails": {},
+  "d1_app_table_columns": {
+    "invites": [
+      "invite_id",
+      "code_hash",
+      "expires_at",
+      "state",
+      "account_id"
+    ],
+    "accounts": [
+      "account_id",
+      "created_hour"
+    ],
+    "devices": [
+      "device_id",
+      "account_id",
+      "token_hash",
+      "pubkey",
+      "enrolled_hour",
+      "last_seen_hour",
+      "last_commit_hour"
+    ],
+    "commits": [
+      "seq",
+      "device_id",
+      "object_id",
+      "committed_hour"
+    ],
+    "meta": [
+      "k",
+      "v"
+    ]
+  },
+  "d1_pii_like_columns": [],
+  "pass_d1_no_name_or_email": true,
+  "pass_nudge_within_24h_while_homelab_up": true
+}

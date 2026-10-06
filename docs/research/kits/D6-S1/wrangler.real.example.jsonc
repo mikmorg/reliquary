@@ -1,0 +1,26 @@
+// D6-S1 kit: Worker config for the SANDBOX account only (H1). Copy it to spikes/D6-S1/worker/wrangler.jsonc
+// in a scratch copy of that folder, then fill in the <...> values. Never use production credentials.
+// Differences from the emulated config: real clock (SIM_CLOCK "0"), 60 s timestamp granularity so that minutes
+// can stand in for days, a 30-minute dead-man's-switch threshold, and a 5-minute cron. There is no EMULATOR_OWNER_TO,
+// so the documented default is tested: with `to` omitted, the binding's destination_address is used.
+// ADMIN_TOKEN and HOMELAB_TOKEN are secrets: set them with `wrangler secret put`, not here.
+{
+  "name": "d6s1-kit",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "d1_databases": [
+    { "binding": "DB", "database_name": "d6s1-kit", "database_id": "<from `wrangler d1 create`>", "migrations_dir": "migrations" }
+  ],
+  "r2_buckets": [{ "binding": "INBOX", "bucket_name": "d6s1-kit-inbox" }],
+  "send_email": [
+    { "name": "OWNER_ALERT", "destination_address": "<owner TEST inbox, verified as a destination address>" }
+  ],
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } },
+  "vars": {
+    "SIM_CLOCK": "0",
+    "TIME_GRANULARITY_S": "60",
+    "DMS_HOURS": "0.5",
+    "ALERT_FROM": "alerts@<sending subdomain, e.g. notify.sandbox-domain>"
+  }
+}

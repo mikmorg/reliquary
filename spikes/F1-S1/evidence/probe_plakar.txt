@@ -1,0 +1,8 @@
+create encrypted store (passphrase, Argon2id KDF)          OK
+client backup through plakar server                        OK
+snapshot id                                                300b4006
+same client restores (decrypts) with the passphrase it writes with YES (bytes identical)
+client 'plakar rm -apply <snap>' via server (delete off)   exit=0, snapshots listed afterwards=0; info: rm: removal of 300b4006 completed successfully
+store on disk before/after rm (server has delete off)      before [files=7 bytes=3701123] after [files=8 bytes=3701339]
+client backup WITHOUT passphrase (write-only device?)      exit=77 plakar: inappropriate ioctl for device
+who listens                                                plakar server accepts inbound HTTP; clients dial it

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  B3-S3 dry-run app: permission and service declarations under test.
+  This is a TEMPLATE for the app module's src/main/AndroidManifest.xml. It is not a complete app.
+  - Package / applicationId: a THROWAWAY name set in Gradle (see README step 1). Never the real Reliquary id.
+  - targetSdk 36 is set in Gradle (Play requirement since 31 Aug 2026).
+  - Variant A ("intended set"): everything below, with the MANAGE_EXTERNAL_STORAGE line enabled
+    only if OD-19 is still open or leans to all-files access.
+  - Variant B ("media only"): delete the MANAGE_EXTERNAL_STORAGE line. This is the pre-decided fallback.
+  - Deliberately ABSENT: REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, MANAGE_MEDIA, ACCESS_BACKGROUND_LOCATION,
+    REQUEST_INSTALL_PACKAGES, specialUse FGS. Do not add them; the dry run tests the design as proposed.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Automatic whole-library backup: broad media access (Photo & Video Permissions declaration). -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <!-- Lets Android 14+ offer "Allow limited access"; the app must then say plainly that backup is partial. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <!-- Original bytes including EXIF location (Data safety: Location). -->
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <!-- Android 12L and below. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+
+    <!-- Variant A only (OD-19 probe). Remove for Variant B. -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+
+    <!-- Long seeding runs: WorkManager promoted to a dataSync foreground service (FGS declaration + demo video). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <!-- "Back up now" button: user-initiated data transfer job (API 34+). -->
+    <uses-permission android:name="android.permission.RUN_USER_INITIATED_JOBS" />
+
+    <application
+        android:label="Reliquary dry run"
+        android:allowBackup="false">
+
+        <!-- Give WorkManager's foreground service the dataSync type (same pattern as Proton Drive / Seafile). -->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+
+        <!-- UIDT job service (class name is the builder's choice). -->
+        <service
+            android:name=".BackupNowJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!-- Launcher activity, enrollment (QR / typed code), health screen and
+             Settings > "Leave family backup" live in the app code; not shown here. -->
+    </application>
+</manifest>

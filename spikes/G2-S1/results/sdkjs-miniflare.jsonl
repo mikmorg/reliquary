@@ -1,0 +1,7 @@
+{"id":"S1","title":"PutObject 4 KiB Buffer, SDK defaults","ok":true,"ms":236,"roundtrip":true}
+{"id":"S2","title":"PutObject 6 MiB Buffer, SDK defaults (includes the SDK expect-continue middleware)","ok":true,"ms":6318,"roundtrip":true}
+{"id":"S3","title":"PutObject stream body with ContentLength, SDK default checksum setting (wire encoding not captured)","ok":false,"ms":58,"error":"Error: @aws-sdk XML parse error: unexpected content.\n  Deserialization error: to see the raw response, inspect the hidden field {error}.$response on this object.","http":500}
+{"id":"S4","title":"Same as S3 with requestChecksumCalculation WHEN_REQUIRED","ok":true,"ms":135,"roundtrip":true}
+{"id":"S5","title":"Same as S2 with the expect-continue middleware removed","ok":true,"ms":452,"roundtrip":true}
+{"id":"S6","title":"getSignedUrl PutObject + UploadPart (path-prefixed endpoint), fetch() upload, SDK Complete","ok":true,"ms":716,"put_status":200,"url_path_prefix_kept":"/cdn-cgi/local/r2/s3/staging/sdk/mumi9mi5/s6","mpu_roundtrip":true}
+{"id":"S7","title":"PutObject IfNoneMatch '*' via SDK on existing key","ok":true,"ms":148,"status":412,"code":"PreconditionFailed"}

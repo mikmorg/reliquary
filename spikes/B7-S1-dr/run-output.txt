@@ -1,0 +1,25 @@
+rcodesign: apple-codesign 0.29.0
+cert withO sha1=409d403c74fc4632333f545a6f463b2cafc1b365   cert noO sha1=1365574218fd9d2f990ec9caff3cccf9238f0bd9
+adhoc-v1           signed cdhash=bf1be1576eed96b61eca39f06203448fa45d122c  ADHOC|RUNTIME
+    DR embedded: 
+adhoc-again-v1     signed cdhash=bf1be1576eed96b61eca39f06203448fa45d122c  ADHOC|RUNTIME
+    DR embedded: 
+selfO-v1           signed cdhash=914ac865acc36e2c09a4c0a9e93acef42753e67f  RUNTIME
+    DR embedded: designated(3) => (identifier "org.reliquary.b7s1probe") and (certificate root = H"409d403c74fc4632333f545a6f463b2cafc1b365") 
+selfNoO-v1         signed cdhash=190ccc3697eb6866160dba80b1d066afec6020ee  RUNTIME
+    DR embedded: designated(3) => (identifier "org.reliquary.b7s1probe") and (certificate root = H"1365574218fd9d2f990ec9caff3cccf9238f0bd9") 
+adhoc-v2           signed cdhash=855cb1c67efc0a3d243d44fa4be08edade38496e  ADHOC|RUNTIME
+    DR embedded: 
+adhoc-again-v2     signed cdhash=855cb1c67efc0a3d243d44fa4be08edade38496e  ADHOC|RUNTIME
+    DR embedded: 
+selfO-v2           signed cdhash=973a7096ba3bcd87c77d2179e98d0b9297f0a7bd  RUNTIME
+    DR embedded: designated(3) => (identifier "org.reliquary.b7s1probe") and (certificate root = H"409d403c74fc4632333f545a6f463b2cafc1b365") 
+selfNoO-v2         signed cdhash=cce9a1d659ee4e5080e620e47769d922b7f12325  RUNTIME
+    DR embedded: designated(3) => (identifier "org.reliquary.b7s1probe") and (certificate root = H"1365574218fd9d2f990ec9caff3cccf9238f0bd9") 
+openssl: OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)
+p12 legacy: signed; DR: designated(3) => (identifier "org.reliquary.b7s1probe") and (certificate root = H"409d403c74fc4632333f545a6f463b2cafc1b365") 
+p12 default: FAILED: Error: incorrect password given when decrypting PFX data
+
+# recorded after the run (2026-09-29T09:59:25Z), sha256 of the npm tarballs used as v1/v2 stand-ins:
+1dc8475bb7938b2eb63c7e79a4a3bb2af0dca3e75bba62db87bb64a6340a79a5  @esbuild/darwin-arm64-0.25.0.tgz
+d5b5109ce4cbdb7057b867b8052f6bf9e51cb65d3e6318a751e35d7d0c4d8326  @esbuild/darwin-arm64-0.25.1.tgz

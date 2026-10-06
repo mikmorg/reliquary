@@ -1,0 +1,26 @@
+component,paths,commit,product_code_lines,test_code_lines,top_languages_product,description
+ente-photos-mobile-dart,ente/mobile/apps/photos/lib,7a5993c,225496,129,Dart=225496,"Ente Photos Flutter app (Dart, lib/ only)"
+ente-photos-mobile-native,ente/mobile/apps/photos/android ente/mobile/apps/photos/ios ente/mobile/apps/photos/plugins,7a5993c,11175,1957,Dart=4152; Kotlin=3710; Swift=3221; GLSL=74,Ente Photos native Android/iOS glue + in-app plugins
+ente-mobile-shared-packages,ente/mobile/packages,7a5993c,46715,4068,Dart=40541; Swift=3217; Kotlin=2629; C++=282,"Ente shared Flutter packages (crypto, accounts, network, ui...)"
+ente-rust,ente/rust,7a5993c,126919,15486,Rust=125726; JavaScript=704; Python=444; Shell=45,Ente Rust crates (core/bindings)
+ente-museum-server,ente/server,7a5993c,54491,19414,Go=54244; Shell=229; Dockerfile=18,Ente museum server (Go)
+ente-web,ente/web,7a5993c,185761,5428,TSX=125355; TypeScript=58416; JavaScript=1884; Dockerfile=106,Ente web apps + packages (TS; also the desktop app's UI)
+immich-mobile-dart,immich/mobile/lib,6cd746a,56761,0,Dart=56761,"Immich Flutter app (Dart, lib/ only, openapi excluded)"
+immich-mobile-native,immich/mobile/android immich/mobile/ios immich/mobile/packages,6cd746a,9238,284,Kotlin=3810; Swift=3103; Dart=1934; C=168,Immich native Android/iOS code + local packages
+immich-server,immich/server/src,6cd746a,52744,27546,TypeScript=52289; TSX=455,"Immich server (TypeScript, NestJS)"
+immich-web,immich/web/src,6cd746a,32822,5340,Svelte=17368; TypeScript=15454,Immich web (Svelte/TS)
+immich-ml,immich/machine-learning,6cd746a,5045,178,Python=4658; C++=251; Dockerfile=122; Shell=14,Immich ML service (Python)
+restic,restic_restic,5127c4a,41369,32161,Go=36937; Shell=3798; PowerShell=159; Zsh=146,restic CLI + repository library (Go)
+kopia,kopia_kopia,87d15de,62456,56504,Go=59848; JavaScript=1196; Makefile=698; Shell=516,"Kopia CLI, repository, server, UI glue (Go)"
+kopia-server-only,kopia_kopia/internal/server kopia_kopia/internal/grpcapi kopia_kopia/internal/auth,87d15de,3877,1757,Go=3694; Protocol Buffers=175; Makefile=8,Kopia repository-server + ACL code (Go)
+plakar,PlakarKorp_plakar,ade5fd0,16636,20153,Go=16375; JavaScript=202; Makefile=32; Dockerfile=17,Plakar (Go)
+plakar-kloset,kloset,5e81a8d,16192,26099,Go=16180; Makefile=12,Kloset storage engine library used by Plakar (Go)
+syncthing,syncthing_syncthing,b223f72,66565,29791,Go=60294; JavaScript=4084; Shell=1843; Protocol Buffers=285,Syncthing (Go)
+syncthing-android-fork,researchxxl_syncthing-android,02a9585,22846,0,Java=14815; Kotlin=6778; Python=603; Batch=350,Syncthing-Fork Android wrapper (Java/Kotlin)
+rustic_core,rustic-rs_rustic_core,647d00f,19906,2278,Rust=19900; Just=6,rustic_core library (Rust)
+rustic-cli,rustic-rs_rustic,143d073,9699,724,Rust=9657; Just=21; Dockerfile=19; Shell=2,rustic CLI (Rust)
+borg,borgbackup_borg/src,153d10a,40413,29734,Python=33503; Cython=5334; C=896; C Header=680,Borg (Python + Cython/C)
+urbackup-backend,uroni_urbackup_backend,a4eb72a,731446,13976,C=306018; C++=232248; C Header=112790; JavaScript=40914,UrBackup server+client backend (C++)
+duplicati,duplicati_duplicati,25734de,237748,4984,C#=207448; JavaScript=7963; Modelica=5888; PO File=5518,Duplicati (C#)
+nextcloud-android,nextcloud_android,3c70807,114520,25861,Kotlin=69869; Java=42978; Shell=651; Batch=238,Nextcloud Android client (Java/Kotlin)
+reliquary-spike-content-encryption,/home/user/reliquary/spikes/content-encryption,2e7958d,2432,0,Rust=1782; Python=633; Go=17,Reliquary throwaway encryption spike (Rust+Go+Python)

@@ -1,0 +1,152 @@
+
+## SC-1 dedup poisoning (duplicate faking) by an enrolled device  [V1-proposed]  replayed=True
+    M:claim IDF
+    M:PUT poison G as IDF at st/c50125/M1
+    H1:query->pending
+    H2:query->pending
+    homelab:REJECT st/c50125/M1 flag=('M', 'signed-bad-content')
+    H1:timeout->requery
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    homelab:commit st/c50125/H11 (signer H1)
+    H1:receipt verified -> GREEN
+    H2:timeout->requery
+    H2:query->present
+    H2:dedup-hit meta PUT
+    homelab:dedup-hit receipt H2
+    H2:receipt verified -> GREEN
+   END: {"devices": {"H1": "protected", "H2": "protected"}, "store_has_F": true, "claims": [["committed", "-"]], "flags": [["M", "signed-bad-content"]], "S1_green_without_F": []}
+
+## SC-1 dedup poisoning (duplicate faking) by an enrolled device  [V0-ADR-0001-literal]  replayed=True
+    M:claim IDF
+    M:PUT poison G as IDF at st/c50125
+    H1:query->pending
+    H2:query->pending
+    homelab:REJECT st/c50125 flag=('M', 'rejected-upload')
+   END: {"devices": {"H1": "done", "H2": "done"}, "store_has_F": false, "claims": [["claimed", "M"]], "flags": [["M", "rejected-upload"]], "S1_green_without_F": ["H1", "H2"]}
+
+## SC-2 claim squatting (claim, never upload)  [V1-proposed]  replayed=True
+    M:claim IDF
+    H1:query->pending
+    tick
+    tick
+    H1:timeout->requery
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    homelab:commit st/c50125/H11 (signer H1)
+    H1:receipt verified -> GREEN
+   END: {"devices": {"H1": "protected", "H2": "idle"}, "store_has_F": true, "claims": [["committed", "-"]], "flags": [], "S1_green_without_F": []}
+
+## SC-2 claim squatting (claim, never upload)  [V0-ADR-0001-literal]  replayed=True
+    M:claim IDF
+    H1:query->pending
+    H2:query->pending
+    tick
+    tick
+   END: {"devices": {"H1": "done", "H2": "done"}, "store_has_F": false, "claims": [], "flags": [], "S1_green_without_F": ["H1", "H2"]}
+
+## SC-3 overwrite of a staged object after the claim TTL lapses (homelab offline)  [V1-proposed]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    H2:query->pending
+   END: {"devices": {"H1": "awaiting", "H2": "waiting"}, "store_has_F": false, "claims": [["staged", "H1"]], "flags": [], "S1_green_without_F": []}
+
+## SC-3 overwrite of a staged object after the claim TTL lapses (homelab offline)  [V1-no-staged_state]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    tick
+    tick
+    M:claim IDF
+    M:PUT poison G as IDF at st/c50125/M1
+    H2:query->pending
+    homelab:REJECT st/c50125/M1 flag=('M', 'signed-bad-content')
+    homelab:commit st/c50125/H11 (signer H1)
+    H1:receipt verified -> GREEN
+   END: {"devices": {"H1": "protected", "H2": "waiting"}, "store_has_F": true, "claims": [["committed", "-"]], "flags": [["M", "signed-bad-content"]], "S1_green_without_F": []}
+
+## SC-3 overwrite of a staged object after the claim TTL lapses (homelab offline)  [V0-ADR-0001-literal]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125+Complete
+    tick
+    tick
+    M:claim IDF
+    M:PUT poison G as IDF at st/c50125
+    H2:query->pending
+    homelab:REJECT st/c50125 flag=('M', 'rejected-upload')
+   END: {"devices": {"H1": "done", "H2": "done"}, "store_has_F": false, "claims": [["claimed", "M"]], "flags": [["M", "rejected-upload"]], "S1_green_without_F": ["H1", "H2"]}
+
+## SC-4 leaked presigned PUT URL reused to overwrite  [V1-proposed]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    LEAK:PUT G over st/c50125/H11
+    homelab:REJECT st/c50125/H11 flag=('-', 'tamper-in-transit')
+    H1:timeout->requery
+    H1:query->upload
+    H1:PUT st/c50125/H12+Complete
+    homelab:commit st/c50125/H12 (signer H1)
+    H1:receipt verified -> GREEN
+   END: {"devices": {"H1": "protected", "H2": "idle"}, "store_has_F": true, "claims": [["committed", "-"]], "flags": [["-", "tamper-in-transit"]], "S1_green_without_F": []}
+
+## SC-4 leaked presigned PUT URL reused to overwrite  [V0-ADR-0001-literal]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125+Complete
+    H2:query->pending
+    LEAK:PUT G over st/c50125
+    homelab:REJECT st/c50125 flag=('H1', 'rejected-upload')
+   END: {"devices": {"H1": "done", "H2": "done"}, "store_has_F": false, "claims": [["claimed", "H1"]], "flags": [["H1", "rejected-upload"]], "S1_green_without_F": ["H1", "H2"]}
+
+## SC-5 malicious cloud says 'already have it'  [V1-proposed]  replayed=True
+    H1:query->present(cloud lie)
+    H1:timeout->requery
+   END: {"devices": {"H1": "idle", "H2": "idle"}, "store_has_F": false, "claims": [], "flags": [], "S1_green_without_F": []}
+
+## SC-5 malicious cloud says 'already have it'  [V0-ADR-0001-literal]  replayed=True
+    H1:query->present(cloud lie)
+   END: {"devices": {"H1": "done", "H2": "idle"}, "store_has_F": false, "claims": [], "flags": [], "S1_green_without_F": ["H1"]}
+
+## SC-6 malicious cloud forges a receipt  [V1-proposed]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    CLOUD:relay receipt H1/c50125 signed CLOUD
+   END: {"devices": {"H1": "awaiting", "H2": "idle"}, "store_has_F": false, "claims": [["staged", "H1"]], "flags": [], "S1_green_without_F": []}
+
+## SC-6 malicious cloud forges a receipt  [V1-no-pinned_trust]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    CLOUD:relay receipt H1/c50125 signed CLOUD
+    H1:receipt verified -> GREEN
+   END: {"devices": {"H1": "protected", "H2": "idle"}, "store_has_F": false, "claims": [["staged", "H1"]], "flags": [], "S1_green_without_F": ["H1"]}
+
+## SC-8 honest-cloud fault: a staged object vanishes before the homelab pulls it  [V1-proposed]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    FAULT:staged object vanishes st/c50125/H11
+    H1:timeout->requery
+    H1:query->upload
+    H1:PUT st/c50125/H12+Complete
+    homelab:commit st/c50125/H12 (signer H1)
+    H1:receipt verified -> GREEN
+   END: {"devices": {"H1": "protected", "H2": "idle"}, "store_has_F": true, "claims": [["committed", "-"]], "flags": [], "S1_green_without_F": []}
+
+## SC-8 honest-cloud fault: a staged object vanishes before the homelab pulls it  [V1-no-reconcile_missing]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    FAULT:staged object vanishes st/c50125/H11
+    H1:timeout->requery
+    H1:query->pending
+    H1:timeout->requery
+    H1:query->pending
+   END: {"devices": {"H1": "waiting", "H2": "idle"}, "store_has_F": false, "claims": [["staged", "H1"]], "flags": [], "S1_green_without_F": []}
+
+## SC-7 malicious cloud deletes the staged object before the homelab pulls it  [V1-proposed]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125/H11+Complete
+    CLOUD:delete st/c50125/H11
+    H1:timeout->requery
+   END: {"devices": {"H1": "idle", "H2": "idle"}, "store_has_F": false, "claims": [["staged", "H1"]], "flags": [], "S1_green_without_F": []}
+
+## SC-7 malicious cloud deletes the staged object before the homelab pulls it  [V0-ADR-0001-literal]  replayed=True
+    H1:query->upload
+    H1:PUT st/c50125+Complete
+    CLOUD:delete st/c50125
+   END: {"devices": {"H1": "done", "H2": "idle"}, "store_has_F": false, "claims": [["claimed", "H1"]], "flags": [], "S1_green_without_F": ["H1"]}

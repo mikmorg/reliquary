@@ -1,0 +1,12 @@
+{"mode":"info","arch":"x86_64","os":"linux","threads":4,"cpu_features":{"sha":true,"sse4.1":true,"avx2":true,"avx512f":true,"avx512vl":true},"sha2_forced_soft":false,"blake3_features":[]}
+{"mode":"mem","workload":"sha256","bytes":1073741824,"runs":5,"mb_per_s_median":988,"mb_per_s_min":922,"mb_per_s_max":1009,"cpu_s_per_gb_median":0.914,"sink":0}
+{"mode":"mem","workload":"hmac_sha256_content","bytes":1073741824,"runs":5,"mb_per_s_median":1027,"mb_per_s_min":977,"mb_per_s_max":1043,"cpu_s_per_gb_median":0.926,"sink":0}
+{"mode":"mem","workload":"C1_sha256+hmac_sha256_content","bytes":1073741824,"runs":5,"mb_per_s_median":544,"mb_per_s_min":519,"mb_per_s_max":561,"cpu_s_per_gb_median":1.685,"sink":0}
+{"mode":"mem","workload":"C2_sha256_then_hmac_digest","bytes":1073741824,"runs":5,"mb_per_s_median":1016,"mb_per_s_min":912,"mb_per_s_max":1140,"cpu_s_per_gb_median":0.954,"sink":0}
+{"mode":"mem","workload":"blake3","bytes":1073741824,"runs":5,"mb_per_s_median":3639,"mb_per_s_min":3301,"mb_per_s_max":4484,"cpu_s_per_gb_median":0.224,"sink":0}
+{"mode":"mem","workload":"blake3_keyed","bytes":1073741824,"runs":5,"mb_per_s_median":4472,"mb_per_s_min":3851,"mb_per_s_max":4783,"cpu_s_per_gb_median":0.223,"sink":0}
+{"mode":"mem","workload":"C3_blake3+keyed_blake3_content","bytes":1073741824,"runs":5,"mb_per_s_median":2313,"mb_per_s_min":1932,"mb_per_s_max":2481,"cpu_s_per_gb_median":0.427,"sink":0}
+{"mode":"mem","workload":"C4_blake3_then_keyed_digest","bytes":1073741824,"runs":5,"mb_per_s_median":3885,"mb_per_s_min":3454,"mb_per_s_max":4667,"cpu_s_per_gb_median":0.233,"sink":0}
+{"mode":"mem","workload":"C5_sha256+keyed_blake3_content","bytes":1073741824,"runs":5,"mb_per_s_median":810,"mb_per_s_min":799,"mb_per_s_max":862,"cpu_s_per_gb_median":1.135,"sink":0}
+{"mode":"mem","workload":"blake3_rayon_all_cores","bytes":1073741824,"runs":5,"mb_per_s_median":6658,"mb_per_s_min":4349,"mb_per_s_max":8441,"cpu_s_per_gb_median":0.229,"sink":0}
+{"mode":"mem","workload":"C4_rayon_all_cores","bytes":1073741824,"runs":5,"mb_per_s_median":7915,"mb_per_s_min":5945,"mb_per_s_max":8719,"cpu_s_per_gb_median":0.233,"sink":0}

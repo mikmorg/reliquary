@@ -1,0 +1,7 @@
+{
+  "name": "a1-s3-vectors-ts",
+  "private": true,
+  "type": "module",
+  "description": "THROWAWAY spike (Reliquary A1-S3): independent TypeScript/JS check of the dedup-ID vectors",
+  "dependencies": { "@noble/hashes": "2.4.0" }
+}

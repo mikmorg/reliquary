@@ -1,0 +1,9 @@
+item,usd_year,when,usd_once
+Workers Paid (production),60.0000,always,
+"Workers Paid (sandbox, research only)",60.0000,research phase,
+Apple Developer Program,99.0000,OD-01 iOS in v1 / OD-09,
+Azure Artifact Signing Basic,119.8800,OD-09 (US/Canada individuals only),
+Google Play / ADC full distribution,,OD-10 closed track,25.0000
+ADC limited distribution,,OD-10 limited (<=20 devices),0.0000
+Domain,"owner quote (H5 L02 estimate $10-15, unverified)",always,
+Email Service,0.0000,"inside 3,000/month; verified destinations free",

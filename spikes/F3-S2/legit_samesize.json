@@ -1,0 +1,51 @@
+{
+ "photo_57k_max_cluster": 7,
+ "photo_57k_cluster_samples": [
+  5,
+  5,
+  7,
+  4,
+  6,
+  6,
+  4,
+  4,
+  4,
+  5,
+  4,
+  4,
+  5,
+  5,
+  5,
+  4,
+  5,
+  4,
+  4,
+  5
+ ],
+ "doc_500k_max_cluster_per_24h": 425,
+ "doc_250k_cluster_samples": [
+  386,
+  402,
+  377,
+  390,
+  404,
+  371,
+  404,
+  425,
+  384,
+  376
+ ],
+ "doc_250k_ge64KiB_cluster_samples": [
+  363,
+  335,
+  371,
+  334,
+  365,
+  366,
+  341,
+  342,
+  368,
+  367
+ ],
+ "note": "max number of distinct-content files sharing one exact size, in random public samples (OI photos: 57,399 = one BUD-HASH seed; GovDocs1: 250k = half of a 500k desktop seed per 24 h)"
+}

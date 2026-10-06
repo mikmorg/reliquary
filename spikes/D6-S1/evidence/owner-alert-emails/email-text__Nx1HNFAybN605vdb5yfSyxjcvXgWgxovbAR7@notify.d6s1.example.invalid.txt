@@ -1,0 +1,1 @@
+The home backup server has not contacted the cloud for 6 hours.

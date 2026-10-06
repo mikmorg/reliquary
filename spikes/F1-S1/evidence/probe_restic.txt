@@ -1,0 +1,22 @@
+init dev1 repo over rest-server                            OK
+backup (append) by dev1                                    OK
+dev1 'restic forget <snap>' (delete history)               exit=3 403
+dev1 'restic prune' (nothing forgotten, so nothing to delete) exit=0; before [snapshots=1 packs=2] after [snapshots=1 packs=2]
+raw HTTP DELETE of existing snapshot file                  HTTP 403
+raw HTTP overwrite (POST) of existing snapshot file        HTTP 403
+raw HTTP DELETE of existing data pack                      HTTP 403
+dev1 restores (decrypts) its whole history                 YES (bytes identical)
+dev1 can print the repository master key                   YES (mac,encrypt)
+dev1 writes snapshot with forged --time and --host         ACCEPTED
+dev1 'key add' (new password for same master key)          exit=0
+dev1 'key remove' of original key                          exit=1
+dev2 reads dev1 repo config (--private-repos)              HTTP 401
+cross-device dedup of identical 3 MB file                  none: dev1 data=4005317 B, dev2 data=3003025 B (separate repos/keys)
+blob ID == plain SHA-256(file) for a 1 MB file (single chunk) YES (unkeyed; visible to key holders only)
+who listens                                                rest-server (server) accepts inbound HTTP; client dials it
+--- rest-server log tail
+Private repositories enabled
+Group accessible repos disabled
+start server on 127.0.0.1:18000
+Creating repository directories in $W/data/dev1
+Creating repository directories in $W/data/dev2

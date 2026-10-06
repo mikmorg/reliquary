@@ -1,0 +1,6 @@
+{
+  "name": "d6-s1-minimal-pii-spike",
+  "private": true,
+  "description": "THROWAWAY D6-S1 spike (emulated). See README.md.",
+  "devDependencies": { "wrangler": "4.143.0" }
+}

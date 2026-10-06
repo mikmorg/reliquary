@@ -1,0 +1,53 @@
+[
+ {
+  "device": "dev-a",
+  "clients": 20,
+  "reqs": 100,
+  "sent": 20939,
+  "granted_sum_seen_by_clients": 20939,
+  "ledger": {
+   "granted": 0,
+   "used": 20939,
+   "open": 20939,
+   "refused": 0
+  },
+  "checks": {
+   "used_equals_granted": true,
+   "used_plus_refused_equals_sent": true
+  }
+ },
+ {
+  "device": "dev-b",
+  "clients": 20,
+  "reqs": 100,
+  "sent": 20751,
+  "granted_sum_seen_by_clients": 5000,
+  "ledger": {
+   "granted": 0,
+   "used": 5000,
+   "open": 5000,
+   "refused": 15751
+  },
+  "checks": {
+   "used_equals_granted": true,
+   "used_plus_refused_equals_sent": true
+  }
+ },
+ {
+  "device": "dev-c",
+  "clients": 20,
+  "reqs": 100,
+  "sent": 20671,
+  "granted_sum_seen_by_clients": 1000,
+  "ledger": {
+   "granted": 0,
+   "used": 1000,
+   "open": 1000,
+   "refused": 19671
+  },
+  "checks": {
+   "used_equals_granted": true,
+   "used_plus_refused_equals_sent": true
+  }
+ }
+]

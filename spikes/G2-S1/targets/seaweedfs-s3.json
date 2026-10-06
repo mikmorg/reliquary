@@ -1,0 +1,1 @@
+{"identities":[{"name":"g2s1","credentials":[{"accessKey":"g2s1-local-ak","secretKey":"g2s1-local-secret-not-a-real-credential"}],"actions":["Admin","Read","Write","List","Tagging"]}]}

@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reliquary prototype</title>
+<!--
+  E2-S1 clickable prototype (throwaway). Desktop first-run: code -> name/email -> discovery proposal ->
+  other devices -> health view. All numbers are SYNTHETIC. The page makes no network requests and
+  saves nothing: no cookies, no localStorage, no form submission. Close the tab to erase everything.
+  Wording is a PLACEHOLDER until E3's copy deck (ADR-0024) exists; see ../README.md.
+  Facilitator controls: press F2 (or Ctrl+Shift+F) to show or hide the facilitator panel.
+-->
+<style>
+:root{--bg:#f5f4f0;--card:#ffffff;--ink:#1d1d1b;--muted:#5b5b57;--line:#d8d6cf;--accent:#1f5f8b;--ok:#2e6b3a;--warn:#8a5a00;--bad:#9b2c2c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1c1e;--card:#26282b;--ink:#ecebe7;--muted:#b3b1ab;--line:#3b3d41;--accent:#7fb5dc;--ok:#8fd19e;--warn:#e7c06b;--bad:#f0a0a0}}
+:root[data-theme="dark"]{--bg:#1b1c1e;--card:#26282b;--ink:#ecebe7;--muted:#b3b1ab;--line:#3b3d41;--accent:#7fb5dc;--ok:#8fd19e;--warn:#e7c06b;--bad:#f0a0a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.win{max-width:760px;margin:32px auto;padding:0 16px}
+.bar{font-size:14px;color:var(--muted);padding:8px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:28px}
+h1{font-size:28px;margin:0 0 12px}
+h2{font-size:21px;margin:18px 0 8px}
+p{margin:8px 0}
+.muted{color:var(--muted)}
+button{font:inherit;padding:12px 20px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;margin:12px 8px 0 0}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.primary{color:#10202c}}
+input[type=text],input[type=email]{font:inherit;padding:10px 12px;width:100%;max-width:420px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+input.code{letter-spacing:.12em;text-transform:uppercase;font-family:ui-monospace,Menlo,Consolas,monospace}
+label{display:block;margin-top:14px}
+.err{color:var(--bad);min-height:1.5em}
+.row{display:flex;gap:14px;align-items:flex-start;border-top:1px solid var(--line);padding:14px 0}
+.row:first-of-type{border-top:0}
+.icon{font-size:24px;width:32px;text-align:center;flex:0 0 32px}
+.grow{flex:1}
+.state{font-weight:600}
+.s-ok{color:var(--ok)}.s-warn{color:var(--warn)}.s-bad{color:var(--bad)}
+.progress{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin:8px 0}
+.progress>div{height:100%;background:var(--accent);width:0}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.thumbs span{width:64px;height:48px;border-radius:4px;background:var(--line)}
+.checks label{display:flex;gap:10px;align-items:center;margin:10px 0}
+.hidden{display:none}
+#fac{position:fixed;right:12px;bottom:12px;width:340px;max-height:70vh;overflow:auto;background:#111;color:#eee;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace;padding:10px;border-radius:8px;z-index:9}
+#fac button{font-size:12px;padding:4px 8px;margin:4px 4px 0 0;background:#333;color:#eee;border-color:#555}
+@media (max-width:520px){.card{padding:18px}h1{font-size:24px}#fac{left:12px;width:auto}}
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="bar">Reliquary</div>
+
+  <section class="card" id="s-welcome">
+    <h1>Welcome</h1>
+    <p>This app keeps a copy of your photos, videos and important papers safe at <b>Alex's home</b>.</p>
+    <p class="muted">It takes about ten minutes to set up. You will need the card that came with this stick.</p>
+    <button class="primary" data-go="s-code">Get started</button>
+  </section>
+
+  <section class="card hidden" id="s-code">
+    <h1>Type the code from your card</h1>
+    <p class="muted">It is printed under the square picture. Capital letters and small letters both work.</p>
+    <label for="code">Your code</label>
+    <input id="code" class="code" type="text" autocomplete="off" spellcheck="false" placeholder="XXXX-XXXX-XXXX">
+    <div class="err" id="code-err" role="alert"></div>
+    <button class="primary" id="code-next">Continue</button>
+  </section>
+
+  <section class="card hidden" id="s-name">
+    <h1>Tell us who you are</h1>
+    <p class="muted">Alex uses this to know whose photos these are, and to email you if something needs your attention.</p>
+    <label for="nm">Your first name</label>
+    <input id="nm" type="text" autocomplete="off">
+    <label for="em">Your email address</label>
+    <input id="em" type="email" autocomplete="off">
+    <div class="err" id="name-err" role="alert"></div>
+    <button class="primary" id="name-next">Continue</button>
+  </section>
+
+  <section class="card hidden" id="s-scan">
+    <h1>Looking for your keepsakes…</h1>
+    <p class="muted">This only looks. Nothing is changed or deleted on your computer.</p>
+    <div class="progress" aria-hidden="true"><div id="scanbar"></div></div>
+    <p id="scantext" aria-live="polite">Checking your Pictures folder</p>
+  </section>
+
+  <section class="card hidden" id="s-propose">
+    <h1>We found things worth keeping safe</h1>
+    <div class="row"><div class="icon" aria-hidden="true">🖼</div><div class="grow">
+      <div class="state">12,480 photos and videos</div><div class="muted">38 GB, from 2009 to today</div></div></div>
+    <div class="row"><div class="icon" aria-hidden="true">📄</div><div class="grow">
+      <div class="state">214 scanned papers and documents</div><div class="muted">1.2 GB</div></div></div>
+    <p>We left out things like program files and downloaded installers.</p>
+    <button class="primary" data-go="s-devices" id="accept">Keep all of these safe</button>
+    <button data-go="s-look">Let me look first</button>
+  </section>
+
+  <section class="card hidden" id="s-look">
+    <h1>A closer look</h1>
+    <h2>Photos and videos</h2>
+    <p class="muted">From your Pictures folder, your Desktop and a folder called "Old camera".</p>
+    <div class="thumbs" aria-label="Example pictures"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <h2>Scanned papers and documents</h2>
+    <p class="muted">From your Documents folder.</p>
+    <button class="primary" data-go="s-devices">Keep all of these safe</button>
+    <button data-go="s-propose">Back</button>
+  </section>
+
+  <section class="card hidden" id="s-devices">
+    <h1>Do you use any of these?</h1>
+    <p class="muted">We will help you protect them too. You can do this later.</p>
+    <div class="checks">
+      <label><input type="checkbox" id="d-android"> An Android phone or tablet</label>
+      <label><input type="checkbox" id="d-iphone"> An iPhone or iPad</label>
+      <label><input type="checkbox" id="d-pc"> Another computer</label>
+    </div>
+    <button class="primary" id="dev-next">Continue</button>
+    <button id="dev-skip">Skip for now</button>
+  </section>
+
+  <section class="card hidden" id="s-done">
+    <h1>You're all set</h1>
+    <p>Reliquary is now sending copies of your keepsakes to Alex's home. You can close this window. It keeps working in the background.</p>
+    <button class="primary" data-go="s-health">Show me how things are</button>
+  </section>
+
+  <section class="card hidden" id="s-health">
+    <h1 id="h-sentence">…</h1>
+    <p class="muted" id="h-asof">…</p>
+    <div id="h-rows"></div>
+  </section>
+</div>
+
+<div id="fac" class="hidden" aria-hidden="true">
+  <b>Facilitator</b> (F2 hides)<br>
+  Scenario: <span id="f-scn">1</span>
+  <div>
+    <button data-scn="1">Health: scenario 1 (catching up)</button>
+    <button data-scn="2">Health: scenario 2 (all stored)</button>
+    <button id="f-reset">Reset to start</button>
+    <button id="f-mark">Mark "participant answered"</button>
+  </div>
+  <pre id="f-log"></pre>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  // Synthetic test code printed on the practice card (see ../README.md). Check char not modelled.
+  var CODE = "K7QM4TXD9HRP";
+  var t0 = null, log = [], scenario = 1, devices = {android:false, iphone:false, pc:false};
+  var $ = function(id){ return document.getElementById(id); };
+
+  function stamp(what){
+    var now = Date.now();
+    if (t0 === null) t0 = now;
+    var s = ((now - t0) / 1000).toFixed(0);
+    log.push(s + " s  " + what);
+    $("f-log").textContent = log.join("\n");
+  }
+  function show(id){
+    var secs = document.querySelectorAll(".card");
+    for (var i = 0; i < secs.length; i++) secs[i].classList.add("hidden");
+    $(id).classList.remove("hidden");
+    stamp("screen " + id.replace("s-", ""));
+    if (id === "s-scan") runScan();
+    if (id === "s-health") renderHealth();
+    var h = $(id).querySelector("h1"); if (h) { h.setAttribute("tabindex", "-1"); h.focus(); }
+  }
+  document.addEventListener("click", function(e){
+    var go = e.target.getAttribute && e.target.getAttribute("data-go");
+    if (go) show(go);
+    var scn = e.target.getAttribute && e.target.getAttribute("data-scn");
+    if (scn) { scenario = +scn; $("f-scn").textContent = scn; show("s-health"); }
+  });
+
+  $("code-next").onclick = function(){
+    var v = $("code").value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (v === CODE) { $("code-err").textContent = ""; stamp("code ok"); show("s-name"); }
+    else { $("code-err").textContent = "That code doesn't match. Check each letter against your card."; stamp("code wrong"); }
+  };
+  $("name-next").onclick = function(){
+    if (!$("nm").value.trim() || $("em").value.indexOf("@") < 1) {
+      $("name-err").textContent = "Please fill in both boxes."; stamp("name incomplete"); return;
+    }
+    $("name-err").textContent = ""; show("s-scan");
+  };
+  function runScan(){
+    var steps = ["Checking your Pictures folder", "Checking your Documents folder", "Checking your Desktop", "Almost done"];
+    var i = 0, bar = $("scanbar");
+    var timer = setInterval(function(){
+      i++; bar.style.width = Math.min(100, i * 25) + "%";
+      if (i < steps.length) $("scantext").textContent = steps[i];
+      if (i >= 4) { clearInterval(timer); show("s-propose"); }
+    }, 1200);
+  }
+  function nextDevices(skip){
+    devices.android = !skip && $("d-android").checked;
+    devices.iphone = !skip && $("d-iphone").checked;
+    devices.pc = !skip && $("d-pc").checked;
+    stamp("devices " + (skip ? "skipped" : JSON.stringify(devices)));
+    show("s-done");
+  }
+  $("dev-next").onclick = function(){ nextDevices(false); };
+  $("dev-skip").onclick = function(){ nextDevices(true); };
+
+  function row(icon, title, stateText, cls, detail){
+    return '<div class="row"><div class="icon" aria-hidden="true">' + icon + '</div><div class="grow">' +
+      '<div>' + title + '</div><div class="state ' + cls + '">' + stateText + '</div>' +
+      '<div class="muted">' + detail + '</div></div></div>';
+  }
+  // PLACEHOLDER WORDING. E3 (ADR-0024) owns the vocabulary. "Protected"/"safe" are deliberately not
+  // used: E2 gates them on the restore drill. Status is never shown by colour alone (icon + words).
+  function renderHealth(){
+    var name = $("nm").value.trim() || "you";
+    var rows = "";
+    if (scenario === 1) {
+      $("h-sentence").textContent = "Most of your keepsakes are stored at home. Some are still on their way.";
+      $("h-asof").textContent = "Checked a minute ago. Nothing for you to do. Leave your computer on and connected.";
+      rows += row("⏳", "This computer", "Catching up", "s-warn",
+        "11,902 of 12,694 keepsakes are stored at Alex's home. 792 are on their way, mostly photos from this month.");
+    } else {
+      $("h-sentence").textContent = "Everything on this computer is stored at home.";
+      $("h-asof").textContent = "Checked a minute ago.";
+      rows += row("✔", "This computer", "Stored at home", "s-ok",
+        "All 12,694 keepsakes are stored at Alex's home, as of this morning.");
+    }
+    if (devices.android) rows += row("✖", "Your Android phone", "Not set up yet", "s-bad",
+      "Photos on your phone are not being kept safe yet. <button data-go='s-health'>Set it up</button>");
+    if (devices.iphone) rows += row("…", "Your iPhone", "Not available yet", "s-bad",
+      "Reliquary can't look after iPhones yet. We'll let you know when it can.");
+    if (devices.pc) rows += row("✖", "Your other computer", "Not set up yet", "s-bad",
+      "Nothing on that computer is being kept safe yet. <button data-go='s-health'>Set it up</button>");
+    $("h-rows").innerHTML = rows;
+  }
+
+  $("f-reset").onclick = function(){
+    $("code").value = ""; $("nm").value = ""; $("em").value = "";
+    ["d-android","d-iphone","d-pc"].forEach(function(id){ $(id).checked = false; });
+    devices = {android:false, iphone:false, pc:false}; scenario = 1; $("f-scn").textContent = "1";
+    t0 = null; log = []; show("s-welcome");
+  };
+  $("f-mark").onclick = function(){ stamp("ANSWERED (facilitator mark)"); };
+  document.addEventListener("keydown", function(e){
+    if (e.key === "F2" || (e.ctrlKey && e.shiftKey && (e.key === "F" || e.key === "f"))) {
+      e.preventDefault(); $("fac").classList.toggle("hidden");
+    }
+  });
+  show("s-welcome");
+})();
+</script>
+</body>
+</html>

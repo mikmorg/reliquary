@@ -1,0 +1,140 @@
+{
+  "label": "EMULATED, not real Cloudflare: wrangler dev --local; local explorer is not Workers Logs",
+  "wrangler_version": "4.143.0",
+  "markers": {
+    "query": "zz-d6s2-q@example.invalid",
+    "header": "zz-d6s2-h@example.invalid",
+    "body_clean": "zz-d6s2-bc@example.invalid",
+    "body_leaky": "zz-d6s2-bl@example.invalid",
+    "body_throw": "zz-d6s2-bt@example.invalid",
+    "fake_client_ip": "203.0.113.77"
+  },
+  "runs": {
+    "invocation_logs_true": {
+      "config": {
+        "enabled": true,
+        "logs": {
+          "invocation_logs": true
+        }
+      },
+      "http_status": {
+        "clean": 200,
+        "leaky": 200,
+        "throw": 500,
+        "query": 200,
+        "header": 200
+      },
+      "cf_probe": [
+        200,
+        "{\"cf_country\":\"US\",\"has_cf_connecting_ip\":true}"
+      ],
+      "markers_found_per_surface": {
+        "wrangler_dev_stdout": [
+          "body_leaky",
+          "body_throw"
+        ],
+        "local_explorer_logs": [
+          "body_leaky",
+          "query"
+        ],
+        "local_explorer_spans": []
+      },
+      "local_explorer_log_rows": 9,
+      "local_explorer_span_rows": 7,
+      "local_explorer_log_messages": [
+        "\"GET http://127.0.0.1:8797/cf\"",
+        "\"GET http://127.0.0.1:8797/cf\"",
+        "[\"{\\\"event\\\":\\\"probe_clean\\\",\\\"device_id\\\":\\\"opaque-1234\\\",\\\"outcome\\\":\\\"ok\\\"}\"]",
+        "\"POST http://127.0.0.1:8797/clean\"",
+        "[\"received body\",\"{\\\"email\\\": \\\"zz-d6s2-bl@example.invalid\\\"}\"]",
+        "\"POST http://127.0.0.1:8797/leaky-console\"",
+        "\"POST http://127.0.0.1:8797/throw\"",
+        "\"GET http://127.0.0.1:8797/query?email=zz-d6s2-q@example.invalid\"",
+        "\"GET http://127.0.0.1:8797/header\""
+      ]
+    },
+    "invocation_logs_false": {
+      "config": {
+        "enabled": true,
+        "logs": {
+          "invocation_logs": false
+        }
+      },
+      "http_status": {
+        "clean": 200,
+        "leaky": 200,
+        "throw": 500,
+        "query": 200,
+        "header": 200
+      },
+      "cf_probe": [
+        200,
+        "{\"cf_country\":\"US\",\"has_cf_connecting_ip\":true}"
+      ],
+      "markers_found_per_surface": {
+        "wrangler_dev_stdout": [
+          "body_leaky",
+          "body_throw"
+        ],
+        "local_explorer_logs": [
+          "body_leaky",
+          "query"
+        ],
+        "local_explorer_spans": []
+      },
+      "local_explorer_log_rows": 9,
+      "local_explorer_span_rows": 7,
+      "local_explorer_log_messages": [
+        "\"GET http://127.0.0.1:8797/cf\"",
+        "\"GET http://127.0.0.1:8797/cf\"",
+        "[\"{\\\"event\\\":\\\"probe_clean\\\",\\\"device_id\\\":\\\"opaque-1234\\\",\\\"outcome\\\":\\\"ok\\\"}\"]",
+        "\"POST http://127.0.0.1:8797/clean\"",
+        "[\"received body\",\"{\\\"email\\\": \\\"zz-d6s2-bl@example.invalid\\\"}\"]",
+        "\"POST http://127.0.0.1:8797/leaky-console\"",
+        "\"POST http://127.0.0.1:8797/throw\"",
+        "\"GET http://127.0.0.1:8797/query?email=zz-d6s2-q@example.invalid\"",
+        "\"GET http://127.0.0.1:8797/header\""
+      ]
+    },
+    "observability_disabled": {
+      "config": {
+        "enabled": false
+      },
+      "http_status": {
+        "clean": 200,
+        "leaky": 200,
+        "throw": 500,
+        "query": 200,
+        "header": 200
+      },
+      "cf_probe": [
+        200,
+        "{\"cf_country\":\"US\",\"has_cf_connecting_ip\":true}"
+      ],
+      "markers_found_per_surface": {
+        "wrangler_dev_stdout": [
+          "body_leaky",
+          "body_throw"
+        ],
+        "local_explorer_logs": [
+          "body_leaky",
+          "query"
+        ],
+        "local_explorer_spans": []
+      },
+      "local_explorer_log_rows": 9,
+      "local_explorer_span_rows": 7,
+      "local_explorer_log_messages": [
+        "\"GET http://127.0.0.1:8797/cf\"",
+        "\"GET http://127.0.0.1:8797/cf\"",
+        "[\"{\\\"event\\\":\\\"probe_clean\\\",\\\"device_id\\\":\\\"opaque-1234\\\",\\\"outcome\\\":\\\"ok\\\"}\"]",
+        "\"POST http://127.0.0.1:8797/clean\"",
+        "[\"received body\",\"{\\\"email\\\": \\\"zz-d6s2-bl@example.invalid\\\"}\"]",
+        "\"POST http://127.0.0.1:8797/leaky-console\"",
+        "\"POST http://127.0.0.1:8797/throw\"",
+        "\"GET http://127.0.0.1:8797/query?email=zz-d6s2-q@example.invalid\"",
+        "\"GET http://127.0.0.1:8797/header\""
+      ]
+    }
+  }
+}

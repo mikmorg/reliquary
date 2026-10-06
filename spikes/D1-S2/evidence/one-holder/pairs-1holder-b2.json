@@ -1,0 +1,394 @@
+[
+ {
+  "variant": "V1-no-reset_on_reject-no-reconcile_missing",
+  "adversary": "device",
+  "budget": 2,
+  "states": 770,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "M",
+    "signed-bad-content"
+   ]
+  ],
+  "seconds": 0.11
+ },
+ {
+  "variant": "V1-no-reset_on_reject-no-reconcile_missing",
+  "adversary": "leak",
+  "budget": 2,
+  "states": 2641,
+  "L1_checked": true,
+  "violations": [
+   "L1"
+  ],
+  "counterexamples": {
+   "L1": [
+    "H1:query->upload",
+    "H1:PUT st/c50125/H11+Complete",
+    "LEAK:PUT G over st/c50125/H11",
+    "=> attacker stops here; honest actors can no longer reach all-green. devs=(('awaiting', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+   ]
+  },
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.41
+ },
+ {
+  "variant": "V1-no-reset_on_reject-no-reconcile_missing",
+  "adversary": "fault",
+  "budget": 2,
+  "states": 542,
+  "L1_checked": true,
+  "violations": [
+   "L1"
+  ],
+  "counterexamples": {
+   "L1": [
+    "H1:query->upload",
+    "H1:PUT st/c50125/H11+Complete",
+    "FAULT:staged object vanishes st/c50125/H11",
+    "=> attacker stops here; honest actors can no longer reach all-green. devs=(('awaiting', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+   ]
+  },
+  "flags_seen": [],
+  "seconds": 0.08
+ },
+ {
+  "variant": "V1-no-reset_on_reject-no-reconcile_missing",
+  "adversary": "cloud",
+  "budget": 2,
+  "states": 5178,
+  "L1_checked": false,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.72
+ },
+ {
+  "variant": "V1-no-ttl-no-reconcile_missing",
+  "adversary": "device",
+  "budget": 2,
+  "states": 37,
+  "L1_checked": true,
+  "violations": [
+   "L1"
+  ],
+  "counterexamples": {
+   "L1": [
+    "M:claim IDF",
+    "=> attacker stops here; honest actors can no longer reach all-green. devs=(('idle', None, 0), ('noF', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'M')] store=[]"
+   ]
+  },
+  "flags_seen": [
+   [
+    "M",
+    "signed-bad-content"
+   ]
+  ],
+  "seconds": 0.0
+ },
+ {
+  "variant": "V1-no-ttl-no-reconcile_missing",
+  "adversary": "leak",
+  "budget": 2,
+  "states": 386,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.04
+ },
+ {
+  "variant": "V1-no-ttl-no-reconcile_missing",
+  "adversary": "fault",
+  "budget": 2,
+  "states": 35,
+  "L1_checked": true,
+  "violations": [
+   "L1"
+  ],
+  "counterexamples": {
+   "L1": [
+    "H1:query->upload",
+    "H1:PUT st/c50125/H11+Complete",
+    "FAULT:staged object vanishes st/c50125/H11",
+    "=> attacker stops here; honest actors can no longer reach all-green. devs=(('awaiting', 'st/c50125/H11', 1), ('noF', None, 0)) claims=[('c50125f4bd266252', 'staged', 'H1')] store=[]"
+   ]
+  },
+  "flags_seen": [],
+  "seconds": 0.0
+ },
+ {
+  "variant": "V1-no-ttl-no-reconcile_missing",
+  "adversary": "cloud",
+  "budget": 2,
+  "states": 461,
+  "L1_checked": false,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.02
+ },
+ {
+  "variant": "V1-no-staged_state-no-per_upload_keys",
+  "adversary": "device",
+  "budget": 2,
+  "states": 528,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "M",
+    "signed-bad-content"
+   ]
+  ],
+  "seconds": 0.03
+ },
+ {
+  "variant": "V1-no-staged_state-no-per_upload_keys",
+  "adversary": "leak",
+  "budget": 2,
+  "states": 714,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.06
+ },
+ {
+  "variant": "V1-no-staged_state-no-per_upload_keys",
+  "adversary": "fault",
+  "budget": 2,
+  "states": 274,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [],
+  "seconds": 0.01
+ },
+ {
+  "variant": "V1-no-staged_state-no-per_upload_keys",
+  "adversary": "cloud",
+  "budget": 2,
+  "states": 2628,
+  "L1_checked": false,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.24
+ },
+ {
+  "variant": "V1-no-per_upload_keys-no-attribution",
+  "adversary": "device",
+  "budget": 2,
+  "states": 654,
+  "L1_checked": true,
+  "violations": [
+   "S3"
+  ],
+  "counterexamples": {
+   "S3": [
+    "M:claim IDF",
+    "tick",
+    "tick",
+    "H1:query->upload",
+    "M:PUT poison G as IDF at st/c50125",
+    "homelab:REJECT st/c50125 flag=('H1', 'rejected-upload')",
+    "=> honest device flagged [('H1', 'rejected-upload')]"
+   ]
+  },
+  "flags_seen": [
+   [
+    "-",
+    "rejected-upload"
+   ],
+   [
+    "H1",
+    "rejected-upload"
+   ],
+   [
+    "M",
+    "rejected-upload"
+   ]
+  ],
+  "seconds": 0.06
+ },
+ {
+  "variant": "V1-no-per_upload_keys-no-attribution",
+  "adversary": "leak",
+  "budget": 2,
+  "states": 634,
+  "L1_checked": true,
+  "violations": [
+   "S3"
+  ],
+  "counterexamples": {
+   "S3": [
+    "H1:query->upload",
+    "LEAK:PUT G over st/c50125",
+    "homelab:REJECT st/c50125 flag=('H1', 'rejected-upload')",
+    "=> honest device flagged [('H1', 'rejected-upload')]"
+   ]
+  },
+  "flags_seen": [
+   [
+    "H1",
+    "rejected-upload"
+   ]
+  ],
+  "seconds": 0.05
+ },
+ {
+  "variant": "V1-no-per_upload_keys-no-attribution",
+  "adversary": "fault",
+  "budget": 2,
+  "states": 230,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [],
+  "seconds": 0.02
+ },
+ {
+  "variant": "V1-no-per_upload_keys-no-attribution",
+  "adversary": "cloud",
+  "budget": 2,
+  "states": 2680,
+  "L1_checked": false,
+  "violations": [
+   "S3"
+  ],
+  "counterexamples": {
+   "S3": [
+    "H1:query->upload",
+    "CLOUD:inject G as c50125",
+    "homelab:REJECT st/c50125/CLOUD flag=('H1', 'rejected-upload')",
+    "=> honest device flagged [('H1', 'rejected-upload')]"
+   ]
+  },
+  "flags_seen": [
+   [
+    "-",
+    "rejected-upload"
+   ],
+   [
+    "H1",
+    "rejected-upload"
+   ]
+  ],
+  "seconds": 0.32
+ },
+ {
+  "variant": "V1-no-ttl-no-reset_on_reject",
+  "adversary": "device",
+  "budget": 2,
+  "states": 22,
+  "L1_checked": true,
+  "violations": [
+   "L1"
+  ],
+  "counterexamples": {
+   "L1": [
+    "M:claim IDF",
+    "=> attacker stops here; honest actors can no longer reach all-green. devs=(('idle', None, 0), ('noF', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'M')] store=[]"
+   ]
+  },
+  "flags_seen": [
+   [
+    "M",
+    "signed-bad-content"
+   ]
+  ],
+  "seconds": 0.0
+ },
+ {
+  "variant": "V1-no-ttl-no-reset_on_reject",
+  "adversary": "leak",
+  "budget": 2,
+  "states": 191,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.01
+ },
+ {
+  "variant": "V1-no-ttl-no-reset_on_reject",
+  "adversary": "fault",
+  "budget": 2,
+  "states": 76,
+  "L1_checked": true,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [],
+  "seconds": 0.0
+ },
+ {
+  "variant": "V1-no-ttl-no-reset_on_reject",
+  "adversary": "cloud",
+  "budget": 2,
+  "states": 536,
+  "L1_checked": false,
+  "violations": [],
+  "counterexamples": {},
+  "flags_seen": [
+   [
+    "-",
+    "tamper-in-transit"
+   ]
+  ],
+  "seconds": 0.04
+ },
+ {
+  "variant": "V1-proposed",
+  "adversary": "cloud",
+  "budget": 2,
+  "junk_states": 0,
+  "states": 5106
+ },
+ {
+  "variant": "V1-no-registry_auth",
+  "adversary": "cloud",
+  "budget": 2,
+  "junk_states": 1214,
+  "states": 7013
+ }
+]

@@ -1,0 +1,115 @@
+{
+ "leak_scan": {
+  "hits": {
+   "filename": 0,
+   "path_token": 0,
+   "sha256_hex": 0,
+   "record_id": 0,
+   "report_field_names": 0
+  },
+  "needles": {
+   "filename": 5000,
+   "path_token": 5000,
+   "sha256_hex": 5000,
+   "record_id": 4800,
+   "report_field_names": 16
+  },
+  "positive_control_field_names_in_plaintext": 16,
+  "cloud_bytes_scanned": 1717380
+ },
+ "consent": {
+  "v1_devices": [
+   "dev-00",
+   "dev-05",
+   "dev-10",
+   "dev-15",
+   "dev-20"
+  ],
+  "v2_fields_zeroed_for_v1": true,
+  "v2_fields_present_for_v2": true
+ },
+ "M9": {
+  "mismatch_reports": 1,
+  "devices": [
+   "dev-07"
+  ],
+  "first": [
+   {
+    "device": "dev-07",
+    "day": 10,
+    "shown": 5574,
+    "receipted_upto_seq": 5571,
+    "excess": 3
+   }
+  ]
+ },
+ "M10": {
+  "dev-12": 2
+ },
+ "M6_email": [
+  {
+   "device": "dev-18",
+   "day": 14,
+   "back_within_3d": false,
+   "receipts_within_3d": 0
+  }
+ ],
+ "M7": {
+  "dev-00": {
+   "checked": 10,
+   "mismatch": 0,
+   "platform": "windows"
+  },
+  "dev-01": {
+   "checked": 10,
+   "mismatch": 0,
+   "platform": "macos"
+  },
+  "dev-02": {
+   "checked": 10,
+   "mismatch": 0,
+   "platform": "linux"
+  },
+  "dev-03": {
+   "checked": 10,
+   "mismatch": 0,
+   "platform": "android"
+  }
+ },
+ "sizes": {
+  "reports": 708,
+  "plaintext_json_bytes": {
+   "min": 461,
+   "median": 481.0,
+   "max": 492
+  },
+  "padded_bytes": 2048,
+  "ciphertext_bytes": {
+   "min": 2248,
+   "max": 2248
+  },
+  "per_device_per_day_1_report": 2248,
+  "per_device_per_day_24_reports": 53952,
+  "outbox_30_days_unsent": 67440,
+  "bud_tel_network_bytes_per_day": 1000000,
+  "bud_tel_disk_bytes": 50000000,
+  "record_id_list_100k_json_bytes": 3500001,
+  "record_id_list_100k_binary_bytes": 1600000,
+  "digest_bytes": 40,
+  "age_encrypt_ms": {
+   "median": 10.83,
+   "max": 172.91,
+   "note": "includes process spawn of the age CLI"
+  },
+  "size_distinct_values_in_cloud": [
+   2248
+  ]
+ },
+ "worker_log_keys": [
+  "day",
+  "device",
+  "kind",
+  "nudge",
+  "size"
+ ]
+}

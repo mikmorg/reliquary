@@ -1,0 +1,8 @@
+check,model,pass
+R2 Standard worked example = $14.85 (S1),14.8500,True
+R2 IA worked example = $29.90 (S1),29.9000,True
+R2 asset-hosting example = $104.40 (S1),104.4000,True
+"R2 GB-month example = 2.66 (S1, truncated)",2.6667,True
+"simulator: 1 GB/day, hold 1 d -> 2.0 GB-month (conservative peak)",2.0000,True
+Workers pricing example 1 = $8.00 (S7),8.0000,True
+"Queues formula, 10M messages = $11.60 (S12)",11.6000,True

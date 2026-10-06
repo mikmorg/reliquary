@@ -1,0 +1,674 @@
+{
+ "target": "versitygw",
+ "endpoint": "http://127.0.0.1:7070",
+ "bucket": "staging",
+ "region": "us-east-1",
+ "run_id": "52a33e01",
+ "finished_utc": "2026-09-29T10:04:54+00:00",
+ "duration_s": 4.5,
+ "requests_sent_by_script": 747,
+ "body_bytes_sent_by_script": 64020336,
+ "results": [
+  {
+   "id": "T01",
+   "title": "PutObject (header SigV4) then GetObject round-trip",
+   "observed": {
+    "status": 200,
+    "code": null,
+    "roundtrip": true
+   },
+   "r2_documented": "200; round-trip",
+   "note": null
+  },
+  {
+   "id": "T02",
+   "title": "Presigned PUT then header GET round-trip",
+   "observed": {
+    "status": 200,
+    "code": null,
+    "roundtrip": true
+   },
+   "r2_documented": "200; round-trip",
+   "note": null
+  },
+  {
+   "id": "T03",
+   "title": "Presigned GET and HEAD",
+   "observed": {
+    "get": {
+     "status": 200,
+     "code": null,
+     "ok": true
+    },
+    "head": {
+     "status": 200,
+     "code": null
+    }
+   },
+   "r2_documented": "200 / 200",
+   "note": null
+  },
+  {
+   "id": "T04",
+   "title": "Presigned PUT with tampered signature",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch"
+   },
+   "r2_documented": "403 SignatureDoesNotMatch",
+   "note": null
+  },
+  {
+   "id": "T05",
+   "title": "Presigned PUT URL replayed against a different key",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch"
+   },
+   "r2_documented": "403 SignatureDoesNotMatch",
+   "note": null
+  },
+  {
+   "id": "T06",
+   "title": "Presigned PUT URL used with GET",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch"
+   },
+   "r2_documented": "403 SignatureDoesNotMatch",
+   "note": null
+  },
+  {
+   "id": "T07",
+   "title": "Presigned URL with expiry changed after signing",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch"
+   },
+   "r2_documented": "403 SignatureDoesNotMatch",
+   "note": null
+  },
+  {
+   "id": "T08",
+   "title": "Presigned PUT used after X-Amz-Expires=1 elapsed",
+   "observed": {
+    "status": 403,
+    "code": "AccessDenied"
+   },
+   "r2_documented": "403 (expired)",
+   "note": null
+  },
+  {
+   "id": "T09",
+   "title": "X-Amz-Expires=604800 vs 604801",
+   "observed": {
+    "604800": {
+     "status": 200,
+     "code": null
+    },
+    "604801": {
+     "status": 400,
+     "code": "AuthorizationQueryParametersError"
+    }
+   },
+   "r2_documented": "604800 allowed (1 s-7 days); >604800 rejected",
+   "note": null
+  },
+  {
+   "id": "T10",
+   "title": "Same presigned PUT URL used twice before expiry",
+   "observed": {
+    "first": {
+     "status": 200,
+     "code": null
+    },
+    "second": {
+     "status": 200,
+     "code": null
+    },
+    "stored": "second"
+   },
+   "r2_documented": "reusable until expiry (both 200, last write wins)",
+   "note": null
+  },
+  {
+   "id": "T11",
+   "title": "Presigned PUT with signed Content-Type: mismatch vs match",
+   "observed": {
+    "mismatch": {
+     "status": 403,
+     "code": "SignatureDoesNotMatch"
+    },
+    "match": {
+     "status": 200,
+     "code": null
+    }
+   },
+   "r2_documented": "mismatch 403; match 200",
+   "note": null
+  },
+  {
+   "id": "T12",
+   "title": "Header-auth request with clock 20 min ahead",
+   "observed": {
+    "status": 403,
+    "code": "RequestTimeTooSkewed"
+   },
+   "r2_documented": "[unverified] 403 RequestTimeTooSkewed (Miniflare says it mirrors a 2026-06-11 R2 capture)",
+   "note": null
+  },
+  {
+   "id": "T13",
+   "title": "Wrong secret key vs unknown access key",
+   "observed": {
+    "wrong_secret": {
+     "status": 403,
+     "code": "SignatureDoesNotMatch"
+    },
+    "unknown_ak": {
+     "status": 403,
+     "code": "InvalidAccessKeyId"
+    }
+   },
+   "r2_documented": "[unverified] 403 SignatureDoesNotMatch / 401 Unauthorized (per Miniflare's R2 capture)",
+   "note": null
+  },
+  {
+   "id": "T14",
+   "title": "GetObject on missing key",
+   "observed": {
+    "status": 404,
+    "code": "NoSuchKey"
+   },
+   "r2_documented": "404 NoSuchKey",
+   "note": null
+  },
+  {
+   "id": "T20",
+   "title": "PutObject If-None-Match:* on absent then existing key",
+   "observed": {
+    "absent": {
+     "status": 200,
+     "code": null
+    },
+    "existing": {
+     "status": 412,
+     "code": "PreconditionFailed"
+    },
+    "stored": "one"
+   },
+   "r2_documented": "200 then 412 PreconditionFailed; stored 'one'",
+   "note": null
+  },
+  {
+   "id": "T21",
+   "title": "PutObject If-Match wrong ETag vs correct ETag",
+   "observed": {
+    "wrong": {
+     "status": 412,
+     "code": "PreconditionFailed"
+    },
+    "correct": {
+     "status": 200,
+     "code": null
+    }
+   },
+   "r2_documented": "412 / 200",
+   "note": null
+  },
+  {
+   "id": "T22",
+   "title": "Presigned PUT, If-None-Match:* sent but NOT signed, key exists",
+   "observed": {
+    "status": 412,
+    "code": "PreconditionFailed",
+    "stored": "four"
+   },
+   "r2_documented": "undocumented (A3 open question 2) -> SB leg",
+   "note": null
+  },
+  {
+   "id": "T23",
+   "title": "Presigned PUT, If-None-Match:* signed (in X-Amz-SignedHeaders), key exists",
+   "observed": {
+    "status": 412,
+    "code": "PreconditionFailed",
+    "stored": "four"
+   },
+   "r2_documented": "412 expected (PutObject supports If-None-Match)",
+   "note": null
+  },
+  {
+   "id": "T24",
+   "title": "Presigned PUT, If-None-Match:* signed, key absent",
+   "observed": {
+    "status": 200,
+    "code": null
+   },
+   "r2_documented": "200",
+   "note": null
+  },
+  {
+   "id": "T25",
+   "title": "Presigned PUT with signed If-None-Match value changed by client",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch"
+   },
+   "r2_documented": "403 SignatureDoesNotMatch",
+   "note": null
+  },
+  {
+   "id": "T26",
+   "title": "Race: 16 concurrent header-auth PutObject If-None-Match:* on one fresh key, 20 rounds",
+   "observed": {
+    "winners_per_round": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "rounds_with_exactly_one_winner": 20,
+    "loser_responses": {
+     "412 PreconditionFailed": 300
+    }
+   },
+   "r2_documented": "[doc: r2/platform/limits.mdx] at most 1 concurrent write/s per key, excess -> HTTP 429; so on R2 expect exactly one 200 and losers as 412 OR 429",
+   "note": null
+  },
+  {
+   "id": "T27",
+   "title": "Race: 16 concurrent presigned PUT (signed If-None-Match:*) on one fresh key, 20 rounds",
+   "observed": {
+    "winners_per_round": [
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1,
+     1
+    ],
+    "rounds_with_exactly_one_winner": 20,
+    "loser_responses": {
+     "412 PreconditionFailed": 300
+    }
+   },
+   "r2_documented": "[doc: r2/platform/limits.mdx] at most 1 concurrent write/s per key, excess -> HTTP 429; so on R2 expect exactly one 200 and losers as 412 OR 429",
+   "note": null
+  },
+  {
+   "id": "T30",
+   "title": "Presigned multipart 5+5+1 MiB, Complete via header auth",
+   "observed": {
+    "complete": {
+     "status": 200,
+     "code": null
+    },
+    "get_sha_match": true,
+    "size": 11534336,
+    "etag": "\"854ccaab47c6c99583ddcdbeebec9a35-3\""
+   },
+   "r2_documented": "200; content matches; ETag '-3' suffix",
+   "note": null
+  },
+  {
+   "id": "T31",
+   "title": "Multipart with non-last part < 5 MiB (1+1 MiB)",
+   "observed": {
+    "complete": {
+     "status": 400,
+     "code": "EntityTooSmall"
+    }
+   },
+   "r2_documented": "400 EntityTooSmall",
+   "note": null
+  },
+  {
+   "id": "T32",
+   "title": "Multipart with unequal non-last parts (5+6+1 MiB)",
+   "observed": {
+    "complete": {
+     "status": 200,
+     "code": null
+    }
+   },
+   "r2_documented": "R2: all parts except last must be the same size (error expected); AWS: allowed",
+   "note": null
+  },
+  {
+   "id": "T33",
+   "title": "Multipart with last part larger than the others (5+6 MiB)",
+   "observed": {
+    "complete": {
+     "status": 200,
+     "code": null
+    }
+   },
+   "r2_documented": "R2: last part must not be larger (error expected); AWS: allowed",
+   "note": null
+  },
+  {
+   "id": "T34",
+   "title": "Re-upload part 1, Complete with the stale ETag then the new ETag",
+   "observed": {
+    "stale_complete": {
+     "status": 400,
+     "code": "InvalidPart"
+    },
+    "new_complete": {
+     "status": 200,
+     "code": null
+    },
+    "content_is_new": true
+   },
+   "r2_documented": "stale -> 400 InvalidPart; new -> 200 (same part number replaces the previous part)",
+   "note": null
+  },
+  {
+   "id": "T34b",
+   "title": "Re-upload part 1, Complete citing ONLY the stale part-1 ETag; what is stored?",
+   "observed": {
+    "complete": {
+     "status": 400,
+     "code": "InvalidPart"
+    },
+    "stored": "absent",
+    "etags_differ": true
+   },
+   "r2_documented": "stale ETag -> 400 InvalidPart; nothing stored",
+   "note": null
+  },
+  {
+   "id": "T35",
+   "title": "ListParts and ListMultipartUploads on an open upload",
+   "observed": {
+    "list_parts": {
+     "status": 200,
+     "code": null,
+     "has_part1": true
+    },
+    "list_uploads": {
+     "status": 200,
+     "code": null,
+     "has_upload": true
+    }
+   },
+   "r2_documented": "R2 implements both (200)",
+   "note": null
+  },
+  {
+   "id": "T36",
+   "title": "AbortMultipartUpload, then UploadPart to the aborted upload",
+   "observed": {
+    "abort": {
+     "status": 204,
+     "code": null
+    },
+    "part_after_abort": {
+     "status": 404,
+     "code": "NoSuchUpload"
+    }
+   },
+   "r2_documented": "204; then 404 NoSuchUpload",
+   "note": null
+  },
+  {
+   "id": "T37",
+   "title": "Complete twice, then UploadPart after Complete",
+   "observed": {
+    "complete1": {
+     "status": 200,
+     "code": null
+    },
+    "complete2": {
+     "status": 200,
+     "code": null
+    },
+    "part_after_complete": {
+     "status": 404,
+     "code": "NoSuchUpload"
+    }
+   },
+   "r2_documented": "undocumented for R2 -> SB leg",
+   "note": null
+  },
+  {
+   "id": "T38",
+   "title": "CompleteMultipartUpload with If-None-Match:* when the key already exists",
+   "observed": {
+    "complete": {
+     "status": 412,
+     "code": "PreconditionFailed"
+    },
+    "overwritten": false
+   },
+   "r2_documented": "R2 docs list no conditional headers for Complete (AWS: 412)",
+   "note": null
+  },
+  {
+   "id": "T39",
+   "title": "CreateMultipartUpload with If-None-Match:* on existing key",
+   "observed": {
+    "status": 200,
+    "code": null
+   },
+   "r2_documented": "undocumented",
+   "note": null
+  },
+  {
+   "id": "T40",
+   "title": "PutObject with wrong vs correct Content-MD5",
+   "observed": {
+    "wrong": {
+     "status": 400,
+     "code": "BadDigest"
+    },
+    "correct": {
+     "status": 200,
+     "code": null
+    }
+   },
+   "r2_documented": "400 BadDigest / 200",
+   "note": null
+  },
+  {
+   "id": "T41",
+   "title": "PutObject with wrong x-amz-checksum-sha256",
+   "observed": {
+    "status": 400,
+    "code": "BadDigest",
+    "stored": false
+   },
+   "r2_documented": "R2 validates flexible checksums: 400 BadDigest, nothing stored",
+   "note": null
+  },
+  {
+   "id": "T42",
+   "title": "PutObject with correct x-amz-checksum-sha256 (echoed?)",
+   "observed": {
+    "status": 200,
+    "code": null,
+    "echoed": "TLmUOHfKGC1WQHiq24WoeQZWdX4qFzp3LzAXnFv0dHs="
+   },
+   "r2_documented": "200 and checksum echoed",
+   "note": null
+  },
+  {
+   "id": "T43",
+   "title": "Presigned PUT with wrong unsigned x-amz-checksum-sha256",
+   "observed": {
+    "status": 403,
+    "code": "AccessDenied"
+   },
+   "r2_documented": "undocumented -> SB leg",
+   "note": null
+  },
+  {
+   "id": "T47",
+   "title": "Presigned PUT with x-amz-checksum-sha256 SIGNED into the URL; body tampered (same length) vs genuine",
+   "observed": {
+    "tampered": {
+     "status": 400,
+     "code": "BadDigest"
+    },
+    "tampered_stored": false,
+    "genuine": {
+     "status": 200,
+     "code": null
+    }
+   },
+   "r2_documented": "R2 validates flexible checksums -> tampered 400 BadDigest (C1-S1 confirms for presigned)",
+   "note": null
+  },
+  {
+   "id": "T48",
+   "title": "Presigned PUT with Content-MD5 SIGNED into the URL; body tampered (same length)",
+   "observed": {
+    "status": 400,
+    "code": "BadDigest",
+    "tampered_stored": false
+   },
+   "r2_documented": "400 BadDigest",
+   "note": null
+  },
+  {
+   "id": "T49",
+   "title": "Presigned PUT with Content-Length SIGNED; client sends a longer body",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch",
+    "stored": false
+   },
+   "r2_documented": "403 SignatureDoesNotMatch (C1-S1 confirms)",
+   "note": null
+  },
+  {
+   "id": "T44",
+   "title": "PutObject with aws-chunked body + trailing checksum (SDK default style)",
+   "observed": {
+    "status": 200,
+    "code": null,
+    "stored_equals_payload": true,
+    "stored_len": 3000,
+    "payload_len": 3000
+   },
+   "r2_documented": "R2 supports (decoded payload stored)",
+   "note": null
+  },
+  {
+   "id": "T45",
+   "title": "Expect: 100-continue (waits 3 s for 100, then sends body anyway)",
+   "observed": {
+    "got_100_continue": true,
+    "seconds_waited_for_100": 0.0,
+    "final_status": 200,
+    "sent_body_without_100": false
+   },
+   "r2_documented": "[unknown] not documented for R2",
+   "note": null
+  },
+  {
+   "id": "T46",
+   "title": "PUT with Transfer-Encoding: chunked (unknown length), UNSIGNED-PAYLOAD",
+   "observed": {
+    "status": 411,
+    "code": "MissingContentLength",
+    "stored_equals_payload": false,
+    "raw_head": "HTTP/1.1 411 Length Required\r\nServer: VERSITYGW\r\nDate: Tue, "
+   },
+   "r2_documented": "R2 behaviour for unknown-length bodies -> SB leg",
+   "note": null
+  },
+  {
+   "id": "T50",
+   "title": "ListObjectsV2 with prefix",
+   "observed": {
+    "status": 200,
+    "code": null,
+    "keys_found": 3
+   },
+   "r2_documented": "200",
+   "note": null
+  },
+  {
+   "id": "T51",
+   "title": "DeleteObject (header auth), then HEAD",
+   "observed": {
+    "delete": {
+     "status": 204,
+     "code": null
+    },
+    "head_after": 404
+   },
+   "r2_documented": "204 / 404",
+   "note": null
+  },
+  {
+   "id": "T52",
+   "title": "Presigned DELETE",
+   "observed": {
+    "status": 204,
+    "code": null
+   },
+   "r2_documented": "204 (R2 allows presigned DELETE; the Worker must never mint one)",
+   "note": null
+  },
+  {
+   "id": "T53",
+   "title": "Presigned POST (form upload) to bucket",
+   "observed": {
+    "status": 400,
+    "code": "InvalidArgument"
+   },
+   "r2_documented": "not supported by R2",
+   "note": null
+  },
+  {
+   "id": "T54",
+   "title": "PutBucketLifecycleConfiguration (abort 7 d on staging/, expire 3 d on restore/) then Get",
+   "observed": {
+    "put": {
+     "status": 501,
+     "code": "NotImplemented"
+    },
+    "get": {
+     "status": 501,
+     "code": "NotImplemented",
+     "has_rules": false
+    }
+   },
+   "r2_documented": "R2 supports lifecycle via S3 API (prefix-scoped abort and expiration)",
+   "note": null
+  }
+ ]
+}

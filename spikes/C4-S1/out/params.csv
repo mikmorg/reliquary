@@ -1,0 +1,24 @@
+key,value,status,replaced_by
+mean_file_bytes,4000000.0000,A,E1 census / A0 (owner-intake: 500k files per 2 TB)
+share_bytes_large,0.6000,A,E1 / A5 (bytes in multipart files)
+share_files_large,0.0100,A,E1 / A5
+part_bytes,5244160,D,T1 spike 2 default part (content-encryption-format.md); B6 decides
+meta_objects_per_file,1,A,A2/A3 (1 = one metadata object per file; 0 = batched)
+queue_msgs_per_file,2,A,C1 (one R2 object-create notification per object)
+worker_req_per_file,3,A,"A0 (dedup check, presign, commit)"
+cpu_ms_per_req,5,A,D3-S1 (BUD-CPU-REQ < 1 ms for auth alone)
+d1_rows_w_per_file,6,A,A0 / C1
+d1_rows_r_per_file,10,A,A0 / C1
+classB_per_file,2,A,A0 (homelab HEAD/GET)
+dwell_days,1,A,A3 / C1 (upload -> commit -> delete)
+warm_cache_days,0,D,C1 (ADR-0001 optional warm cache; traceability C-01)
+devices,25,O,H2 F2 (settled range 10-25)
+people,10,O,H2 F1
+heartbeat_per_dev_day,96,A,B8/C7 (status ping every 15 min)
+emails_per_person_month,4,A,E3 nudge policy
+dedup_ratio,0.0000,A,A1/F3 (0 = conservative)
+engine_overhead,0.0000,A,A6-S2
+fill_target,0.8000,O,"C5 / owner (rule of thumb, no primary source)"
+lead_days,14,A,H5 L21 (drive purchase + burn-in)
+buffer_days,90,A,C4 proposal
+afr,0.0136,secondary,Backblaze 2025 annual AFR (search snippet; primary blocked)

@@ -1,0 +1,391 @@
+derived {'SEED_FILES': 57399, 'SEED_RATE_PER_H': 9567, 'STRICT_RATE_PER_DAY': 333, 'BATCH': 1000}
+
+WORST CASE OVER STRATEGIES (PLAN rule: pass if >30 d or alert)
+C0 A  none   cross=1 learn-remaining 10k  | PLAN FAIL S1,S3,S5     | max P(learn) 1.00 | fastest full run 0.04 d
+C0 A  none   cross=1 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C1 g  none   cross=1 learn-remaining 10k  | PLAN FAIL S1,S3,S5     | max P(learn) 1.00 | fastest full run 0.08 d
+C1 g  none   cross=1 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C1s   none   cross=1 learn-remaining 10k  | PLAN PASS              | max P(learn) 1.00 | fastest full run 30.04 d
+C1s   none   cross=1 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C2 C  D-a o  cross=1 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C2 C  D-a o  cross=1 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C2 C  D-b c  cross=1 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C2 C  D-b c  cross=1 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C2 C  D-b1   cross=1 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C2 C  D-b1   cross=1 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C2 C  D-c D  cross=1 learn-remaining 10k  | PLAN FAIL S5           | max P(learn) 1.00 | fastest full run 0.08 d
+C2 C  D-c D  cross=1 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3 C  D-a o  cross=1 learn-remaining 10k  | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-a o  cross=1 confirm-file 20      | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-a o  cross=0 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3 C  D-a o  cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3 C  D-b c  cross=1 learn-remaining 10k  | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-b c  cross=1 confirm-file 20      | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-b c  cross=0 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3 C  D-b c  cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3 C  D-b1   cross=1 learn-remaining 10k  | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-b1   cross=1 confirm-file 20      | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-b1   cross=0 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3 C  D-b1   cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3 C  D-c D  cross=1 learn-remaining 10k  | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-c D  cross=1 confirm-file 20      | PLAN PASS              | max P(learn) 0.00 | fastest full run - d
+C3 C  D-c D  cross=0 learn-remaining 10k  | PLAN FAIL S5           | max P(learn) 1.00 | fastest full run 0.08 d
+C3 C  D-c D  cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-a o  cross=1 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-a o  cross=1 confirm-file 20      | PLAN FAIL S3,S4,S5     | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-a o  cross=0 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-a o  cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-b c  cross=1 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-b c  cross=1 confirm-file 20      | PLAN FAIL S3,S4,S5     | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-b c  cross=0 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-b c  cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-b1   cross=1 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-b1   cross=1 confirm-file 20      | PLAN FAIL S3,S4,S5     | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-b1   cross=0 learn-remaining 10k  | PLAN FAIL S3,S5        | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-b1   cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-c D  cross=1 learn-remaining 10k  | PLAN FAIL S5           | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-c D  cross=1 confirm-file 20      | PLAN FAIL S3,S4,S5     | max P(learn) 1.00 | fastest full run 0.04 d
+C3L   D-c D  cross=0 learn-remaining 10k  | PLAN FAIL S5           | max P(learn) 1.00 | fastest full run 0.08 d
+C3L   D-c D  cross=0 confirm-file 20      | PLAN FAIL S1,S2,S3,S4,S5 | max P(learn) 1.00 | fastest full run 0.04 d
+
+ATTACK detail
+C0 A  S1  none   cross=1 learn-r | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C0 A  S1  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C0 A  S2  none   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=0.0GB | PASS (>30 d)
+C0 A  S2  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C0 A  S3  none   cross=1 learn-r | 0.04 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C0 A  S3  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C0 A  S4  none   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C0 A  S4  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C0 A  S5  none   cross=1 learn-r | 0.04 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C0 A  S5  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1 g  S1  none   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1 g  S1  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1 g  S2  none   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=0.0GB | PASS (>30 d)
+C1 g  S2  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1 g  S3  none   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C1 g  S3  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1 g  S4  none   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C1 g  S4  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1 g  S5  none   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C1 g  S5  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1s   S1  none   cross=1 learn-r | 30.04 d       | no alert                                                       | learned=1 | up=0.0GB | PASS (>30 d)
+C1s   S1  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1s   S2  none   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=0.0GB | PASS (>30 d)
+C1s   S2  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1s   S3  none   cross=1 learn-r | 30.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C1s   S3  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1s   S4  none   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C1s   S4  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C1s   S5  none   cross=1 learn-r | 30.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C1s   S5  none   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S1  D-a o  cross=1 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=1 | up=0.0GB | PASS (alert)
+C2 C  S1  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S1  D-b c  cross=1 learn-r | 0.08 d        | alert@24h orphans_cumulative after 10000 probes                | learned=1 | up=0.0GB | PASS (alert)
+C2 C  S1  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S1  D-b1   cross=1 learn-r | not finished  | alert@3h orphans_cumulative after 2000 probes                  | learned=0 | up=0.0GB | PASS (alert)
+C2 C  S1  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S1  D-c D  cross=1 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=1 | up=0.0GB | PASS (alert)
+C2 C  S1  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S2  D-a o  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=0.0GB | PASS (>30 d)
+C2 C  S2  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S2  D-b c  cross=1 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C2 C  S2  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S2  D-b1   cross=1 learn-r | not finished  | alert@73h orphans_cumulative after 1120 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C2 C  S2  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S2  D-c D  cross=1 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=1 | up=0.0GB | PASS (alert)
+C2 C  S2  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S3  D-a o  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C2 C  S3  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S3  D-b c  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C2 C  S3  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S3  D-b1   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C2 C  S3  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S3  D-c D  cross=1 learn-r | not finished  | alert@0h same_size_new_objects_24h after 9567 probes           | learned=1 | up=1.91GB | PASS (alert)
+C2 C  S3  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S4  D-a o  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C2 C  S4  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S4  D-b c  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C2 C  S4  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S4  D-b1   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C2 C  S4  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S4  D-c D  cross=1 learn-r | not finished  | alert@0h same_size_new_objects_24h after 280 probes            | learned=0 | up=0.06GB | PASS (alert)
+C2 C  S4  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S5  D-a o  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C2 C  S5  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S5  D-b c  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C2 C  S5  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S5  D-b1   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C2 C  S5  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C2 C  S5  D-c D  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C2 C  S5  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S1  D-a o  cross=1 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S1  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S1  D-a o  cross=0 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=1 | up=0.0GB | PASS (alert)
+C3 C  S1  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S1  D-b c  cross=1 learn-r | 0.08 d        | alert@24h orphans_cumulative after 10000 probes                | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S1  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S1  D-b c  cross=0 learn-r | 0.08 d        | alert@24h orphans_cumulative after 10000 probes                | learned=1 | up=0.0GB | PASS (alert)
+C3 C  S1  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S1  D-b1   cross=1 learn-r | not finished  | alert@3h orphans_cumulative after 2000 probes                  | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S1  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S1  D-b1   cross=0 learn-r | not finished  | alert@3h orphans_cumulative after 2000 probes                  | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S1  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S1  D-c D  cross=1 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S1  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S1  D-c D  cross=0 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=1 | up=0.0GB | PASS (alert)
+C3 C  S1  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S2  D-a o  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S2  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S2  D-a o  cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=0.0GB | PASS (>30 d)
+C3 C  S2  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S2  D-b c  cross=1 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S2  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S2  D-b c  cross=0 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S2  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S2  D-b1   cross=1 learn-r | not finished  | alert@73h orphans_cumulative after 1120 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S2  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S2  D-b1   cross=0 learn-r | not finished  | alert@73h orphans_cumulative after 1120 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S2  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S2  D-c D  cross=1 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S2  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S2  D-c D  cross=0 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3 C  S2  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S3  D-a o  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S3  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S3  D-a o  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3 C  S3  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S3  D-b c  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S3  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S3  D-b c  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3 C  S3  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S3  D-b1   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S3  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S3  D-b1   cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3 C  S3  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S3  D-c D  cross=1 learn-r | not finished  | alert@0h same_size_new_objects_24h after 9567 probes           | learned=0 | up=1.91GB | PASS (alert)
+C3 C  S3  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S3  D-c D  cross=0 learn-r | not finished  | alert@0h same_size_new_objects_24h after 9567 probes           | learned=1 | up=1.91GB | PASS (alert)
+C3 C  S3  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S4  D-a o  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S4  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S4  D-a o  cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3 C  S4  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S4  D-b c  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S4  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S4  D-b c  cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3 C  S4  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S4  D-b1   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S4  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S4  D-b1   cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3 C  S4  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S4  D-c D  cross=1 learn-r | not finished  | alert@0h same_size_new_objects_24h after 280 probes            | learned=0 | up=0.06GB | PASS (alert)
+C3 C  S4  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S4  D-c D  cross=0 learn-r | not finished  | alert@0h same_size_new_objects_24h after 280 probes            | learned=0 | up=0.06GB | PASS (alert)
+C3 C  S4  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S5  D-a o  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S5  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S5  D-a o  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3 C  S5  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S5  D-b c  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S5  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S5  D-b c  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3 C  S5  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S5  D-b1   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S5  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S5  D-b1   cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3 C  S5  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3 C  S5  D-c D  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=0 | up=2.0GB | PASS (oracle gives no information)
+C3 C  S5  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3 C  S5  D-c D  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3 C  S5  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S1  D-a o  cross=1 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=0 | up=0.0GB | PASS (alert)
+C3L   S1  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S1  D-a o  cross=0 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=1 | up=0.0GB | PASS (alert)
+C3L   S1  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S1  D-b c  cross=1 learn-r | 0.08 d        | alert@24h orphans_cumulative after 10000 probes                | learned=0 | up=0.0GB | PASS (alert)
+C3L   S1  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S1  D-b c  cross=0 learn-r | 0.08 d        | alert@24h orphans_cumulative after 10000 probes                | learned=1 | up=0.0GB | PASS (alert)
+C3L   S1  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S1  D-b1   cross=1 learn-r | not finished  | alert@3h orphans_cumulative after 2000 probes                  | learned=0 | up=0.0GB | PASS (alert)
+C3L   S1  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S1  D-b1   cross=0 learn-r | not finished  | alert@3h orphans_cumulative after 2000 probes                  | learned=0 | up=0.0GB | PASS (alert)
+C3L   S1  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S1  D-c D  cross=1 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=0 | up=0.0GB | PASS (alert)
+C3L   S1  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S1  D-c D  cross=0 learn-r | 0.08 d        | alert@24h orphans_24h after 10000 probes                       | learned=1 | up=0.0GB | PASS (alert)
+C3L   S1  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S2  D-a o  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S2  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S2  D-a o  cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=0.0GB | PASS (>30 d)
+C3L   S2  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S2  D-b c  cross=1 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3L   S2  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S2  D-b c  cross=0 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3L   S2  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S2  D-b1   cross=1 learn-r | not finished  | alert@73h orphans_cumulative after 1120 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3L   S2  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S2  D-b1   cross=0 learn-r | not finished  | alert@73h orphans_cumulative after 1120 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3L   S2  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S2  D-c D  cross=1 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3L   S2  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=0 | up=0.0GB | PASS (oracle gives no information)
+C3L   S2  D-c D  cross=0 learn-r | not finished  | alert@96h orphans_cumulative after 1400 probes                 | learned=0 | up=0.0GB | PASS (alert)
+C3L   S2  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-a o  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S3  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-a o  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S3  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-b c  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S3  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-b c  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S3  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-b1   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S3  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-b1   cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S3  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-c D  cross=1 learn-r | not finished  | alert@0h same_size_new_objects_24h after 9567 probes           | learned=1 | up=1.91GB | PASS (alert)
+C3L   S3  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S3  D-c D  cross=0 learn-r | not finished  | alert@0h same_size_new_objects_24h after 9567 probes           | learned=1 | up=1.91GB | PASS (alert)
+C3L   S3  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-a o  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3L   S4  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-a o  cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3L   S4  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-b c  cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3L   S4  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-b c  cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3L   S4  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-b1   cross=1 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3L   S4  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-b1   cross=0 learn-r | 35.04 d       | no alert                                                       | learned=1 | up=2.0GB | PASS (>30 d)
+C3L   S4  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-c D  cross=1 learn-r | not finished  | alert@0h same_size_new_objects_24h after 280 probes            | learned=0 | up=0.06GB | PASS (alert)
+C3L   S4  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S4  D-c D  cross=0 learn-r | not finished  | alert@0h same_size_new_objects_24h after 280 probes            | learned=0 | up=0.06GB | PASS (alert)
+C3L   S4  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-a o  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-a o  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-a o  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-a o  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-b c  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-b c  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-b c  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-b c  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-b1   cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-b1   cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-b1   cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-b1   cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-c D  cross=1 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-c D  cross=1 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+C3L   S5  D-c D  cross=0 learn-r | 0.08 d        | no alert                                                       | learned=1 | up=2.0GB | FAIL
+C3L   S5  D-c D  cross=0 confirm | 0.04 d        | no alert                                                       | learned=1 | up=0.0GB | FAIL
+
+LEGIT (false positives)
+C1 g  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 0.25 d | no alert
+C1 g  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 0.25 d | no alert
+C1 g  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 0.25 d | no alert
+C1 g  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 0.25 d | no alert
+C1 g  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 0.25 d | ALERT@27h orphans_24h
+C1 g  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 0.25 d | ALERT@27h orphans_24h
+C1 g  D-a o  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1 g  D-a o  L3 reinstall re-query 57k files, all own hits                          | lookups done in 0.25 d | no alert
+C1 g  D-a o  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 2.21 d | no alert
+C1 g  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 0.25 d | no alert
+C1 g  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 0.25 d | no alert
+C1 g  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 0.25 d | no alert
+C1 g  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 0.25 d | no alert
+C1 g  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 0.25 d | no alert
+C1 g  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 0.25 d | no alert
+C1 g  D-b c  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1 g  D-b c  L3 reinstall re-query 57k files, all own hits                          | lookups done in 0.25 d | no alert
+C1 g  D-b c  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 2.21 d | no alert
+C1 g  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 2.42 d | no alert
+C1 g  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 2.42 d | no alert
+C1 g  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 2.42 d | no alert
+C1 g  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 2.42 d | no alert
+C1 g  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 2.42 d | no alert
+C1 g  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 2.42 d | no alert
+C1 g  D-b1   L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1 g  D-b1   L3 reinstall re-query 57k files, all own hits                          | lookups done in 2.42 d | no alert
+C1 g  D-b1   L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 20.88 d | no alert
+C1 g  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 0.25 d | no alert
+C1 g  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 0.25 d | no alert
+C1 g  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 0.25 d | no alert
+C1 g  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 0.25 d | no alert
+C1 g  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 0.25 d | ALERT@27h orphans_24h
+C1 g  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 0.25 d | ALERT@27h orphans_24h
+C1 g  D-c D  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1 g  D-c D  L3 reinstall re-query 57k files, all own hits                          | lookups done in 0.25 d | no alert
+C1 g  D-c D  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 2.21 d | ALERT@0h same_size_new_objects_24h
+C1s   D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 172.04 d | no alert
+C1s   D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 172.04 d | no alert
+C1s   D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 172.04 d | no alert
+C1s   D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 172.04 d | no alert
+C1s   D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 172.04 d | no alert
+C1s   D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 172.04 d | no alert
+C1s   D-a o  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1s   D-a o  L3 reinstall re-query 57k files, all own hits                          | lookups done in 172.04 d | no alert
+C1s   D-a o  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 400.00 d | no alert
+C1s   D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 172.04 d | no alert
+C1s   D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 172.04 d | no alert
+C1s   D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 172.04 d | no alert
+C1s   D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 172.04 d | no alert
+C1s   D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 172.04 d | no alert
+C1s   D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 172.04 d | no alert
+C1s   D-b c  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1s   D-b c  L3 reinstall re-query 57k files, all own hits                          | lookups done in 172.04 d | no alert
+C1s   D-b c  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 400.00 d | no alert
+C1s   D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 172.04 d | no alert
+C1s   D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 172.04 d | no alert
+C1s   D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 172.04 d | no alert
+C1s   D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 172.04 d | no alert
+C1s   D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 172.04 d | no alert
+C1s   D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 172.04 d | no alert
+C1s   D-b1   L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1s   D-b1   L3 reinstall re-query 57k files, all own hits                          | lookups done in 172.04 d | no alert
+C1s   D-b1   L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 400.00 d | no alert
+C1s   D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 172.04 d | no alert
+C1s   D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 172.04 d | no alert
+C1s   D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 172.04 d | no alert
+C1s   D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 172.04 d | no alert
+C1s   D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 172.04 d | no alert
+C1s   D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 172.04 d | no alert
+C1s   D-c D  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C1s   D-c D  L3 reinstall re-query 57k files, all own hits                          | lookups done in 172.04 d | no alert
+C1s   D-c D  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 400.00 d | ALERT@0h same_size_new_objects_24h
+C2 C  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 0.25 d | no alert
+C2 C  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 0.25 d | no alert
+C2 C  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 0.25 d | no alert
+C2 C  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 0.25 d | no alert
+C2 C  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 0.25 d | ALERT@27h orphans_24h
+C2 C  D-a o  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 0.25 d | ALERT@27h orphans_24h
+C2 C  D-a o  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C2 C  D-a o  L3 reinstall re-query 57k files, all own hits                          | lookups done in 0.25 d | no alert
+C2 C  D-a o  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 2.21 d | no alert
+C2 C  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 0.25 d | no alert
+C2 C  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 0.25 d | no alert
+C2 C  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 0.25 d | no alert
+C2 C  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 0.25 d | no alert
+C2 C  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 0.25 d | no alert
+C2 C  D-b c  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 0.25 d | no alert
+C2 C  D-b c  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C2 C  D-b c  L3 reinstall re-query 57k files, all own hits                          | lookups done in 0.25 d | no alert
+C2 C  D-b c  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 2.21 d | no alert
+C2 C  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 2.42 d | no alert
+C2 C  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 2.42 d | no alert
+C2 C  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 2.42 d | no alert
+C2 C  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 2.42 d | no alert
+C2 C  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 2.42 d | no alert
+C2 C  D-b1   L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 2.42 d | no alert
+C2 C  D-b1   L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C2 C  D-b1   L3 reinstall re-query 57k files, all own hits                          | lookups done in 2.42 d | no alert
+C2 C  D-b1   L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 20.88 d | no alert
+C2 C  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.05             | lookups done in 0.25 d | no alert
+C2 C  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.0, hit=0.2              | lookups done in 0.25 d | no alert
+C2 C  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.05           | lookups done in 0.25 d | no alert
+C2 C  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.001, hit=0.2            | lookups done in 0.25 d | no alert
+C2 C  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.05            | lookups done in 0.25 d | ALERT@27h orphans_24h
+C2 C  D-c D  L1 phone first seed 57399 files/6h, p_orphan=0.01, hit=0.2             | lookups done in 0.25 d | ALERT@28h orphans_24h
+C2 C  D-c D  L2 steady state 50 files/day, p_orphan=0.01                            | lookups done in 0.71 d | no alert
+C2 C  D-c D  L3 reinstall re-query 57k files, all own hits                          | lookups done in 0.25 d | no alert
+C2 C  D-c D  L4 desktop 500k docs over 48 h, p_orphan=0.001                         | lookups done in 2.21 d | ALERT@0h same_size_new_objects_24h

@@ -1,0 +1,29 @@
+TB,link_Mbps,days_at_full_rate,use,cap_TB_month,household_baseline_TB,pull_allowance_TB_month_at_80pct,months_to_pull_seed,r2_storage_usd_if_backlog_waits_1_month
+1,20,4.6300,pull (downlink) or restore (uplink),,,,,
+1,50,1.8500,pull (downlink) or restore (uplink),,,,,
+1,100,0.9300,pull (downlink) or restore (uplink),,,,,
+1,500,0.1900,pull (downlink) or restore (uplink),,,,,
+1,1000,0.0900,pull (downlink) or restore (uplink),,,,,
+2,20,9.2600,pull (downlink) or restore (uplink),,,,,
+2,50,3.7000,pull (downlink) or restore (uplink),,,,,
+2,100,1.8500,pull (downlink) or restore (uplink),,,,,
+2,500,0.3700,pull (downlink) or restore (uplink),,,,,
+2,1000,0.1900,pull (downlink) or restore (uplink),,,,,
+5,20,23.1500,pull (downlink) or restore (uplink),,,,,
+5,50,9.2600,pull (downlink) or restore (uplink),,,,,
+5,100,4.6300,pull (downlink) or restore (uplink),,,,,
+5,500,0.9300,pull (downlink) or restore (uplink),,,,,
+5,1000,0.4600,pull (downlink) or restore (uplink),,,,,
+10,20,46.3000,pull (downlink) or restore (uplink),,,,,
+10,50,18.5200,pull (downlink) or restore (uplink),,,,,
+10,100,9.2600,pull (downlink) or restore (uplink),,,,,
+10,500,1.8500,pull (downlink) or restore (uplink),,,,,
+10,1000,0.9300,pull (downlink) or restore (uplink),,,,,
+2,,,,1.2000,0.3000,0.6600,3.0000,30.0000
+10,,,,1.2000,0.3000,0.6600,15.2000,150.0000
+2,,,,1.2000,0.6000,0.3600,5.6000,30.0000
+10,,,,1.2000,0.6000,0.3600,27.8000,150.0000
+2,,,,2.0000,0.3000,1.3000,1.5000,30.0000
+10,,,,2.0000,0.3000,1.3000,7.7000,150.0000
+2,,,,2.0000,0.6000,1.0000,2.0000,30.0000
+10,,,,2.0000,0.6000,1.0000,10.0000,150.0000

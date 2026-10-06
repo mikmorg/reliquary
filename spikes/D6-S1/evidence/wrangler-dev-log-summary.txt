@@ -1,0 +1,16 @@
+   1045 [wrangler:info] POST /v1/heartbeat 200 OK 
+    625 [wrangler:info] POST /v1/sim/now 200 OK 
+    624 [wrangler:info] POST /v1/sim/run-dms 200 OK 
+    570 [wrangler:info] POST /v1/homelab/pull 200 OK 
+     49 [wrangler:info] POST /v1/commit 200 OK 
+      4 [wrangler:info] POST /v1/redeem 200 OK 
+      4 [wrangler:info] POST /v1/admin/invites 200 OK 
+      3 [wrangler:info] POST /v1/inbox 200 OK 
+      2 [wrangler:warn] Unable to fetch the `Request.cf` object! Falling back to a default placeholder...
+      2 [wrangler:info] POST /v1/sim/try-send-other 200 OK 
+      2 [wrangler:info] POST /v1/homelab/ack 200 OK 
+      1 [wrangler:info] send_email binding called with MessageBuilder:
+      1 [wrangler:info] Ready on http://127.0.0.1:8799
+      1 [wrangler:info] POST /v1/redeem 400 Bad Request 
+      1 [wrangler:info] POST /v1/device/add 200 OK 
+      1 [wrangler:info] GET /__scheduled 200 OK 

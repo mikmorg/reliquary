@@ -1,0 +1,53 @@
+[miniflare] T01 PutObject (header SigV4) then GetObject round-trip: {"status": 200, "code": null, "roundtrip": true}
+[miniflare] T02 Presigned PUT then header GET round-trip: {"status": 200, "code": null, "roundtrip": true}
+[miniflare] T03 Presigned GET and HEAD: {"get": {"status": 200, "code": null, "ok": true}, "head": {"status": 200, "code": null}}
+[miniflare] T04 Presigned PUT with tampered signature: {"status": 403, "code": "SignatureDoesNotMatch"}
+[miniflare] T05 Presigned PUT URL replayed against a different key: {"status": 500, "code": null}
+[miniflare] T06 Presigned PUT URL used with GET: {"status": 403, "code": "SignatureDoesNotMatch"}
+[miniflare] T07 Presigned URL with expiry changed after signing: {"status": 403, "code": "SignatureDoesNotMatch"}
+[miniflare] T08 Presigned PUT used after X-Amz-Expires=1 elapsed: {"status": 403, "code": "ExpiredRequest"}
+[miniflare] T09 X-Amz-Expires=604800 vs 604801: {"604800": {"status": 200, "code": null}, "604801": {"status": 400, "code": "InvalidArgument"}}
+[miniflare] T10 Same presigned PUT URL used twice before expiry: {"first": {"status": 200, "code": null}, "second": {"status": 200, "code": null}, "stored": "second"}
+[miniflare] T11 Presigned PUT with signed Content-Type: mismatch vs match: {"mismatch": {"status": 403, "code": "SignatureDoesNotMatch"}, "match": {"status": 200, "code": null}}
+[miniflare] T12 Header-auth request with clock 20 min ahead: {"status": 403, "code": "RequestTimeTooSkewed"}
+[miniflare] T13 Wrong secret key vs unknown access key: {"wrong_secret": {"status": 403, "code": "SignatureDoesNotMatch"}, "unknown_ak": {"status": 401, "code": "Unauthorized"}}
+[miniflare] T14 GetObject on missing key: {"status": 404, "code": "NoSuchKey"}
+[miniflare] T20 PutObject If-None-Match:* on absent then existing key: {"absent": {"status": 200, "code": null}, "existing": {"status": 412, "code": "PreconditionFailed"}, "stored": "one"}
+[miniflare] T21 PutObject If-Match wrong ETag vs correct ETag: {"wrong": {"status": 412, "code": "PreconditionFailed"}, "correct": {"status": 200, "code": null}}
+[miniflare] T22 Presigned PUT, If-None-Match:* sent but NOT signed, key exists: {"status": 412, "code": "PreconditionFailed", "stored": "four"}
+[miniflare] T23 Presigned PUT, If-None-Match:* signed (in X-Amz-SignedHeaders), key exists: {"status": 412, "code": "PreconditionFailed", "stored": "four"}
+[miniflare] T24 Presigned PUT, If-None-Match:* signed, key absent: {"status": 200, "code": null}
+[miniflare] T25 Presigned PUT with signed If-None-Match value changed by client: {"status": 403, "code": "SignatureDoesNotMatch"}
+[miniflare] T26 Race: 16 concurrent header-auth PutObject If-None-Match:* on one fresh key, 20 rounds: {"winners_per_round": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], "rounds_with_exactly_one_winner": 20, "loser_responses": {"412 PreconditionFailed": 300}}
+[miniflare] T27 Race: 16 concurrent presigned PUT (signed If-None-Match:*) on one fresh key, 20 rounds: {"winners_per_round": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], "rounds_with_exactly_one_winner": 20, "loser_responses": {"412 PreconditionFailed": 300}}
+[miniflare] T30 Presigned multipart 5+5+1 MiB, Complete via header auth: {"complete": {"status": 200, "code": null}, "get_sha_match": true, "size": 11534336, "etag": "\"9dd98dc456ba7e5bc30002de524016df-3\""}
+[miniflare] T31 Multipart with non-last part < 5 MiB (1+1 MiB): {"complete": {"status": 400, "code": "EntityTooSmall"}}
+[miniflare] T32 Multipart with unequal non-last parts (5+6+1 MiB): {"complete": {"status": 404, "code": "NoSuchUpload"}}
+[miniflare] T33 Multipart with last part larger than the others (5+6 MiB): {"complete": {"status": 404, "code": "NoSuchUpload"}}
+[miniflare] T34 Re-upload part 1, Complete with the stale ETag then the new ETag: {"stale_complete": {"status": 400, "code": "InvalidPart"}, "new_complete": {"status": 200, "code": null}, "content_is_new": true}
+[miniflare] T34b Re-upload part 1, Complete citing ONLY the stale part-1 ETag; what is stored?: {"complete": {"status": 400, "code": "InvalidPart"}, "stored": "absent", "etags_differ": true}
+[miniflare] T35 ListParts and ListMultipartUploads on an open upload: {"list_parts": {"status": 501, "code": "NotImplemented", "has_part1": null}, "list_uploads": {"status": 501, "code": "NotImplemented", "has_upload": null}}
+[miniflare] T36 AbortMultipartUpload, then UploadPart to the aborted upload: {"abort": {"status": 204, "code": null}, "part_after_abort": {"status": 404, "code": "NoSuchUpload"}}
+[miniflare] T37 Complete twice, then UploadPart after Complete: {"complete1": {"status": 200, "code": null}, "complete2": {"status": 404, "code": "NoSuchUpload"}, "part_after_complete": {"status": 404, "code": "NoSuchUpload"}}
+[miniflare] T38 CompleteMultipartUpload with If-None-Match:* when the key already exists: {"complete": {"status": 200, "code": null}, "overwritten": true}
+[miniflare] T39 CreateMultipartUpload with If-None-Match:* on existing key: {"status": 200, "code": null}
+[miniflare] T40 PutObject with wrong vs correct Content-MD5: {"wrong": {"status": 400, "code": "BadDigest"}, "correct": {"status": 200, "code": null}}
+[miniflare] T41 PutObject with wrong x-amz-checksum-sha256: {"status": 200, "code": null, "stored": true}
+[miniflare] T42 PutObject with correct x-amz-checksum-sha256 (echoed?): {"status": 200, "code": null, "echoed": null}
+[miniflare] T43 Presigned PUT with wrong unsigned x-amz-checksum-sha256: {"status": 200, "code": null}
+[miniflare] T47 Presigned PUT with x-amz-checksum-sha256 SIGNED into the URL; body tampered (same length) vs genuine: {"tampered": {"status": 200, "code": null}, "tampered_stored": true, "genuine": {"status": 200, "code": null}}
+[miniflare] T48 Presigned PUT with Content-MD5 SIGNED into the URL; body tampered (same length): {"status": 400, "code": "BadDigest", "tampered_stored": false}
+[miniflare] T49 Presigned PUT with Content-Length SIGNED; client sends a longer body: {"status": 500, "code": null, "stored": false}
+[miniflare] T44 PutObject with aws-chunked body + trailing checksum (SDK default style): {"status": 200, "code": null, "stored_equals_payload": false, "stored_len": 3080, "payload_len": 3000}
+[miniflare] T45 Expect: 100-continue (waits 3 s for 100, then sends body anyway): {"got_100_continue": false, "seconds_waited_for_100": 3.0, "final_status": 200, "sent_body_without_100": true}
+[miniflare] T46 PUT with Transfer-Encoding: chunked (unknown length), UNSIGNED-PAYLOAD: {"status": 500, "code": null, "stored_equals_payload": false, "raw_head": "HTTP/1.1 500 Internal Server Error\r\nContent-Length: 21\r\nCont"}
+[miniflare] T50 ListObjectsV2 with prefix: {"status": 200, "code": null, "keys_found": 3}
+[miniflare] T51 DeleteObject (header auth), then HEAD: {"delete": {"status": 204, "code": null}, "head_after": 404}
+[miniflare] T52 Presigned DELETE: {"status": 204, "code": null}
+[miniflare] T53 Presigned POST (form upload) to bucket: {"status": 501, "code": "NotImplemented"}
+[miniflare] T54 PutBucketLifecycleConfiguration (abort 7 d on staging/, expire 3 d on restore/) then Get: {"put": {"status": 501, "code": "NotImplemented"}, "get": {"status": 501, "code": "NotImplemented", "has_rules": false}}
+[miniflare] W01 Worker-minted (aws4fetch) presigned PUT; object visible to the Worker's R2 binding: {"status": 200, "code": null, "binding_sees_same_bytes": true}
+[miniflare] W02 Binding put(onlyIf If-None-Match:*) on key written over S3: {"status": 412, "stored": false, "etag": null}
+[miniflare] W03 S3 PutObject If-None-Match:* on key written by binding: {"binding": 200, "status": 412, "code": "PreconditionFailed"}
+[miniflare] W04 Binding createMultipartUpload -> Worker-presigned S3 UploadPart x3 -> binding complete: {"complete": 200, "sha_match": true, "size": 10486994}
+[miniflare] W05 D1 claim (INSERT .. ON CONFLICT DO NOTHING): sequential, then 16-way race x10: {"first": {"won": true}, "second": {"won": false}, "winners_per_round": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]}

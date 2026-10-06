@@ -1,0 +1,12 @@
+ 09:14:46 up  2:15,  0 user,  load average: 5.93, 8.37, 7.10
+{"cmd":"build","rows":1000000,"secs":3.36,"db_bytes":152092672}
+ 09:14:49 up  2:15,  0 user,  load average: 6.42, 8.43, 7.12
+{"cmd":"rotate","mode":"inplace","new_epoch":1,"rows":1000000,"secs":5.62,"cpu_secs":2.19,"rchar":303800558,"wchar":304296104,"disk_read_bytes":4096,"disk_write_bytes":304644096,"spot_check_ok":true,"db_bytes_after":152092672}
+ 09:14:55 up  2:15,  0 user,  load average: 6.70, 8.46, 7.14
+{"cmd":"rotate","mode":"inplace","new_epoch":2,"rows":1000000,"secs":4.98,"cpu_secs":2.01,"rchar":303812846,"wchar":304320752,"disk_read_bytes":4096,"disk_write_bytes":304664576,"spot_check_ok":true,"db_bytes_after":152096768}
+ 09:15:00 up  2:15,  0 user,  load average: 7.05, 8.50, 7.16
+{"cmd":"rotate","mode":"map","new_epoch":3,"rows":1000000,"secs":6.07,"cpu_secs":2.85,"rchar":606230246,"wchar":461407304,"disk_read_bytes":8192,"disk_write_bytes":460201984,"spot_check_ok":true,"db_bytes_after":229576704}
+ 09:15:06 up  2:15,  0 user,  load average: 7.28, 8.53, 7.18
+{"cmd":"derive","rows":1000000,"secs":0.191,"ids_per_s":5244847,"sink":164}
+{"cmd":"derive","rows":5000000,"secs":1.532,"ids_per_s":3264002,"sink":156}
+ 09:15:09 up  2:15,  0 user,  load average: 7.50, 8.55, 7.19

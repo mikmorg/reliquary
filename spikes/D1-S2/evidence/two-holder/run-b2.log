@@ -1,0 +1,8 @@
+V0-ADR-0001-literal                    none    states=     61 violations=S1         (0.01s)
+V0-ADR-0001-literal                    device  states=    611 violations=S1,SL,S3,L1 (0.09s)
+V0-ADR-0001-literal                    leak    states=    722 violations=S1,SL,S3,L1 (0.09s)
+V0-ADR-0001-literal                    fault   states=    105 violations=S1,SL,L1   (0.01s)
+V0-ADR-0001-literal                    cloud   states=   3434 violations=S1,SL,S3   (0.48s)
+V1-proposed                            device  states= 142260 violations=-          (70.79s)
+V1-proposed                            fault   states= 150063 violations=-          (79.31s)
+V1-proposed                            cloud   states= 971688 violations=-          (526.96s)

@@ -1,0 +1,20 @@
+# G2-S1 emulated leg (NOT real R2/Cloudflare): wrangler dev + Miniflare local R2 S3 endpoint.
+name = "g2s1"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+S3_BASE = "http://127.0.0.1:8787/cdn-cgi/local/r2/s3/staging"
+S3_REGION = "auto"
+S3_AK = "g2s1-local-ak"
+S3_SK = "g2s1-local-secret-not-a-real-credential"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "staging"
+local_dev = { experimental_s3_credentials = { accessKeyId = "g2s1-local-ak", secretAccessKey = "g2s1-local-secret-not-a-real-credential" } }
+
+[[d1_databases]]
+binding = "DB"
+database_name = "g2s1"
+database_id = "00000000-0000-0000-0000-000000000000"

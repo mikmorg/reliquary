@@ -1,0 +1,35 @@
+key,value,unit,source,accessed
+workers_paid_base,5.0000,USD/month/account,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/workers/platform/pricing.mdx,2026-09-29
+workers_req_incl,10000000.0000,requests/month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/workers/platform/pricing.mdx,2026-09-29
+workers_req_rate,0.3000,USD per 1M requests,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/workers/platform/pricing.mdx,2026-09-29
+workers_cpu_incl,30000000.0000,CPU-ms/month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/workers/platform/pricing.mdx,2026-09-29
+workers_cpu_rate,0.0200,USD per 1M CPU-ms,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/workers/platform/pricing.mdx,2026-09-29
+r2_std_storage,0.0150,USD/GB-month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_std_classA,4.5000,USD per 1M,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_std_classB,0.3600,USD per 1M,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_ia_storage,0.0100,USD/GB-month (30-day minimum),https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_ia_classA,9.0000,USD per 1M,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_ia_classB,0.9000,USD per 1M,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_ia_retrieval,0.0100,USD/GB,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_free_storage,10,GB-month/month (Standard only),https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_free_classA,1000000.0000,ops/month (Standard only),https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+r2_free_classB,10000000.0000,ops/month (Standard only),https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/r2/pricing.mdx,2026-09-29
+d1_read_incl,25000000000.0000,rows/month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/d1-pricing.mdx,2026-09-29
+d1_read_rate,0.0010,USD per 1M rows,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/d1-pricing.mdx,2026-09-29
+d1_write_incl,50000000.0000,rows/month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/d1-pricing.mdx,2026-09-29
+d1_write_rate,1.0000,USD per 1M rows,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/d1-pricing.mdx,2026-09-29
+d1_storage_incl,5,GB,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/d1-pricing.mdx,2026-09-29
+d1_storage_rate,0.7500,USD/GB-month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/d1-pricing.mdx,2026-09-29
+q_ops_incl,1000000.0000,ops/month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/queues_pricing.mdx,2026-09-29
+q_ops_rate,0.4000,USD per 1M ops,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/queues_pricing.mdx,2026-09-29
+q_ops_per_msg,3,"ops/message (write+read+delete, <=64 KB)",https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/workers/queues_pricing.mdx,2026-09-29
+do_req_incl,1000000.0000,requests/month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/durable-objects/durable-objects-pricing.mdx,2026-09-29
+do_req_rate,0.1500,USD per 1M,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/durable-objects/durable-objects-pricing.mdx,2026-09-29
+do_dur_incl,400000.0000,GB-s/month,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/durable-objects/durable-objects-pricing.mdx,2026-09-29
+do_dur_rate,12.5000,USD per 1M GB-s (billed at 128 MB/object),https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/partials/durable-objects/durable-objects-pricing.mdx,2026-09-29
+email_incl,3000,emails/month/account,https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/email-service/platform/pricing.mdx,2026-09-29
+email_rate,0.3500,"USD per 1,000",https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/email-service/platform/pricing.mdx,2026-09-29
+apple_dev,99.0000,USD/year,https://developer.apple.com/programs/,2026-09-29
+azure_signing_basic,9.9900,"USD/month (5,000 signatures)",https://raw.githubusercontent.com/MicrosoftDocs/azure-docs/main/articles/artifact-signing/how-to-change-sku.md,2026-09-29
+android_full_dist,25.0000,USD once (Play / ADC full distribution),https://developer.android.com/developer-verification/guides/faq,2026-09-29
+android_limited_dist,0.0000,"USD (ADC limited distribution, <=20 devices)",https://developer.android.com/developer-verification/guides/faq,2026-09-29

@@ -1,0 +1,698 @@
+{
+ "scenarios": {
+  "A_happy_multiwake": {
+   "source_bytes": 41955385,
+   "spool_budget": 10488320,
+   "wakes": 6,
+   "parts_per_wake": [
+    [
+     1,
+     2
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     7,
+     8
+    ],
+    [
+     9
+    ],
+    []
+   ],
+   "source_bytes_read_per_wake": [
+    10485760,
+    20971520,
+    31457280,
+    41943040,
+    41955385,
+    0
+   ],
+   "source_read_total_over_size": 3.499,
+   "peak_spool_bytes_after_produce": 10488320,
+   "produce_ms": [
+    151,
+    219,
+    227,
+    322,
+    244,
+    0
+   ],
+   "verify": {
+    "errors": [],
+    "n_parts": 9,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 9,
+    "upload_id": "up-8e7d59b2cffde282"
+   },
+   "db_bytes": 61440
+  },
+  "B_cancel": {
+   "first_wake": {
+    "cancel_latency_us": 595,
+    "cancelled": true,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {},
+    "handed_off": [
+     1
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 92,
+    "produced_parts": [
+     1
+    ],
+    "progress_callbacks": 113,
+    "source_bytes_read": 7340032,
+    "spool_bytes_after": 5244160,
+    "status": {
+     "complete": false,
+     "enqueued": 1,
+     "missing": 0,
+     "n_parts": 6,
+     "not_started": 5,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-a10de90637b74b7f"
+   },
+   "verify": {
+    "errors": [],
+    "n_parts": 6,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 6,
+    "upload_id": "up-a10de90637b74b7f"
+   }
+  },
+  "C_sigkill": {
+   "spool_at_kill": [
+    "up-9ec30119378a1233.00001.part",
+    "up-9ec30119378a1233.00002.part",
+    "up-9ec30119378a1233.00003.tmp"
+   ],
+   "relaunch": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {},
+    "handed_off": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 899,
+    "produced_parts": [
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12
+    ],
+    "progress_callbacks": 970,
+    "source_bytes_read": 62914560,
+    "spool_bytes_after": 62929920,
+    "status": {
+     "complete": false,
+     "enqueued": 12,
+     "missing": 0,
+     "n_parts": 12,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-9ec30119378a1233"
+   },
+   "verify": {
+    "errors": [],
+    "n_parts": 12,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 12,
+    "upload_id": "up-9ec30119378a1233"
+   }
+  },
+  "D_failures": {
+   "wake1": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {},
+    "handed_off": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 517,
+    "produced_parts": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "progress_callbacks": 405,
+    "source_bytes_read": 26214400,
+    "spool_bytes_after": 26220800,
+    "status": {
+     "complete": false,
+     "enqueued": 5,
+     "missing": 0,
+     "n_parts": 5,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-21c573ed89ca740f"
+   },
+   "daemon1": {
+    "taken": 5,
+    "ok": 0,
+    "failed": 5,
+    "dropped": 0
+   },
+   "wake2": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {
+     "failed": 5
+    },
+    "handed_off": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 0,
+    "produced_parts": [],
+    "progress_callbacks": 0,
+    "source_bytes_read": 0,
+    "spool_bytes_after": 26220800,
+    "status": {
+     "complete": false,
+     "enqueued": 5,
+     "missing": 0,
+     "n_parts": 5,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-21c573ed89ca740f"
+   },
+   "verify": {
+    "errors": [],
+    "n_parts": 5,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 10,
+    "upload_id": "up-21c573ed89ca740f"
+   }
+  },
+  "E_force_quit": {
+   "wake1": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {},
+    "handed_off": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 263,
+    "produced_parts": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "progress_callbacks": 324,
+    "source_bytes_read": 20971520,
+    "spool_bytes_after": 20976640,
+    "status": {
+     "complete": false,
+     "enqueued": 4,
+     "missing": 0,
+     "n_parts": 4,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-df9b1e6ef8550280"
+   },
+   "daemon": {
+    "taken": 0,
+    "ok": 0,
+    "failed": 0,
+    "dropped": 4
+   },
+   "wake2": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {},
+    "handed_off": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "ok": true,
+    "orphans_reset": 4,
+    "produce_ms": 0,
+    "produced_parts": [],
+    "progress_callbacks": 0,
+    "source_bytes_read": 0,
+    "spool_bytes_after": 20976640,
+    "status": {
+     "complete": false,
+     "enqueued": 4,
+     "missing": 0,
+     "n_parts": 4,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-df9b1e6ef8550280"
+   }
+  },
+  "F_duplicates": {
+   "wake2": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {
+     "duplicate": 3,
+     "recorded": 3
+    },
+    "handed_off": [],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 0,
+    "produced_parts": [],
+    "progress_callbacks": 0,
+    "source_bytes_read": 0,
+    "spool_bytes_after": 0,
+    "status": {
+     "complete": true,
+     "enqueued": 0,
+     "missing": 0,
+     "n_parts": 3,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 3
+    },
+    "upload_id": "up-a1e7d9f794935102"
+   }
+  },
+  "G_purge_regen": {
+   "wake1": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {},
+    "handed_off": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 268,
+    "produced_parts": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "progress_callbacks": 292,
+    "source_bytes_read": 18874368,
+    "spool_bytes_after": 18878976,
+    "status": {
+     "complete": false,
+     "enqueued": 4,
+     "missing": 0,
+     "n_parts": 4,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-589dd27ddb9e8396"
+   },
+   "wake2": {
+    "cancelled": false,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {
+     "failed": 1,
+     "recorded": 3
+    },
+    "handed_off": [
+     1
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 82,
+    "produced_parts": [
+     1
+    ],
+    "progress_callbacks": 81,
+    "source_bytes_read": 5242880,
+    "spool_bytes_after": 5244160,
+    "status": {
+     "complete": false,
+     "enqueued": 1,
+     "missing": 0,
+     "n_parts": 4,
+     "not_started": 0,
+     "spooled": 0,
+     "uploaded": 3
+    },
+    "upload_id": "up-589dd27ddb9e8396"
+   },
+   "verify": {
+    "errors": [],
+    "n_parts": 4,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 5,
+    "upload_id": "up-589dd27ddb9e8396"
+   }
+  },
+  "H_source_changed": {
+   "wake2": {
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "error": "SourceChanged(msg: \"part 2 plaintext differs from the first production; refusing to re-encrypt\")",
+    "event_outcomes": {
+     "failed": 1,
+     "recorded": 3
+    },
+    "ok": false,
+    "orphans_reset": 0,
+    "upload_id": "up-813787ae297f5069"
+   }
+  }
+ },
+ "checks": [
+  {
+   "check": "A: every wake ok",
+   "pass": true,
+   "detail": []
+  },
+  {
+   "check": "A: spool never above budget",
+   "pass": true,
+   "detail": "peak 10488320 budget 10488320"
+  },
+  {
+   "check": "A: reassembled + decrypted == source",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 9,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 9,
+    "upload_id": "up-8e7d59b2cffde282"
+   }
+  },
+  {
+   "check": "A: spool empty at end",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B: cancelled flag set",
+   "pass": true,
+   "detail": {
+    "cancel_latency_us": 595,
+    "cancelled": true,
+    "core_version": "reliquary-ios-shape 0.1.0",
+    "event_outcomes": {},
+    "handed_off": [
+     1
+    ],
+    "ok": true,
+    "orphans_reset": 0,
+    "produce_ms": 92,
+    "produced_parts": [
+     1
+    ],
+    "progress_callbacks": 113,
+    "source_bytes_read": 7340032,
+    "spool_bytes_after": 5244160,
+    "status": {
+     "complete": false,
+     "enqueued": 1,
+     "missing": 0,
+     "n_parts": 6,
+     "not_started": 5,
+     "spooled": 0,
+     "uploaded": 0
+    },
+    "upload_id": "up-a10de90637b74b7f"
+   }
+  },
+  {
+   "check": "B: only whole parts committed (part 1)",
+   "pass": true,
+   "detail": [
+    1
+   ]
+  },
+  {
+   "check": "B: no torn .tmp left in spool",
+   "pass": true,
+   "detail": []
+  },
+  {
+   "check": "B: cancel latency recorded",
+   "pass": true,
+   "detail": 595
+  },
+  {
+   "check": "B: completes after cancel",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 6,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 6,
+    "upload_id": "up-a10de90637b74b7f"
+   }
+  },
+  {
+   "check": "C: killed mid-part (a .tmp existed)",
+   "pass": true,
+   "detail": [
+    "up-9ec30119378a1233.00001.part",
+    "up-9ec30119378a1233.00002.part",
+    "up-9ec30119378a1233.00003.tmp"
+   ]
+  },
+  {
+   "check": "C: relaunch ok, torn .tmp removed",
+   "pass": true,
+   "detail": [
+    null,
+    []
+   ]
+  },
+  {
+   "check": "C: completes after SIGKILL",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 12,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 12,
+    "upload_id": "up-9ec30119378a1233"
+   }
+  },
+  {
+   "check": "D: failures reported as events",
+   "pass": true,
+   "detail": {
+    "failed": 5
+   }
+  },
+  {
+   "check": "D: failed parts re-handed off with fresh URLs",
+   "pass": true,
+   "detail": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "check": "D: completes; re-uploads byte-identical",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 5,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 10,
+    "upload_id": "up-21c573ed89ca740f"
+   }
+  },
+  {
+   "check": "E: orphaned tasks reset on relaunch",
+   "pass": true,
+   "detail": [
+    4,
+    [
+     1,
+     2,
+     3,
+     4
+    ]
+   ]
+  },
+  {
+   "check": "E: orphaned parts re-handed off",
+   "pass": true,
+   "detail": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  {
+   "check": "E: completes after force-quit",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 4,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 4,
+    "upload_id": "up-df9b1e6ef8550280"
+   }
+  },
+  {
+   "check": "F: duplicates detected, not double-counted",
+   "pass": true,
+   "detail": {
+    "duplicate": 3,
+    "recorded": 3
+   }
+  },
+  {
+   "check": "G: purged part regenerated",
+   "pass": true,
+   "detail": [
+    1
+   ]
+  },
+  {
+   "check": "G: regenerated part byte-identical to first attempt",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 4,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 5,
+    "upload_id": "up-589dd27ddb9e8396"
+   }
+  },
+  {
+   "check": "H: SourceChanged raised, nothing re-encrypted",
+   "pass": true,
+   "detail": "SourceChanged(msg: \"part 2 plaintext differs from the first production; refusing to re-encrypt\")"
+  },
+  {
+   "check": "H: no part 2 ciphertext left in spool",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "I0: size 0 round-trips",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 1,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 1,
+    "upload_id": "up-25c415695558f2dd"
+   }
+  },
+  {
+   "check": "I1: size 1 round-trips",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 1,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 1,
+    "upload_id": "up-02d1e4fe415139fb"
+   }
+  },
+  {
+   "check": "I2: size 10485760 round-trips",
+   "pass": true,
+   "detail": {
+    "errors": [],
+    "n_parts": 2,
+    "ok": true,
+    "part_numbers_with_conflicting_bodies": 0,
+    "plaintext_sha256_match": true,
+    "server_put_attempts": 2,
+    "upload_id": "up-e8cd7530dbf8cca4"
+   }
+  }
+ ],
+ "summary": {
+  "checks": 26,
+  "passed": 26
+ }
+}

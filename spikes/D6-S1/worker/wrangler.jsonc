@@ -1,0 +1,25 @@
+// D6-S1 emulated control plane. LOCAL ONLY (wrangler dev --local). Never deploy this file:
+// the tokens below are synthetic test values for the emulator.
+{
+  "name": "d6s1-minimal-pii",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "d1_databases": [
+    { "binding": "DB", "database_name": "d6s1", "database_id": "00000000-0000-0000-0000-00000000d6s1", "migrations_dir": "migrations" }
+  ],
+  "r2_buckets": [{ "binding": "INBOX", "bucket_name": "d6s1-inbox" }],
+  "send_email": [
+    // Dead-man's switch: may only ever email the owner (C12, send-bindings.mdx).
+    { "name": "OWNER_ALERT", "destination_address": "zz-d6s1-owner@example.invalid" }
+  ],
+  "triggers": { "crons": ["0 * * * *"] },
+  "observability": { "enabled": true, "logs": { "invocation_logs": false } },
+  "vars": {
+    "SIM_CLOCK": "1",
+    "EMULATOR_OWNER_TO": "zz-d6s1-owner@example.invalid",
+    "DMS_HOURS": "6",
+    "ALERT_FROM": "alerts@notify.d6s1.example.invalid",
+    "ADMIN_TOKEN": "synthetic-admin-token-d6s1",
+    "HOMELAB_TOKEN": "synthetic-homelab-token-d6s1"
+  }
+}

@@ -1,0 +1,27 @@
+PASS A: every wake ok
+PASS A: spool never above budget :: peak 10488320 budget 10488320
+PASS A: reassembled + decrypted == source :: {'errors': [], 'n_parts': 9, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 9, 'upload_id': 'up-8e7d59b2cffde282'}
+PASS A: spool empty at end
+PASS B: cancelled flag set :: {'cancel_latency_us': 595, 'cancelled': True, 'core_version': 'reliquary-ios-shape 0.1.0', 'event_outcomes': {}, 'handed_off': [1], 'ok': True, 'orphans_reset': 0, 'produce_ms': 92, 'produced_parts': [1], 'progress_callbacks': 113, 'source_bytes_read': 7340032, 'spool_bytes_after': 5244160, 'status': {'complete': False, 'enqueued': 1, 'missing': 0, 'n_parts': 6, 'not_started': 5, 'spooled': 0, 'uploaded': 0}, 'upload_id': 'up-a10de90637b74b7f'}
+PASS B: only whole parts committed (part 1) :: [1]
+PASS B: no torn .tmp left in spool
+PASS B: cancel latency recorded :: 595
+PASS B: completes after cancel :: {'errors': [], 'n_parts': 6, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 6, 'upload_id': 'up-a10de90637b74b7f'}
+PASS C: killed mid-part (a .tmp existed) :: ['up-9ec30119378a1233.00001.part', 'up-9ec30119378a1233.00002.part', 'up-9ec30119378a1233.00003.tmp']
+PASS C: relaunch ok, torn .tmp removed :: (None, [])
+PASS C: completes after SIGKILL :: {'errors': [], 'n_parts': 12, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 12, 'upload_id': 'up-9ec30119378a1233'}
+PASS D: failures reported as events :: {'failed': 5}
+PASS D: failed parts re-handed off with fresh URLs :: [1, 2, 3, 4, 5]
+PASS D: completes; re-uploads byte-identical :: {'errors': [], 'n_parts': 5, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 10, 'upload_id': 'up-21c573ed89ca740f'}
+PASS E: orphaned tasks reset on relaunch :: (4, [1, 2, 3, 4])
+PASS E: orphaned parts re-handed off :: [1, 2, 3, 4]
+PASS E: completes after force-quit :: {'errors': [], 'n_parts': 4, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 4, 'upload_id': 'up-df9b1e6ef8550280'}
+PASS F: duplicates detected, not double-counted :: {'duplicate': 3, 'recorded': 3}
+PASS G: purged part regenerated :: [1]
+PASS G: regenerated part byte-identical to first attempt :: {'errors': [], 'n_parts': 4, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 5, 'upload_id': 'up-589dd27ddb9e8396'}
+PASS H: SourceChanged raised, nothing re-encrypted :: SourceChanged(msg: "part 2 plaintext differs from the first production; refusing to re-encrypt")
+PASS H: no part 2 ciphertext left in spool
+PASS I0: size 0 round-trips :: {'errors': [], 'n_parts': 1, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 1, 'upload_id': 'up-25c415695558f2dd'}
+PASS I1: size 1 round-trips :: {'errors': [], 'n_parts': 1, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 1, 'upload_id': 'up-02d1e4fe415139fb'}
+PASS I2: size 10485760 round-trips :: {'errors': [], 'n_parts': 2, 'ok': True, 'part_numbers_with_conflicting_bodies': 0, 'plaintext_sha256_match': True, 'server_put_attempts': 2, 'upload_id': 'up-e8cd7530dbf8cca4'}
+{"checks": 26, "passed": 26}

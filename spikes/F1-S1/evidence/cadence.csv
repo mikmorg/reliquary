@@ -1,0 +1,14 @@
+repo,stable_releases_12m,stable_releases_24m,version_epochs_started_12m,epochs_started_24m_list,latest_stable,latest_stable_date,commits_default_branch_12m,extra,note
+immich-app_immich,38,110,2,v2.0.0@2025-10-01 v3.0.0@2026-06-30,v3.2.4,2026-09-28,2855,,server+mobile share tags
+ente_ente,33,62,0,photos-v1.0.0@2025-03-21,photos-v1.3.64,2026-09-22,17597,,"Ente Photos mobile app tags only (photos-vX.Y.Z, no -beta/-rc)"
+restic_restic,2,6,1,v0.18.0@2025-03-27 v0.19.0@2026-06-09,v0.19.1,2026-07-05,714,,pre-1.0: minor = format/API epoch
+restic_rest-server,0,1,0,v0.14.0@2025-05-31,v0.14.0,2025-05-31,24,,
+kopia_kopia,6,14,2,v0.18.0@2024-11-16 v0.19.0@2025-01-23 v0.20.0@2025-05-19 v0.21.0@2025-07-18 v0.22.0@2025-11-17 v0.23.0@2026-05-11,v0.23.1,2026-06-15,435,,pre-1.0
+PlakarKorp_plakar,10,14,0,v1.0.1@2025-05-15,v1.1.7,2026-09-24,1128,,
+syncthing_syncthing,12,34,0,v2.0.0@2025-08-12,v2.1.5,2026-09-08,241,,
+rustic-rs_rustic_core,6,19,5,rustic_core-v0.5.0@2024-10-02 rustic_core-v0.6.0@2024-11-18 rustic_core-v0.7.0@2024-11-24 rustic_core-v0.8.0@2025-09-12 rustic_core-v0.9.0@2025-11-08 rustic_core-v0.10.0@2026-02-11 rustic_core-v0.11.0@2026-04-05 rustic_core-v0.12.0@2026-06-01 rustic_core-v0.13.0@2026-08-16,rustic_core-v0.13.0,2026-08-16,99,,0.x: each minor is semver-breaking
+borgbackup_borg,4,6,0,,1.4.5,2026-07-19,2141,"2.0 betas: 25 total, first 2.0.0b1@2022-08-07, last 2.0.0b25@2026-09-27, 6 in 12m",stable 1.x only; 2.0 betas counted separately
+uroni_urbackup_backend,4,4,0,,2.5.38,2026-08-30,12,,server tags (client tags have 'client' suffix)
+researchxxl_syncthing-android,18,18,2,v2.0.10.2@2025-10-29 v1.30.0.5@2025-12-08,v2.1.5.0,2026-09-08,333,,fork repo created 2025-10; older tags inherited
+duplicati_duplicati,9,11,3,v2.1.0.4_stable_2025-01-31@2025-01-31 v2.2.0.0_stable_2025-10-23@2025-10-23 v2.3.0.0_stable_2026-04-14@2026-04-14 v2.4.0.0_stable_2026-09-03@2026-09-03,v2.4.0.0_stable_2026-09-03,2026-09-03,2396,,stable channel tags only
+nextcloud_android,14,32,3,stable-33.0.0@2026-02-18 stable-34.0.0@2026-06-08 stable-35.0.0@2026-09-16,stable-35.0.0,2026-09-16,4077,,stable-X.Y.Z tags

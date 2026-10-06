@@ -1,0 +1,36 @@
+admin creates repo (symmetric repo password)                   OK
+admin enables ACLs (installs default ACL entries)              OK
+--- default ACL entries
+    id:1fad47c0af70b459e93729aa54dd376e user:*@* access:APPEND target:type=content
+    id:01e97bdd1bc35e150142a8a8c8db0314 user:*@* access:READ target:type=policy,policyType=global
+    id:33eedf974628b22a4775dc210a75c111 user:*@* access:READ target:type=policy,hostname=OWN_HOST,policyType=host
+    id:0fa54c2dc6566f5cedf0d4d3b2b02308 user:*@* access:FULL target:type=policy,username=OWN_USER,hostname=OWN_HOST
+    id:cbd8c71ad49004253d64b50c6c53de3d user:*@* access:FULL target:type=snapshot,username=OWN_USER,hostname=OWN_HOST
+    id:9b091d42f2f0133cafcf4a71e90a291a user:*@* access:FULL target:type=user,username=OWN_USER@OWN_HOST
+dev1 connects with user password only                          OK
+dev2 connects with user password only                          OK
+device config holds repo password or encryption key?           NO (config: apiServer,caching,hostname,username,description,enableActions,formatBlobCacheDuration)
+dev1 snapshot (append)                                         OK
+dev2 snapshot of an identical 3 MB file                        OK
+repo content count before/after dev2 snapshot                  7 -> 9
+identical file from dev1 and dev2 -> same object ID (cross-user dedup) YES (69ce0fd08734dac9b752a72ba10a3555)
+dev2 reads dev1's file bytes by object ID                      YES
+dev2 lists dev1's snapshots                                    NO (manifest ACL)
+dev2 reads dev1's snapshot root by object ID                   YES: photo1.bin
+dev1 restores (server decrypts for it)                         YES (bytes identical)
+dev1 deletes its own snapshot (default ACL)                    exit=0, snapshot GONE
+--- default FULL entries for *@* (id, target):
+    0fa54c2dc6566f5cedf0d4d3b2b02308 {"hostname": "OWN_HOST", "type": "policy", "username": "OWN_USER"}
+    cbd8c71ad49004253d64b50c6c53de3d {"hostname": "OWN_HOST", "type": "snapshot", "username": "OWN_USER"}
+    9b091d42f2f0133cafcf4a71e90a291a {"type": "user", "username": "OWN_USER@OWN_HOST"}
+--- tightened ACL entries
+    id:1fad47c0af70b459e93729aa54dd376e user:*@* access:APPEND target:type=content
+    id:01e97bdd1bc35e150142a8a8c8db0314 user:*@* access:READ target:type=policy,policyType=global
+    id:33eedf974628b22a4775dc210a75c111 user:*@* access:READ target:type=policy,hostname=OWN_HOST,policyType=host
+    id:9b091d42f2f0133cafcf4a71e90a291a user:*@* access:FULL target:type=user,username=OWN_USER@OWN_HOST
+    id:21e5c7644a0584835406c1022d880d17 user:*@* access:APPEND target:type=snapshot,username=OWN_USER,hostname=OWN_HOST
+    id:cd56e16829afcb34d92bc079e7e25d0b user:*@* access:READ target:type=policy,hostname=OWN_HOST,username=OWN_USER
+server restarted after ACL change                              OK
+dev1 deletes own snapshot after ACL tightened to APPEND        exit=1, snapshot still present: access denied
+dev1 can still append after tightening                         YES
+who listens                                                    kopia server accepts inbound gRPC/HTTPS; clients dial it

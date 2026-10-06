@@ -1,0 +1,1 @@
+{"impl": "python 3.11.15 hashlib/hmac/base64 (constructions a, b; sha256; base32)", "positives_pass": 27, "positives_fail": 0}

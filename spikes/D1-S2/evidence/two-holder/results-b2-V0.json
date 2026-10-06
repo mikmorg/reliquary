@@ -1,0 +1,449 @@
+{
+ "budget": 2,
+ "ttl": 2,
+ "max_attempts": 3,
+ "dedup_id_F": "c50125f4bd266252",
+ "dedup_id_G": "e75c962b2220c571",
+ "variants": [
+  {
+   "name": "V0-ADR-0001-literal",
+   "per_upload_keys": false,
+   "create_only": false,
+   "receipts": false,
+   "pinned_trust": false,
+   "ttl": true,
+   "staged_state": false,
+   "reset_on_reject": false,
+   "requery": false,
+   "attribution": false,
+   "homelab_verify": true,
+   "registry_auth": false,
+   "reconcile_missing": false
+  },
+  {
+   "name": "V1-proposed",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1+create_only",
+   "per_upload_keys": true,
+   "create_only": true,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-per_upload_keys",
+   "per_upload_keys": false,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-receipts",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": false,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-pinned_trust",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": false,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-ttl",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": false,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-staged_state",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": false,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-reset_on_reject",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": false,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-requery",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": false,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-attribution",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": false,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-homelab_verify",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": false,
+   "registry_auth": true,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-registry_auth",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": false,
+   "reconcile_missing": true
+  },
+  {
+   "name": "V1-no-reconcile_missing",
+   "per_upload_keys": true,
+   "create_only": false,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": false
+  },
+  {
+   "name": "V1-no-per_upload_keys+create_only",
+   "per_upload_keys": false,
+   "create_only": true,
+   "receipts": true,
+   "pinned_trust": true,
+   "ttl": true,
+   "staged_state": true,
+   "reset_on_reject": true,
+   "requery": true,
+   "attribution": true,
+   "homelab_verify": true,
+   "registry_auth": true,
+   "reconcile_missing": true
+  }
+ ],
+ "results": [
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "none",
+   "budget": 0,
+   "states": 61,
+   "L1_checked": true,
+   "violations": [
+    "S1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "device",
+   "budget": 2,
+   "states": 611,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "S3",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "M:claim IDF",
+     "H1:query->pending",
+     "H2:query->pending",
+     "=> SILENT LOSS: ['H1', 'H2'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "S3": [
+     "M:claim IDF",
+     "tick",
+     "tick",
+     "H1:query->upload",
+     "M:PUT poison G as IDF at st/c50125",
+     "homelab:REJECT st/c50125 flag=('H1', 'rejected-upload')",
+     "=> honest device flagged [('H1', 'rejected-upload')]"
+    ],
+    "L1": [
+     "M:claim IDF",
+     "H1:query->pending",
+     "H2:query->pending",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', None, 0), ('done', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'M')] store=[]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "rejected-upload"
+    ],
+    [
+     "H1",
+     "rejected-upload"
+    ],
+    [
+     "H2",
+     "rejected-upload"
+    ],
+    [
+     "M",
+     "rejected-upload"
+    ]
+   ],
+   "seconds": 0.09
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "leak",
+   "budget": 2,
+   "states": 722,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "S3",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "S3": [
+     "H1:query->upload",
+     "LEAK:PUT G over st/c50125",
+     "homelab:REJECT st/c50125 flag=('H1', 'rejected-upload')",
+     "=> honest device flagged [('H1', 'rejected-upload')]"
+    ],
+    "SL": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "H2:query->pending",
+     "LEAK:PUT G over st/c50125",
+     "=> SILENT LOSS: ['H1', 'H2'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "H2:query->pending",
+     "LEAK:PUT G over st/c50125",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', 'st/c50125', 1), ('done', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "rejected-upload"
+    ],
+    [
+     "H1",
+     "rejected-upload"
+    ],
+    [
+     "H2",
+     "rejected-upload"
+    ]
+   ],
+   "seconds": 0.09
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "fault",
+   "budget": 2,
+   "states": 105,
+   "L1_checked": true,
+   "violations": [
+    "S1",
+    "SL",
+    "L1"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "H2:query->pending",
+     "FAULT:staged object vanishes st/c50125",
+     "=> SILENT LOSS: ['H1', 'H2'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "L1": [
+     "H1:query->upload",
+     "H1:PUT st/c50125+Complete",
+     "H2:query->pending",
+     "FAULT:staged object vanishes st/c50125",
+     "=> attacker stops here; honest actors can no longer reach all-green. devs=(('done', 'st/c50125', 1), ('done', None, 0)) claims=[('c50125f4bd266252', 'claimed', 'H1')] store=[]"
+    ]
+   },
+   "flags_seen": [],
+   "seconds": 0.01
+  },
+  {
+   "variant": "V0-ADR-0001-literal",
+   "adversary": "cloud",
+   "budget": 2,
+   "states": 3434,
+   "L1_checked": false,
+   "violations": [
+    "S1",
+    "SL",
+    "S3"
+   ],
+   "counterexamples": {
+    "S1": [
+     "H1:query->present(cloud lie)",
+     "=> ['H1'] green but the homelab store lacks F"
+    ],
+    "SL": [
+     "H1:query->present(cloud lie)",
+     "H2:query->present(cloud lie)",
+     "=> SILENT LOSS: ['H1', 'H2'] green, store lacks F, and no honest continuation can ever store F"
+    ],
+    "S3": [
+     "H1:query->upload",
+     "CLOUD:inject G as c50125",
+     "homelab:REJECT st/c50125/CLOUD flag=('H1', 'rejected-upload')",
+     "=> honest device flagged [('H1', 'rejected-upload')]"
+    ]
+   },
+   "flags_seen": [
+    [
+     "-",
+     "rejected-upload"
+    ],
+    [
+     "H1",
+     "rejected-upload"
+    ],
+    [
+     "H2",
+     "rejected-upload"
+    ]
+   ],
+   "seconds": 0.48
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+[
+ {
+  "sim_now": 1791194400,
+  "to": "zz-d6s1-delta@example.invalid",
+  "from": "nudges@notify.d6s1.example.invalid",
+  "subject": "Your Reliquary code",
+  "text": "Hi Zzdelta, type this code into the Reliquary app: 697655"
+ },
+ {
+  "sim_now": 1791194400,
+  "to": "zz-d6s1-beta@example.invalid",
+  "from": "nudges@notify.d6s1.example.invalid",
+  "subject": "Your Reliquary code",
+  "text": "Hi Zzbeta, type this code into the Reliquary app: 553184"
+ },
+ {
+  "sim_now": 1791194400,
+  "to": "zz-d6s1-alpha@example.invalid",
+  "from": "nudges@notify.d6s1.example.invalid",
+  "subject": "Your Reliquary code",
+  "text": "Hi Zzalpha, type this code into the Reliquary app: 082266"
+ },
+ {
+  "sim_now": 1791194400,
+  "to": "zz-d6s1-gamma@example.invalid",
+  "from": "nudges@notify.d6s1.example.invalid",
+  "subject": "Your Reliquary code",
+  "text": "Hi Zzgamma, type this code into the Reliquary app: 399937"
+ },
+ {
+  "sim_now": 1792702800,
+  "to": "zz-d6s1-beta@example.invalid",
+  "from": "nudges@notify.d6s1.example.invalid",
+  "subject": "Your backup needs a look",
+  "text": "Hi Zzbeta, your laptop is switched on but has not finished a backup for 14 days. Open the Reliquary app on it."
+ },
+ {
+  "sim_now": 1793080800,
+  "to": "zz-d6s1-alpha@example.invalid",
+  "from": "nudges@notify.d6s1.example.invalid",
+  "subject": "Your backup needs a look",
+  "text": "Hi Zzalpha, your phone has not been in touch for 15 days. Open the Reliquary app on it."
+ },
+ {
+  "sim_now": 1793102400,
+  "to": "zz-d6s1-gamma@example.invalid",
+  "from": "nudges@notify.d6s1.example.invalid",
+  "subject": "Your backup needs a look",
+  "text": "Hi Zzgamma, your phone has not been in touch for 14 days. Open the Reliquary app on it."
+ }
+]
