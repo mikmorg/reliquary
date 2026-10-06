@@ -242,3 +242,24 @@ HOLDERS=1 .venv/bin/python model.py 3          # all variants x attackers, one h
 HOLDERS=1 .venv/bin/python pairs.py
 .venv/bin/python render.py <results json files>   # Markdown matrix + counterexamples
 ```
+
+## Addendum (2026-10-06, synthesis stage): charitable ADR-0001 baseline
+
+The skeptic review pointed out that V0 fills ADR-0001's gaps with "off", so a device counts a file
+done after "pending" or after its own PUT. That makes V0 fail even with no attacker. A charitable
+variant was therefore run, `V0c-charitable`. The device is green only when the Worker reports
+"committed", and it re-asks otherwise. Reset-on-reject and reconcile-missing are on. Receipts and
+per-upload keys are off. Patch and results: `evidence/v0-charitable/`.
+
+| Attacker | One holder, budgets 1–3 | Two holders, budget 1 |
+|---|---|---|
+| none | pass | pass |
+| device | pass at budget 1; S3 at budgets 2–3 | pass |
+| leak | S3 | S3 |
+| fault | pass | pass |
+| cloud | S1, SL, S3 | S1, SL, S3 |
+
+Read item 1 of "What this means" with this correction. Under the charitable reading, ADR-0001 §4
+loses data only to a malicious control plane, and it blames honest devices (S3) for a leaked URL or
+another device's poison. The honest-cloud silent-loss traces above come from V0's defaults, which
+ADR-0001 does not state. The protocol change is still required, because of the cloud attacker.
