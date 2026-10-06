@@ -218,6 +218,8 @@ The attack class is primary-sourced (Tahoe, S19) and was executed in D1-S1: with
 
 SR-21 is rewritten to follow F3's DR-F3-2: scope, record-first, and exact accounting of queried IDs. AR-06 is narrowed to the remaining same-person and above-T_x oracle plus leaked-secret history. Homelab-only dedup (devices always upload unless they hold their own receipt) would remove the cloud oracle entirely without conflicting with CLAUDE.md. Its bandwidth cost is unmeasured (C4, E1).
 
+Two further options the skeptics raised are left to F3, which already evaluates them: a randomised upload threshold (Harnik, Pinkas and Shulman-Peleg 2010; F3 has a secondary listing only) and server-aided dedup keys (DupLESS-style). F3 finds that a key server inside Cloudflare would be worse than today, and that a homelab-held asynchronous OPRF would change the settled "HMAC(family secret, content)" construction (F3 claim C17, secondary-only; the DupLESS paper is blocked). D1 recommends neither in Wave 1; both stay open under DR-F3-2 and A1.
+
 ### 8. Revocation (K10 contested, SR-09, SR-17)
 
 What is documented: R2 key permission changes "may take up to a minute" (S7), and revoking a parent token stops derived temporary credentials "immediately" (S4). These describe different operations rather than a conflict. Not documented: whether rolling or revoking the token that signed presigned URLs invalidates them. If it does, per-epoch or per-device signing tokens are the BUD-REVOKE kill switch. C1-S1 must test it.
@@ -241,6 +243,8 @@ SR-17 now lets the admin revoke at the Worker directly, which works while the ho
 | Device keys via PAKE / co-signing / USB return trip / key transparency | Constrained by ADR-0002 §3 (OD-05) | Removes T-02 | Effort; D3 must weigh | K7; S20 |
 | Global presence answer + rate limits | Fits | Fastest seeding | Oracle not bounded (F3-S2) | S33 |
 | **Scoped presence (DR-F3-2)** or homelab-only dedup | Fits (storage dedup unchanged) | Removes the cross-person oracle | Duplicate uploads (cost unmeasured) | S33; F3 note |
+| Randomised upload threshold (Harnik et al. 2010) | Fits (storage dedup unchanged) | Blurs the presence signal | Bandwidth; weaker than scoping; source secondary | F3 note (B24) |
+| Server-aided dedup keys: DupLESS-style server in Cloudflare, or a homelab-held asynchronous OPRF | Cloudflare server: violates SR-01. Homelab OPRF: **changes settled text** (HMAC construction) | Takes the offline-usable secret off devices | Latency against an outbound-only homelab; new primitive; USB IDs harder | F3 note (C17, secondary-only) |
 | Register tooling: Markdown + Mermaid vs pytm vs Threagile | — | Markdown fits repo review | pytm/Threagile add toolchains; Threagile last release 2024-07-30 | S29 |
 
 ### Similar work and lessons
@@ -302,6 +306,7 @@ No kits are needed in Wave 1 (both spikes are CT). Real R2 behaviour (If-None-Ma
 | Receipt key on the ingest VM (minor, adversary) | **Recorded.** A separate receipt signer is listed as a Wave 2 alternative under AR-08 (register §6c, T-26). |
 | Ransomware false green (minor, adversary) | **Recorded.** T-23, deferred to Wave 2 (E3, A3, D4-S3). |
 | K14 precedent unread (minor, all) | **Kept** as contested precedent; not cited as support. Access escalated to H1. |
+| Missed alternatives (all three skeptics) | **Recorded.** Homelab-only dedup, scoped presence, short Age bucket lock, token-roll kill switch, per-device signing tokens, PAKE, USB return trip, local QR hand-over, keep-encrypted-until-receipt, cloud-side ciphertext-hash binding and CopyObject create-only are now in Findings 2, 6–8, SR-09, SR-14, SR-15, SR-28 or the alternatives table. Randomised thresholds and DupLESS/OPRF are listed and left to F3 (Finding 7). |
 
 ## Conflicts with settled text
 
