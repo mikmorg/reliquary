@@ -1,491 +1,487 @@
 # D2. Key hierarchy, custody, recovery and succession cryptography
 
 - **Workstream:** D2 (see `docs/research/PLAN.md`, section "D2.")
-- **Status:** Draft (analyst deep read, Wave 1 batch W1-a). Skeptic review has not started, so every claim below is still **pending**.
-- **Date:** 2026-09-29 (last updated 2026-09-29)
-- **Feeds:** ADR-0008 (key hierarchy, custody, recovery; reserved for D2), OD-08 (recovery recipient, k-of-n, holders), OD-06 (PQ, owned by A2: this note adds the recovery coupling), OD-07 (A6 at-rest posture: custody coupling), OD-17 (new accepted-risk candidates AR-D2-1/2), one-way door #3 (recovery recipient in the key hierarchy)
-- **Depends on:** D1 (SR-02, SR-14, SR-15, SR-23, AR-08), A1 (dedup-ID construction and epochs, DR-A1-1), A2 (envelope, OD-06), A6 (at-rest posture, OD-07; the A6 draft `a6-homelab-storage-engine.md` appeared during this stage and recommends posture **A′**: keep the received age payload and rewrap the header at ingest to an offline archive recipient plus R), E7 (break-glass requirement; no E7 note exists yet, so the requirement is taken from PLAN §E7), T1 spike 2 (`content-encryption-format.md`, D-2/D-3/D-4), F3 (C4–C6 PQ findings)
-- **Traceability rows advanced:** OPEN-3b (homelab keypair custody), Q1-2a (generating and storing the homelab keypair), OPEN-3c / Q1-2b (custody and rotation trigger of the dedup secret; A1 keeps the ID-side mechanics), R-20, R-22 (input)
+- **Status:** Final for Wave 1 (batch W1-a). Skeptic review is done (three lenses: sources, logic, adversary). Claim verdicts are the computed tally. Holders, the human drill (D2-S3) and the time-delay question carry over to Wave 2.
+- **Date:** 2026-09-29 (last updated 2026-10-06)
+- **Feeds:** ADR-0008 (`docs/adr/0008-key-hierarchy-custody-recovery.md`, Proposed, partial), `docs/security/key-inventory.md` (Draft), `docs/security/key-ceremony-runbook.md` (Draft), OD-08, OD-06 (coupling; A2 owns it), OD-07 (coupling; A6 owns it), OD-17 (AR-D2-1, AR-D2-2), DR-A2-2 (joint with A2 and A6), new DR-D2-1..3, one-way door #3 (recovery recipient in the key hierarchy)
+- **Depends on:** D1 (SR-02, SR-14, SR-15, SR-23, AR-06, AR-08), A1 (dedup-ID construction and epochs, DR-A1-1), A2 (envelope, OD-06, DR-A2-2, its C9), A3 (drain bound, DR-A3-3), A6 (posture A′, h0 handling), E7 (break-glass requirement; no E7 note yet, so it is taken from PLAN §E7), T1 spike 2 (`content-encryption-format.md`), F3
+- **Traceability rows advanced:** OPEN-3b, Q1-2a (homelab keypair custody and generation), OPEN-3c and Q1-2b (dedup secret custody and rotation trigger; A1 keeps the ID mechanics), R-20, R-22 (see "Conflicts with settled text")
 
 ## Summary
 
-Every object a device writes should be encrypted to **two recipients from day one**:
+Reliquary needs two keys that can open the archive: an **online ingest key** at the homelab and an **offline recovery key R** that nobody holds in one piece. age supports this natively (C1). If the owner chooses post-quantum (OD-06), R must be post-quantum too, because age refuses to mix PQ and classic recipients (C2).
 
-- an online **ingest key** held by the homelab;
-- an offline **recovery key** that nobody holds in one piece.
+After skeptic review the recommendation changed in one important way. **Devices write only the ingest stanza. The homelab adds R** (with the admin's archive key X) when it rewraps headers at ingest, which matches A2's DR-A2-2 option P1. The earlier "devices also write R" argument was refuted by all three skeptics (C21, contested). Two things replace it. First, the homelab cannot check an R stanza that a device wrote. Second, each retired ingest key can be sealed to {X, R} instead of being destroyed, which keeps late USB bundles readable at a cost per epoch, not per object.
 
-age supports this natively. In the container, stock Go `age` 1.3.2 encrypted to and decrypted from two hybrid post-quantum (`age1pq`) recipients. It **refused** to mix a post-quantum recipient with a classic one. This is the most important coupling: if the owner chooses post-quantum (OD-06), the recovery key must also be post-quantum. That rules out YubiKeys, TPMs and passphrase stanzas as recovery *recipients*.
-
-The recommended recovery design uses only stock tools:
-
-1. The recovery identity is a post-quantum age identity. It is stored only as a small passphrase-encrypted age file (260 bytes).
-2. That file's 128-bit random passphrase is split with **SLIP-39** into k-of-n word shares (20 words each). The default is 2-of-3, pending E7-S1.
-3. Every share card also carries the encrypted identity as a QR code, so any k cards are enough to recover.
-
-The analyst ran this whole chain once in the container, using python-shamir-mnemonic and Go age: 2 of 3 shares, then the passphrase, then the identity, then a decrypted object. The real test is still the family drill (D2-S3).
-
-Under A6's draft posture A′, the homelab rewraps every stored header to an offline **archive key X**, held by the admin, plus R. Devices should still include R themselves. That keeps USB bundles and staged objects readable after an ingest key has been rotated and destroyed.
-
-The online ingest key should be a plain software key. Under A′ it protects only data in transit, so unattended unlock is acceptable. Under postures that store plaintext, it should be unlocked in the same way and at the same time as the store volume. Hardware keys add ceremony without addressing the real risk, a live compromise of the ingest VM (AR-08). Software unwrap runs at thousands of objects per second in the container.
-
-The dedup secret should be random per epoch (A1). It should be sealed by the homelab to each authenticated device key, and rotated on every loss, theft or compromise revocation.
+R is a PQ age identity, stored as a 422-byte armored, passphrase-wrapped file. Its 128-bit passphrase is split with SLIP-39 into 20-word cards, 2-of-3 by default. Each card also carries the wrapped file as a QR code. In the container this whole chain ran end to end, including a QR encode and decode (C6, C25). No relative has tried it yet (D2-S3 is kit-ready).
 
 Confidence:
 
 - **High:** the format facts.
-- **Medium:** the recovery design and the custody recommendation. Both depend on OD-06, OD-07 and on real people (E7-S1, D2-S3).
+- **Medium:** the custody and recovery design, which depends on OD-06, OD-07 and on real people (E7-S1, D2-S3).
 
 ## Questions
 
 | # | Question (PLAN D2, Wave 1 scope) | Short answer | Confidence |
 |---|---|---|---|
-| 1 | Key inventory: custody, backup, rotation and compromise response for each key | Draft inventory in §F1: 15 items across four tiers (offline, homelab online, device, cloud/project). D2 fixes custody for the homelab and recovery keys and only lists D3/D5/C3 keys. | Medium |
-| 2 | Online ingest key plus an offline recovery recipient from day one? | **Yes.** Two stanzas on every content object and metadata record. Measured cost with two PQ recipients: a 3,184 B header, against 1,627 B for one PQ recipient. age identities ignore stanzas that are not theirs, so the extra stanza does not affect ingest. | High (format); Medium (value, which depends on OD-07) |
-| 3 | Rotation by rewrap only; what the at-rest posture implies | Rotating any key never touches payloads: the payload key is derived from the file key, so only the header changes. The ingest key needs **no** rewrap under any posture: rotate it with a signed bundle. Under A′ the stored headers never carry I. Destroy the old I after the longest drain path. Replacing the recovery key needs a header rewrap of every stored ciphertext, and Reliquary must write that tool, because upstream age has none. No rewrap revokes access to ciphertext someone has already copied. | High (mechanics); Medium (tooling) |
-| 4 | Custody of the online key: encrypted file, TPM-sealed (systemd-creds, clevis, Proxmox vTPM), YubiKey, HSM | A software age identity. Under A′ (A6 draft) it protects only data in transit, so unattended unlock is fine: a key file, or Tang/TPM with a manual fallback. It is rotated per epoch and destroyed after draining. Under plaintext postures it uses the **same unlock mechanism as the store volume**. The offline archive key X (A′) is admin-held: a passphrase- or YubiKey-wrapped file, brought online only for restores and rebuilds. Keep I off VM backups. Proxmox vTPM is excluded: its own documentation says it has no real security benefit. A YubiKey cannot hold a PQ ingest key. HSM is out of scope for cost. | Medium |
-| 5 | Offline backup: SLIP-39 vs raw Shamir of an age identity (age-plugin-sss) vs paper QR vs extra hardware keys; k-of-n, holders, drill cadence | **SLIP-39 over a passphrase that wraps the PQ recovery identity, with a QR of the wrapped identity on every card.** age-plugin-sss is rejected: experimental, n stanzas per object, no Windows builds. Extra hardware keys are rejected under PQ. Default 2-of-3; E7-S1 checks it with real people. Card check every year; full drill at Gate C and whenever holders change. | Medium |
-| 6 | Dedup secret delivered encrypted to the device key by the homelab; compatible with instant enrollment? | **Yes, if A1's construction B is adopted** (HMAC over the SHA-256). The device starts discovery and hashing at once, and derives IDs within seconds when the sealed secret arrives. Only the first upload waits until the homelab is reachable. Under construction A, late delivery would force a second full read. | Medium |
-| 7 | Dedup-secret derivation and rotation (Wave 1 scope) | S_e is 32 random bytes per epoch, generated at the homelab and **not** derived from the recovery or admin root. A copy sealed to R goes in the doomsday kit. Rotate on every revocation for loss, theft, compromise or estrangement. No calendar rotation. | Medium |
-| 8 | Key ceremony: air-gapped generation; fingerprints on cards and kits | Runbook draft in §F7. Use a live-boot offline machine, Go age ≥ 1.3.0 and python-shamir-mnemonic, verified against their checksums. Test-recover from every k-subset before printing. Print short fingerprints of the recipients and the admin root key. | Medium |
-| 9 | PQ and crypto agility for keep-forever data (with A2) | Recommend **PQ for both the ingest and recovery recipients** (OD-06 and OD-08 decided together). Signatures can stay Ed25519 for now; the trust bundle must carry algorithm IDs so a PQ signature can be added later. | Medium-high |
-| 10 | E7's succession requirement: can an heir read the archive without Reliquary? | Yes with this design, provided the stored form is age ciphertext decryptable by R. Otherwise the kit must also carry the volume key sealed to R, plus a runbook. The only non-stock step is transcribing words into the SLIP-39 tool. Time-delayed, owner-blockable release (Ente/Bitwarden) needs an online party and is not offered in v1 cryptography. | Medium |
-| 11 | New: does D2-S1 (YubiKey ≥ 20 unwraps/s) still matter? | Only if OD-06 is "classic". A PQ ingest key cannot live on a YubiKey (§F3). If OD-06 is "PQ", mark D2-S1 "not applicable" and do not buy hardware for it. | High (logic) |
+| 1 | Key inventory: custody, backup, rotation, compromise response for each key | 15 items in four tiers (§F1; normative draft `docs/security/key-inventory.md`). The key backups are split into an **offline bundle**, sealed only on the air-gapped machine, and an **online bundle** that the homelab may refresh. This fixes the review finding that refreshing a single bundle online exposed Tier-0 keys. | Medium |
+| 2 | Online ingest key plus an offline recovery recipient from day one? | **Yes, on every stored object from day one.** The recovery stanza is written by the homelab at the A′ rewrap, not by devices (P1). Late bundles are covered by escrowing retired ingest keys (§F2). | High (format); Medium (placement, which is a joint decision, DR-A2-2) |
+| 3 | Rotation by rewrap only; what the at-rest posture implies | Payloads are never touched; only headers change (C14). The ingest key is rotated by a signed trust bundle, and is escrowed and then deleted from online storage. Replacing R or X needs a store-wide header rewrap with a custom tool, **because** R and X sit on stored headers. A two-level design (stored headers carry only X, and X is sealed to R) would make replacing R a re-seal; it is compared in §F2. No rewrap revokes ciphertext that has already been copied (C15). | High (mechanics); Medium (tooling) |
+| 4 | Custody of the online key | A software PQ identity. Under A′: unattended unlock, with the key held **in RAM**, loaded at boot through Tang or from a key file on a volume that is not snapshotted, replicated or backed up. A6 must also stop h0 (the retained original header) and the ingest key from both sitting on the store's disks (§F4). Never a Proxmox vTPM (C10). A YubiKey cannot hold a PQ key (C11). The archive key X can be a passphrase-wrapped file, or be wrapped at rest by a YubiKey or a Mac Secure Enclave (C24). | Medium |
+| 5 | Offline backup method; k-of-n; holders; drill cadence | SLIP-39 over a 128-bit passphrase W that wraps R. W is generated by the shamir tool, and the shares are 20 words. Each card carries the armored wrapped identity as a QR, and the doomsday USB carries the file. Default 2-of-3; holders after E7-S1. Human drills use throwaway keys. A real-key check runs only on the air-gapped image and includes an R-stanza audit (§F6). | Medium |
+| 6 | Dedup secret delivered sealed by the homelab; compatible with instant enrollment? | Conditionally. Under A1 construction B no second file read is needed, but uploads wait for the per-path delivery that D3 designs (SR-15). The claim is secondary-only (C16) and is not used to support DR-A1-1. | Low-medium |
+| 7 | Dedup-secret derivation and rotation | 32 random bytes per epoch, generated at the homelab; not derived from R or A. Backed up in the online bundle. Trigger DR-D2-1: rotate on every revocation for loss, theft, compromise or estrangement, conditional on DR-A1-1 and A1-S2. | Medium |
+| 8 | Key ceremony | Draft runbook `docs/security/key-ceremony-runbook.md`. It now lets shamir generate W (so W is not passed on the command line), turns off shell history, uses armored output and seals the offline bundle at the ceremony. | Medium |
+| 9 | PQ and crypto agility | Recommend `mlkem768x25519` for R and X, decided together with OD-06. The device-side encoder route for I (a native X-Wing stanza, the `age-plugin-pq` plugin protocol, or Rust's native `tagpq`) is A2's choice (C5, C22, C23). Signatures stay Ed25519, with algorithm IDs in the trust bundle. | Medium-high |
+| 10 | E7 succession: can an heir read the archive without Reliquary? | Yes, with R, the disks and stock Go age ≥ 1.3.0 (or an older age plus `age-plugin-pq`, C22), provided stored headers carry R (A6 posture A′, or posture A with a homelab rewrap). A time-delayed release is **not** forbidden by SR-23 (the earlier reading was wrong). v1 leaves it out by choice; it goes to the owner as AR-D2-2. | Medium |
+| 11 | Does D2-S1 (YubiKey ≥ 20 unwraps/s) still matter? | Only if OD-06 = classic. Its 20/s line is also below the roughly 90/s that BUD-INGEST implies (arithmetic, §F4), so it goes back to H1. | High (logic) |
 
 ## Method
 
-- **Sweep:** three scouts ran (docs, source, issues/forums), and their findings were merged. There was no separate pricing/standards scout; NIST material was blocked (see below).
-- **Deep read (this stage):** the analyst re-fetched and read the load-bearing primaries:
-  - the age spec in full;
-  - the plugin spec label rules;
-  - the age README (PQ and identity-file sections);
-  - Go `filippo.io/age` v1.3.2 (`age.go`, `pq.go`, `extra/`, `cmd/age-plugin-batchpass`);
-  - SLIP-39;
-  - python-shamir-mnemonic 0.3.0 (`cli.py`);
-  - age-plugin-yubikey 0.5.1 (`builder.rs`, `format.rs`, README);
-  - age-plugin-sss, age-plugin-tpm and PaperAge READMEs;
-  - Proxmox `qm.adoc` (TPM section);
-  - the systemd-creds man page;
-  - the rage `age` CHANGELOG;
-  - the Ente Legacy docs.
-- **Analyst checks run in the container** (scratchpad `d2-analyst/`; not the D2-S2 spike, which the spike runner owns; synthetic random bytes only, data class `SYN`):
-  1. Built Go age v1.3.2 from the module proxy. The toolchain resolved to go1.27.0.
-  2. Tested `age-keygen -pq`, a mixed PQ + X25519 encryption, two-PQ-recipient encryption and decryption with either identity, and `age-inspect`.
-  3. Wrapped a PQ identity with a 128-bit hex passphrase (`age-plugin-batchpass`), split it with `shamir create 2of3 -S <hex>` and recovered it from shares 1 and 3 (`shamir_mnemonic.combine_mnemonics`). Decrypted a two-recipient object with the recovered identity. Also tried a wrong passphrase.
-  4. A 2,000-iteration Go micro-benchmark of `DecryptHeader`, repeated 3 times, on a shared 4-vCPU Xeon @ 2.10 GHz. This is **not** homelab hardware, and the numbers varied about 2× between runs.
-- **Routes used:** raw.githubusercontent.com mirrors, proxy.golang.org, static.crates.io and pypi.org.
-- **Blocked sources, to be reported to H1** (none were silently replaced):
-  - csrc.nist.gov and nvlpubs.nist.gov (NIST IR 8547, SP 800-57): PQ timeline claims are therefore **secondary only** and not load-bearing here.
-  - rfc-editor.org and datatracker.ietf.org (RFC 5869, draft-ietf-hpke-pq-03, X-Wing).
-  - support.apple.com (Legacy Contact, ADP recovery key), bitwarden.com/help, support.1password.com, tarsnap.com, signal.org, keybase.
-  - Yubico developer docs (no performance figure found).
-  - GitHub issue comment threads: age #136, age-plugin-yubikey #132 and rage #598/#621 are known from issue bodies and metadata only.
-  - WebSearch: the scouts exhausted the budget.
-  - During this stage the Go checksum database timed out once (`sum.golang.org`). The benchmark was built with the age module's own `go.sum` instead.
-- **Stop rule:** the third scout added community evidence but no new primary source on custody or recovery. The deep read closed three scout leads:
-  - the X25519 identity is also 32 CSPRNG bytes;
-  - no tagpq identity plugin exists in Go age (the plugin says "the identity side is handled by a different plugin");
-  - the yubikey defaults were re-checked in the crate.
+- **Sweep:** docs, source and issues/forums scouts. There was no separate standards scout, because NIST was blocked.
+- **Deep read:** the analyst read the load-bearing primaries listed in Sources and ran checks in the container (M1).
+- **Spikes:** the spike runner ran D2-S1 (emulated) and D2-S2, and prepared the D2-S3 kit.
+- **Skeptic review (2026-10-06):** three lenses. Each lens re-ran part of the measurements independently.
+- **Synthesis checks (M2, this stage, 2026-10-06; data class `SYN`, files in tmpfs and then deleted):**
+  1. Built `age-plugin-pq` from the `filippo.io/age` v1.3.2 module (Go toolchain auto-switched to go1.26.8). With it on `PATH`, Debian age 1.1.1 decrypted a two-PQ-recipient object written by Go age v1.3.2, using a plugin identity converted by `age-plugin-pq -identity`. Without the plugin it failed with "couldn't start plugin".
+  2. Ran the recommended construction end to end:
+     - PQ R;
+     - `shamir create custom -t 1 -g 2 3 -x -s 128`, so shamir drew W itself (20-word shares);
+     - an armored scrypt wrap of R's identity line, 422 B, ASCII only;
+     - a QR of the armored file (segno 1.6.6, version 16, level M), decoded back with zxing-cpp 3.1.1 byte-identical;
+     - all three 2-subsets recovered W, unwrapped the scanned file and decrypted a {I, R} object;
+     - one share alone was refused, and a wrong secret was refused (`incorrect passphrase`).
+
+     This used the batchpass plugin. The interactive `age -d` prompt path was already exercised in D2-S2 and the D2-S3 dry run.
+  3. Re-fetched the age spec (`C2SP/C2SP @ main : age.md`, SHA-256 `b0a767b9…0232f` on 2026-10-06) and re-read the `age-plugin-se` README and the rage CHANGELOG to confirm the skeptics' better sources.
+- **Routes used:** raw.githubusercontent.com, proxy.golang.org, static.crates.io, pypi.org.
+- **Blocked sources, reported to H1 and not silently replaced:**
+  - csrc.nist.gov and nvlpubs.nist.gov (NIST IR 8547, SP 800-57);
+  - rfc-editor.org and datatracker.ietf.org;
+  - support.apple.com, bitwarden.com/help, support.1password.com, tarsnap.com, signal.org, keybase;
+  - Yubico developer docs;
+  - GitHub issue threads beyond their bodies, and the GitHub API for C2SP and rage (this session has no access);
+  - c2sp.org/age, the stable spec.
+- **Stop rule:** the third scout added no new primary source. The skeptics then found three primaries the sweep had missed (C22–C24); the synthesizer re-read all three.
 
 ## Sources
 
 | # | Source | Publisher | Version or date | Accessed | Primary? |
 |---|---|---|---|---|---|
-| S1 | C2SP age spec, `C2SP/C2SP @ main : age.md` (editor's copy; stable at c2sp.org/age, which is blocked) | C2SP / F. Valsorda | editor's copy, main | 2026-09-29 | Yes |
-| S2 | C2SP age plugin spec, `C2SP/C2SP @ main : age-plugin.md` (labels extension) | C2SP | main | 2026-09-29 | Yes |
-| S3 | `FiloSottile/age @ main : README.md` (PQ keys, passphrase-protected key files, age-inspect) | F. Valsorda | main (download links v1.3.2) | 2026-09-29 | Yes |
-| S4 | Go module `filippo.io/age` v1.3.2 via proxy.golang.org (`age.go` incompatibleLabelsError, `pq.go`, `extra/age-plugin-tagpq`, `cmd/age-plugin-batchpass`, `go.mod` "go 1.25.0"); tag times v1.3.0 2025-12-27, v1.3.2 2026-08-29 | F. Valsorda | v1.3.2 | 2026-09-29 | Yes |
-| S5 | Rust `age` crate CHANGELOG, `str4d/rage @ main : age/CHANGELOG.md`; crate 0.12.1 source (scout) | str4d | 0.12.0 2026-07-13; 0.12.1 2026-07-14; Unreleased | 2026-09-29 | Yes |
-| S6 | rage #621 "Add support for post-quantum recipients" (open) and #598 (community X-Wing draft) | GitHub | 2026-05-30; 2026-01-09 | 2026-09-29 (bodies only) | No |
-| S7 | SLIP-0039, `satoshilabs/slips @ master : slip-0039.md` | SatoshiLabs | Status Final, created 2017-12-18 | 2026-09-29 | Yes |
-| S8 | python-shamir-mnemonic 0.3.0 (PyPI; `README.rst`, `shamir_mnemonic/cli.py`) | Trezor | 0.3.0, 2024-05-16 | 2026-09-29 | Yes |
-| S9 | age-plugin-yubikey README (main) and crate 0.5.1 (`src/builder.rs`, `src/format.rs`) | str4d | 0.5.1, 2026-04-08 | 2026-09-29 | Yes |
-| S10 | age-plugin-tpm README (`Foxboron/age-plugin-tpm @ master`); v1.0.1 module (scout) | Foxboron | v1.0.1, 2026-01-24 | 2026-09-29 | Yes |
-| S11 | age-plugin-sss README (`olastor/age-plugin-sss @ main`); v0.4.0 module and SPEC.md (scout) | olastor | v0.4.0, 2026-05-03 | 2026-09-29 | Yes |
-| S12 | PaperAge README (`matiaskorhonen/paper-age @ main`) | M. Korhonen | main | 2026-09-29 | Yes |
-| S13 | Proxmox VE docs, `proxmox/pve-docs @ master : qm.adoc` §"Trusted Platform Module (TPM)" | Proxmox | master | 2026-09-29 | Yes |
-| S14 | systemd-creds(1), `systemd/systemd @ main : man/systemd-creds.xml` | systemd | main | 2026-09-29 | Yes |
-| S15 | Clevis and Tang READMEs (`latchset/*`) (scout) | latchset | master | 2026-09-29 | Yes |
-| S16 | systemd #39049 (TPM2 unlock fails without system change), #40159 (v259 unseal regression) | GitHub | 2025-09-20; 2025-12-20 | 2026-09-29 (bodies) | No |
-| S17 | Ente Photos Legacy docs, `ente-io/ente @ main : docs/docs/photos/features/account/legacy/index.md`; Ente `architecture/README.md` (scout) | Ente | main | 2026-09-29 | Yes |
-| S18 | Bitwarden server `EmergencyAccess.cs`, `EmergencyAccessService.cs` (scout) | Bitwarden | main | 2026-09-29 | Yes |
-| S19 | restic `doc/design.rst` (keys; threat model on leaked master key) | restic | master | 2026-09-29 | Yes |
-| S20 | age #136 "Changing recipients of existing encrypted files" (closed 2025-12-07, reportedly not planned) | GitHub | 2020-07-23 | 2026-09-29 (body only) | No |
-| S21 | age-plugin-yubikey #132 (PIN cache expiring during bulk re-encryption) | GitHub | 2023-02-17 | 2026-09-29 (body only) | No |
-| S22 | vsss-rs 6.0.1 README (scout) | M. Lodder | 6.0.1 | 2026-09-29 | Yes |
-| S23 | SOPS v3.13.3 `sops.go`, `shamir/shamir.go` (scout) | getsops | v3.13.3 | 2026-09-29 | Yes |
-| S24 | NIST IR 8547 ipd (2024-11-12), known from search snippets and secondary summaries only (encryptionconsulting.com, pqcmandates.com) | NIST | ipd 2024-11-12 | blocked | Primary **not read** |
-| S25 | In-repo: `content-encryption-format.md` (T1 spike 2), `a1-content-identity.md`, `d1-threat-model.md`, `f3-security-literature.md` | Reliquary | 2026-09-29 | 2026-09-29 | No (internal) |
-| S26 | age-plugin-se README, `remko/age-plugin-se @ main` (scout; not re-read) | R. Tronçon | main | 2026-09-29 | Yes |
-| S27 | minisign README, `jedisct1/minisign @ master` (scout; not re-read) | F. Denis | master | 2026-09-29 | Yes |
-| M1 | **Analyst container checks** (Method items 1–4): Go age 1.3.2 CLI and library, python-shamir-mnemonic 0.3.0 | this note | 2026-09-29 | — | Measurement |
+| S1 | C2SP age spec, `C2SP/C2SP @ main : age.md` (editor's copy; the stable c2sp.org/age is blocked). SHA-256 of the copy read: `b0a767b91a184c536e8a04002f7bba7521388fee3989f5891e23cc1aaa00232f` | C2SP | main | 2026-09-29; re-read 2026-10-06 | Yes |
+| S2 | C2SP age plugin spec, `C2SP/C2SP @ main : age-plugin.md` | C2SP | main | 2026-09-29 | Yes |
+| S3 | `FiloSottile/age @ main : README.md` | F. Valsorda | main (v1.3.2) | 2026-09-29 | Yes |
+| S4 | Go module `filippo.io/age` v1.3.2 via proxy.golang.org (`age.go`, `pq.go`, `extra/age-plugin-pq/plugin-pq.go`, `extra/age-plugin-tagpq`, `cmd/age-plugin-batchpass`, `tag/internal/tagtest`) | F. Valsorda | v1.3.0 2025-12-27; v1.3.2 2026-08-29 | 2026-09-29; re-read 2026-10-06 | Yes |
+| S5 | `str4d/rage @ main : age/CHANGELOG.md`; crate age 0.12.1 (`src/native/`) | str4d | 0.12.0 2026-07-13; 0.12.1 2026-07-14 | 2026-09-29; re-read 2026-10-06 | Yes |
+| S6 | rage #621 (PQ recipients, open) and #598 | GitHub | 2026-05-30; 2026-01-09 | 2026-10-06 (page, skeptic 1) | No |
+| S7 | SLIP-0039, `satoshilabs/slips @ master : slip-0039.md` | SatoshiLabs | Final | 2026-09-29 | Yes |
+| S8 | python-shamir-mnemonic 0.3.0 (`README.rst`, `cli.py`) | Trezor | 0.3.0, 2024-05-16 | 2026-09-29 | Yes |
+| S9 | age-plugin-yubikey README and crate 0.5.1 (`builder.rs`, `format.rs`) | str4d | 0.5.1, 2026-04-08 | 2026-09-29 | Yes |
+| S10 | age-plugin-tpm README | Foxboron | v1.0.1 | 2026-09-29 | Yes |
+| S11 | age-plugin-sss README, `SPEC.md`, v0.4.0 | olastor | v0.4.0, 2026-05-03 | 2026-09-29 | Yes |
+| S12 | PaperAge README | M. Korhonen | main | 2026-09-29 | Yes |
+| S13 | Proxmox VE `pve-docs @ master : qm.adoc` (TPM section) | Proxmox | master | 2026-09-29 | Yes |
+| S14 | systemd-creds(1) man page source | systemd | main | 2026-09-29 | Yes |
+| S15 | Clevis and Tang READMEs | latchset | master | 2026-09-29 | Yes |
+| S16 | systemd #39049, #40159 | GitHub | 2025 | 2026-09-29 (bodies) | No |
+| S17 | Ente Legacy docs, `ente-io/ente @ main` | Ente | main | 2026-09-29 | Yes |
+| S18 | Bitwarden server `EmergencyAccess*.cs` | Bitwarden | main | 2026-09-29 | Yes |
+| S19 | restic `doc/design.rst` | restic | master | 2026-09-29 | Yes |
+| S20 | age #136 (closed 2025-12-07; reason given differently by skeptics) | GitHub | 2020-07-23 | 2026-10-06 (skeptic 1) | No |
+| S21 | age-plugin-yubikey #132 | GitHub | 2023-02-17 | 2026-09-29 (body) | No |
+| S22 | vsss-rs 6.0.1 README | M. Lodder | 6.0.1 | 2026-09-29 | Yes |
+| S23 | SOPS v3.13.3 source | getsops | v3.13.3 | 2026-09-29 | Yes |
+| S24 | NIST IR 8547 ipd: **primary not read** (blocked). Secondary: encryptionconsulting.com, pqcmandates.com, appviewx.com (skeptic 2) | NIST | ipd 2024-11-12 | blocked | No |
+| S25 | In-repo notes: `a1-content-identity.md`, `a2-object-envelope.md` (C6, C9, C21, DR-A2-2), `a3-ingest-protocol.md` (DR-A3-3), `a6-homelab-storage-engine.md` (§F3, C21), `d1-threat-model.md` (§6, SR-14/15/23), `docs/security/threat-model.md`, `content-encryption-format.md` | Reliquary | 2026-09-29 to 10-06 | 2026-10-06 | No (internal) |
+| S26 | age-plugin-se README, `remko/age-plugin-se @ main` (`--pq`: "Post-quantum keys (generated with `--pq`) always use the `tag` recipient type"; advice to also encrypt to a backup key) | R. Tronçon | main (v0.2.0 adds `--pq`, per skeptic 1) | **re-read 2026-10-06** | Yes |
+| S27 | minisign README | F. Denis | master | 2026-09-29 (scout) | Yes |
+| M1 | Analyst container checks (Go age v1.3.2, python-shamir-mnemonic 0.3.0) | this note | 2026-09-29 | — | Measurement |
+| M2 | Synthesizer checks (Method, items 1–2): Go age v1.3.2, age-plugin-pq v1.3.2, Debian age 1.1.1, shamir-mnemonic 0.3.0, segno 1.6.6, zxing-cpp 3.1.1 | this note | 2026-10-06 | — | Measurement |
+| D2-S1/S2/S3 | Spike evidence (see Spikes); they used **age v1.3.1**, while M1 and M2 used v1.3.2 | spike runner | 2026-09-29, 2026-10-06 | — | Measurement |
 
 ## Claims
 
-All skeptic columns are pending; skeptics should attack every row marked "Key".
+The verdict column is the computed tally: **verified** means at least one primary source and at least 2 of 3 skeptics did not refute; **secondary-only** means no primary source; **contested** means anything else. "Tally ID" maps to the skeptic batch. U = upheld (not refuted), R = refuted. C22–C26 are new in synthesis. They were not tallied and are never the sole support of a recommendation.
 
-| # | Claim | Sources | Key? | Skeptic 1 | Skeptic 2 | Skeptic 3 | Verdict |
-|---|---|---|---|---|---|---|---|
-| C1 | An age header wraps the same 128-bit file key independently in one or more stanzas. Identity implementations MUST ignore unrecognised stanzas. An ingest recipient plus a recovery recipient is therefore native, and the extra stanza does not stop the ingest identity from decrypting. | S1; M1 (both identities decrypt) | Yes | | | | pending |
-| C2 | The same file SHOULD NOT be encrypted to `mlkem768x25519` (or `mlkem768p256tag`) and to non-PQ recipients. Go age 1.3.2 **refuses** it: `incompatible recipients: can't mix post-quantum and classic recipients` (reproduced). The `postquantum` plugin label enforces the same rule for plugins. | S1, S2, S4; M1 | Yes | | | | pending |
-| C3 | An scrypt stanza MUST be the only stanza. A passphrase can therefore never be a second recipient on objects; it can only protect an identity file. | S1, S2 | Yes | | | | pending |
-| C4 | Measured header sizes with Go age 1.3.2: one PQ recipient 1,627 B; two PQ recipients 3,184 B; two X25519 recipients 266 B. The second PQ recipient adds 1,557 B per object. | M1 (`age-inspect`, file sizes, benchmark) | Yes (cost) | | | | pending |
-| C5 | The Rust `age` crate (0.12.1, 2026-07-14; the Unreleased section too) has no native `mlkem768x25519` recipient or identity. A rage feature request for PQ recipients was still open on 2026-09-29. So the Reliquary encoder must implement the X-Wing HPKE stanza itself, and the stock tool for heirs must be Go age ≥ 1.3.0. | S5, S6; S25 (F3 C5) | Yes | | | | pending |
-| C6 | Stock-tool recovery chain: SLIP-39 2-of-3 shares (python-shamir-mnemonic 0.3.0, custom 128-bit secret) → hex passphrase → scrypt-wrapped PQ identity → decryption of a two-recipient object with Go age 1.3.2. It worked end to end once in the container. A wrong passphrase fails loudly (`incorrect passphrase`). | M1; S3, S7, S8 | Yes | | | | pending |
-| C7 | A wrapped PQ identity is 260 B if only the `AGE-SECRET-KEY-PQ-1…` line (78 B) is wrapped. Wrapping the full `age-keygen -pq` output, including its ~1,960-character public-key comment, gives 2,266 B, which exceeds PaperAge's ~1.9 KiB QR limit. | M1; S12 | Yes (ceremony) | | | | pending |
-| C8 | SLIP-39 (Final) needs secrets of at least 128 bits, a multiple of 16. 128-bit secrets give 20-word shares and 256-bit secrets 33-word shares. New shares SHOULD set the extendable flag, which lets more share sets with new identifiers reconstruct the same secret. Sets must not be mixed. SLIP-39's own passphrase cannot be verified: a wrong one silently yields a different secret. | S7 | Yes | | | | pending |
-| C9 | The SLIP-39 reference implementation says it uses no hardening, is likely vulnerable to side channels, and "should not be used for handling sensitive secrets". Its CLI prints the recovered master secret as hex. | S8 | Yes (ceremony) | | | | pending |
-| C10 | Proxmox VE documentation: an emulated vTPM "does *not* provide any real security benefits" compared with a physical TPM. | S13 | Yes | | | | pending |
-| C11 | age-plugin-yubikey 0.5.1 writes classic P-256 stanzas (`piv-p256`; age1tag recipients on main). Defaults are PIN policy Once and touch policy **Always**. It has no decryption agent; the PIN cache is lost on unplug or applet switch and does not work on YubiKey 4. Go age ships `age-plugin-tagpq` only for the recipient side, and no identity plugin for `mlkem768p256tag` was found. **Inference:** under PQ, a YubiKey can hold neither the ingest key nor a recovery recipient. | S4, S9, S21 | Yes | | | | pending |
-| C12 | Software unwrap rate in the container (single goroutine, N = 2,000, 3 runs): PQ first stanza 4,904–6,827/s; PQ second stanza (the recovery identity tries both) 1,489–2,797/s; X25519 3,359–7,676/s. That is two orders of magnitude above D2-S1's 20/s threshold. Not homelab hardware; noisy shared VM. | M1 | Yes (custody) | | | | pending |
-| C13 | age-plugin-sss is "experimental until v1.0.0" (v0.4.0), has no Windows builds, splits each file's own key into n stanzas (one per share recipient), may prompt interactively for which share to decrypt, and produces long recipient strings. | S11 | Yes | | | | pending |
-| C14 | Header MAC key = HKDF(file key, "header") and payload key = HKDF(file key, nonce, "payload"). Adding, removing or replacing a recipient rewrites only the header and MAC. Go age exposes `ExtractHeader`/`DecryptHeader`/`NewInjectedFileKeyIdentity` but no header-rewrite API. Upstream closed the "change recipients" request (#136). Reliquary must build its own rewrap tool. | S1, S4, S20 | Yes | | | | pending |
-| C15 | Re-issuing SLIP-39 cards for the same secret (extendable) does not revoke old cards: any k old cards still reconstruct it. Only a new recovery key plus a header rewrap revokes, and never for ciphertext already copied. restic documents the same limit for a leaked master key. | S7, S19; inference | Yes | | | | pending |
-| C16 | Under A1 construction B, a device can hash its whole library before it receives the dedup secret and derive IDs from cached SHA-256 values afterwards. Delivery of the sealed secret by the homelab therefore does not cost a second read; only the first upload waits. | S25 (A1 §5, D1 SR-15) + inference | Yes | | | | pending |
-| C17 | TPM-sealed secrets have failed to unseal after routine OS changes (systemd #39049, #40159). TPM auto-unlock needs a tested manual fallback. | S16 (issue bodies) | No (supporting) | | | | Secondary only |
-| C18 | NIST IR 8547 (ipd, 2024-11-12) proposes deprecating quantum-vulnerable key establishment after 2030 and disallowing it after 2035. | S24 (secondary only) | No: the PQ recommendation rests on C2, C4, C5 and keep-forever retention, not on these dates | | | | Secondary only |
-| C19 | Ente Legacy: trusted contacts (Ente users, must accept) can start recovery; the owner can block it within 7, 14 or 30 days; the main use case is passing on memories after death. | S17 | No (similar work) | | | | pending |
-| C20 | systemd-creds `auto` does not use the TPM2 when running in a container; `null` gives no confidentiality; the host key lives in `/var/lib/systemd/credential.secret` on the same disk. | S14 | No (custody detail) | | | | pending |
+| # | Tally ID | Claim (as corrected after review) | Sources | Key? | S1 sources | S2 logic | S3 adversary | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| C1 | K1 | Each stanza wraps the same file key independently, and identities MUST ignore unrecognised stanzas, so a multi-recipient header is native. Nuance: the spec lets a recipient type refuse to be mixed with other types, and that is the basis of C2. | S1; M1 | Yes | U | U | U | **Verified** |
+| C2 | K2 | The same file SHOULD NOT be encrypted to PQ and non-PQ recipients, and Go age refuses to do it (reproduced by three parties). With a PQ I, R must be PQ. | S1, S2, S4; M1; D2-S2 | Yes | U (but "PQ excludes all hardware" is wrong, see C24) | U | U | **Verified** |
+| C3 | K3 | An scrypt stanza MUST be the only stanza. A passphrase can therefore only protect an identity file. | S1 | Yes | U | U | U | **Verified** |
+| C4 | K4 | Header sizes (Go age 1.3.2, reproduced): one PQ stanza 1,627 B; two PQ 3,184 B; one X25519 168 B; two X25519 266 B. The file counts used in the arithmetic (0.9M–4.5M for 2–10 TB, about 2.2 MB per file) come from **A2 C21**, which attributes them to F3; F3 does not contain them. They are an assumption, not data. | M1; D2-S2; A2 C21 | Yes (cost) | U (attribution fixed) | U (3,184 B fails A2-S1's local ≤ 3 KB rule) | U (plus h0, about 4.8 KB per object under A′, A6 C21) | **Verified** |
+| C5 | K5 | Rust age 0.12.1 has **no native `mlkem768x25519`**. Corrected consequences: the encoder does **not** have to implement X-Wing (see C22, C23), and heirs do **not** strictly need Go age ≥ 1.3.0. That version is the simplest kit tool; `age-plugin-pq` is the fallback. | S5, S6, S4 | Yes | U (overstated) | R (age-plugin-pq missed) | U (tagpq caveat) | **Verified** (narrow absence only) |
+| C6 | K6 | The stock-tool chain SLIP-39 → hex passphrase → scrypt-wrapped PQ identity → decrypt a two-recipient object works, and a wrong passphrase fails loudly. Agents only; no human yet. | M1; D2-S2; S3, S7, S8 | Yes | U | U | U | **Verified** |
+| C7 | K7 | A wrapped identity line is 260 B binary or **422 B armored**; the full key file wrapped is 2,266 B. PaperAge's ~1.9 KiB limit applies to its own plaintext input, so it is a loose comparison. A binary QR could hold 2,266 B, but the armored identity-line form is the practical choice. | M1; M2; S12 | Yes (ceremony) | U (binary vs armored) | U (loose comparison) | U | **Verified** |
+| C8 | K8 | SLIP-39: ≥ 128 bits, a multiple of 16; 20 words (128-bit) or 33 words (256-bit); extendable share sets; the SLIP-39 passphrase cannot be verified. | S7 | Yes | U | U | U | **Verified** |
+| C9 | K9 | python-shamir-mnemonic is unhardened, says it "should not be used for handling sensitive secrets", recommends an air-gapped live system, and prints the recovered secret. | S8 | Yes | U | U (the heir's machine is not covered) | U (drills and re-issue not covered) | **Verified** |
+| C10 | K10 | Proxmox: an emulated vTPM "does *not* provide any real security benefits". | S13 | Yes | U | U | U | **Verified** |
+| C11 | K11 | age-plugin-yubikey 0.5.1 writes classic `piv-p256` stanzas (default PIN Once, touch Always, no agent). **Corrected:** a YubiKey (PIV) and age-plugin-tpm cannot hold a PQ key, but a PQ hardware identity does exist: age-plugin-se `--pq` (macOS Secure Enclave, age1tagpq; C24). Go age's only software `tagpq` identity is test-internal code. | S4, S9, S26 | Yes | **R** (age-plugin-se `--pq`) | U | U | **Verified** (the YubiKey part; the absence part is corrected) |
+| C12 | K12 | Software unwrap in the container: PQ first stanza about 4,700–6,800/s, PQ second stanza about 1,500–3,500/s, X25519 about 3,400–9,600/s (all four runs). The lower bound is about 74× D2-S1's 20/s and about 16× the roughly 90/s that BUD-INGEST implies (§F4). Not homelab hardware. | M1; skeptic re-runs; D2-S2 | Yes (custody) | U ("two orders of magnitude" softened) | U (wrong basis: 90/s) | U | **Verified** |
+| C13 | K13 | age-plugin-sss is experimental (v0.4.0) and has no Windows builds. It emits **one** `sss` stanza that embeds n wrapped shares, so the header grows by about n × 1.56 KB under PQ (6,548 B measured). It also supports password shares. | S11; D2-S2 | Yes | U (structure) | U | U (password shares) | **Verified** |
+| C14 | K14 | The payload key and the header MAC key derive from the file key, so a recipient change rewrites only the header. Go age has no public header writer (D2-S2 built one). | S1, S4, S20, S19 | Yes | U | U | U | **Verified** |
+| C15 | K14 | Re-issuing extendable SLIP-39 cards does not revoke old cards. Only a new R plus a rewrap revokes, and never for ciphertext already copied. True **because** R sits on stored headers (see the two-level alternative, §F2). | S7, S19; logic | Yes | U | U | U | **Verified** (with K14) |
+| C16 | K15 | Under A1 construction B, sealed delivery of S_e costs no second file read. Compatibility with "instant" enrollment depends on the per-path delivery mechanism D3 designs (SR-15), and on DR-A1-1. | S25 (internal) | Yes | U (understates the admin-gated delay) | U (conditional) | R (phone path) | **Secondary-only** |
+| C17 | — | TPM-sealed secrets have failed to unseal after routine OS changes, so TPM auto-unlock needs a manual fallback. | S16 | No | — | — | — | Secondary-only (not tallied) |
+| C18 | K17 | NIST IR 8547 ipd: per secondary sources, quantum-vulnerable algorithms at 112-bit strength are deprecated after 2030, and all of them (including X25519/P-256-class) are disallowed after 2035. The original blanket wording was wrong. | S24 (secondary) | No | R | R | R | **Contested**: not used |
+| C19 | — | Ente Legacy: trusted contacts start recovery; the owner can block it within 7, 14 or 30 days. | S17 | No | — | — | — | Not tallied (similar work) |
+| C20 | — | systemd-creds `auto` skips TPM2 in containers; `host` keeps its key on the same disk. | S14 | No | — | — | — | Not tallied |
+| C21 | K16 | "Devices must also write R, or late bundles become unreadable forever once I is destroyed." | S25 (A6 §F3), S1 | Was key | R | R | R | **Contested**: withdrawn as support. See §F2 for what replaced it |
+| C22 | new | Go age v1.3.2 ships `age-plugin-pq`, which adds `mlkem768x25519` recipients and identities to "any version and implementation of age that supports plugins". M2: Debian age 1.1.1 plus the plugin decrypted a two-PQ object. | S4 (`plugin-pq.go`); M2 | Supporting | (raised by S2) | | | New; primary re-read; not tallied |
+| C23 | new | Rust age 0.12.0 added `age::tagpq::Recipient` (encryption only). | S5 | Supporting | (raised by S1, S3) | | | New; primary re-read; not tallied |
+| C24 | new | age-plugin-se `--pq` makes non-exportable Secure Enclave keys of the `tag` (tagpq) type. Its README advises also encrypting to a backup key. | S26 | Supporting | (raised by S1) | | | New; primary re-read; not tallied |
+| C25 | new | M2: PQ R plus a shamir-generated 128-bit W (20 words); armored wrap 422 B; QR version 16-M round trip byte-identical; all 2-subsets recover; one share and a wrong secret are refused. | M2 | Supporting | | | | New measurement; not tallied |
+| C26 | new | The age file key is 128 bits ("16 bytes of CSPRNG output"). Every object is therefore at most as strong as a 128-bit symmetric key, whatever protects R. | S1 | Supporting | | | | Primary; not tallied |
 
 ## Findings
 
-### F1. Key inventory (draft for ADR-0008)
+### F1. Key inventory (normative draft: `docs/security/key-inventory.md`)
 
-"Owner of spec" is the workstream that fixes the details; D2 fixes custody and backup for tiers 0 and 1.
+| # | Key | Tier | Custody (summary) | Backup | Rotation | Compromise response |
+|---|---|---|---|---|---|---|
+| K-01 | Recovery identity R (`mlkem768x25519`) | 0 offline | In the clear only during a ceremony, an air-gapped key check or a recovery. Stored as an armored scrypt-wrapped identity file (422 B) | W split SLIP-39 k-of-n. Wrapped file as QR on every card and on the doomsday USB | Only on suspected exposure of ≥ k cards or of R; new R → signed bundle → store rewrap | Rotate and rewrap. Copied ciphertext stays exposed (C15) |
+| K-02 | Admin root signing key A (Ed25519) | 0 offline | Passphrase-protected file on two offline media held by the owner | **Whether A is reachable through R is DR-D2-3.** Recommended: not in the heir bundle | Rare; signed by the old key | Re-pin through kits |
+| K-03 | Ingest identity I_e | 1 online | Software PQ identity; posture-conditional (§F4); held in RAM, never on snapshotted, replicated or backed-up storage | **Escrowed:** sealed to {X, R} into the online bundle at creation | New epoch by an A-signed bundle, at least yearly and after suspected compromise (proposal; no primary source) | Rotate now. Treat staged and in-flight objects of that epoch as disclosed (AR-08) |
+| K-03b | Archive identity X (A′) | 0/1 admin | Passphrase-wrapped file, or a file wrapped at rest by a YubiKey or a Mac Secure Enclave (`--pq`) | Sealed to R in the offline bundle, plus a second offline copy | Rare; store rewrap with X online | Rotate and rewrap |
+| K-04 | Receipt signing key (Ed25519) | 1 online | Ingest VM (a separate signer is a Wave 2 option under AR-08) | None (disposable) | Certified by A in the trust bundle | Rotate |
+| K-05 | Dedup epoch secrets S_e | 1 online | Homelab keeps every epoch; devices keep the current one in keystore-wrapped storage | Online bundle | DR-D2-1 trigger | Rotate; the historical-ID oracle remains (AR-06) |
+| K-06/07 | Volume and catalog keys (A6) | 1 | A6 | Online bundle (D2 requirement) | A6 | A6 |
+| K-08 | Homelab Cloudflare pull tokens | 1 | Ingest VM | Owner's password manager | Replace | Revoke |
+| K-09 | Device Ed25519 signing key | 2 | Platform keystore | None: re-enroll | Re-enroll | Revoke (SR-17) |
+| K-10 | Device sealing / restore key | 2 | Keystore-wrapped; **recommended PQ** (harvest-now on sealed S_e and on restores) | None | Re-enroll | Revoke |
+| K-11..14 | Update keys (D5), Play upload key (B3), Worker secrets (C1/D3; never trust-forging, SR-23), DKIM (C3) | project / cloud | Owners named | — | — | — |
 
-| # | Key | Tier | Algorithm | Custody | Backup | Rotation | Compromise response | Owner of spec |
-|---|---|---|---|---|---|---|---|---|
-| K-01 | **Recovery identity R** | 0 offline | age mlkem768x25519 (32-byte seed) | Exists in the clear only during the ceremony and a recovery. Stored as a 260 B scrypt-wrapped identity file under passphrase W. | W split SLIP-39 k-of-n. The wrapped file is printed as a QR on every card and copied onto the doomsday USB. | Only on suspected exposure of ≥ k cards or of R itself. New R' → signed bundle → header rewrap of stored ciphertext (if A6 keeps ciphertext). | Rotate R and rewrap. Accept that ciphertext copied before the rotation stays readable (C15). | D2 |
-| K-02 | **Admin root signing key A** | 0 offline | Ed25519 (minisign-style file) | Password-protected file on two offline media held by the owner | Copy sealed to R in the doomsday kit | Rare. The new key is signed by the old key, or re-pinned by kit if the old key is lost. | Re-pin through kits (painful): hence the two offline copies | D2 (custody); D3 (what it signs) |
-| K-03 | **Ingest identity I_n** | 1 homelab online | age mlkem768x25519 | Software identity on the ingest VM, unlocked with the A6 volume mechanism (§F4), excluded from VM backups | **None needed**: disposable. In-flight objects are recoverable with R or by re-upload (SR-11d). | New I_{n+1} in an A-signed trust bundle, at least yearly and after any suspected ingest-VM compromise. The interval is a proposal with no primary source. Keep I_n until the R2 and USB pipeline drains (A3 DR-A3-3 bounds this), then destroy it. Late bundles stay readable through R. | Rotate now; treat everything staged under I_n as disclosed (AR-08) | D2 |
-| K-03b | **Archive identity X** (only under A6 posture A′) | 0/1 admin, offline except for restores | age mlkem768x25519 | Passphrase-wrapped file on the admin's offline machine, or a file wrapped to a YubiKey. That wrap stays inside the house, so classic is fine. Brought online only for restores, catalog rebuilds and drills | Sealed to R in the doomsday bundle; a second offline copy | Rare. New X' means a header rewrap of the store, done with X online | Rotate and rewrap; ciphertext already copied stays exposed (C15) | A6 (posture); D2 (custody) |
-| K-04 | Receipt / status signing key | 1 online | Ed25519 | Ingest VM, same protection as K-03 | None: disposable | New key certified by A in the trust bundle | Rotate; re-issue receipts if D4 requires it (A3) | A3 format; D2 custody |
-| K-05 | Dedup epoch secrets S_e | 1 online | 32 random bytes → HKDF → HMAC key (A1) | Homelab keeps all epochs. Devices keep the current epoch in keystore-wrapped storage. | Each S_e sealed to R into the doomsday bundle | New epoch on trigger (§F5) | Rotate; the oracle over historical IDs remains (AR-06) | A1 (ID mechanics); D2 (custody, trigger) |
-| K-06 | At-rest volume or dataset key(s) | 1 homelab | A6's choice (ZFS native, LUKS, or none) | A6 | Sealed to R into the doomsday bundle (a hard requirement from D2) | A6 | A6 | A6 |
-| K-07 | Catalog key (if the catalog is encrypted separately) | 1 homelab | A6 | A6 | Sealed to R | A6 | A6 | A6 |
-| K-08 | Homelab Cloudflare API tokens (pull-only) | 1 homelab | Bearer | Ingest VM | Password manager (owner) | Replace | Revoke in the Cloudflare dashboard | C1 |
-| K-09 | Device Ed25519 signing key | 2 device | Ed25519 | Platform keystore, non-exportable where possible | **None**: re-enroll on loss | Re-enroll | Revoke (SR-17) | D3 |
-| K-10 | Device restore / sealing key | 2 device | Recommended **mlkem768x25519** (see §F6); ADR-0001 says X25519 | Keystore-wrapped | None | Re-enroll | Revoke; the admin checks the fingerprint before restores (D1 SR-14 interim) | D3, A8 |
-| K-11 | Update signing keys (two embedded) | project | Ed25519/minisign | Offline (D5) | D5 | D5 | D5 | D5 |
-| K-12 | Play upload key | project | Play | D5/B3 | B3 | B3 | B3 | B3 |
-| K-13 | Worker secrets (invite pepper, etc.) | cloud | HMAC | Worker secrets; **not trust-forging** (SR-23) | Password manager | Replace | Replace; the cost is availability and invites only | C1, D3 |
-| K-14 | DKIM keys | cloud | C3 | C3 | C3 | C3 | C3 | C3 |
+**Two bundles, not one.** This fixes the logic skeptic's major issue: refreshing a single bundle online would have put A and X in the clear on an online machine.
 
-The Cloudflare account, domain registrar and Play console credentials are **accounts**, not keys. E7 owns the credential inventory. D2 requires only that their recovery codes go in the same R-sealed bundle.
+- **Offline bundle** (an age file to R): {X, and A only if DR-D2-3 = "full admin"}. It is created and re-sealed only on the air-gapped ceremony machine.
+- **Online bundle** (an age file to {R, X}): {every S_e, every retired I_e, K-06, K-07}. The homelab refreshes it, because it already holds all of these online. Encrypting it to X as well lets the admin open it without the share holders.
+- **Account recovery codes** (Cloudflare, registrar, Play) are E7's credential inventory. DR-D2-3 recommends keeping them out of the R-reachable bundles.
 
-**The doomsday bundle** is one age file encrypted to R. It holds K-02, K-03b (X, under A′), every S_e, K-06, K-07 and the account recovery codes, and is refreshed when any of them changes. Copies are safe anywhere, because R guards them. Refresh needs only R's *public* key, so it runs online with no ceremony.
-
-### F2. The hierarchy and why a recovery recipient goes on every object from day one
+### F2. Hierarchy and where each stanza is written
 
 ```
-             offline                                  homelab (online)                       devices
-  R (PQ age identity; W split k-of-n) ──┐     I_n (PQ ingest identity) ─────────────┐     encrypt every object and
-  A (Ed25519 root, 2 offline copies) ───┼──►  signs trust bundle: {I_n, R, K-04, S-epoch id, alg ids}   record to {I_n, R}
-                                        │     K-04 receipts; S_e epochs  ───────────┴──► pinned by QR/kit (SR-02)
-  doomsday bundle = age file to R ◄─────┘     (backups of A, X, S_e, volume keys, account codes)
-
-  Under A6 posture A′, at ingest: header {I_n, R} → stored header {X, R}; the payload is unchanged; X is admin-held and offline
+offline                       homelab (online)                           devices
+R  (PQ; W split k-of-n) ──►   trust bundle {I_e, R, X?, K-04, epoch, alg ids} signed by A
+A  (Ed25519, 2 copies)        at ingest: device header {I_e}  ──►  stored header {X, R}      write {I_e} only (P1)
+X  (PQ, admin)                retire I_e: seal to {X, R} → online bundle, then delete online copies
 ```
 
-- **The format supports it** (C1). The cost is +1,557 B per object and per metadata record under PQ (C4); an X25519 second stanza would add 98 B.
-  - At F3's arithmetic of 0.9M–4.5M files for 2–10 TB, two PQ stanzas mean roughly 2.9–14.3 GB of headers for content objects (3,184 B each). Records double that, to about 0.3 % of stored bytes, and about half of it is due to R. This is arithmetic, not measured on family data.
-  - Header parsing must handle more than one stanza (CE §15 item 6 is already open).
-- **Why devices should include R themselves, even under A′.** A′ destroys old ingest keys after draining. A USB bundle that sits in a drawer past that point, or an object from a device that was offline for months, would then be unreadable forever unless R is also a recipient. The device-side cost is 1.5 KB per upload.
-- **Adding R later is expensive, and part of it is impossible.** The rewrap needs I online to recover each file key (C14). It rewrites every stored ciphertext header. It cannot reach objects already on USB sticks in drawers, or in R2 staging. It needs a custom tool, because upstream has none (C14). D2-S2 measures the rewrap cost. The one-way door (#3) is real.
-- **What R protects depends on A6** (OD-07):
-  - *If the store keeps the received age ciphertext* (A6 posture A, or A6's recommended **A′**, where headers are rewrapped at ingest to {X, R}), then R plus the disks is the whole doomsday story, using stock `age -d` alone. This is D2's preferred family of postures for succession (BUD-RECOVERY). A′ fits this note well:
-    - I then guards only transit, so its custody can be light;
-    - R is added to stored headers at ingest, even for anything a device sent without it.
-  - *If the store is plaintext on an encrypted volume*, R-on-objects protects only staged and in-transit objects. The heir instead needs the volume key (K-06, sealed to R) plus a ZFS/LUKS import runbook, which is harder for a non-author. Either way, R is the root of the doomsday bundle.
-- **Separation of duties.** Devices never hold R or I (settled: devices cannot read backups). The Worker holds nothing that forges trust (SR-23). I is disposable. A and R are offline.
+- **Placement: P1 (device writes {I_e}; homelab writes {X, R} at the rewrap).** This is the same as A2's DR-A2-2 recommendation, and replaces this note's earlier P2. The reasons:
+  1. The homelab cannot check a device-written R stanza (A2 C9; the adversary skeptic made the same point). Under P1, every R stanza on stored objects comes from homelab Go age, which the owner controls and can audit (§F6).
+  2. 3,184 B fails A2-S1's local ≤ 3 KB rule, while 1,627 B passes (C4).
+  3. The case for P2 (C21) is **contested** and is not used.
+- **Late bundles are covered by escrow, not by device R stanzas.** A6 §F3 step 5 already deletes I_e only after the longest drain path (A3 DR-A3-3). Sealing each I_e to {X, R} before that deletion also covers bundles that arrive beyond the bound:
+  - the admin opens them with X, without convening share holders (the logic skeptic's "routine use of break-glass R" issue);
+  - heirs open them with R;
+  - the cost is one small age file per epoch, instead of 1,557 B per object. By arithmetic from C4, that file is about 3.3 KB: a 3,184 B two-PQ header, the 78 B identity line and the age overhead;
+  - the exposure does not grow, because R and X can read those objects after ingest anyway.
+- **What P1 does not cover:** the window in which an object exists only as staged ciphertext under I_e and the homelab is destroyed before the next online-bundle copy leaves the box (AR-07 window). P2 would narrow that window, at the cost of unverifiable stanzas. The owner may still choose P2 as defence in depth (DR-A2-2). In that case the homelab-written {X, R} remains the authoritative stored form.
+- **Posture coupling (OD-07):**
+  - under A′, P1 is complete;
+  - under posture A (keep received ciphertext, no rewrap), the homelab must still rewrap to add R, as A2 also says;
+  - under plaintext postures, K-06 goes in the online bundle and the heir needs a volume runbook.
+- **Two-level alternative.** Stored headers carry {X} only, and X is sealed to R.
 
-### F3. PQ couples to every custody and recovery choice
+  | | {X, R} on stored headers (recommended) | {X} only; X sealed to R |
+  |---|---|---|
+  | Heir steps | `age -d -i R` on objects | `age -d` the bundle to get X, then `age -d -i X` |
+  | Replacing R | Store-wide header rewrap (C14; 1M PQ rewraps took 186 s CPU in D2-S2) | Re-seal one small file |
+  | Single point of failure | None beyond R | Every sealed copy of X; losing them all means losing the archive to heirs |
+  | Header bytes | 3,184 B | 1,627 B |
 
-- With a PQ ingest key, stock age forbids a classic second recipient (C2). So R must be `age1pq`. These are all excluded as recipients: YubiKey (`piv-p256`/age1tag), age-plugin-tpm (age1tag), age-plugin-se (P-256), and passphrase stanzas (C3).
-- `mlkem768p256tag` (age1tagpq) exists in the spec for hardware, but no identity implementation was found. The ML-KEM half cannot run on a PIV applet as far as this sweep shows (C11). That last point is an absence claim for skeptics to attack.
-- Hardware keys can still **protect an identity file at rest**: for example, a PQ identity file encrypted to a YubiKey and unlocked with a touch at boot. That file never leaves the house, so harvest-now does not apply to it.
-- The Rust stack has no native PQ recipient (C5). Two consequences:
-  - The client encoder must add the X-Wing HPKE stanza. The CE encoder is already custom, and F3 notes that the RustCrypto `x-wing` crate's wire compatibility is unverified.
-  - The heir's stock tool is **Go age ≥ 1.3.0**. The doomsday kit must ship static Go age binaries for Windows, macOS and Linux, plus the source zip and the Sigsum-verifiable release reference (S4 `SIGSUM.md`).
-- **If the owner declines PQ (OD-06 "classic")**, R can be X25519 and extra YubiKeys become possible recovery recipients. D2-S1 also becomes relevant again. The rest of this design is unchanged.
+  R replacement is expected to be rare (only if ≥ k cards are exposed), and the direct heir path survives losing the bundles. The recommendation therefore stays {X, R}, with confidence medium. The two-level design is the fallback if the owner weighs storage or rewrap tooling more heavily.
+- **Adding R later** still needs I online, a custom tool, and cannot reach copies outside the store (C14, D2-S2). One-way door #3 holds.
+
+### F3. PQ coupling
+
+- With a PQ ingest key, R and X must be PQ (C2).
+- These cannot be stored-object recipients under PQ: YubiKey PIV (`piv-p256`), age-plugin-tpm (classic) and scrypt (C3, C11).
+- age-plugin-se `--pq` is a PQ hardware identity (C24). It is non-exportable and macOS-only, so it can never be the only path. Two possible uses:
+  - wrap X's identity file at rest on the owner's Mac;
+  - be an extra owner-held recipient, which would add about 1.5 KB per object (not recommended for v1).
+- **R itself must be `mlkem768x25519`,** because no usable software tagpq identity exists outside Go age's test code (C11) and heirs need stock tools.
+- **Encoder routes for I are A2's choice (C5, C22, C23):**
+  - (a) a native Rust X-Wing stanza, which needs CCTV vectors;
+  - (b) the Rust plugin protocol with a bundled `age-plugin-pq`: a subprocess per object, awkward on Android;
+  - (c) Rust's native `tagpq` recipient for I, with a custom Go identity at the homelab built on the test-internal code pattern. Go age's acceptance of a {tagpq I, mlkem768x25519 R} mix is unchecked, but under P1 that mix never occurs on one header.
+- **Heir kit:** Go age ≥ 1.3.0 static binaries (recommended), plus `age-plugin-pq` for older Go age or rage (C22).
+- **If OD-06 = classic:** R and X may be X25519, YubiKeys become possible recovery recipients, and D2-S1 matters again.
 
 ### F4. Custody of the online ingest key
 
-| Option | What it protects against | Fits "unattended" and BUD-TTS? | Verdict |
-|---|---|---|---|
-| Plain file (0400, dedicated user) | Nothing at rest | Yes | Acceptable only if A6 also has no at-rest protection |
-| Passphrase-wrapped identity (`age -p`, native `-i` support, S3) unlocked at service start | Stolen disks, VM backups, snapshots | No. After a power cut, ingest waits for the admin. Data stays staged and devices keep their files, so nothing is lost, but it is delayed. | Good if A6 also unlocks by hand |
-| systemd-creds `host` in the VM | Only partial copies: the host key sits on the same disk (C20) | Yes | Weak; do not rely on it |
-| systemd-creds `tpm2` on a **Proxmox vTPM** | Nothing real (C10) | Yes | **Excluded** |
-| Physical TPM on the host (systemd-creds / clevis tpm2 with a PCR policy) | Disks removed from the machine | Yes, but PCR changes after upgrades can break unseal (C17) | Needs the manual fallback |
-| clevis + Tang on another homelab host | Disks or backups taken off the LAN | Yes | Good auto-unlock option; one more service to run |
-| YubiKey holding I | Key extraction | Unknown throughput; touch default is Always; PIN cache fragile (C11, S21) | **Impossible under PQ**; not recommended under classic |
-| YubiKey wrapping I's file (touch once at boot) | Stolen disks, backups | No (needs a touch at boot) | Equivalent to the passphrase option, with hardware |
-| HSM | Key extraction | Yes | Out of scope: cost and PQ support unknown |
+| Option | Verdict |
+|---|---|
+| Plain file on the VM's normal disk | Not acceptable under A′ while h0 is kept in the clear (see below) |
+| Passphrase-wrapped identity, manual unlock | Good if A6 also unlocks by hand. It stalls ingest after a power cut, which threatens BUD-TTS |
+| systemd-creds `host` | Weak (C20) |
+| Proxmox vTPM | **Excluded** (C10) |
+| Physical TPM (systemd-creds / clevis) | Acceptable with a tested manual fallback (C17) |
+| clevis + Tang on another host, with the key loaded into **tmpfs** at boot | **Preferred** auto-unlock under A′ |
+| YubiKey holding I | Impossible under PQ; not recommended under classic (touch Always, fragile PIN cache) |
+| HSM | Out of scope |
 
-**Recommendation.**
+Corrections from review:
 
-1. I is a software PQ identity. Software unwrap is not the bottleneck (C12).
-2. **Under A′ (A6 draft), prefer unattended unlock.** I protects only data in transit, and a stall after a power cut threatens BUD-TTS. Use a key file on the ingest VM's disk, excluded from backups, or Tang auto-unlock where the owner already runs it. Short epochs plus destruction after draining limit what a later capture of I can open.
-3. **Under postures that keep plaintext (A6 B)**, I sits on the same protected volume or dataset as the store and is unlocked by **the same mechanism and at the same moment** that A6 chooses for the store: a manual passphrase at boot, or Tang/TPM auto-unlock with a manual fallback. That means one unlock ceremony, and I is never weaker or stronger than the data it guards.
-4. Keep I out of the VM's system-disk backups.
-5. The archive key X (A′ only) is brought online only by the admin, for restores, rebuilds and drills. Store it as a passphrase- or YubiKey-wrapped file; D2-S1's throughput question does not arise for it.
-6. No custody choice defends against a live ingest-VM compromise (AR-08). Only short-lived I (cheap rotation), store immutability (D4-S4) and SR-01 bound it.
+- **h0 plus I_e is a read key at rest.** The logic skeptic pointed out that A6 keeps the original device header h0 (1,627 B under PQ) in the manifest. A disk thief who gets I_e, h0 and the payload can read every open-epoch object. So "I only guards transit" holds only if one of these is true:
+  - h0 is stored sealed to X, or only as a MAC or digest;
+  - I_e never touches the store's disks (Tang into tmpfs, or manual unlock).
 
-Confidence: medium, because it depends on OD-07.
+  ADR-0008 makes this a requirement and hands the h0 form to A6.
+- **Snapshots and replication.** "Exclude from backups" is not enough. I_e must not live on any snapshotted, ZFS-replicated or vzdump-covered volume. Destroying I_e must cover every such copy (adversary skeptic).
+- **Rates.** Software unwrap is not the bottleneck (C12). BUD-INGEST at ≥ 100 MB/s, with about 2.2 MB per object (an A2 C21 assumption) and one record per object, implies about 90 unwraps/s. That is arithmetic. D2-S1's 20/s line is below that, and is flagged to H1.
+- No custody choice addresses a live compromise of the ingest VM (AR-08).
 
-### F5. Dedup secret: derivation, custody, delivery, rotation
+### F5. Dedup secret
 
-- **Derivation.** S_e = 32 CSPRNG bytes per epoch, as in A1. The dedup-ID key K_e = HKDF(S_e, "reliquary/v1/dedup-id-key"), which is A1's construction and CE D-4 generalised.
-  - Do **not** derive S_e from R or A. That would put an offline root online at every rotation (so rotations would not happen), and it would reuse an age identity seed as a KDF root (key separation).
-  - The backup problem is solved by sealing each S_e to R in the doomsday bundle.
-  - Losing every S_e is survivable: start a new epoch and re-derive IDs from the catalog's SHA-256 values (A1 §5).
-- **Delivery (SR-15).** The homelab seals S_e as a small age file to the device's sealing key. It does this only after the device key is authenticated by a path Cloudflare cannot forge (SR-14, D3). The Worker only relays the ciphertext.
-  - Never put S_e on printed cards: cards sit in drawers for years and are photographed.
-  - A USB kit may carry S_e in the clear for kit-enrolled desktops as the D1 interim, until SR-14 exists.
-- **Instant enrollment.** Compatible under A1 construction B (C16). This is one more argument for DR-A1-1 option B.
-  - Enrollment feels instant: discovery and hashing start immediately.
-  - Uploads start when the sealed secret arrives. That is one homelab poll interval when the homelab is up, and indefinitely when it is down, which E3 should phrase plainly.
-  - D3 decides whether that delay is acceptable against "near-zero-effort enrollment".
-- **Harvest-now on delivery.** A sealed S_e that crosses Cloudflare under an X25519 device key could be opened by a future quantum adversary. Combined with the recorded cloud ID history, that adversary could test IDs for known files. Recommend the device sealing/restore key (K-10) be `mlkem768x25519` too. Restores re-encrypted to device keys carry plaintext content, so the same reasoning applies there with more force (hand-off to D3, A8, A2).
-- **Rotation trigger (proposed; the owner decides).**
-  - Rotate on **every revocation for loss, theft, suspected compromise or estrangement**.
-  - Do not rotate on routine retirement of a device the admin has wiped.
-  - No calendar rotation: rotation gives no forward secrecy for historical IDs (AR-06), so a schedule buys little.
-  - Cost is A1-S2's measurement (target < 60 s per client, zero file reads, homelab < 24 h). If that holds, one admin command per incident fits BUD-SUPPORT.
+- **Derivation:** S_e = 32 CSPRNG bytes per epoch at the homelab; K_e = HKDF(S_e, "reliquary/v1/dedup-id-key") (A1). It is not derived from R or A: an offline root would have to come online for every rotation, and key purposes would mix.
+- **Backup:** the online bundle (§F1).
+- **Delivery:** per enrollment path, as D1 §6 and SR-15 require. D3 designs it.
+  - The phone path in D1's table is a local in-app scan of the enrolled device's QR, or sealed delivery after SR-14 admission. The adversary skeptic's "phones have no path" therefore overstates the gap, but the local-scan mechanism still has to be built (D3).
+  - Before Gate C no relative is onboarded, so only the admin places production secrets (D1).
+  - **A clear S_e on a USB stick must be sealed, or deleted after first use,** because the same stick is the ADR-0002 seeding transport and can be lost. This goes to D3.
+- **Enrollment latency:** under construction B there is no second file read, but uploads wait for delivery: the homelab when it is up, the admin under any admin-gated interim (C16, secondary-only). This is **not** used as support for DR-A1-1. It goes to D3/OD-05 and to E3 for wording.
+- **Rotation trigger (DR-D2-1):**
+  - rotate on every revocation for loss, theft, suspected compromise or estrangement;
+  - not on an admin-wiped retirement;
+  - no calendar rotation, since there is no forward secrecy for historical IDs (AR-06).
 
-### F6. Recovery design: offline backup, k-of-n, holders, drills
+  This is conditional on DR-A1-1 = B and A1-S2 meeting its targets. Under construction A, every rotation forces full re-reads, and the recommendation falls back to (b), confirmed compromise only.
+- **Device sealing key:** should be PQ (K-10), because a sealed S_e crosses Cloudflare and could be harvested now and opened later. This goes to D3 and A8.
 
-**Recommended construction (option A below).**
+### F6. Recovery design, k-of-n, holders, drills
 
-1. At the ceremony, generate R with `age-keygen -pq`. Keep only the `AGE-SECRET-KEY-PQ-1…` line (C7).
-2. Generate W = 16 random bytes and write it as 32 lowercase hex characters. This matches age's own 128-bit file-key strength.
-3. Wrap R: `age -p` (or batchpass during the ceremony) produces `recovery-identity.age` (260 B), which fits easily into a QR code (C7).
-4. Split W with SLIP-39: `shamir create` with the extendable flag set and no SLIP-39 passphrase (C8's silent-wrong-passphrase hazard).
-5. Each **share card** carries:
-   - the 20 words;
-   - the group and member numbers, as SLIP-39's first words show;
-   - the QR of `recovery-identity.age`;
-   - a short fingerprint of R's recipient (for example the first 8 hex digits of SHA-256 over the `age1pq1…` string; D3 fixes the exact format);
-   - a one-page plain-language instruction.
-6. **Recovery:**
-   1. Collect k cards.
-   2. Run `shamir recover`; it prints the hex (C9).
-   3. Scan any card's QR into a file.
-   4. Run `age -d -i recovery-identity.age <object>` and type the hex when asked. A wrong entry fails loudly (C6).
+**Construction (ADR-0008 decision 3):**
 
-Verified once in the container (C6); D2-S3 tests it with a relative.
+1. **R:** `age-keygen -pq`, stripped to the identity line (78 B).
+2. **W:** 128 bits, generated by `shamir create custom … -x -s 128` itself, so it never appears on the command line (runbook fix).
+3. **Why 128 bits under PQ:** the age file key is 128 bits (C26), so every object is already at most as strong as a 128-bit symmetric key, whatever protects R. A 128-bit W behind scrypt is therefore not the weakest link. 256 bits would mean 33 words instead of 20, which costs BUD-RECOVERY directly. This rationale rests on C26 (primary); no NIST categorisation is cited, because the primary is blocked.
+4. **Wrap:** `age -a -p`, armored, 422 B (C7, C25).
+5. **Cards:** each card carries the 20 words, the group and member line, a QR of the armored file, R's fingerprint (format: D3), and a one-page instruction. The doomsday USB also holds the file. The QR is a second path, so a failed scan is not fatal.
+6. **No SLIP-39 passphrase:** a wrong one is silently accepted and yields a different secret (C8).
 
-**Why this beats the alternatives:**
-- It needs only stock tools; direct SLIP-39 of the seed would need a Bech32 re-encoding script.
-- Shares are 20 words, not 33.
-- Errors are detected: RS1024 checksums per share (C8), plus the scrypt MAC at the end.
-- Any k cards are self-sufficient.
-- A single card reveals nothing.
+**Heir path.** These are additions from review (C9, adversary and sources lenses):
 
-**Holders and k-of-n.** These are proposals for OD-08, pending E7-S1 with real people.
+- recover on an offline machine;
+- write R only into a RAM-backed temporary folder;
+- the kit ships a way to run `shamir` without installing Python. Options are a bootable recovery USB with age and shamir preinstalled (recommended for evaluation), or an embeddable Python with pinned wheels. D2-S3 must measure whichever is chosen.
+
+**Mechanical evidence:** C6 and C25. The armored QR path and the PQ + 128-bit combination ran only in M2, not in the spike or the drill kit, so the D2-S3 kit must be amended (Spikes).
+
+**Holders (OD-08; E7-S1 confirms):**
 
 | Scheme | Holders (example) | Survives | Risk |
 |---|---|---|---|
-| **2-of-3 (default)** | Partner; an adult relative outside the household; a safe-deposit box or executor | Loss of any one card; the owner's death (partner + executor) | Any two holders together can read everything (AR-D2-1) |
-| 3-of-5 | As above, plus two more relatives | Two lost cards | More people, and more drift over decades |
-| Two groups, GT = 1: owner 2-of-2 (home safe + bank box) **or** family 2-of-3 | — | The owner can self-recover without relatives; the family can recover without the owner | Doubles the paths to R; more complex to explain |
+| **2-of-3 (default)** | Partner; an adult relative outside the household; a safe-deposit box or executor | Loss of any one card; the owner's death | Any two holders together become admin-equivalent for reading (AR-D2-1) |
+| 3-of-5 | As above, plus two | Two lost cards | More people, more drift over decades |
+| Two groups (owner 2-of-2 **or** family 2-of-3) | — | Owner self-recovery without relatives | Harder to explain |
 
-**Life events** (E7 hands these back to D2):
+**Life events:**
 
-| Event | Action |
-|---|---|
-| A holder dies, leaves or becomes estranged, and their card is retrieved | Re-issue a new extendable set for the same W and destroy the old cards. No cryptographic rotation. |
-| A card may be in hostile hands | If fewer than k cards are at risk, re-issue and accept the risk. If k or more are at risk, rotate R and rewrap (C15). |
+- A holder is lost but their card is retrieved: re-issue an extendable set.
+- ≥ k cards may be in hostile hands: rotate R and rewrap (C15).
+- **Any real-card recovery while the owner is alive:** rotate R and rewrap (adversary skeptic).
 
-**Drill cadence.**
-- **Every year:** a card check. Each holder confirms they still have the card, and the owner validates each share's checksum on an offline machine. A single share is useless alone, and the owner is admin anyway.
-- **Full recovery drill:** at Gate C (D2-S3), after any holder change, and at least every 3 years. This is a proposal; there is no primary source for the interval.
+**Drills (fixes from review):**
 
-### F7. Key-ceremony runbook (draft; D2 owns the final version)
+- **Human drills always use throwaway drill keys** (as D2-S3 does). Real cards are never typed into a networked machine.
+- **Annual holder check:** each holder confirms they still have their card and that it is readable, by phone or in person. The cards are not posted to the owner, and no share is reconstructed.
+- **Real-key check** at Gate C, after any holder change and at least every 3 years (a proposal with no primary source). It runs only on the air-gapped ceremony image, and includes an **R-stanza audit:**
+  1. Export a random sample of stored headers (headers only).
+  2. Unwrap each with R and check its header MAC.
+  3. Record the pass rate.
 
-Data class: the ceremony handles production secrets, so it is never run with family content present and never logged to the repo (H3).
+  This is the only way to detect R stanzas that are silently broken, whether by a bug or by a compromised ingest VM (adversary skeptic). Cross-implementation round-trip tests (G2) cover the encoder side between audits.
 
-1. **Prepare (online machine, before the day).**
-   1. Download Go age ≥ 1.3.0 release archives for Linux, Windows and macOS. Verify them with Sigsum (S4 `SIGSUM.md`), or build from the proxy.golang.org module zip and record its hash.
-   2. Download the python-shamir-mnemonic wheel (and `click`) and record their hashes.
-   3. Get a printer with no network, or a PDF-to-USB path, PaperAge (optional) and qrencode.
-   4. Write everything onto a read-only USB.
-2. **Air-gapped machine.** Boot a Linux live image with networking hardware disabled or unplugged. Mount the tools USB read-only and check every hash.
-3. **Generate R.**
-   1. `age-keygen -pq -o r.txt`, then `age-keygen -y r.txt > r.pub`.
-   2. Strip `r.txt` to the identity line.
-   3. Compute and write down the fingerprint of `r.pub`.
-4. **Generate and split W.**
-   1. `shamir create custom -t 1 -g 2 3 -x -S $(head -c16 /dev/urandom | xxd -p)` (or the chosen scheme). This prints W as "Using master secret".
-   2. Wrap: `age -p -o recovery-identity.age r.txt` and enter W.
-5. **Verify before printing.**
-   1. For **every** k-subset of shares, run `shamir recover`, check that the hex matches, then `age -d -i recovery-identity.age test.age`. Here `test.age` is a test file encrypted to `r.pub`.
-   2. Run `age-inspect` on a test object encrypted to {I, R}.
-6. **Generate A** (Ed25519, minisign-style, password-protected). Print A's public-key fingerprint.
-7. **Assemble the trust bundle** {I_1 recipient, R recipient, K-04 public key, epoch id, algorithm ids}. I_1 and K-04 are generated on the homelab beforehand and brought in as public keys. Sign the bundle with A. Its digest is what QR and kits pin (SR-02, D3).
-8. **Print** the cards (§F6), the fingerprint sheet (R, A, bundle digest) and the recovery instruction page. Verify each printed QR by scanning it on the air-gapped machine.
-9. **Destroy.** Wipe `r.txt`; W only ever existed on screen and in RAM. Power off, which clears the live system's RAM. Keep only:
-   - `recovery-identity.age`;
-   - `r.pub`;
-   - A's encrypted key file on two offline media;
-   - the signed bundle.
-10. **Seal the doomsday bundle** online later: it needs R's public key only.
-11. **Record** the date, tool versions and hashes, fingerprints and the holder list (names only) in the owner's ceremony log. Do not record W or any shares.
+### F7. Key ceremony
 
-### F8. Succession (E7 requirement as handed over)
+See `docs/security/key-ceremony-runbook.md` (Draft). Changes from the analyst draft:
 
-Since no E7 note exists, D2 took the requirement from PLAN §E7:
-- break-glass without the owner;
-- an heir can read the archive without Reliquary;
-- a doomsday kit;
-- life events.
+- shamir generates W, and shell history is off;
+- output is armored;
+- every k-subset is tested, including scanning the printed QR back on the air-gapped machine;
+- the offline bundle is sealed at the ceremony;
+- I_e and K-04 are generated at the homelab and only their public keys enter the ceremony;
+- a ceremony log keeps no secrets.
 
-This design meets them *cryptographically*, provided the stored form is decryptable by R, or K-06 is in the doomsday bundle.
+### F8. Succession (E7 requirement from PLAN §E7)
 
-**Time-delayed, owner-blockable release** (Ente Legacy's 7/14/30-day window, C19; Bitwarden's WaitTimeDays, S18) needs an online party that holds a wrapped key and enforces the delay. In Reliquary the candidates are:
-- the homelab, which may be the thing that died;
-- the Worker, which must hold no trust keys (SR-23).
+- **Read without Reliquary:** met, with R, the disks and stock Go age (C1, C6, C22), when stored headers carry R.
+- **What k holders get:** **AR-D2-1, restated.** If A and the account recovery codes are R-reachable, any k holders become full admins: they can read everything, sign trust bundles that point devices at their own ingest key, and take over cloud accounts. DR-D2-3 recommends a **read-only** heir bundle: R reaches X, S_e, the volume keys and the retired I_e, but not A or the account codes. Successors who want to keep the system running then perform a re-key and re-pin ceremony.
+- **Time-delayed, owner-blockable release (AR-D2-2, corrected).** SR-23 forbids trust-forging *signing* keys in the Worker. It does not forbid the cloud holding ciphertext. So these are possible in principle:
+  - a Bitwarden-style cloud-held share, encrypted to an heir's key, released by a Durable Object alarm unless the owner cancels;
+  - a drand/tlock timelock on one share. No source was read for this; it is unverified.
 
-So v1 offers **no cryptographic time delay**. E7 can add social friction instead: holders agree to call the owner first. Gate C's dead-man's switch can send *instructions*, never keys. Recorded as AR-D2-2.
+  The costs: heir keys must be enrolled and kept for decades, it depends on the Cloudflare account surviving the owner (billing), and it adds complexity. **v1 leaves it out by choice,** and friction stays social. The owner decides (DR-D2-2).
 
 ### Alternatives compared
 
 | Option | Fit with settled requirements | Pros | Cons | Evidence |
 |---|---|---|---|---|
-| Single homelab key (ADR-0001 as written) | Fits the text | Simplest | Loss of the key or the owner = loss of everything; no succession | PLAN D2, E7 |
-| **Ingest I + offline R on every object, both PQ (recommended)** | Fits: devices still cannot read; the admin still decrypts everything | Native age; stock-tool recovery; I disposable | +1.56 KB per object; custom PQ encoder in Rust; heirs need Go age ≥ 1.3.0 | C1, C2, C4, C5 |
-| I + R, both X25519 | Fits | Smallest header; Rust support; YubiKeys possible as R | Harvest-now on keep-forever data | C4; F3 C24 |
-| Mixed PQ I + classic R | — | — | Violates the spec's SHOULD NOT; Go age refuses | C2 |
-| R added only at homelab ingest (A′ rewrap), not by devices | Fits | No per-object cost on devices | Objects still in transit when their ingest key is destroyed (USB bundles in drawers, long-offline devices) become unreadable forever | F2 |
-| **Offline backup: SLIP-39 over W wrapping R, QR on each card (recommended)** | — | Stock tools; 20 words; errors caught; cards self-sufficient | Needs a QR scanner or a typed QR; relies on python-shamir-mnemonic (unhardened) | C6–C9 |
-| SLIP-39 directly over R's 32-byte seed (33 words) | — | One artifact type | Bech32 script needed (non-stock); 33 words; verify by fingerprint only | C8 |
-| age-plugin-sss as R | — | Threshold inside age | Experimental; n × 1.56 KB per object under PQ; holders need age identities for decades; no Windows builds | C13 |
-| Paper QR of R + a memorised passphrase (PaperAge) | — | Simple | Single point of failure; dies with the owner unless written down | S12 |
-| Extra YubiKeys as recipients | Only if OD-06 = classic | No shares to transcribe | Classic only; PINs must be passed on; hardware ages over decades; needs the plugin | C11 |
-| Time-delayed online escrow (Ente/Bitwarden style) | Conflicts with SR-23 / homelab-only | Owner can block | Needs a trusted online party | C19, S18 |
+| Single homelab key (ADR-0001 as written) | Fits | Simplest | The owner or the key lost means the archive is lost | PLAN D2, E7 |
+| **I on device headers; homelab rewrap to {X, R}; I_e escrowed to {X, R} (recommended)** | Fits; R-22 wording affected (see Conflicts) | Every stored R stanza is written at home and auditable; 1,627 B device header; stock-tool heirs | Staged-only window (AR-07); depends on A′ or a rewrap | C1, C2, C4, C14; A2 C9 |
+| P2: devices write {I_e, R} | Fits | Covers the staged-only window | Unverifiable stanzas; 3,184 B fails A2-S1 local rule; +1,557 B per object | C4; C21 contested |
+| P3: P2 plus disclosed encapsulation randomness | Fits | Verifiable R | Custom crypto, needs review | A2 |
+| Two-level: stored {X}; X sealed to R | Fits | R rotation is a re-seal; smaller headers | Heir depends on a sealed copy of X | §F2 |
+| I and R both X25519 | Fits | Small; YubiKeys possible | Harvest-now on keep-forever data | C4 |
+| Mixed PQ and classic | — | — | Spec SHOULD NOT; Go age refuses | C2 |
+| **SLIP-39 over a 128-bit W wrapping R; armored QR on cards (recommended)** | — | Stock tools; 20 words; checksummed; QR plus USB paths | Unhardened tool (needs an air gap); a scan step | C6–C9, C25, C26 |
+| SLIP-39 of R's seed (33 words) | — | One artifact | A non-stock bech32 step | D2-S2 C1/C2 |
+| age-plugin-sss per object | — | Threshold inside age | Experimental; about n × 1.56 KB per object; no Windows builds | C13 |
+| age-plugin-sss protecting only R's file | — | No word cards (password shares possible) | Experimental; holders need the plugin for decades | C13 (adversary skeptic) |
+| Extra YubiKeys as recipients | Only if OD-06 = classic | No transcription | Classic only | C11 |
+| Secure Enclave `--pq` as an extra recipient | — | PQ hardware | Non-exportable; macOS only; +1.5 KB per object | C24 |
+| Cloud-held, heir-encrypted share with a cancellable delay | Compatible with SR-23 in principle | Owner can block a release | Heir keys for decades; billing lapses; complexity | §F8 |
 
 ### Similar work and lessons
 
 | Project | What they do | Borrow or avoid | Source |
 |---|---|---|---|
-| age-plugin-se README | Hardware-bound keys cannot move; advises also encrypting to a backup key | Borrow: I + R is the same pattern | S26 |
-| restic | A master key wrapped by several key files; a leaked master key cannot be rotated in place | Borrow the honest limit (C15) | S19 |
-| SOPS | Data key split across key groups with Vault's Shamir | Shows threshold-over-recipients works, but per file: avoid for objects | S23 |
-| Ente recovery key and Legacy | Recovery key wraps the master key; time-delayed trusted-contact recovery | Borrow the plain-language framing; the time delay needs a server (not v1) | S17 |
-| Bitwarden Emergency Access | Grantee public key, KeyEncrypted, WaitTimeDays, View vs Takeover | Same as Ente | S18 |
-| Trezor SLIP-39 | Word shares; multi-share flows have had repeated UX bugs | Expect ceremony errors: verify every k-subset before printing | S7; scout issues (low confidence) |
-| Apple ADP / Legacy Contact, 1Password Emergency Kit, Tarsnap keymgmt, Signal SVR, Keybase paper keys, Dark Crystal | — | **Not read** (blocked or not reached) | open |
+| age-plugin-se | Hardware-bound keys; advises a backup key | I/X plus R is the same pattern | S26 |
+| restic | A leaked master key cannot be rotated in place | State the limit honestly (C15) | S19 |
+| SOPS | Shamir over key groups, per file | Avoid per-object thresholds | S23 |
+| Ente Legacy, Bitwarden Emergency Access | Time-delayed trusted-contact release | Feasible later without trust-forging keys (§F8) | S17, S18 |
+| Trezor SLIP-39 | Word shares | Test every k-subset before printing | S7 |
+| Apple ADP/Legacy, 1Password Emergency Kit, Tarsnap, Signal SVR, Keybase, Dark Crystal | — | **Not read** (blocked) | open |
 
 ### Tools and libraries
 
 | Name | Purpose | Licence | Maturity | Source |
 |---|---|---|---|---|
-| Go `filippo.io/age` + `age-keygen`, `age-inspect`, `age-plugin-batchpass` | Homelab decrypt, ceremony, heir tool | BSD-3-Clause (not re-checked) | v1.3.2, 2026-08-29; PQ since v1.3.0 (2025-12-27) | S4 |
-| Rust `age` | Client decrypt side; no PQ recipient | MIT/Apache-2.0 | 0.12.1, 2026-07-14 | S5 |
-| python-shamir-mnemonic | SLIP-39 split and recover | MIT (not re-checked) | 0.3.0, 2024-05-16; self-declared unhardened | S8 |
-| vsss-rs | Rust Shamir/Feldman if Reliquary ever builds its own share tool | Apache-2.0 | 6.0.1; audits funded per README (reports not read) | S22 |
-| age-plugin-yubikey | Hardware-wrapped identity *file* at rest (classic) | MIT/Apache-2.0 | 0.5.1, 2026-04-08 | S9 |
-| age-plugin-tpm | TPM-held classic identity | MIT (not checked) | v1.0.1; awesome-age marks it experimental | S10 |
-| age-plugin-sss | Per-file threshold | not checked | v0.4.0, experimental | S11 |
-| clevis/tang, systemd-creds | Auto-unlock of I's file or the volume | GPL/LGPL (not checked) | mature | S14, S15 |
-| PaperAge | QR PDF of a passphrase-encrypted payload (≤ ~1.9 KiB) | MIT (not checked) | main | S12 |
-| minisign | Admin root key A (Ed25519) | ISC (not checked) | mature | S27 |
+| Go `filippo.io/age` (+ `age-plugin-pq`, `age-plugin-batchpass`, `age-inspect`) | Homelab, ceremony, heir tool | BSD-3-Clause (not re-checked) | v1.3.2, 2026-08-29 | S4 |
+| Rust `age` | Client; `tagpq` encryption only, no `mlkem768x25519` | MIT/Apache-2.0 | 0.12.1, 2026-07-14 | S5 |
+| python-shamir-mnemonic | SLIP-39 | MIT (not re-checked) | 0.3.0, 2024-05-16; unhardened | S8 |
+| age-plugin-se | Secure Enclave, PQ via `--pq` | not checked | v0.2.0 (per skeptic 1) | S26 |
+| age-plugin-yubikey, age-plugin-tpm | Classic hardware wrap of files at rest | MIT/Apache; not checked | 0.5.1; v1.0.1 | S9, S10 |
+| age-plugin-sss | Threshold | not checked | v0.4.0, experimental | S11 |
+| clevis/tang, systemd-creds | Auto-unlock | GPL/LGPL (not checked) | mature | S14, S15 |
+| segno, zxing-cpp | QR encode/decode used in M2 (candidates for the kit) | not checked | 1.6.6; 3.1.1 | PyPI |
 
 ## Spikes
 
-The spike runner fills this section; it runs in parallel. The rows below restate the PLAN spikes plus this note's view on applicability.
-
 | Spike | Hypothesis | Pass → / fail → (decision) | Exec tag | Budget IDs | Data class | Status | Result |
 |---|---|---|---|---|---|---|---|
-| D2-S1 YubiKey unwrap throughput | ≥ 20 unwraps/s unattended | Pass → a YubiKey may hold I; fail → hardware only offline. **Analyst view: not applicable if OD-06 = PQ (C11).** The software baseline is C12. | CT/OL | BUD-INGEST, BUD-TTS | SYN | (spike runner) | (spike runner) |
-| D2-S2 Encrypt to I + 2-of-3 split R; destroy I; recover; rewrap vs re-encrypt cost | Recovery succeeds; the cost of adding R later is measured | Pass → ADR-0008 as recommended; the rewrap cost goes into one-way door #3. Fail → revisit the recovery construction before Gate A | CT | BUD-RECOVERY (indirect) | SYN | (spike runner) | (spike runner) |
-| D2-S3 Combined recovery drill (the only one) | A non-author recovers 10 named photos with the kit and stock tools | Within BUD-RECOVERY and without owner help → Gate C passes | FM | BUD-RECOVERY | FAM (owner's own photos, consented) | (spike runner: kit) | (spike runner) |
+| D2-S1 YubiKey unwrap throughput | A YubiKey 5 identity with touch policy `never` does ≥ 20 unwraps/s unattended; plugin overhead is small next to 50 ms | Pass → a YubiKey may hold I under classic; fail → hardware only offline. **Not applicable if OD-06 = PQ** (C11). Threshold flagged to H1 (about 90/s from BUD-INGEST, §F4) | CT/OL | BUD-INGEST | `SYN → results` | **Emulated, not a real YubiKey**; OL kit ready | Medians (2026-10-06, 3 runs, N = 2,000): native X25519 7,413/s; batched plugin session 4,356/s; stock plugin client 388/s; age CLI per object 146.4/s. That leaves roughly 43–50 ms for the device at 20/s (arithmetic). No YubiKey latency source was found. Pass: **inconclusive**. Evidence: `spikes/D2-S1/README.md`, `spikes/D2-S1/evidence/emulation-results.jsonl`; kit `docs/research/kits/D2-S1/` |
+| D2-S2 Ingest + 2-of-3 split recovery; destroy ingest key; recover; rewrap vs re-encrypt | Stock tools recover after I is destroyed; adding a recipient later costs much less as a header rewrap, but needs I online and a custom tool | Pass → recovery construction for ADR-0008; rewrap cost recorded for door #3 | CT | BUD-RECOVERY (indirect), BUD-INGEST (context) | `SYN → results` | **Ran; pass** | 48/48 checks in both runs (age v1.3.1). Mixing refused; `-p` with `-r` refused. Variants A (classic, 128-bit, 20 words) and B (PQ, 256-bit, 33 words) recovered 10/10 SHA-identical from shares 1+3. Debian age 1.1.1: classic 10/10, PQ 0/10 without a plugin (M2: PQ works with `age-plugin-pq`). Rewrap of 1M headers with 4 workers: classic 97.0 s, PQ 186.0 s (run 2). Re-encrypt pipe 324.4 MiB/s, about 1.6 h / 8.2 h CPU for 2 / 10 TB (arithmetic; disk I/O not measured). **Gap:** the recommended PQ + 128-bit armored QR construction was not a spike variant; it was covered only by M2 (C25). Evidence: `spikes/D2-S2/README.md`, `spikes/D2-S2/evidence/run1-2026-09-29/`, `spikes/D2-S2/evidence/run2-2026-10-06/` |
+| D2-S3 Combined recovery drill (the only one) | A non-author relative with only the kit recovers 10 named photos within BUD-RECOVERY, without owner help | Pass → ADR-0008 recovery path "as drilled" and the Gate C item met; fail → fix the runbook or tooling (recovery USB, one-command script) and re-run | FM | BUD-RECOVERY | `LAB → results`; drill keys are `SEC`, throwaway | **Kit-ready; no human result** | Mechanical self-check 2026-10-06: 10/10 (classic, 128-bit) and 10/10 (PQ, 256-bit), about 1 s each (`dry-run-2026-10-06.txt`). **Kit amendments needed before the family session (not made in this stage):** (1) default to PQ + 128-bit with armored output; (2) add a QR-scan step from the printed card; (3) add the offline-machine instruction and the chosen way to run shamir (recovery USB or embedded Python), and time it; (4) re-run the dry run. Kit: `docs/research/kits/D2-S3/` |
 
 ## Conflicts with settled text
 
-- **None that contradict.** Three points for the owner to see:
-  1. ADR-0001 says content is encrypted "to the homelab public key", singular. Adding R extends this; it does not change who can read. The admin still decrypts everything, and devices still cannot.
-  2. **However,** k colluding share holders can also decrypt everything. CLAUDE.md scopes privacy "against outsiders … not against the admin". Share holders become admin-equivalent collectively. Recorded as AR-D2-1 for OD-17; no settled-text change is needed if the owner accepts it.
-  3. ADR-0001 says "e.g. X25519 / age". PQ fits the "e.g.", and ADR-0001 §6's device X25519 restore key likewise. Recommending PQ device sealing keys (K-10) is a hand-off, not a conflict.
+1. **R-22 / CLAUDE.md encryption trust model.** The settled text says "The owner (admin) holds the private key and can decrypt everything; privacy is against outsiders … not against the admin". Under OD-08 option A, any k share holders, possibly including outsiders such as an executor, can decrypt every family member's archive. With a "full admin" heir bundle they could also forge trust and take over accounts. **This changes who can decrypt.** It is raised as a decision request against settled text (OD-08 with DR-D2-2 and DR-D2-3), cross-referenced to D6 for family consent. It is not resolved here.
+2. **ADR-0001 §2** says content is encrypted "to the homelab public key (e.g. X25519 / age)". PQ fits the "e.g.". Adding X and R at the homelab rewrap does not change what devices encrypt to under P1, so there is no conflict for devices. The stored form is A6/OD-07's decision.
+3. **R-21 (HMAC(family secret, content)).** The F5 enrollment and rotation conclusions depend on DR-A1-1 construction B, which rewords this. They are therefore conditional.
+4. **ADR-0002 §3 near-zero enrollment.** An admin-gated interim delivery of S_e would conflict with it. This goes to D3/OD-05, not here.
 
 ## Open questions
 
-1. **A6 posture (OD-07):** the A6 draft recommends A′ (ciphertext rewrapped to {X, R}), which suits this design. Open points:
-   - whether X and R should both exist or be merged; this note says keep both, because merging would force a k-of-n gathering for every restore;
-   - the ingest-key epoch interval;
-   - how long the original 184-byte header (`.h0`) must be kept.
-
-   Owner: A6 with D2, Gate A.
-2. **Wire compatibility** of a Rust X-Wing HPKE stanza (RustCrypto `x-wing` "draft 06") with Go age's `mlkem768x25519`, tested against CCTV hybrid vectors. Owner: A2/G2, before Gate A.
-3. **Existence of any hardware identity for `mlkem768p256tag`.** This is an absence claim (C11). Owner: D2 skeptics.
-4. **Rewrap tool design and cost** (D2-S2), and whether A6 addresses the store by plaintext SHA-256 so that header rewrites never move data. Owner: D2-S2, A6.
-5. **Exact fingerprint format** on cards and kits. Owner: D3 (ADR-0014).
-6. **Whether any SLIP-39 tool other than the unhardened reference suits the ceremony** (for example Trezor hardware with an imported custom secret: not checked). Owner: D2 follow-up.
-7. **Similar-work sources not read** (Apple ADP/Legacy Contact, 1Password, Tarsnap keymgmt, Signal SVR, Dark Crystal, NIST SP 800-57 cryptoperiods). Owner: H1, via alternative routes.
-8. **Whether "uploads wait for the sealed dedup secret"** is acceptable under near-zero enrollment when the homelab is down. Owner: D3 (OD-05 neighbourhood), E3 wording.
+1. **Placement (DR-A2-2):** a joint A2/A6/D2 sign-off on P1 plus escrow. Owner: A2, A6, D2. When: Gate A.
+2. **The h0 form at rest:** sealed to X, MAC only, or clear with I_e kept off the disks. Owner: A6. When: Gate A.
+3. **Ingest-key epoch interval:** proposed at least yearly; no primary source. Owner: A6/D2 with A3 (drain bound). When: Gate A.
+4. **Encoder route for I:** X-Wing, plugin or tagpq, plus CCTV vectors. Owner: A2/G2. When: Gate A.
+5. **D2-S3 human result** with the amended kit, and the shamir delivery method. Owner: D2 Wave 2 with E7. When: Gate C.
+6. **Holders and k-of-n:** E7-S1. Owner: E7. When: Gate C, but before the production ceremony.
+7. **Fingerprint format** for R, A and the bundle digest. Owner: D3.
+8. **A hardened SLIP-39 tool** (for example a Trezor with a custom secret, or a reviewed Rust implementation): not checked. Owner: D2 Wave 2.
+9. **Time-delayed release design and costs**, if the owner wants it. Owner: D2/E7 Wave 2.
+10. **Whether Go age accepts mixed tagpq and mlkem768x25519 recipients on one header:** unchecked. It matters only if P2 is chosen together with a tagpq I. Owner: A2.
+11. **Unread similar work** (blocked sources). Owner: H1.
 
 ## Recommendation
 
-**ADR-0008 strawman:**
+Draft ADR-0008 (Proposed, partial). In-scope decisions for Wave 1:
 
-1. **Two recipients on every age file a device writes:** a disposable online ingest key I and an offline recovery key R. Both are `mlkem768x25519` if OD-06 = PQ, which this note recommends. Both are X25519 otherwise. Never mix the two kinds.
-2. **R is stored only as a 260-byte passphrase-wrapped age identity.** Its 128-bit passphrase is split with SLIP-39: default 2-of-3, extendable, no SLIP-39 passphrase. Every card carries the wrapped identity as a QR plus R's fingerprint. Recovery uses only python-shamir-mnemonic and Go age ≥ 1.3.0, which ship in the doomsday kit.
-3. **An offline Ed25519 admin root key A signs the trust bundle** {I, R, receipt key, epoch, algorithm ids}. A is backed up on two offline media and sealed to R.
-4. **I is software and rotated per epoch by a signed bundle.** Under A6's A′ it unlocks unattended; under plaintext postures it shares the volume unlock. It is excluded from VM backups, never on a Proxmox vTPM, and never on a YubiKey under PQ. Under A′, stored headers are rewrapped to an **admin-held offline archive key X plus R**. X is kept separate from R, so that restores do not need the share holders.
-5. **Dedup secrets are random per epoch,** sealed by the homelab to authenticated device keys, backed up sealed to R, and rotated on every loss, theft, compromise or estrangement revocation.
-6. **One doomsday bundle** (an age file to R) holds every other secret the heir needs. It is refreshed online.
+1. **Recipient placement.**
+   - Devices write {I_e} only.
+   - The homelab writes the stored header {X, R} at ingest. This applies under A′, and also under posture A by an added rewrap.
+   - Each I_e is sealed to {X, R} into the online bundle before its online copies are deleted.
+   - All stanzas are `mlkem768x25519` if OD-06 = PQ (recommended); never mixed.
+2. **R** is a PQ age identity, stored only as a 422 B armored scrypt-wrapped file. A 128-bit W, generated by shamir, is split with SLIP-39: 2-of-3 by default, extendable, no SLIP-39 passphrase, 20 words. Each card carries a QR of the wrapped file and R's fingerprint; the doomsday USB carries the file.
+3. **A** is an offline Ed25519 key on two offline media. It signs the trust bundle {I_e, R, K-04, epoch, algorithm IDs}. By default it is **not** reachable from R (DR-D2-3).
+4. **I_e** is a software key, held in RAM:
+   - under A′, loaded unattended through Tang into tmpfs, with a manual fallback, and never on snapshotted or replicated storage;
+   - h0 is never kept in the clear alongside a disk-resident I_e;
+   - never on a Proxmox vTPM.
+5. **Two bundles:** the offline one {X (+A if chosen)}, sealed only at the ceremony; the online one {S_e, retired I_e, K-06, K-07}, sealed to {R, X} by the homelab.
+6. **Dedup secrets:** random per epoch, delivered per D3's per-path mechanism (SR-15), rotated per DR-D2-1.
+7. **Drills:** human drills use throwaway keys. Real-key checks happen only air-gapped and include an R-stanza audit. A real-card recovery while the owner is alive triggers an R rotation.
 
 **What would change this:**
 
-- OD-06 = classic: R may be X25519 or YubiKeys, and D2-S1 matters again.
-- E7-S1 shows relatives will not hold word cards: move to hardware tokens (classic only) or to professional escrow of shares.
-- D2-S3 fails BUD-RECOVERY on the SLIP-39 step: switch to direct 33-word shares with a printed conversion tool, or to fewer, simpler steps.
-- A6 chooses plaintext at rest with a complex volume stack: the kit needs a much longer runbook, so D2 would argue for keeping ciphertext.
+- OD-06 = classic: X25519 R and X become possible, and so do YubiKeys, and D2-S1 matters again.
+- The owner prefers P2 for the staged-only window.
+- OD-07 picks a plaintext posture: a volume runbook goes into the kit.
+- D2-S3 fails at the SLIP-39 or QR step: a recovery USB with one command, or 33-word direct shares.
+- E7-S1 finds relatives will not hold cards: professional escrow, or hardware tokens under classic only.
 
 ## Decision requests
 
-### OD-08: Recovery recipient, k-of-n and share holders (with OD-06)
-- **Needed by:** Gate A, before the first real ingest (one-way door #3).
-- **Evidence:** this note (§F2, §F3, §F6); F3 note C4–C6; `content-encryption-format.md` D-2/D-3.
+### OD-08: Recovery recipient, k-of-n and share holders (decide with OD-06)
+
+- **Needed by:** Gate A (one-way door #3), before the first real ingest.
+- **Evidence:** §F2, §F3, §F6; D2-S2; C1, C2, C6, C25.
 - **Options:**
-  | Option | What it means for the family | Cost (money and owner time) | Reversibility | Risks |
+
+  | Option | What it means for the family | Cost | Reversibility | Risks |
   |---|---|---|---|---|
-  | A. PQ I + PQ R, SLIP-39 2-of-3 over the wrapped R (recommended) | Three people each keep one card; any two plus the kit recover everything | One ceremony (half a day); about 1.5 KB extra per file; yearly card check | One-way door for existing objects; holders can be changed by re-issuing cards | Two holders together can read everything (AR-D2-1) |
-  | B. Same, 3-of-5 or two groups | More people involved; survives two lost cards | Same | Same | More coordination over decades |
-  | C. No recovery recipient (ADR-0001 as written) | The archive dies with the homelab key or the owner | None now | Adding R later means a rewrap, and cannot reach USB or staged objects | Permanent loss (D1 catastrophic outcome) |
-  | D. Classic I + R (X25519 / YubiKeys) | Hardware keys possible | Smaller headers | Same door | Harvest-now on keep-forever data |
-- **Recommendation:** A. It is the only option that gives heirs a stock-tool path without the owner, at a cost of about 0.15 % of storage for R's stanzas (all PQ headers together come to about 0.3 %; arithmetic). Choose holders after E7-S1.
-- **Touches settled text:** none. It records AR-D2-1 for OD-17.
-- **If no decision by the deadline:** the run assumes option A with 2-of-3. No production ceremony runs, so Gate A cannot pass.
+  | A. PQ R and X on every stored object (homelab-written), SLIP-39 2-of-3 over the passphrase wrapping R, QR on cards (recommended) | Three people each keep a card; any two plus the kit recover everything | Half-day ceremony; about 1.5 KB more per stored object; a yearly holder check | One-way door for existing objects; holders can change by re-issuing cards | Any two holders can read everything (AR-D2-1) |
+  | B. As A, but 3-of-5 or two groups | More people | Same | Same | Coordination over decades |
+  | C. No recovery recipient | The archive dies with the key or the owner | None now | A later rewrap cannot reach USB or staged copies | Permanent loss |
+  | D. Classic X25519 R / YubiKeys | Hardware is possible | Smaller headers | Same | Harvest-now on keep-forever data |
 
-### OD-06 coupling (to A2; not a new item)
-Decide OD-06 and OD-08 in the **same sitting**. A "PQ" answer forces a PQ recovery key and excludes hardware recipients. A "classic" answer re-enables D2-S1.
+- **Recommendation:** A. Choose holders after E7-S1.
+- **Touches settled text: yes.** R-22 (CLAUDE.md encryption trust model): share holders become collective decryptors. The owner must explicitly accept this, or amend the wording. Cross-reference D6 for family consent.
+- **Default if no decision:** the run assumes A with 2-of-3. No production ceremony runs, so Gate A cannot pass.
 
-### DR-D2-1 (new, to H1 for numbering): dedup-secret rotation trigger
-- **Needed by:** Gate A (with ADR-0006/0008).
+### OD-06 coupling (owned by A2)
+
+Decide OD-06 and OD-08 in the same sitting. PQ forces PQ R and X; classic re-enables D2-S1.
+
+### DR-A2-2 (joint, owned by A2): where the recovery stanza is written
+
+- **D2 now recommends P1** (devices write the ingest stanza only), plus escrow of every retired ingest key to {X, R}.
+- P2 remains an owner option for defence in depth during the staged-only window. If chosen, the homelab-written {X, R} stays authoritative.
+
+### DR-D2-1 (new; H1 to number): dedup-secret rotation trigger
+
 - **Options:**
-  - (a) every loss, theft, compromise or estrangement revocation (recommended);
+  - (a) every revocation for loss, theft, compromise or estrangement;
   - (b) confirmed compromise only;
   - (c) a calendar schedule.
-- **Recommendation:** (a). It is cheap if A1-S2 meets its targets, and it bounds a leaked secret's use against future uploads.
-- **Touches settled text:** none.
-- **Default if no decision:** (a).
+- **Recommendation:** (a), **conditional on DR-A1-1 = B and A1-S2 meeting its targets**. Otherwise (b).
+- **Touches settled text:** no; it is conditional on DR-A1-1, which does.
 
-### DR-D2-2 (new, to H1 → OD-17): accepted-risk candidates
-- **AR-D2-1:** any k share holders together can decrypt the whole archive.
-- **AR-D2-2:** v1 has no cryptographic time-delayed or owner-blockable release; succession friction is social.
-- **Recommendation:** accept both.
+### DR-D2-2 (new; to the OD-17 register): accepted risks
+
+- **AR-D2-1 (restated):** any k holders together can read the whole archive, and with a full-admin bundle can also forge trust and take over accounts.
+- **AR-D2-2 (restated):** v1 has no time-delayed, owner-blockable release. This is by choice; SR-23 does not forbid it.
+- **Options:**
+  - accept both;
+  - reject AR-D2-1: raise k, or use professional escrow;
+  - reject AR-D2-2: build a cloud-held, heir-encrypted share with a cancellable delay, in Wave 2 or later.
+- **Recommendation:** accept both for v1, with the read-only scoping from DR-D2-3.
+
+### DR-D2-3 (new; H1 to number): what the share holders' bundle unlocks
+
+- **Options:**
+  - (i) read-only: X, S_e, volume keys and retired ingest keys;
+  - (ii) full admin: (i) plus A and the account recovery codes.
+- **Recommendation:** (i). The account codes go to E7's credential inventory under separate custody. Successors who want to keep the system running perform a re-key ceremony.
+- **Needed by:** Gate A, before the ceremony.
+
+### OD-07 coupling (owned by A6)
+
+ADR-0008 requires that h0 is never stored in the clear on the same disks as a disk-resident ingest key, and that the stored header carries R in every ciphertext-keeping posture.
 
 ## Hand-offs
 
 | To | What | Why |
 |---|---|---|
-| A2 (ADR-0007) | Two stanzas per object and per record; PQ-only or classic-only header parser; the encoder needs the X-Wing stanza (C5); CE §15 item 6 | The recipient set is D2's; the envelope is A2's (PLAN cycle A2 ↔ D2) |
-| A6 (ADR-0012) | Under A′: stored headers are {X, R} (both PQ if OD-06 = PQ); keep X separate from R; the proposed I epoch interval; unattended I unlock. Under B: I shares the volume unlock. In every posture, K-06/K-07 must be sealed to R | F1, F2, F4 |
-| A1 (ADR-0006) | Construction B also makes sealed delivery of the dedup secret cheap (C16); trigger policy DR-D2-1 | F5 |
-| D3 (ADR-0014) | Trust-bundle contents and signature by A; fingerprint format; K-10 as `mlkem768x25519`; S_e sealing only after SR-14; enrollment wording when the homelab is down | F1, F5 |
-| A8 (ADR-0028) | Restores to PQ device keys (harvest-now) | F5 |
-| D5 (ADR-0015) | Update keys stay outside this hierarchy; algorithm IDs for a future PQ signature | F1 |
-| E7 (ADR-0040) | Holder selection (E7-S1); life-event actions for card re-issue; social delay in place of a time lock; kit contents (Go age binaries, shamir tool, cards, instructions) | F6, F8 |
-| G2 (ADR-0035) | CCTV hybrid vectors; a negative test that a mixed PQ + classic header is never produced | C2, C5 |
-| H1 | Blocked-source list (Method); numbering for DR-D2-1/2 | PLAN §5.4 |
+| A2 (ADR-0007) | P1 agreed (DR-A2-2). The encoder route for I (C5, C22, C23). The G2 vectors. A negative test that no mixed header is ever produced | §F2, §F3 |
+| A6 (ADR-0012) | The homelab writes {X, R}, also under posture A. The h0 form at rest. I_e in tmpfs and off snapshots and replication. K-06/K-07 go in the online bundle. I_e escrow before deletion | §F2, §F4 |
+| A3 (ADR-0009) | The drain bound (DR-A3-3) sets when online copies of I_e may be deleted; escrow covers bundles beyond it | §F2 |
+| A1 (ADR-0006) | DR-D2-1 is conditional on construction B; C16 is secondary-only and is not support for DR-A1-1 | §F5 |
+| D3 (ADR-0014) | Per-path S_e delivery (SR-15). A USB S_e sealed or deleted after first use. K-10 PQ. Fingerprint format. Trust-bundle contents | §F1, §F5 |
+| D1 | Amend AR-08 (h0 plus I_e at rest). AR-D2-1 and AR-D2-2 restated for the register | §F4, §F8 |
+| D6 (ADR-0027) | Share holders as decryptors: family consent and charter disclosure | Conflicts 1 |
+| E7 (ADR-0040) | Holders (E7-S1). Custody of the account recovery codes (DR-D2-3). Social delay. Life-event actions | §F6, §F8 |
+| G2 (ADR-0035) | CCTV hybrid vectors; a cross-implementation round trip; a test for the R-stanza audit tool | §F6 |
+| D2 Wave 2 / spike runner | Amend the D2-S3 kit (PQ + 128-bit, armored, QR step, shamir delivery, offline machine) and re-run its dry run. Add a Debian age plus `age-plugin-pq` check to the kit | Spikes |
+| H1 | Blocked sources. D2-S1's threshold vs BUD-INGEST (about 90/s). Numbering for DR-D2-1..3 | Method, §F4 |

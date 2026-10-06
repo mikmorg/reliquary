@@ -1,474 +1,548 @@
 # A2. Object envelope and metadata-record format
 
 - **Workstream:** A2 (see `docs/research/PLAN.md`, section "A2.")
-- **Status:** Draft (analyst deep read, Wave 1 batch W1-a; continuation pass 2026-10-06 re-checked versions, re-ran M1 and added C22–C23). Skeptic review has not started, so every claim below is **pending**. A separate spike runner is running A2-S1 to A2-S4 in parallel; see [Spikes](#spikes).
+- **Status:** Final for Wave 1 (batch W1-a). Analyst deep read, continuation pass, three skeptic reviews (sources, logic, adversary) and spikes A2-S1 (CT part) to A2-S4 are all merged. The claim verdicts are the code-computed tally and are not overridden. The metadata-record schema stays **provisional** (P1; it follows A5).
 - **Date:** 2026-09-29 (last updated 2026-10-06)
-- **Wave 1 scope:** the P0 **object envelope** for the ADR-0007 draft, covering the construction, the post-quantum option (OD-06), recipients, sender authentication, resumability, truncation, padding and agility. The **metadata-record schema is provisional** (P1; it follows A5 and the H4 data model).
-- **Feeds:** ADR-0007 and `docs/spec/object-format.md` (both reserved for A2), OD-06 (PQ), evidence for OD-07 (A6 posture) and OD-08 (recovery recipient), one-way door #2 (object envelope, PQ, sender authentication), and new decision requests DR-A2-1 to DR-A2-4 (below; H1 assigns OD numbers).
+- **Wave 1 scope:** the P0 **object envelope** for the ADR-0007 draft: construction, post-quantum option (OD-06), recipients, sender authentication, resumability, truncation, padding and agility.
+- **Feeds:**
+  - ADR-0007 draft: `docs/adr/0007-object-envelope-and-metadata-record.md` (Proposed, partial);
+  - spec draft: `docs/spec/object-format.md` (Draft);
+  - OD-06 (PQ);
+  - evidence for OD-07 (A6 posture), OD-08 (recovery recipient) and OD-04 (device-signed records);
+  - one-way door #2 (object envelope, PQ, sender authentication);
+  - new decision requests DR-A2-2 to DR-A2-4 (H1 assigns OD numbers). DR-A2-1 is OD-06.
 - **Depends on:**
-  - **T1 spike 2**, the CE note: `docs/research/content-encryption-format.md` and `spikes/content-encryption/`. **It exists and this note builds on it.** Its D-1, D-2, D-3 and D-7, and its open issues 6 and 8, are the starting points here.
-  - D2 (`d2-key-hierarchy-custody-recovery.md`), F3 (`f3-security-literature.md`), D1 (`d1-threat-model.md`: SR-02, SR-03, SR-05, SR-13, SR-22, SR-24), A1 (`a1-content-identity.md`), A3 (`a3-ingest-protocol.md` F4, F8), A6 (`a6-homelab-storage-engine.md` F3, posture A′), B4 (`b4-ios-decision.md` K2–K5), H4 (`docs/design/data-model.md` §6).
-- **Traceability rows advanced:** R-19 (content and metadata encrypted on the device), R-20 (devices cannot read), R-25 (source locator, name and mtime only at the homelab), Q1-4 (resumable uploads vs age randomness).
+  - **T1 spike 2**, the CE note: `docs/research/content-encryption-format.md` and `spikes/content-encryption/`. It exists, and this note builds on its D-1, D-2, D-3, D-7 and D-9 and its open issues 6 and 8.
+  - Drafts: D2 (`d2-key-hierarchy-custody-recovery.md`), F3 (`f3-security-literature.md`, incl. C28), D1 (`docs/security/threat-model.md`: SR-03, SR-04, SR-13, SR-14, SR-22, SR-24), A1, A3 (F4, F8, Q10), A6 (F3, posture A′), B4 (K2–K5) and H4 (`docs/design/data-model.md` §6).
+- **Traceability rows advanced:** R-19 (content and metadata encrypted on the device), R-20 (devices cannot read), R-25 (locator, name and mtime only at the homelab), Q1-4 (resumable uploads vs age randomness).
 
 ## Summary
 
-**Keep the CE design: every content object is a standard age v1 file written by our own encoder.** Recommended changes:
+**Keep the CE design: every content object is a standard age v1 file written by the client's own resumable encoder.** Use the native age post-quantum recipient `mlkem768x25519` (X-Wing) for every stanza.
 
-1. **Post-quantum from day one.** Use the native age hybrid recipient `mlkem768x25519` (X-Wing) for *every* stanza. The age spec says a PQ file SHOULD NOT also carry classic stanzas, and Go age 1.3.2 refuses to write such a file. I reproduced that refusal in the container.
-2. **Measured header sizes.** Go age 1.3.2 in the container gave:
+The spikes now back this:
+- **Interop (A2-S3).** The Rust `hpke` 0.14.1 X-Wing stanza interoperates byte for byte with Go age 1.3.2, typage 0.3.1 and kage 0.8.0, in both directions: 853/853 checks.
+- **Resume (A2-S2).** CE's journaled resume survives 70 random kills with a PQ header.
+- **Forgery and truncation (A2-S4).** A device-signed record inside the encryption rejects 26/26 forgery, truncation and downgrade attacks before any catalog write.
 
-   | Header | Size |
-   |---|---|
-   | One PQ stanza | 1,627 B |
-   | Two PQ stanzas | 3,184 B |
-   | One X25519 stanza | 168 B |
+The main remaining unknown for OD-06 is **phone cost**. PQ is a fixed cost per object. On x86 it costs 35–52 % throughput on 16–100 KiB objects and 5–15 % at photo sizes; the phone figure needs the A2-S1 OL kit.
 
-   Two PQ stanzas therefore **fail** A2-S1's "header ≤ 3 KB per object" as written, and one PQ stanza passes. That is why this note asks where the recovery stanza goes (DR-A2-2). The homelab cannot check a recovery stanza that a device wrote, because it cannot open it. The analyst therefore recommends:
-   - devices write only the ingest stanza;
-   - the homelab writes the archive and recovery stanzas when it rewraps at ingest (A6 posture A′).
-
-   This conflicts with the D2 draft, and the owner decides.
-3. **Sender authentication.** age provides none. HPKE Auth mode does not exist for the PQ KEMs: the HPKE-PQ draft says so, and the Rust `hpke` crate rejects it. So sender authentication stays a **device Ed25519 signature on the metadata record, inside the encryption**. Changes to the CE version of the record:
-   - the record binds more fields (sequence, record ID, object length);
-   - it is carried in a C2SP **signed-note**, so signature algorithms can be swapped later;
-   - receipts bind the digest of the *signed plaintext record*, which stays stable across batching and rewrap.
-4. **No stock Rust age crate can write or read PQ objects** (age 0.12.1). The client encoder must emit the X-Wing stanza itself, for example with the `hpke` 0.14.1 crate. Byte-level interop with Go age is **unverified** until A2-S3 runs.
-5. **New in the continuation pass: X-Wing is not yet behaviourally frozen.** The CCTV vector `hybrid_low_order` requires a *header failure* when the X25519 part of `enc` is a low-order point (all-zero shared secret). The `hpke` 0.14.1 X-Wing decapsulation uses the RustCrypto `x-wing` key type that *accepts* that case, and `x-wing` 0.1.1 (2026-10-01) says CFRG has yet to pick one behaviour for the RFC (C22). The encrypt direction is unaffected. Any Rust *decrypt* path (A8 device restores, Rust homelab tools) must add the rejection itself, and A2-S3 must run `hybrid_low_order` against it.
+Changes from the earlier draft, after the skeptic review:
+1. **Recipient placement no longer rests on the 3 KB budget or on verifiability alone.** The recommendation is P1 with escrowed retired ingest keys ("P1-E"), with P2′ as a close alternative. In both, the homelab writes the stored recovery stanza.
+2. **"Rotation by rewrap" is not revocation.** This is now explicit.
+3. **The signed record binds a transport-neutral object identity**, not the R2 staging key.
+4. **The signature algorithm is left to D3**, so that hardware-backed P-256 keys stay possible.
+5. **Rust crypto dependencies must be pinned exactly**, and the X-Wing low-order rejection lives in project code.
 
 **Confidence:**
 
 | Area | Confidence |
 |---|---|
-| Spec and source facts | High |
-| PQ recommendation | Medium-high |
-| Recipient placement | Medium, because it couples to OD-07 and OD-08 |
+| Spec and source facts; interop | High (verified claims; A2-S3) |
+| PQ from day one | Medium-high, pending phone cost (A2-S1 OL) |
+| Recipient placement | Medium (couples to OD-07 and OD-08; P1-E is new and unreviewed) |
 | Record encoding | Low-medium (provisional) |
 
 ## Questions
 
 | # | Question (PLAN A2) | Short answer | Confidence |
 |---|---|---|---|
-| 1 | Which construction? | **age v1 (C2SP)**, as CE D-1. It is the only candidate with a public spec, a conformance kit (CCTV), independent implementations in Go, Rust and TypeScript, a stock CLI and a written backwards-compatibility promise (C1, C3, C14). Custom HPKE + STREAM, Tink, libsodium secretstream and saltpack each lose the stock CLI, and most also lack PQ (§Alternatives). | High |
-| 2 | Post-quantum from day one? Header size and phone cost? | **Yes, mlkem768x25519 for all stanzas** (DR-A2-1). Measured header sizes: one PQ stanza 1,627 B, two 3,184 B (C6). The PQ cost is a fixed number of KEM operations per object; the payload crypto is unchanged. Phone CPU and battery are not measured (A2-S1, OL kit). | Medium-high (recommendation); High (sizes); no result (phone cost) |
-| 3 | Recipient set: online ingest key plus offline recovery key; rotation should only rewrap | The format carries 1–N stanzas, all PQ. Rotation is a header rewrap, because the payload key depends only on the file key and the nonce (C2; A6 C2). **Placement is a decision** (DR-A2-2). A device-written recovery stanza cannot be verified at ingest (C9). The recommendation is device = ingest stanza only, and homelab = {archive, recovery} at the A′ rewrap. | High (mechanics); Medium (placement) |
-| 4 | Sender authentication | **Device Ed25519 signature over the record, inside the encryption.** HPKE Auth mode is unavailable for PQ KEMs (C10, C11). HPKE PSK mode breaks stock age decryption. saltpack-style DH authentication does not carry over to a KEM (C19). The record binds object, device, sequence and time (§F4). | High (options ruled out); Medium-high (design) |
-| 5 | Resumability (segments aligned to multipart parts; deterministic regeneration vs temp file) | **CE mechanism unchanged.** Only prefix_len grows: 1,643 B with one PQ stanza, 3,200 B with two. CE's layout math is unit-tested for prefixes of 1–65,551 B. The header is built once and persisted in the sealed state, so the X-Wing encapsulation randomness never has to be re-derived; hedge it like the X25519 esk. B4 K2–K4 (guard at handoff, bounded spool, sequential sources) are placement rules and need no format change. | High (layout); Medium (hedging for X-Wing, not prototyped) |
-| 6 | Truncation and reordering; random access for restores | age STREAM: a counter nonce plus a final flag. Streaming decryption MUST fail without a valid final chunk, and seeking from the end MUST verify the final chunk first (C3). CE §5.5 adds "authenticate the final chunk before serving any middle chunk" because the Rust `StreamReader::seek` does not. Keep that rule. The multi-stanza header parser (CE open issue 6) is now mandatory. | High |
-| 7 | Length hiding: Padmé vs buckets vs none; zstd | **Padmé with zero padding before encryption**, if F3-S1 confirms most sizes are unique (DR-A2-4). Cost is ≤ 3.1 % for 64 KiB–4 GiB (F3 C8, arithmetic). IDs and SHA-256 stay over the unpadded bytes. The true size goes only in the signed record, and every cloud-visible size field must carry the padded length (F3 C10). **No compression in v1:** a `content_encoding` field is reserved (§F7). | Medium |
-| 8 | Metadata-record fields and encoding; schema evolution | **Provisional:** a signed-note (C2SP) whose text is one line of compact I-JSON, signed with the device's Ed25519 key. The fields are from H4 §6.1 plus the A1, A3 and B4 additions (§F6). Deterministic CBOR (CDE) is the main alternative. The choice follows A5 and the D2/E7 recovery kit. | Low-medium |
-| 9 | Algorithm agility and migration | Agility lives at the **stanza** level: new recipient types, rewrap only. The payload suite (ChaCha20-Poly1305, 64 KiB STREAM) is fixed by age v1. Replacing it means decrypting and re-encrypting at the homelab: about 28 h per 10 TB at BUD-INGEST's 100 MB/s (arithmetic). Signature agility comes from signed-note key names and type bytes. The record's `object.profile` names the Reliquary profile. | Medium |
-| 10 | (new) Can the homelab verify a recovery stanza written by a device? | **No.** An HPKE SealBase stanza can be checked only with the recipient's private key or the sender's encapsulation randomness, and R is offline. A buggy or malicious device could write a garbage R stanza that ingest cannot detect (C9). | High (logic) |
-| 11 | (new) Does the Rust ecosystem have a drop-in PQ age implementation? | **No.** The `age` crate 0.12.1 has native `x25519`, `scrypt`, `tag` and `tagpq` only (confirmed by listing `src/native/`). Its `hpke` and `ml-kem` dependencies serve the encryption-only `tagpq` recipient (C7). This resolves a conflict between scouts. Re-checked 2026-10-06: 0.12.1 is still the latest `age` crate. | High |
-| 12 | (new) Is the X-Wing KEM behaviour stable across implementations? | **Not fully.** Go age (via CCTV `hybrid_low_order`) rejects a low-order X25519 share; Rust `hpke` 0.14.1 on `x-wing`'s default key accepts it; `x-wing` 0.1.1 adds a rejecting key type and says the default will change once CFRG publishes the RFC (C22). Honest encryptions are unaffected; only malformed-stanza handling differs. Treat as a decrypt-side conformance item, not a format change. | High (facts); Medium (impact) |
+| 1 | Which construction? | **age v1 (C2SP)**, as in CE D-1. It is the only candidate with all of: a public spec, a conformance kit (CCTV), independent Go/Rust/TS/Kotlin implementations and a stock CLI with a written backwards-compatibility promise (C1, C13, C14; A2-S3). | High |
+| 2 | Post-quantum from day one? Header size and phone cost? | **Yes, `mlkem768x25519` for all stanzas (OD-06)**, provided the A2-S1 OL kit shows acceptable phone cost. Header sizes: one stanza 1,627 B, two 3,184 B, X25519 168 B (C6, **verified**). Rust↔Go/typage/kage interop is verified (C25, A2-S3). x86 cost per object: about +77 µs per stanza to generate and +215 µs to open. Throughput loss vs X25519 is 52 % at 16 KiB, 37 % at 100 KiB, 15 % at 1 MiB and 5 % at 4 MiB (C26). Phone cost: **no result** (kit-ready). | Medium-high (recommendation); High (sizes, interop); none (phone) |
+| 3 | Recipient set; rotation by rewrap only | 1–N stanzas, all PQ (no mixing, C5). Changing recipients is a header rewrite (C2, **verified**). **Rewrap is not revocation**: the file key never changes, so an old ingest key still opens every recorded copy that was wrapped to it (§F3). **Placement is a decision** (DR-A2-2): P1-E is recommended and P2′ is the alternative. In both, the homelab writes the stored R. | High (mechanics); Medium (placement) |
+| 4 | Sender authentication | **A device signature on the record, inside the encryption.** HPKE Auth mode does not exist for PQ KEMs (C10, C11, **verified**). age authenticates no sender (C12, **verified**; A2-S4 premise). The record binds content, transport-neutral object identity, device, sequence and time (§F4). Keeping a classical signature for v1 rests on reasoning only (C24, **secondary only**) plus a design rule: the homelab's signed ingest verdict is the durable authority. | High (options ruled out); Medium (classical-signature adequacy) |
+| 5 | Resumability | **CE mechanism unchanged; tested with PQ.** prefix_len is 1,643 B (one stanza) or 3,200 B (two). A2-S2 passed: at most one part re-encrypted per kill, no (key, nonce) reuse, no key survives commit, no temp ciphertext spool (C27). X-Wing encapsulation randomness is hedged through a seeded RNG that asserts exactly 64 bytes are drawn (C23, now prototyped). | High |
+| 6 | Truncation, reordering, random access | age STREAM, plus CE §5.4 and §5.5. A2-S4 showed two independent layers: the length binding catches truncation and append before decryption, and STREAM catches them without it (C28). **New rule:** restore output is exposed only after the final chunk and the record's SHA-256 verify. | High |
+| 7 | Length hiding; zstd | **Padmé zero padding if F3-S1 passes** (DR-A2-4), with every cloud-visible size padded. Size buckets are an added option. With padding, stock `age -d` output carries trailing zeros, so heirs need the true size. No compression in v1; `content_encoding` is reserved. | Medium |
+| 8 | Metadata-record fields and encoding | **Provisional:** a C2SP signed-note whose text is one line of I-JSON, in batches of per-(device, file) signed units. CBOR (CDE) is the main alternative. Revisit after A5. | Low-medium |
+| 9 | Algorithm agility and migration | Stanza-level agility gives new recipient types by rewrap. The payload suite is fixed by age v1; replacing it means re-encryption, about 28 h per 10 TB at 100 MB/s (arithmetic). Signature agility comes from signed-note types: 0x01 Ed25519, 0x02 ECDSA, and 0xff for future types such as a PQ signature (C15, corrected). | Medium |
+| 10 | (new) Can the homelab verify a device-written recovery stanza? | **No** without skR or the encapsulation randomness (C9, **secondary only**: logic). Nobody can check a *homelab-written* R stanza without skR either. Only a sampled recovery drill with the real R key checks R stanzas under any placement. | Medium-high (logic) |
+| 11 | (new) Is there a drop-in Rust PQ age implementation? | **No.** `age` 0.12.1 has no `mlkem768x25519` (C7, **verified**). The spike's own stanza code on `hpke` 0.14.1 works (A2-S3). | High |
+| 12 | (new) Is X-Wing behaviour stable across implementations? | **Not fully.** A decoder built on plain `hpke` 0.14.1 accepts low-order shares and fails CCTV `hybrid_low_order` **and** `hybrid_identity` (C22, **verified**; A2-S3). `x-wing` says its default key type "will be altered" once the RFC is published. So pin exact versions and keep the rejection in project code. | High |
 
 ## Method
 
-- **Sweep:** three scouts (docs, source, community), then this analyst deep read.
-- **Read in full or in the relevant sections by the analyst:**
-  - the C2SP age spec (whole: header, payload, all five native recipient types, the scrypt exclusivity rule, test vectors);
-  - the HPKE-PQ draft (hybrid KEM mapping, IANA table, the "Asymmetric-Key-Authenticated Modes" section);
-  - X-Wing draft §"Not an authenticated KEM";
-  - HPKE (RFC 9180 source) KCI section headings;
-  - C2SP signed-note (format and signature types);
-  - the CCTV age README;
-  - Go age v1.3.2 `age.go`/`pq.go` (mixing enforcement);
-  - Rust `age` 0.12.1 `src/native/` and `Cargo.toml`;
-  - Rust `hpke` 0.14.1 `src/kem/xwing.rs` and `Cargo.toml`;
-  - the age(1) man page (backwards compatibility);
-  - the Go age README (PQ keys).
-- **Reproduction in the container:** Go age v1.3.2 binaries built earlier in this run, under `scratchpad/tools/bin`.
-  - Headers were measured with `age-inspect` and file sizes, for one PQ recipient, two PQ recipients and one X25519 recipient.
-  - A mixed PQ + X25519 encryption was attempted: rejected, exit 1.
-  - The PQ recipient string is 1,959 characters.
-  - Synthetic random bytes only; nothing else was measured.
+- **Sweep:** three scouts (docs, source, community), the analyst deep read, a continuation pass (2026-10-06), three skeptics (sources, logic, adversary) and the spike runner (A2-S1 to A2-S4).
+- **Read by the analyst, in full or the relevant sections:**
+  - the C2SP age spec;
+  - the HPKE-PQ draft editor's copy;
+  - the X-Wing draft §"Not an authenticated KEM";
+  - the HPKE source markdown;
+  - C2SP signed-note;
+  - the CCTV age README and `hybrid_low_order`;
+  - Go age v1.3.2 `age.go`/`pq.go`;
+  - Rust `age` 0.12.1 `src/native/`;
+  - Rust `hpke` 0.14.1 `src/kem/xwing.rs`;
+  - `x-wing` 0.1.0 and 0.1.1;
+  - the age(1) man page and the Go age README.
+- **Synthesis re-check (2026-10-06):** signed-note.md was re-read to correct C15. It defines type `0x02` (ECDSA P-256/384/521, SHOULD be P-256), and `0xff` for types without an assigned byte. `0x06` is a timestamped ML-DSA-44 *(sub)tree cosignature*, not a general signature type.
+- **Reproductions:**
+  - M1/M2: Go age v1.3.2 header sizes, the mixing refusal and recipient length (analyst);
+  - re-run independently by skeptic 1 (2026-10-06) with the same numbers;
+  - A2-S3 repeated the sizes across 4 encoders.
 - **Scout conflicts resolved:**
-  1. *"Rust age 0.12 depends on hpke and ml-kem, so it probably has native PQ"* (community scout) vs *"no mlkem768x25519 in 0.12.1"* (docs and source scouts). Resolved by listing the crate's `src/native/` modules. The dependencies serve `tagpq`, and there is no native X-Wing recipient (C7).
-  2. *The two-stanza header is "at or just over 3 KB" (derived)*. Now measured at 3,184 B. That exceeds 3 KB whether KB means 1,000 or 1,024 B (C6).
-  3. *D2 "devices include R themselves" vs A6 "recovery recipient added at ingest, not on devices"*. Not resolved here. The trade-offs are set out as DR-A2-2, including the new verifiability finding (C9).
-- **Routes:** raw.githubusercontent.com (C2SP, CCTV, hpkewg, dconnolly, cfrg, FiloSottile, keybase, jedisct1, rclone, borgbackup, bupstash, ente, tink-crypto, cbor-wg, openpgp-pqc), proxy.golang.org, static.crates.io, index.crates.io, registry.npmjs.org, developer.apple.com doc JSON. GitHub issue metadata came via the community scout.
-- **Blocked sources** (report to H1; no secondary source was substituted for a primary one):
-  - c2sp.org and age-encryption.org: the raw C2SP mirror was used, with no commit hash, because the GitHub API is restricted to mikmorg/reliquary.
-  - datatracker.ietf.org and rfc-editor.org: RFC 9180 was read from CFRG source markdown. RFC 8949, RFC 8032 and RFC 9580 were not read. The status of draft-ietf-hpke-pq and draft-ietf-openpgp-pqc is unverified.
-  - eprint.iacr.org and arxiv.org: the STREAM paper (2015/189), MEGA and Nextcloud papers, and PURBs/Padmé were not read.
+  1. Rust `age` 0.12 has no native PQ; its `hpke` and `ml-kem` dependencies serve `tagpq` (C7).
+  2. The two-stanza header is 3,184 B (measured).
+  3. Device-written R (D2) vs homelab-written R (A6): reframed as DR-A2-2 with P1-E and P2′ (§F3).
+- **Routes:** raw.githubusercontent.com (C2SP, CCTV, hpkewg, dconnolly, cfrg, FiloSottile, keybase, jedisct1, rclone, borgbackup, bupstash, ente, tink-crypto, cbor-wg, openpgp-pqc), proxy.golang.org, static.crates.io, index.crates.io, registry.npmjs.org, repo.maven.apache.org (kage; repo1.maven.org returned HTTP 429), developer.apple.com doc JSON.
+- **Blocked sources** (reported to H1; no secondary source was substituted for a primary one):
+  - c2sp.org and age-encryption.org: the raw C2SP mirror was used, without a commit hash.
+  - datatracker.ietf.org, www.ietf.org and rfc-editor.org. RFC 8949, RFC 8032 and RFC 9580 were not read. Skeptic 1's web search (2026-10-06) *lists* draft-ietf-hpke-pq-04 (March 2026) and -05 (July 2026); their contents were **not read**. The hpkewg editor's copy keeps 0x647a, Nenc 1120 and Npk 1216, and now defines the KEM through draft-irtf-cfrg-concrete-hybrid-kems, which states it "is identical to the X-Wing construction". age still cites -03.
+  - eprint.iacr.org and arxiv.org: the STREAM paper, the MEGA and Nextcloud papers and PURBs/Padmé were not read.
   - csrc.nist.gov (FIPS 203/204).
-  - words.filippo.io, soatok.blog, HN.
-  - developers.google.com/tink (Tink source used instead).
-  - WebSearch: the session budget was exhausted.
-  - A COSE struct draft path on raw GitHub returned 404, so COSE was **not** evaluated from a primary source.
-  - mailarchive.ietf.org (403 from shell, 2026-10-06): the CFRG message that `x-wing` 0.1.1 cites for "CFRG have decided" on non-contributory X25519 was not read; C22 relies on the crate's own statement of it.
-- **Continuation pass (2026-10-06, after the session limit interrupted Wave 1):**
-  - re-checked latest versions: `age` crate 0.12.1, Go age v1.3.2, typage 0.3.1, CCTV age 2026-09-25 (all unchanged); `hpke` 0.14.1 unchanged; **`x-wing` 0.1.1 published 2026-10-01** (new);
-  - diffed `x-wing` 0.1.0 vs 0.1.1 source and read `hpke` 0.14.1 `src/kem/xwing.rs` in full (C22, C23);
-  - read the CCTV `hybrid_low_order` vector and its generator (`internal/tests/hybrid_low_order.go`);
-  - re-ran M1 with Go age v1.3.2 (M2): identical numbers.
-  - The partial spike-runner tree at `scratchpad/A2/ce-pq` (a copy of the CE spike with `hpke = "=0.14.1"` added) was **not** used as evidence; its `evidence/` files are the CE run's.
-- **Stop rule:** by the end of the analyst pass, no new primary source changed a finding. The last three reads (signed-note, `hpke` crate source, CCTV README) refined the design without contradicting it.
+  - mailarchive.ietf.org: 403 from shell and EGRESS_BLOCKED for WebFetch (2026-10-06). The CFRG message on non-contributory X25519 is unread; C22 relies on the `x-wing` crate's own statement.
+  - The GitHub API: restricted for this session, so age #59 could not be re-read. It is not needed (C12 rests on the spec and on A2-S4).
+  - A COSE draft path returned 404, so COSE was not evaluated.
+  - words.filippo.io, soatok.blog and HN.
+- **Stop rule:** the last three primary reads (signed-note, `x-wing` 0.1.1 and the CCTV generator) refined the design without changing a finding. The spikes confirmed the predictions rather than adding new primary sources.
 
 ## Sources
 
 | # | Source | Publisher | Version or date | Accessed | Primary? |
 |---|---|---|---|---|---|
-| S1 | age spec, editor's copy: `C2SP/C2SP @ main : age.md` (= c2sp.org/age) | C2SP | main head (commit not retrievable) | 2026-09-29 | Yes |
-| S2 | Go `filippo.io/age` v1.3.2 module (proxy.golang.org): `age.go` (incompatibleLabelsError), `pq.go`, `extra/age-plugin-pq`, `cmd/age-inspect`, `go.mod` (go 1.25.0) | F. Valsorda | v1.3.2, 2026-08-29; PQ since v1.3.0, 2025-12-27 | 2026-09-29 | Yes |
-| S3 | `FiloSottile/age @ main : README.md` (PQ keys, "~2000 characters", age-plugin-pq, age-inspect) and `doc/age.1.ronn` (BACKWARDS COMPATIBILITY) | F. Valsorda | main | 2026-09-29 | Yes |
-| S4 | CCTV age vectors: `C2SP/CCTV @ main : age/README.md`; module `c2sp.org/CCTV/age` pseudo-versions 2026-08-29 (4448f2097b2d, pinned by age v1.3.2) and 2026-09-25 (50a8ecf2a220) | C2SP | as stated | 2026-09-29 | Yes |
-| S5 | Rust `age` 0.12.1 crate (static.crates.io): `src/native/{x25519,scrypt,tag,tagpq}.rs`, `Cargo.toml` (hpke ^0.12, ml-kem ^0.2), CHANGELOG | str4d | 0.12.1, 2026-07-14 | 2026-09-29 | Yes |
-| S6 | Rust `hpke` 0.14.1 crate: `src/kem/xwing.rs` (KEM_ID 0x647a, draft-ietf-hpke-pq-03, auth-mode errors), `Cargo.toml` (depends on `x-wing` 0.1.0 "hazmat", `ml-kem` 0.3; default features include x25519, mlkem, chacha; rust-version 1.85) | RustCrypto | 0.14.1 | 2026-09-29 | Yes |
-| S7 | Rust `x-wing` 0.1.0 crate `Cargo.toml` ("X-Wing KEM (draft 06)"); `hpke-rs` 0.7.0 `src/kem.rs` (XWingDraft06, auth unsupported) | RustCrypto; Cryspen | 0.1.0; 0.7.0 | 2026-09-29 | Yes |
-| S26 | Rust `x-wing` 0.1.1 crate (static.crates.io): `CHANGELOG.md` (0.1.1, 2026-10-01: "Fallible `DecapsulationKeyRejectNonContrib`"), `src/lib.rs` (backstory doc comment on non-contributory X25519; cites a CFRG mail-archive message) | RustCrypto | 0.1.1, 2026-10-01 (crates.io pubtime) | 2026-10-06 | Yes |
-| S27 | CCTV age `testdata/hybrid_low_order` ("expect: header failure"; "the X25519 part of enc is a low-order point, so the shared secret is the disallowed all-zero value") and `internal/tests/hybrid_low_order.go` (order-8 point) | C2SP | module 2026-09-25 (50a8ecf2a220) | 2026-10-06 | Yes |
-| S8 | draft-ietf-hpke-pq editor's copy: `hpkewg/hpke-pq @ main : draft-ietf-hpke-pq.md` (hybrid KEM mapping; IANA 0x647a Nenc 1120, Npk 1216, Auth "no"; §"Asymmetric-Key-Authenticated Modes of RFC9180") | IETF HPKE WG | editor's copy (-latest); age cites -03 | 2026-09-29 | Yes |
-| S9 | X-Wing draft editor's copy: `dconnolly/draft-connolly-cfrg-xwing-kem @ main` (§"Not an authenticated KEM") | Connolly et al. | editor's copy | 2026-09-29 | Yes |
-| S10 | HPKE source markdown: `cfrg/draft-irtf-cfrg-hpke @ master` (KCI; Auth-mode caveats; non-goals). May differ editorially from RFC 9180 | IRTF CFRG | master | 2026-09-29 | Yes (mirror) |
-| S11 | C2SP signed-note: `C2SP/C2SP @ main : signed-note.md` | C2SP | main head | 2026-09-29 | Yes |
-| S12 | typage (npm `age-encryption`) 0.3.1 README and package (hybrid identities and recipients) | F. Valsorda | 0.3.1, 2026-08-28 | 2026-09-29 | Yes |
-| S13 | Apple CryptoKit doc JSON: HPKE.Ciphersuite, XWingMLKEM768X25519 (iOS 26+), HPKE (iOS 17+) | Apple | current | 2026-09-29 | Yes |
-| S14 | Tink Java `HpkeParameters.java` (X_WING 0x647a with HKDF_SHA256 only) and `StreamingAead.java` Javadoc; tink-go v2.8.0 streaming AEAD source | Google | main; v2.8.0 | 2026-09-29 | Yes |
-| S15 | libsodium `secretstream` documentation | F. Denis | master | 2026-09-29 | Yes |
+| S1 | age spec: `C2SP/C2SP @ main : age.md` (= c2sp.org/age) | C2SP | main head | 2026-09-29; 2026-10-06 | Yes |
+| S2 | Go `filippo.io/age` v1.3.2 module (proxy.golang.org): `age.go`, `pq.go`, `cmd/age-inspect`; `@v/list` (v1.3.0 2025-12-27T14:59Z, v1.3.2 2026-08-29T17:40Z) | F. Valsorda | v1.3.2 | 2026-09-29; 2026-10-06 | Yes |
+| S3 | `FiloSottile/age @ main : README.md` and `doc/age.1.ronn` (BACKWARDS COMPATIBILITY) | F. Valsorda | main | 2026-09-29 | Yes |
+| S4 | CCTV age: `C2SP/CCTV @ main : age/README.md`; module `c2sp.org/CCTV/age` 2026-08-29 (4448f2097b2d) and 2026-09-25 (50a8ecf2a220) | C2SP | as stated | 2026-09-29 | Yes |
+| S5 | Rust `age` 0.12.1 crate (static.crates.io; index.crates.io pubtime 2026-07-14) | str4d | 0.12.1 | 2026-09-29; 2026-10-06 | Yes |
+| S6 | Rust `hpke` 0.14.1 crate: `src/kem/xwing.rs` (KEM_ID 0x647a; cites draft-ietf-hpke-pq-03 and concrete-hybrid-kems-02; `assert!` on auth mode), `Cargo.toml` (caret `x-wing = "0.1.0"`) | RustCrypto | 0.14.1 (pubtime 2026-09-06) | 2026-09-29; 2026-10-06 | Yes |
+| S7 | Rust `x-wing` 0.1.0 (`Cargo.toml`: "draft 06"); `hpke-rs` 0.7.0 `src/kem.rs` (UnsupportedKemOperation for XWingDraft06 auth) | RustCrypto; Cryspen | 0.1.0; 0.7.0 | 2026-09-29 | Yes |
+| S8 | draft-ietf-hpke-pq editor's copy: `hpkewg/hpke-pq @ main` | IETF HPKE WG | editor's copy; age cites -03 | 2026-09-29; 2026-10-06 | Yes |
+| S9 | X-Wing draft editor's copy: `dconnolly/draft-connolly-cfrg-xwing-kem @ main` | Connolly et al. | editor's copy (2026-09-23) | 2026-09-29 | Yes |
+| S10 | HPKE source markdown: `cfrg/draft-irtf-cfrg-hpke @ master` | IRTF CFRG | master | 2026-09-29 | Yes (mirror) |
+| S11 | C2SP signed-note: `C2SP/C2SP @ main : signed-note.md` (signature types 0x01–0x06, 0xff) | C2SP | main head | 2026-09-29; re-read 2026-10-06 | Yes |
+| S12 | typage (npm `age-encryption`) 0.3.1 | F. Valsorda | 0.3.1, 2026-08-28 | 2026-09-29 | Yes |
+| S13 | Apple CryptoKit doc JSON: HPKE (iOS 17+), XWingMLKEM768X25519 (iOS 26+) | Apple | current | 2026-09-29 | Yes |
+| S14 | Tink Java `HpkeParameters.java`, `StreamingAead.java`; tink-go v2.8.0 | Google | main; v2.8.0 | 2026-09-29 | Yes |
+| S15 | libsodium `secretstream` docs | F. Denis | master | 2026-09-29 | Yes |
 | S16 | saltpack README and `specs/saltpack_encryption_v2.md` | Keybase | master | 2026-09-29 | Yes |
-| S17 | Ente web crypto `types.ts` and `libsodium.ts` (per-file secretstream, 4 MiB chunks, "Existing encrypted files depend on this chunk boundary") | Ente | main | 2026-09-29 | Yes |
-| S18 | rclone crypt docs (file format) | rclone | master | 2026-09-29 | Yes |
-| S19 | bupstash technical overview and `bupstash-new-sub-key(1)` | A. Chambers | master | 2026-09-29 | Yes |
-| S20 | Borg `docs/internals/security.rst` (borg 2 session keys, AAD binding) | BorgBackup | master | 2026-09-29 | Yes |
-| S21 | draft-ietf-openpgp-pqc editor's copy | IETF OpenPGP WG | editor's copy (status unverified) | 2026-09-29 | Yes |
+| S17 | Ente web crypto `types.ts`, `libsodium.ts` | Ente | main | 2026-09-29 | Yes |
+| S18 | rclone crypt docs | rclone | master | 2026-09-29 | Yes |
+| S19 | bupstash technical overview | A. Chambers | master | 2026-09-29 | Yes |
+| S20 | Borg `docs/internals/security.rst` | BorgBackup | master | 2026-09-29 | Yes |
+| S21 | draft-ietf-openpgp-pqc editor's copy | IETF OpenPGP WG | status unverified | 2026-09-29 | Yes |
 | S22 | draft-ietf-cbor-cde editor's copy | IETF CBOR WG | editor's copy | 2026-09-29 | Yes |
-| S23 | GitHub issues: age #59 (no sender authentication), age #55 (PQ request), rage #598 (third-party X-Wing draft), restic #187 (asymmetric backups), borg #1039 (nonce reuse on rollback), duplicacy #638 (KDF diverges from docs), rclone #1712 (no plaintext checksum) | GitHub | as listed by the community scout | 2026-09-29 | No (community) |
-| S24 | Reliquary CE note `content-encryption-format.md` and `spikes/content-encryption/` | this repo (T1) | 2026-09-29 | 2026-09-29 | Yes (project evidence) |
-| S25 | Reliquary drafts: D2, F3, D1, A1, A3, A6, B4 notes and `docs/design/data-model.md` | this repo | 2026-09-29 | 2026-09-29 | Project evidence (drafts, not yet skeptic-reviewed) |
-| M1 | Analyst reproduction with Go age v1.3.2 in the container (header sizes, mixing refusal, recipient length) | this note | 2026-09-29 | 2026-09-29 | Measurement (synthetic data) |
-| M2 | Re-run of M1 (fresh keys, 1,000 random bytes): one PQ stanza header 1,627 B (file 2,659 B), two PQ 3,184 B (4,216 B), one X25519 168 B (1,200 B); recipient 1,959 chars; mixed PQ + X25519 refused (exit 1, "incompatible recipients: can't mix post-quantum and classic recipients"); two-stanza file decrypts with the second identity | this note | 2026-10-06 | 2026-10-06 | Measurement (synthetic data) |
+| S23 | GitHub issues: age #59, age #55, rage #598, restic #187, borg #1039, duplicacy #638, rclone #1712 | GitHub | via the community scout | 2026-09-29 | No (community) |
+| S24 | Reliquary CE note and `spikes/content-encryption/` | this repo (T1) | 2026-09-29 | 2026-09-29 | Project evidence |
+| S25 | Reliquary drafts: D2, F3 (incl. C28), D1, A1, A3, A6, B4, H4 | this repo | Wave 1 | 2026-10-06 | Project evidence (drafts) |
+| S26 | Rust `x-wing` 0.1.1: `CHANGELOG.md`, `src/lib.rs` (`DecapsulationKeyRejectNonContrib`; default "accepts non-contributory behaviour" and "will be altered") | RustCrypto | 0.1.1, 2026-10-01 | 2026-10-06 | Yes |
+| S27 | CCTV `testdata/hybrid_low_order` and `internal/tests/hybrid_low_order.go` | C2SP | module 2026-09-25 | 2026-10-06 | Yes |
+| S28 | `cfrg/draft-irtf-cfrg-concrete-hybrid-kems @ main` (where the hpke-pq editor's copy now anchors MLKEM768-X25519), as cited by skeptic 1 | IRTF CFRG | main | 2026-10-06 (skeptic 1) | Yes |
+| S29 | kage 0.8.0 (`com.github.android-password-store:kage`, repo.maven.apache.org; `MlKem768X25519Identity`/`Recipient`) | android-password-store | 0.8.0 | 2026-10-06 (spike runner) | Yes |
+| M1/M2 | Analyst reproduction with Go age v1.3.2 (header sizes, mixing refusal, recipient length) | this note | 2026-09-29; 2026-10-06 | — | Measurement (synthetic) |
+| SP1–SP4 | Spikes A2-S1 (CT), A2-S2, A2-S3, A2-S4 (§Spikes) | this workstream | 2026-10-06 | — | Measurement (synthetic, x86) |
 
 ## Claims
 
-All verdicts are pending skeptic review.
+**Key?** marks the claims the skeptics reviewed (K-id in brackets). The **Verdict** column is the code-computed tally, and it is not overridden:
+- **verified**: a primary source, and at least 2 of 3 skeptics did not refute;
+- **secondary only**: no primary source;
+- **contested**: otherwise.
 
-| # | Claim | Sources | Key? | Skeptic 1 (sources) | Skeptic 2 (logic) | Skeptic 3 (adversary/cost/user) | Verdict |
+"Correction applied" means the wording below has been narrowed or fixed after review; the verdict still applies to the claim as reviewed. Claims C25–C30 are new in synthesis, come from the spike runner's measurements, and were not reviewed by the skeptics.
+
+| # | Claim | Sources | Key? | Skeptic 1 (sources) | Skeptic 2 (logic) | Skeptic 3 (adversary) | Verdict |
 |---|---|---|---|---|---|---|---|
-| C1 | age v1 wraps one 128-bit CSPRNG file key in 1–N independent stanzas. The header MAC is HMAC-SHA-256 under HKDF(file key, "header") over all stanzas. The payload key is HKDF(file key, nonce, "payload"). The payload is 64 KiB ChaCha20-Poly1305 chunks with an 11-byte counter plus a final flag. Identities MUST ignore unrecognised stanzas. | S1 | Yes | | | | pending |
-| C2 | Changing the recipient set is a header rewrite (new stanzas and a new MAC, which needs the file key). The payload bytes stay valid. | S1 (+ A6 C2) | Yes | | | | pending |
-| C3 | Streaming decryption MUST error at EOF without a valid final chunk. Seeking relative to the end MUST first verify the final chunk. The payload MUST NOT be modified without re-encrypting with a fresh nonce. | S1 | Yes | | | | pending |
-| C4 | The `mlkem768x25519` stanza is HPKE SealBase with KEM MLKEM768-X25519 (draft-ietf-hpke-pq-03 / filippo.io/hpke-pq), HKDF-SHA256, ChaCha20Poly1305, info `age-encryption.org/mlkem768x25519`, empty aad. It has two arguments (the type and base64 of a 1,120-byte enc) and a 32-byte body. Identities MUST reject a non-canonical enc or wrong lengths. | S1, S8 | Yes | | | | pending |
-| C5 | The same file SHOULD NOT be encrypted to `mlkem768x25519` (or `mlkem768p256tag`) and to non-PQ recipients. Go age 1.3.2 enforces this through a `postquantum` label and fails with "can't mix post-quantum and classic recipients" (reproduced, M1). An scrypt stanza MUST be alone. | S1, S2, M1 | Yes | | | | pending |
-| C6 | Measured with Go age 1.3.2 (M1, reproduced in M2): header 1,627 B with one PQ stanza, 3,184 B with two PQ stanzas, 168 B with one X25519 stanza. A PQ recipient string is 1,959 characters. These match D2's independent measurement and the README's age-inspect example. | M1, M2, S3, D2 C4 | Yes (cost; A2-S1 rule) | | | | pending |
-| C7 | The Rust `age` crate 0.12.1 (latest, 2026-07-14) has native `x25519`, `scrypt`, `tag` and `tagpq` modules, and no `mlkem768x25519` recipient or identity. Its hpke and ml-kem dependencies serve the encryption-only `tagpq`. | S5 | Yes | | | | pending |
-| C8 | The Rust `hpke` 0.14.1 crate implements the MLKEM768-X25519 KEM (0x647a), citing filippo.io/hpke-pq and draft-ietf-hpke-pq-03, on top of RustCrypto `x-wing` 0.1.0 ("draft 06"). It is a candidate for the client's own stanza encoder. **Byte-level interop with Go age is not verified.** CCTV vectors can test only the decrypt direction (C14), so interop needs Go age to decrypt Rust output (A2-S3). | S6, S7, S4 | Yes | | | | pending |
-| C9 | The homelab cannot verify that a device-written stanza for an offline recipient R wraps the right file key. Checking a SealBase output needs skR or the sender's encapsulation randomness. A faulty device could therefore store unrecoverable R stanzas undetected, unless the homelab writes R itself (A′ rewrap) or the device discloses its encapsulation randomness to the homelab. | S1, S8 (logic) | Yes | | | | pending |
-| C10 | The HPKE-PQ KEMs, MLKEM768-X25519 among them, "do not support AuthEncap/AuthDecap". The draft names PSK mode or digital signatures as alternatives. X-Wing is "not … an authenticated KEM". | S8, S9 | Yes | | | | pending |
-| C11 | Rust `hpke` 0.14.1 errors on authenticated encapsulation with X-Wing ("Use Base or Psk operation mode"). `hpke-rs` 0.7.0 returns UnsupportedKemOperation for X-Wing and ML-KEM auth operations. Even with DHKEM, RFC 9180 Auth mode is exposed to key-compromise impersonation. | S6, S7, S10 | No (supporting) | | | | pending |
-| C12 | age gives no sender authentication for public-key recipients. Anyone holding the recipient can produce a valid file; the only "expectation of authentication" the spec names is scrypt's. | S1; S23 (age #59) | Yes | | | | pending |
-| C13 | Go age ≥ 1.3.0 decrypts PQ objects natively; older or other implementations can use `age-plugin-pq`. The age(1) man page promises that files from a stable version decrypt with any later version, possibly behind a flag if that is a security risk. | S2, S3 | Yes (30-year readability) | | | | pending |
-| C14 | CCTV age has 147 vector files, including 18 `hybrid_*` plus `armor_hybrid`. It is distributed as the Go module `c2sp.org/CCTV/age` and the npm package `cctv-age`. It "can't be used to test the encryption direction end-to-end", but can test header and STREAM round trips given the file key. | S4 | Yes (A2-S3 method) | | | | pending |
-| C15 | C2SP signed-note is UTF-8 text (no control characters other than newline), a blank line, and "— name base64(keyID‖sig)" lines. It defines Ed25519 (type 0x01) and a timestamped ML-DSA-44 cosignature type (0x06), and warns that PQ signatures can approach 5 kB. | S11 | Yes (record envelope) | | | | pending |
-| C16 | libsodium secretstream chains state (after each message the nonce is XORed with MAC bytes) and documents no seek. Inference: no plain random access to a middle chunk, and deterministic resume needs the chain state. | S15 | No | | | | pending |
-| C17 | Tink Streaming AEAD is symmetric-only, allows no append or modify, and has no rollback protection. Tink HPKE has an X_WING KEM (HKDF-SHA256 only) on Java main; which release ships it is unverified. | S14 | No | | | | pending |
-| C18 | Apple CryptoKit has HPKE from iOS 17 / macOS 14, and X-Wing (XWingMLKEM768X25519, citing X-Wing draft 06) only from iOS 26 / macOS 26. A Rust core, not CryptoKit, is therefore the portable PQ path. | S13 | No | | | | pending |
-| C19 | saltpack v2 authenticates the sender with per-recipient MAC keys derived by DH between the sender's long-term key and the recipient key. This needs a DH-capable recipient key, so it does not transfer to a KEM-only PQ recipient. | S16 | No | | | | pending |
-| C20 | Ente fixes its secretstream chunk size permanently ("Existing encrypted files depend on this chunk boundary"). rclone crypt's documented format has no final-chunk marker. Borg 1 reused counter nonces after a rollback (borg #1039). | S17, S18, S23 | No (lessons) | | | | pending |
-| C22 | CCTV `hybrid_low_order` expects **header failure** for an `mlkem768x25519` stanza whose X25519 share is a low-order point (all-zero shared secret). Rust `hpke` 0.14.1 wraps `x_wing::DecapsulationKey` and calls its infallible `decapsulate` (xwing.rs l.28, l.181). `x-wing` 0.1.1 (2026-10-01) documents that this default type *accepts* non-contributory X25519, adds `DecapsulationKeyRejectNonContrib`, states that CFRG will pick a single behaviour for the RFC, and that the default type "will be altered" when it is published. Inference (untested until A2-S3): `hpke` 0.14.1 as a decoder fails `hybrid_low_order`. | S6, S26, S27 | Yes (A2-S3; decrypt paths) | | | | pending |
-| C23 | Rust `hpke` 0.14.1 X-Wing encapsulation draws its 64 bytes of encapsulation randomness from a caller-supplied `CryptoRng` (`encap_with_rng`); the deterministic entry point is `pub(crate)`. So CE-style hedged randomness can be injected only through a seeded `CryptoRng` (source reading; not prototyped). | S6 | No (supporting F5) | | | | pending |
-| C21 | Header overhead arithmetic (not measured on family data). At F3's 0.9M–4.5M files for 2–10 TB, one PQ stanza per content object costs about 1.5–7.3 GB of headers; two stanzas about 2.9–14.3 GB, i.e. about 0.07 % vs 0.14 % of stored bytes. Metadata records double these unless records are batched (§F6). | C6 + F3 | Yes (cost) | | | | pending |
+| C1 | age v1 wraps one 128-bit file key in 1–N stanzas. Header MAC = HMAC-SHA-256 under HKDF(file key, "header"). Payload key = HKDF(file key, nonce, "payload"). 64 KiB ChaCha20-Poly1305 chunks with a counter and a final flag. | S1 | No (background) | — | — | — | Not separately reviewed |
+| C2 | Changing the recipient set rewrites only the header (new stanzas and MAC, which need the file key); the payload stays valid. [K10] | S1 | Yes | Upheld; rewrap ≠ revocation | Upheld; a rewrap does not re-key | Upheld; a malicious cloud keeps old copies, so nothing is revoked | **Verified**. Correction applied: "not revocation" (§F3) |
+| C3 | Streaming decryption MUST fail without a valid final chunk; seeking from the end MUST verify the final chunk first. | S1 | No | — | — | — | Not separately reviewed (exercised by A2-S4 C2/C6) |
+| C4 | The `mlkem768x25519` stanza is HPKE SealBase with MLKEM768-X25519 (draft-ietf-hpke-pq-03 / filippo.io/hpke-pq), HKDF-SHA256, ChaCha20Poly1305, info `age-encryption.org/mlkem768x25519`, empty aad, a 1,120-byte enc and a 32-byte body. [K1] | S1, S8 | Yes | Upheld; the editor's copy now anchors the KEM in concrete-hybrid-kems (S28) | Upheld; byte stability past -03 is open | Upheld | **Verified** |
+| C5 | A file SHOULD NOT mix PQ and non-PQ recipients. Go age 1.3.2 refuses. [K2] | S1, S2, M1/M2 | Yes | Upheld; the refusal is Go-specific | Upheld; typage writes mixed headers | Upheld; only the ingest profile check enforces it | **Verified**. Correction applied: enforced at ingest (E_PROFILE), not assumed from encoders |
+| C6 | Go age 1.3.2: header 1,627 B (one PQ), 3,184 B (two PQ), 168 B (X25519); PQ recipient 1,959 chars. [K3] | M1/M2, S3, SP3 | Yes | Upheld (reproduced) | Upheld; the inference "drives DR-A2-2" does not follow | Upheld | **Verified**. Correction applied: no longer used as the driver of DR-A2-2 |
+| C7 | Rust `age` 0.12.1 (latest) has native `x25519`, `scrypt`, `tag` and `tagpq`; no `mlkem768x25519`. [K4] | S5 | Yes | Upheld | Upheld | Upheld | **Verified** |
+| C8 | Rust `hpke` 0.14.1 implements MLKEM768-X25519 (0x647a) on RustCrypto `x-wing` ("draft 06"). [K5] (Its "interop unverified" part is superseded by C25.) | S6, S7 | Yes | Upheld; stale (interop now verified); caret dep resolves `x-wing` 0.1.1 | Upheld; same | Upheld; same; pin exactly | **Verified**. Correction applied: interop verified (C25); `x-wing` resolves to 0.1.1 in `spikes/A2-S2/Cargo.lock` (the A2-S3 README's "0.1.0" is wrong) |
+| C9 | The homelab cannot verify that a device-written recovery stanza wraps the right file key, because checking a SealBase output needs skR or the encapsulation randomness. [K9] | logic (S1, S8) | Yes | Upheld; a sampled drill can catch systematic bugs | Upheld; does not rule out P2′ | Upheld; also true of a homelab-written R; deriving the randomness from the file key would allow checking | **Secondary only**. Not used as the sole support for DR-A2-2 |
+| C10 | The HPKE-PQ KEMs do not support AuthEncap/AuthDecap; X-Wing is not an authenticated KEM. [K7] | S8, S9 | Yes | Upheld | Upheld | Upheld | **Verified** |
+| C11 | `hpke` 0.14.1 refuses auth mode with X-Wing by **panicking** (`assert!`), not by returning an error. `hpke-rs` 0.7.0/0.8.0-pre.1 return UnsupportedKemOperation. [K7] | S6, S7, SP4 | Yes (with C10) | "errors" was wrong: panic | Same | Same | **Verified** (as K7). Correction applied: "panics" |
+| C12 | age gives no sender authentication for public-key recipients; the only "expectation of authentication" is scrypt's. [K8] | S1; SP4 premise | Yes | Upheld (inference from the construction) | Upheld | Upheld | **Verified** |
+| C13 | Go age ≥ 1.3.0 decrypts PQ natively; age(1) promises that files from a stable version decrypt with later versions, possibly behind a flag. [K11] | S2, S3 | Yes | Upheld; the promise covers files from the age tool, and ours only if conformant | Upheld; "30 years" is extrapolation | Upheld; a later version may refuse by default | **Verified**. Correction applied: our objects are covered only through CCTV + project-vector conformance |
+| C14 | CCTV age: 147 vector files incl. 18 `hybrid_*`; Go module and npm package; decrypt direction only. | S4 | No | — | — | — | Not separately reviewed (used by A2-S3) |
+| C15 | signed-note: UTF-8 text, a blank line, "— name base64(keyID‖sig)" lines. Types: 0x01 Ed25519; **0x02 ECDSA (P-256/384/521, SHOULD be P-256)**; 0x04–0x06 transparency-log cosignatures (0x06 = timestamped ML-DSA-44 tree cosignature, *not* a general signature); 0xff for types without an assigned byte. It warns PQ signatures can approach 5 kB. | S11 | No | — | (skeptic 2 flagged the original wording) | — | Not separately reviewed. Correction applied on re-read of S11 |
+| C16–C20 | libsodium secretstream chains state and has no documented seek; Tink Streaming AEAD is symmetric-only; CryptoKit has X-Wing only from iOS 26; saltpack DH authentication needs a DH-capable recipient; Ente/rclone/Borg lessons. | S13–S20, S23 | No | — | — | — | Not separately reviewed |
+| C21 | Header overhead ≈ 0.07 % (one stanza) / 0.14 % (two) "at F3's 0.9M–4.5M files over 2–10 TB". [K12] | C6 + F3 | Yes | **Refuted**: 0.9M–4.5M is not in F3; the percentage depends on mean size, not TB | Upheld on arithmetic; attribution wrong; no stored posture has 0.07 % | **Refuted**: circular citation; stored cost under P1 + A′ is ~0.22 % | **Contested**. Not used as support. Replaced by the per-mean-size table in §F2, which builds on F3 C28 |
+| C22 | CCTV `hybrid_low_order` expects header failure for a low-order X25519 share; `hpke` 0.14.1 uses `x_wing::DecapsulationKey` (infallible, accepts non-contributory); `x-wing` 0.1.1 says CFRG will pick one behaviour. [K6] | S6, S26, S27 | Yes | Upheld; CFRG message unread | Upheld; also `hybrid_identity` | Upheld; now measured | **Verified**. Correction applied: tested in A2-S3; lax decoder fails `hybrid_low_order` **and** `hybrid_identity` |
+| C23 | `hpke` 0.14.1 draws the 64-byte X-Wing encapsulation randomness from a caller-supplied `CryptoRng`; the deterministic entry point is crate-private. | S6, SP2 | No | — | — | — | Not separately reviewed; prototyped in A2-S2 (`HedgeRng` asserts exactly 64 bytes) |
+| C24 | Forging an Ed25519 device signature is useful only if done before the homelab verifies it at ingest, so a classical signature is adequate for v1 *if* nothing later re-verifies device signatures as authority. [K13] | reasoning | Yes | Upheld (inference); "by the time of verification"; exercise agility before a CRQC | Upheld with a condition: a catalog rebuild, fixity or late USB ingest must not re-verify device signatures as authority | Upheld; state "verify once; persist the verdict" | **Secondary only**. Used only beside C10/C12 and with the design rule in §F4 |
+| C25 | **New (SP3).** Rust (`hpke` =0.14.1, `x-wing` 0.1.1) × Go age 1.3.2 × typage 0.3.1 × kage 0.8.0, all directions, 3 key origins, 7 sizes, 1–2 stanzas: 853/853. All encoders write 1,627 / 3,184 B. CCTV: Go 147/147; Rust strict, typage and kage 85/85 applicable. The typage and kage runners check only success+hash vs throw (weaker than the Rust strict runner). 15 project vectors regenerate byte-identically and pass in all four decoders. | SP3 | — | — | — | — | New, not reviewed (measurement) |
+| C26 | **New (SP1, x86 container, not a phone).** Generate/open per object: X25519 80.7/75.0 µs; PQ×1 157.4/289.4 µs; PQ×2 319.4/607.6 µs. Whole-object throughput loss of PQ×1 vs X25519 (default build): 51.9 % @16 KiB, 36.8 % @100 KiB, 14.5 % @1 MiB, 4.6 % @4 MiB, ~0 @25 MiB. The slowest PQ case is 70.9 MB/s (portable build, 16 KiB), above 12.5 MB/s. Host load 7–9. | SP1 | — | — | — | — | New, not reviewed (measurement) |
+| C27 | **New (SP2).** 70 SIGKILLs (50 with one stanza, 20 with two); every object decrypts to the exact SHA-256 in Go age and Rust; at most 1 part re-encrypted per kill; no (key, nonce) reuse (wire consistency, unique nonces/MACs, 12/12 edit-after-kill refusals); 0 key hits after commit. | SP2 | — | — | — | — | New, not reviewed (measurement) |
+| C28 | **New (SP4).** 26 attacks rejected with specific codes and a byte-identical store; stock Go `age -d` accepts the forged object; the record's `header_mac` string is only a pre-filter (B4, D4); the length binding and STREAM reject truncation independently. | SP4 | — | — | — | — | New, not reviewed (measurement) |
+| C29 | **New (SP3).** typage 0.3.1 writes a mixed PQ+X25519 header without error; kage refuses with a misleading scrypt error. | SP3 | — | — | — | — | New, not reviewed (measurement) |
+| C30 | **New (arithmetic on C6).** Header overhead as a share of stored bytes = header bytes / mean object size (table in §F2). | C6, F3 C28 | — | — | — | — | New, not reviewed; inputs measured, family mean unmeasured |
 
 ## Findings
 
 ### F1. Construction: age v1 stays (CE D-1 reaffirmed)
 
-- **Why age:** it is the only candidate that satisfies all four PLAN criteria together (C1, C3, C13, C14).
-  - spec stability: C2SP, a versioned `v1` line, and a compatibility promise;
-  - a conformance kit: CCTV;
-  - implementations in Go, Rust and TypeScript: Go reference, rage, typage;
-  - a stock CLI that can decrypt.
-- **What CE already settled** (S24):
-  - Our own encoder writes the standard format, because the `age` crate cannot resume.
-  - CE rejected a custom chunked format ("loses verification with stock age tools"). Nothing found here changes that.
-- **Similar-work lessons that confirm the choice:**
-  - **Publish a spec plus vectors.** Duplicacy's KDF drifted from its documentation (duplicacy #638, S23). A2's deliverable is therefore `object-format.md` **plus project vectors**. Our encoder can take injected randomness, so the encryption direction can have vectors even though CCTV's cannot (C14).
-  - **Chunk size is permanent.** Ente's comment says so (C20). age fixes 64 KiB, which is fine.
-  - **A final-chunk flag is essential.** rclone crypt lacks one (C20).
-  - **Nonce state must never roll back.** Borg #1039 (C20). CE's hedged, per-file random keys avoid persistent counters. The journal rollback risk is R-1 in CE.
-- **Devices that cannot decrypt** (restic #187, bupstash put-only keys, S19, S23): encrypting to a public key helps only when paired with append-only storage. This is already settled in CLAUDE.md and ADR-0001.
+- **Why age.** It is the only candidate meeting all four PLAN criteria together (C1, C13, C14, C25):
+  - spec stability (C2SP);
+  - a conformance kit (CCTV);
+  - independent implementations, now including Kotlin (kage 0.8.0, which has native PQ);
+  - a stock CLI that decrypts.
+- **The stock-CLI promise covers our files only if they conform** (C13 correction). That is why `object-format.md` ships encrypt-direction project vectors and CI runs CCTV + project vectors against every decoder (Duplicacy #638 lesson).
+- **Lessons that still hold:**
+  - chunk size is permanent (Ente);
+  - a final-chunk flag is essential (rclone crypt);
+  - never roll back nonce state (Borg #1039);
+  - public-key encryption helps only together with append-only storage (restic #187, bupstash).
 
 ### F2. Post-quantum from day one (OD-06)
 
-- **The threat is real for Reliquary's data.**
-  - Keep-forever data travels as ciphertext through Cloudflare and by post.
-  - An X25519 wrap recorded today opens the file key to a future quantum adversary.
-  - The symmetric layers and HMAC IDs are not exposed the same way (F3 Q7). This is reasoning plus secondary NIST timelines; it does not rest on the NIST dates (D2 C18 is "secondary only").
-- **What PQ costs:**
-  - **Bytes:** 1,627 B or 3,184 B per object instead of 168 B (C6). That is about 0.07 %–0.14 % of stored bytes (C21), plus the same again for metadata records unless they are batched.
-  - **CPU:** one X-Wing encapsulation per stanza per object. D2 measured software *decapsulation* at 4,904–6,827 per second in the container (D2 C12, x86). Phone encapsulation cost is **not measured**; that is the job of A2-S1 (OL kit).
-  - **Distribution:** a recipient string is 1,959 characters (C6). The QR code must carry the trust-bundle **digest** (CE D-9), never the recipient itself.
-  - **Tooling:** heirs need Go age ≥ 1.3.0 or the `age-plugin-pq` plugin (C13). No Rust drop-in exists (C7).
-  - **Spec maturity:** the KEM is referenced from an IETF *draft* (-03) and filippo.io/hpke-pq (C4, S8). One behavioural detail is still open at CFRG: whether a non-contributory (all-zero) X25519 result is rejected. age's CCTV vectors already pin *reject* (C22). Because an honest encryptor never produces such a share, this affects only how decoders treat malformed or hostile stanzas, never the bytes of a valid object.
-- **Risk if the KEM draft changes:** the age stanza name `mlkem768x25519` is bound to its referenced definition. The age(1) promise covers files already written (C13). This is an inference about maintainer behaviour, and skeptics should attack it.
-- **No mixing** (C5). A PQ object cannot carry an X25519 stanza "for compatibility", and cannot carry a scrypt stanza. This binds D2's recovery design (D2 F3).
-- **Fallback if A2-S3 finds no interoperable Rust X-Wing:**
-  1. The device encoder emits X25519 for now.
-  2. The homelab rewraps stored headers to PQ {X, R} at ingest (A′).
-  3. The harvest-now exposure is then limited to transit copies: staged R2 objects and USB sticks. Those copies are short-lived in R2 but can be recorded.
+- **Threat.** Keep-forever data crosses Cloudflare and the post. A recorded X25519 wrap opens the file key to a future quantum adversary. F3 §7 extends this to device restore and sealing keys (M-40; D2 K-10).
+- **Feasibility is now demonstrated, not inferred** (C4, C7, C8, C22, C25):
+  - the client must write its own stanza code, since the Rust `age` crate has none;
+  - the spike's code on `hpke` =0.14.1 interoperates with every reference implementation;
+  - a strict decoder passes all applicable CCTV vectors.
+- **Cost: bytes** (C6 **verified**; C30 arithmetic; the family mean is unmeasured, E1):
 
-  This is weaker, but it can be recovered from. A2-S1's "fail → X25519 now with a migration plan" already covers it.
+  | Configuration | Bytes per object | @ 4 MiB | @ 2.23 MB (F3-S1 photo mean) | @ 1.30 MB (corpus median) | @ 0.51 MB (F3-S1 doc mean) |
+  |---|---|---|---|---|---|
+  | Device transit, one stanza (P1/P1-E) | 1,627 | 0.04 % | 0.07 % | 0.13 % | 0.32 % |
+  | Device transit, two stanzas (P2′) | 3,184 | 0.08 % | 0.14 % | 0.25 % | 0.63 % |
+  | Stored {X, R} + kept h0 (A′) | 4,811 | 0.11 % | 0.22 % | 0.37 % | 0.95 % |
+  | X25519 reference | 168 | — | — | — | — |
 
-### F3. Recipient set and rotation
+  - Each **unbatched** metadata record adds another full age file: 2,683 B measured, of which 1,627 B is header.
+  - Batching amortizes this (§F6).
+  - F3 C28 gives the extra over X25519 as 0.13–1.2 % per file with records unbatched.
+  - The earlier "0.07–0.14 % at F3's 0.9M–4.5M files" (C21) is **contested** and withdrawn.
+- **Cost: CPU** (C26, x86 only):
+  - **Per object.** PQ adds a fixed ~77 µs per stanza to generate and ~215 µs per stanza to open.
+  - **Throughput.** The relative loss is large for small objects (35–52 % at 16–100 KiB) and 5–15 % at photo sizes. It never fell below 12.5 MB/s on x86.
+  - **A2-S1's rule.** "≤ 10 % loss on a low-end phone" is **not tested** (no phone). Applied per object at every size, it would already fail on x86 for small objects. Applied at the typical object size, as the kit does, it may pass. **A2 does not reinterpret the rule.** DR-A2-1 asks the owner/H1 how it aggregates (per object, at the typical size, or byte-weighted over the E1 mix).
+  - A low-end phone several times slower than this host could bring small-file PQ throughput towards the uplink rate. That is an inference; it is unmeasured.
+- **Tooling:**
+  - heirs need Go age ≥ 1.3.0, typage, kage or `age-plugin-pq`;
+  - the QR carries the trust-bundle digest, never the 1,959-character recipient (CE D-9).
+- **Spec maturity:**
+  - the KEM is referenced from draft-ietf-hpke-pq-03;
+  - -04/-05 exist but were not read;
+  - the editor's copy keeps the ID and sizes, and defers to concrete-hybrid-kems (S28);
+  - CFRG has not yet fixed the X-Wing low-order behaviour (C22).
 
-- **Rotation cost.** Each stanza wraps the same file key (C1), so rotating or adding a recipient means rewriting the header only (C2). About 10 TB of rewrites if done late (A6 C2). Nothing is rewritten if done at ingest from day one (A′).
-- **Placement choice (DR-A2-2):**
+  A valid object's bytes are unaffected by the low-order question; only decoder strictness is. The age(1) promise covers files already written (C13).
+- **No mixing** (C5 **verified**; C29). Mixing is not prevented by every encoder, so ingest enforces the profile (E_PROFILE, A2-S4 D1–D3). The recovery recipient must therefore be PQ: either `mlkem768x25519`, or the PQ hardware type `mlkem768p256tag` (hand-off to D2/OD-08; its stanza size was not measured).
+- **Fallback if the phone cost fails:**
+  1. Devices encrypt with X25519.
+  2. The homelab rewraps stored headers to PQ {X, R} at ingest.
+  3. Harvest-now exposure is limited to the transit copies already recorded.
 
-  | Option | Device header | Stored header | For | Against |
-  |---|---|---|---|---|
-  | **P1 (recommended): devices write {I_e} only; the homelab writes {X, R} at the A′ rewrap** | 1,627 B, which passes A2-S1 | {X, R}, written and checked at home | The recovery stanza on every stored object is produced by code the owner controls. Smallest device cost | Staged or USB copies are readable only with I_e (and the device still holds the plaintext until its receipt). An object whose device and homelab are both lost before commit is unrecoverable (AR-07 window). I_e must be kept until the R2 and USB pipeline drains (A3 DR-A3-3) |
-  | P2 (D2 draft): devices write {I_e, R} | 3,184 B, which **fails** A2-S1 as written | {X, R} (rewrapped) or {I_e, R} (posture A) | In-transit copies survive losing I_e. Late USB bundles stay readable after I_e is destroyed | The R stanza cannot be verified at ingest (C9). Under posture A that unverified stanza **is** the stored recovery path. +1,557 B per object and per record |
-  | P3: P2 plus the device discloses its R-encapsulation randomness inside the record, so the homelab recomputes and compares the R stanza | 3,184 B | as P2 | Verifiable R | Custom, needs crypto review; the randomness must be stripped before archiving the record. **Not recommended without review** |
+### F3. Recipient set, rotation and placement
 
-- **Posture coupling.** If OD-07 ends up at posture A (keep received ciphertext, no rewrap), P1 leaves stored objects with no R. In that case the analyst recommends the homelab rewrap to add R anyway, rather than trusting device-written R stanzas.
-- **Parser.** Whatever is chosen, the header parser must accept 1–N stanzas (CE open issue 6). The ingest check should be: *exactly the stanza count and types the device's trust-bundle epoch prescribes, all `mlkem768x25519`, no plugin, scrypt or armor* (SR-22).
+- **Rotation mechanics** (C2 **verified**). Every stanza wraps the same file key, so adding or rotating recipients is a header rewrite.
+- **Rewrap is not revocation.** The file key never changes. Consequences:
+  - Anyone who ever held a wrapping key, and any recorded copy carrying the old stanzas, keeps access. That includes R2 copies the cloud kept, USB sticks, and A6's kept h0.
+  - **Compromise of an ingest key I_e exposes every transit copy wrapped to it, permanently.**
+  - Only re-encryption under a fresh file key (with a new payload nonce) restores confidentiality for a given object.
+  - Rewrap gives recipient *agility*, not recovery from a compromise.
+- **Requirements that follow** (to D2/A6):
+  - short I_e epochs, with the online copy destroyed at epoch end;
+  - I_e kept out of homelab VM backups (D2 K-03 already says so);
+  - a decision on whether A6 keeps h0 at rest. If it does, anyone who later obtains an old I_e can also open those stored objects through h0.
+- **Who can check an R stanza** (C9, **secondary only**):
+  - The homelab cannot verify a device-written R stanza.
+  - Nobody can verify a homelab-written R stanza without skR either. A tampered config or a compromised ingest VM could point R at an attacker's key, silently, for every object.
+  - Mitigations, under any placement:
+    - (a) the homelab pins pkR from the **owner-signed trust bundle**, as devices do;
+    - (b) a **periodic sampled recovery drill** with the real R key, or R-canary objects, is the only true check (hand-off to D2-S3 and C8).
+- **Placement options (DR-A2-2).** The 3 KB rule is no longer a driver; it only appears as a cost note.
+
+  | Option | Device writes | Stored header | Late USB bundle / long-offline upload after I_e is retired | Device cost | Unverified stanzas |
+  |---|---|---|---|---|---|
+  | **P1-E (recommended, provisional):** P1 plus escrow of each retired I_e, encrypted to R, kept with the store and off-box with the recovery kit | {I_e} | {X, R} by the homelab | Readable: R → escrowed I_e → object. Needs the escrow blob to survive | 1 encapsulation; 1,627 B | none on devices |
+  | P1 (earlier draft): retired I_e destroyed | {I_e} | {X, R} by the homelab | **Unreadable** once I_e is destroyed. The device still has the plaintext until its receipt, unless the user has since deleted it | as P1-E | none |
+  | **P2′ (alternative):** device writes {I_e, R}; the homelab rewrites stored headers to {X, R} | {I_e, R} | {X, R} by the homelab | Readable with R directly, with no escrow blob needed | 2 encapsulations; 3,184 B (+1,557 B; about +160 µs on x86; phone unmeasured) | the transit R stanza (fallback only) |
+  | P2 (D2 draft under posture A): device R is the stored recovery path | {I_e, R} | {I_e, R} | Readable with R | as P2′ | **the stored** R, which is never checked |
+  | P3/P3′: P2 plus the homelab recomputes the device's R stanza (disclosed randomness, or randomness derived from the file key) | {I_e, R} | as P2/P2′ | Readable with R | as P2′ | none, but custom construction; P3′ has a key-dependent-randomness question. **Crypto review required** |
+
+- **Reasoning:**
+  - P1-E and P2′ both keep the stored R homelab-written and pinned, so C9 does not separate them.
+  - The real trade-off: P2′ costs every device one extra X-Wing encapsulation and 1.5 KB per object (and a second record header unless batched). It keeps transit objects self-contained for recovery.
+  - P1-E keeps device cost minimal and the online I_e retention bounded to one epoch. It costs an escrow artifact that must be stored safely.
+  - P1-E is **new in synthesis and not skeptic-reviewed**, so this is a provisional lean, decided with D2 and A6.
+  - If phone cost (A2-S1 OL) turns out small, P2′'s simplicity may win.
+- **P1 mitigation either way:**
+  - On an ingest-key epoch change, the client re-seals any **un-receipted** item to the new I_e, when the source is still present (hand-off to A3/A4).
+  - Bundles sealed under a retired key are opened through the escrow (P1-E) or flagged for re-upload (P1).
+- **Parser:** see F5. Ingest requires *exactly* the stanza count and types that the device's trust-bundle epoch prescribes (SR-22; A2-S4 D1–D3).
 
 ### F4. Sender authentication and binding
 
-- **Why a signature is needed.** age is anonymous (C12), so a forged object from anyone holding the recipient is always a *valid age file*. It must be rejected by the **signed record**, before any catalog write (A2-S4; D1 SR-03, SR-04).
+- **A signature is needed.** age is anonymous (C12 **verified**). A2-S4 shows stock `age -d` decrypting an attacker's forged object with exit 0 (C28). Forgery resistance rests entirely on the signed record plus homelab verification (D1 SR-03, SR-04).
 - **Options:**
 
-  | Option | Works with PQ? | Stock `age -d` still works? | Verdict |
+  | Option | PQ-compatible? | Stock `age -d` still works? | Verdict |
   |---|---|---|---|
-  | Device Ed25519 signature on the record, inside the encryption (CE §9) | Yes. The signature is verified at ingest now, and the homelab keeps its own verdict | Yes | **Adopt** |
-  | HPKE Auth mode | **No**, not defined for the PQ KEMs (C10, C11). Even with DHKEM it has KCI caveats | No: age uses SealBase | Reject |
-  | HPKE PSK mode (per-device PSK) | Yes | **No**: not the age stanza | Reject |
+  | Device signature on a signed-note record, inside the encryption | Yes (the signature is classical, see below) | Yes | **Adopt** |
+  | HPKE Auth mode | No (C10, C11 **verified**); `hpke` 0.14.1 panics | No | Reject |
+  | HPKE PSK mode | Yes | No (not the age stanza) | Reject |
   | saltpack-style DH MAC keys | No (C19) | No | Reject |
-  | Outer signature visible to the cloud | Yes | Yes | Not needed. The cloud already knows the device from its credential, and the homelab verifies the inner signature |
+  | Per-device symmetric MAC key, enrolled and wrapped to the homelab key, verified only at home (missed alternative raised by skeptics) | **Yes, PQ-secure today** | Yes | **Candidate complement** for D3. It adds enrollment state; a homelab compromise allows forgery, but that is already total compromise |
+  | Outer signature visible to the cloud | Yes | Yes | Not needed |
 
-- **Fields the record signature binds.** Extends CE §9; D1 SR-03/SR-13; A3 F8.
-  - **Content:** `dedup_id` (A1 text form, with epoch), `sha256`, `size` (true, unpadded).
-  - **Object:** staging `key`, `header_mac` of the **device-written** header (h0; A6 keeps it), `ct_len`, `prefix_len`, `profile`. `object: null` marks a dedup hit.
-  - **Device and order:** `device_id` (must equal the signing key's registered device), `device_seq`, `record_id` (random, the idempotency key).
-  - **Time:** `recorded_at` (device time, context only; SR-19).
-- **Why `header_mac` plus `ct_len` binds the object.** A payload is authenticated only under its file key, and the header MAC commits to the header under that key. An attacker who lacks the file key cannot pair a different payload with this header. The homelab still decrypts and matches `sha256`/`dedup_id`/`size` (SR-04), which is the binding of record to content.
-- **When to sign: at sealing, not at start.** This agrees with A3 F8.
-  - At upload start, persist the unsigned record fields in the sealed upload state (CE §8.1).
-  - Allocate `device_seq` and sign when the record first leaves the device.
-  - A restarted upload then leaves no sequence gap.
-  - This fixes the CE E4 concern ("metadata built from state that Complete deletes") without signing early.
-- **What receipts bind.** Bind `record_sha256`, the SHA-256 of the exact **signed plaintext record**, not the record's age ciphertext. It stays the same when records are batched (A3 F8) and when the homelab rewraps record headers (A6 F3). It reveals nothing guessable, because the record contains a random `record_id` and a signature. The receipt format belongs to A3; this is the A2 input.
-- **PQ signatures.**
-  - Forging a device signature needs a quantum computer *at verification time*, and the homelab verifies at ingest. So Ed25519 is adequate for v1 (inference, medium).
-  - Where this fails: anyone who later relies on *old* signatures as provenance evidence after a cryptographically relevant quantum computer exists.
-  - Keep signature agility: signed-note key names and type bytes (C15), and trust-bundle algorithm IDs (D2 Q9).
+- **Fields the signature binds:**
+  - **Content:** `dedup_id` (A1 text form, with epoch), `sha256`, `size` (true, unpadded), and `padded_len` if DR-A2-4 adopts padding.
+  - **Object: transport-neutral.** `h0_sha256` (SHA-256 of the device-written header bytes, including the MAC line), `header_mac`, `ct_len`, `prefix_len`, `profile`, `stanzas`. `object: null` marks a dedup hit.
+    - **The R2 staging key is not signed.** It was in the earlier draft and broke the settled transport-agnostic bundles. A3 Q10 keeps one `record_id` across USB→R2 fallback, and a per-upload key would produce a different signed record.
+    - The staging key or USB path maps to `h0_sha256` outside the signature (confirm with A4).
+  - **Device and order:** `device_id` (must equal the signing key's registered device), `device_seq`, `record_id` (random; the idempotency key).
+  - **Time:** `recorded_at` (device time, context only).
+- **What actually binds the record to the object** (C28 correction). The record's `header_mac` and `h0_sha256` are **pre-filters**: an attacker can copy a MAC line. The security checks are, in order:
+  1. verify the header MAC under the file key the homelab unwraps (E_OBJECT_HMAC);
+  2. check the STREAM final chunk and the length (E_BINDING_LENGTH / E_STREAM_*);
+  3. match SHA-256, dedup_id and size on the decrypted plaintext (E_CONTENT_MISMATCH, E_DEDUP_MISMATCH).
+- **When to sign:** at sealing. Allocate `device_seq` and sign when the record first leaves the device (agrees with A3 F8).
+- **Rollback of `device_seq`** (adversary skeptic). Restored app data or a disk snapshot can roll the counter back while the key survives. Honest records would then hit E_REPLAY_SEQ. Requirements for A3:
+  - E_REPLAY_SEQ for a registered device must become a **visible health issue**, not a silent drop;
+  - define seq-epoch recovery: the homelab returns the highest seen seq and the device jumps forward, or the device re-keys.
+- **Receipts** bind `record_sha256`, the digest of the exact signed plaintext record (A3 owns the format).
+- **Classical signatures for v1: design rule, not just reasoning.** C24 is **secondary only**. It holds only if:
+  - the homelab verifies each device signature **once**, at ingest;
+  - it persists its own **signed ingest verdict** (the receipt);
+  - that verdict is the durable authority. Catalog rebuilds (A6/ADR-0013), fixity (A7), provenance and late-USB policy must never re-verify device signatures as the source of authority.
 
-### F5. Resumability, truncation and random access with PQ headers
+  After a cryptographically relevant quantum computer exists, an exposed long-lived classical device key could be used to forge *new* uploads. Signature agility must therefore be exercised before then: signed-note 0xff types, and trust-bundle algorithm IDs.
+- **Which signature algorithm.** This is D3's call (ADR-0014). Any signed-note type registered for that device in the trust bundle is acceptable:
+  - **Ed25519 (0x01)** in software, wrapped by the keystore; or
+  - **ECDSA P-256 (0x02)**, which can be hardware-backed. The iOS Secure Enclave and Android StrongBox offer P-256; that is skeptic-reported and was not checked here.
 
-- **Layout.** Everything in CE §5–§8 holds with prefix_len = header + 16:
-  - 1,643 B with one PQ stanza, or 3,200 B with two;
-  - the part and chunk math is unit-tested for prefixes of 1–65,551 B;
-  - the sealed state persists the whole prefix, so it grows by about 1.5–3 KB per in-flight upload.
-- **Hedging.** Derive each stanza's 64-byte X-Wing encapsulation randomness from the CE hedge (HKDF over the CSPRNG seed with salt SHA-256(plaintext); new info labels such as `reliquary/v1/hedge/xwing-encap/<i>`). Feed it to the library through a seeded CSPRNG. Source reading confirms this is the only route: `hpke` 0.14.1 draws the 64 encapsulation bytes from the caller's `CryptoRng`, and its deterministic entry point is crate-private (C23). This is **not prototyped**; A2-S2 or a follow-up should cover it.
-- **Decrypt-side conformance (C22).** Any Rust code that *opens* `mlkem768x25519` stanzas (A8 device restores under D2 K-10; Rust homelab tools, if any) must reject a low-order X25519 share, either via `x-wing` ≥ 0.1.1 `DecapsulationKeyRejectNonContrib` (which `hpke` 0.14.1 does not expose) or by checking the X25519 output itself. Go age already does (CCTV). The client's *encrypt* path is unaffected.
-- **Truncation.** Keep CE §5.4 (valid-length classes) and §5.5 (authenticate the final chunk before serving any chunk). Error codes are specified in `object-format.md`, as A2-S4 requires.
-- **iOS (B4 K2–K4).**
-  - The keystream guard must hold **before** a part file is handed to `nsurlsessiond` (K2).
-  - The spool is bounded by BUD-TMP (K3).
-  - Sequential sources regenerate parts by re-reading (K4; CE §8.6 already measures this).
-  - None of these changes the format.
+  A software Ed25519 key can be exfiltrated by malware on a stolen device, which allows forging as that device until it is revoked.
+
+### F5. Resumability, truncation, random access and decoding
+
+- **Layout:** CE §5–§8 with prefix_len = header + 16 (1,643 / 3,200 B). Tested by A2-S2 (C27).
+- **Hedging:**
+  - each stanza's 64-byte X-Wing randomness comes from HKDF(seed, salt = SHA-256(plaintext), info = `reliquary/v1/hedge/xwing-encap/<i>`);
+  - it is injected through a seeded RNG that **asserts exactly 64 bytes are drawn** (C23; A2-S2);
+  - the header is built once and kept in the sealed state.
+
+  This assertion couples the encoder to `hpke`'s internal RNG use, so it is another reason to pin exactly.
+- **Truncation and order:** CE §5.4 (valid lengths) and §5.5 (authenticate the final chunk before serving a middle chunk). A2-S4 shows that the length binding and STREAM reject independently (C28).
+- **Restore output rule (new).** age releases authenticated non-final chunks before truncation is detected (A2-S3 obs. 5). Restore tools must therefore write to a temporary file and expose it only after the final chunk and the record's SHA-256 both verify (spec §8).
+- **Decoder conformance (C22 verified):**
+  - every Rust decoder rejects an all-zero X25519 shared secret in the X-Wing ciphertext share, in project code (A2-S3 strict decoder; A2-S4 D4 → E_OBJECT_HEADER);
+  - it must not rely on the crate default, which `x-wing` says "will be altered".
+- **Dependency pinning (major skeptic issue):**
+  - the client and any Rust homelab tool pin `hpke`, `x-wing` and `ml-kem` with `=`;
+  - CCTV `hybrid_*` and the project vectors gate every bump (G2);
+  - the spike pinned only `hpke` (`=0.14.1`), and its lock resolved `x-wing` 0.1.1 and `ml-kem` 0.3.2.
+- **Panic safety:** `hpke` 0.14.1 panics on X-Wing auth mode (C11). Server code must never reach auth paths and should treat a panic in a decoder as a reject.
+- **iOS (B4 K2–K4):** placement rules only; no format change.
 
 ### F6. Metadata record (provisional; follows A5)
 
-- **Envelope, recommended.** Plaintext = C2SP signed-note (C15):
-  - note text = one line of compact JSON, I-JSON profile: UTF-8, no duplicate keys, integers ≤ 2^53;
-  - then the device's Ed25519 signature line `— <device key name> <b64(keyID‖sig)>`.
-  - This is CE §9's shape (JSON line plus signature line) moved onto a published envelope that has key IDs and algorithm agility. It also matches what A3 F4 suggests for receipts.
-  - Padding goes *inside* the signed JSON (a `pad` field), because signed-note allows no trailing bytes.
-  - Records travel in **record batches**: one age file carrying N length-prefixed signed notes. This amortizes the PQ header (A3 F8).
-- **Fields, v0.** From H4 §6.1, plus:
-  - A1's text-form `dedup_id` with epoch, and a reserved `chunk_list`;
+- **Envelope.** The plaintext is a C2SP signed-note (C15): one line of I-JSON, then one signature line.
+  - Records travel in **record batches**: one age file carrying N length-prefixed signed notes, to amortize the PQ header.
+  - Each note stays a distinct **per-(device, file) signed unit**, so this matches ADR-0001's "encrypted metadata record per (device, file)" (logic skeptic).
+- **Relation to A4 manifests.** The device signature lives on the per-(device, file) record. A4 manifests and USB bundles should **reference record digests** (`record_sha256`) rather than re-sign the same facts. A4 decides, and this note asks it to avoid two signed structures.
+- **Fields v0:** H4 §6.1, plus:
+  - A1's text `dedup_id` with epoch, and a reserved `chunk_list`;
   - A3's `device_seq` and `record_id`;
-  - B4 K5's opaque `source_version` token, used in place of stat fields for PhotoKit;
-  - raw-bytes forms for locators and names (`*_raw_b64`), because paths are not always valid UTF-8;
-  - `content_encoding` (reserved; always `identity` in v1);
-  - `padded_len` (if DR-A2-4 adopts padding).
+  - B4's `source_version`;
+  - `*_raw_b64` path forms;
+  - `content_encoding` (`identity` in v1);
+  - `padded_len`;
+  - the transport-neutral object block (§F4).
 - **Evolution rules:**
-  - `schema_version` is an integer; `kind` is an open set.
-  - Unknown fields are preserved and ignored.
-  - A field's meaning never changes within a `v`.
-  - Plugin-defined `source_hints` are namespaced by plugin ID.
-- **Alternative: deterministic CBOR** (CDE, S22).
-  - For: native byte strings for raw paths and IDs (A1 prefers the 35-byte binary ID in CBOR); smaller.
-  - Against: heirs need a decoder; no published signing envelope was checked in this run (COSE was not read, because the primary source was blocked).
-  - The analyst leans JSON-in-signed-note, because the break-glass tool (D2/E7) must read names anyway and text is easiest to inspect decades later. **Low-medium confidence; revisit after A5.**
+  - integer `v`; an open `kind`;
+  - unknown fields preserved and ignored;
+  - no change of meaning within a `v`;
+  - plugin `source_hints` namespaced.
+- **Alternative: deterministic CBOR (CDE).** Revisit after A5 and the D2/E7 break-glass requirements. The analyst leans JSON for heir readability. Low-medium confidence.
 
 ### F7. Length hiding and compression
 
-- **Padding: Padmé, conditional on F3-S1** (DR-A2-4).
-  - Mechanism: append zero bytes to the plaintext before encryption.
-  - IDs and SHA-256 stay over the unpadded bytes (Borg precedent, F3 C9).
-  - Resume stays byte-identical, because zero padding is deterministic.
-  - Every cloud-visible size field must become the padded length: receipts, presence (dedup_id, size) and SR-24 declarations (F3 C10).
-  - The break-glass kit must truncate to the size given in the record.
-- **Compression:** none in v1.
-  - Photos and videos, the main keepsakes, are already compressed. This is an expectation; A5 or the E1 corpus should confirm the byte mix.
-  - Compression would stop stock `age -d` from giving back the original file, and would add a parser to the ingest path.
-  - Reserve `content_encoding` in the record so documents can gain zstd later without a format break.
+- **Padmé, conditional on F3-S1 (DR-A2-4):**
+  - zero padding before encryption;
+  - IDs and SHA-256 over the unpadded bytes;
+  - every cloud-visible size padded (receipts, presence checks, SR-24, multipart layout).
+- **Trade-off added in review.** Stock `age -d` then returns the file plus up to about 3.1 % trailing zeros. Recovery needs the true size from the record.
+  - The adversary skeptic notes that some formats break with that much trailing data. Their example: ZIP readers look for the end-of-central-directory record only near the end of the file. That is skeptic-reported and was not checked against a primary source here.
+  - If the record or its batch is lost, an heir has no true size.
+  - Options: accept this, or also carry the true length somewhere recoverable without the record (to D2-S3 and E7).
+- **Size buckets** are listed as an option in DR-A2-4. F3 discussed them.
+- **No compression in v1.** `content_encoding` is reserved.
 
 ### Alternatives compared
 
 | Option | Fit with settled requirements | Pros | Cons | Evidence |
 |---|---|---|---|---|
-| **age v1, mlkem768x25519 only (recommended)** | Fits: encrypted to the homelab key; devices cannot read | Stock Go age ≥ 1.3.0; C2SP spec; CCTV hybrid vectors; PQ | 1.6–3.2 KB header; client must implement the X-Wing stanza; KEM referenced from an I-D | C4–C8, C13, C14 |
-| age v1, X25519 (CE today) | Fits | 168 B header; any age version; Rust crate decrypts | Harvest-now exposure of keep-forever data | C6, F3 Q7 |
-| age v1, mixed PQ + X25519 | — | — | Spec SHOULD NOT; Go age refuses | C5 |
-| HPKE (base/auth) + custom STREAM | Fits | Full control | No stock CLI; own spec; Auth mode unavailable with PQ | C10, CE §3 |
-| Tink Hybrid (X-Wing) + Streaming AEAD | Fits | Google-maintained; nOAE definition | No stock CLI; symmetric streaming layer needs its own key wrap; release support for X-Wing unverified; Swift friction (S23) | C17 |
-| libsodium sealed box + secretstream (Ente) | Fits | Audited in Ente; mobile-proven | No PQ; chained state, no documented seek; no stock CLI | C16, C20 |
-| saltpack signcryption | Fits | Built-in sender authentication | No PQ; the DH-based authentication does not carry over to a KEM | C19 |
-| OpenPGP RFC 9580 (+ PQC draft) via Sequoia/GnuPG | Fits | Very widespread tooling | PQC for OpenPGP still a draft (status unverified); large surface; not evaluated in depth | S21 |
+| **age v1, `mlkem768x25519` only (recommended)** | Fits | Stock Go age ≥ 1.3.0, typage, kage; C2SP spec; CCTV hybrid vectors; interop verified | 1.6–3.2 KB header; own stanza code; KEM from an I-D; X-Wing low-order behaviour not yet fixed at CFRG; large relative cost for small objects | C4–C8, C13, C22, C25, C26 |
+| age v1, X25519 (CE today) | Fits | 168 B header; any age version | Harvest-now on transit copies and device keys | C6; F3 §7 |
+| age v1 with `mlkem768p256tag` for a hardware R (with `mlkem768x25519` elsewhere) | Fits (both PQ, so mixing is allowed) | Hardware-held recovery identity | Stanza size not measured; Rust `tagpq` is encrypt-only; hardware support unevaluated | C7; D2/OD-08 |
+| age v1, mixed PQ + X25519 | — | — | SHOULD NOT; Go refuses; typage does not refuse | C5, C29 |
+| HPKE base/auth + custom STREAM | Fits | Full control | No stock CLI; Auth unavailable with PQ | C10 |
+| Tink Hybrid + Streaming AEAD | Fits | Google-maintained | No stock CLI; separate key wrap; X-Wing release unverified | C17 |
+| libsodium sealed box + secretstream | Fits | Audited (Ente) | No PQ; no documented seek | C16 |
+| saltpack | Fits | Built-in sender authentication | No PQ; DH authentication does not carry over to KEMs | C19 |
+| OpenPGP RFC 9580 + PQC draft | Fits | Widespread tooling | PQC draft status unverified; not evaluated in depth | S21 |
 
 ### Similar work and lessons
 
 | Project or paper | What they do | Borrow or avoid | Source |
 |---|---|---|---|
-| age / C2SP + CCTV | Spec plus a language-neutral vector kit | **Borrow:** publish `object-format.md` + vectors, including encrypt-direction vectors from injected randomness | S1, S4 |
-| Duplicacy #638 | KDF code diverged from the docs | **Avoid:** CI must run the vectors against every implementation | S23 |
-| Ente | Per-file secretstream key, 4 MiB chunks, permanent chunk size | **Borrow** per-file keys (age already does this); **note** chunk size is forever | S17 |
-| rclone crypt | 64 KiB secretbox chunks, no final marker; no plaintext checksum (#1712) | **Avoid** a missing final flag; **borrow** a plaintext digest inside the signed record | S18, S23 |
-| bupstash, restic #187 | Put-only keys; asymmetric crypto only helps with append-only storage | Confirms the ADR-0001 pairing | S19, S23 |
-| Borg 1 / Borg 2 | Counter-nonce reuse after rollback; Borg 2 uses session keys and AAD type binding | **Avoid** persistent counters; **borrow** binding type and version into authenticated data (our record `type`/`v`) | S20, S23 |
-| saltpack | Sender authentication in the format | Not applicable to KEM recipients | S16 |
-| age #59 | "Anyone can replace the file": age has no sender authentication | Motivates F4 | S23 |
+| age / C2SP + CCTV | Spec plus a vector kit | **Borrow:** spec + encrypt-direction project vectors (done in A2-S3) | S1, S4 |
+| Duplicacy #638 | Code diverged from the docs | **Avoid:** CI runs vectors on every implementation | S23 |
+| Ente | Per-file keys; permanent chunk size | Chunk size is forever | S17 |
+| rclone crypt | No final marker; no plaintext checksum | **Avoid** both | S18, S23 |
+| bupstash, restic #187 | Put-only keys | Confirms ADR-0001 | S19, S23 |
+| Borg 1 / 2 | Nonce reuse after rollback; AAD type binding | **Avoid** counters; **borrow** type/version binding | S20, S23 |
+| saltpack | Sender authentication in the format | Not applicable to KEMs | S16 |
 
 ### Tools and libraries
 
 | Name | Purpose | Licence | Maturity | Source |
 |---|---|---|---|---|
-| Go `filippo.io/age` + age-inspect, age-plugin-pq | Homelab decrypt and rewrap; heir tool; interop oracle | BSD-3-Clause (not re-checked) | v1.3.2, 2026-08-29; go.mod needs Go 1.25 | S2 |
-| Rust `age` | Decrypt side (X25519 only) | MIT/Apache-2.0 | 0.12.1, 2026-07-14; no PQ identity | S5 |
-| Rust `hpke` (RustCrypto) | X-Wing stanza encoder and decoder in the client core | MIT/Apache-2.0 | 0.14.1; interop unverified | S6 |
-| Rust `x-wing`, `ml-kem` | X-Wing KEM building blocks | MIT/Apache-2.0 (crate ships LICENSE-MIT and LICENSE-APACHE) | 0.1.1, 2026-10-01 ("draft 06"; adds rejecting decapsulation key); ml-kem 0.3 | S7, S26 |
-| typage (`age-encryption`) | TypeScript age with hybrid PQ; A2-S3 third implementation | BSD-3-Clause (not re-checked) | 0.3.1, 2026-08-28 | S12 |
-| CCTV age vectors | Conformance (decrypt direction) | Not checked (README: copying allowed "without attribution") | 2026-09-25 | S4 |
-| ed25519-dalek | Device record signatures | BSD-3-Clause (not re-checked) | not checked in this run | — |
-| kage (Kotlin) | Possible Android-native reader | — | **PQ status unknown** (not reached) | — |
+| Go `filippo.io/age` + age-inspect | Homelab rewrap; heir tool; interop oracle | BSD-3-Clause (not re-checked) | v1.3.2, 2026-08-29 | S2 |
+| Rust `hpke` (RustCrypto) | X-Wing stanza encode/decode in the client core | MIT/Apache-2.0 | 0.14.1; **interop verified** (C25); pre-1.0; panics on X-Wing auth | S6, SP3 |
+| Rust `x-wing`, `ml-kem` | KEM building blocks | MIT/Apache-2.0 | 0.1.1 (2026-10-01), ml-kem 0.3.2; **pin exactly** | S26 |
+| Rust `age` | X25519 decrypt only | MIT/Apache-2.0 | 0.12.1; no PQ | S5 |
+| typage | TS age with PQ | BSD-3-Clause (not re-checked) | 0.3.1; writes mixed headers | S12, SP3 |
+| kage | Kotlin age with native PQ | not checked | 0.8.0; passes CCTV (weaker runner) | S29, SP3 |
+| CCTV age | Decrypt-direction conformance | README allows copying | 2026-09-25 | S4 |
+| ed25519-dalek | Record signatures (spike) | not checked | as locked in the spike | — |
 
 ## Spikes
 
-Placeholder: a separate spike runner is running these in parallel. Results will be merged here.
+All four ran in the cloud container on synthetic data (`SYN → results`), on x86 Linux and **not on a phone**. R2 and the keystore were simulated by local files; this is emulated, not real R2. The spike code is in `spikes/A2-S2/` and is shared by all four.
 
 | Spike | Hypothesis | Pass → / fail → (decision) | Exec tag | Budget IDs | Data class | Status | Result |
 |---|---|---|---|---|---|---|---|
-| A2-S1 Throughput and energy, X25519 vs PQ | PQ adds a header ≤ 3 KB per object and ≤ 10 % throughput loss on a low-end phone; encryption is never the bottleneck against a 100 Mbit uplink | Pass → PQ from day one (DR-A2-1); fail → X25519 now plus a migration plan. **Note:** the analyst measured 3,184 B for two PQ stanzas, which fails the header limit as written; one stanza (1,627 B) passes (DR-A2-2) | CT + OL | BUD-HASH, BUD-BAT-S | SYN → results | (spike runner) | (spike runner) |
-| A2-S2 Kill-and-resume, 50 random kills | Every object decrypts to the exact SHA-256, at most one segment is re-encrypted per kill, no (key, nonce) reuse, no file key survives commit. Should include a PQ-header variant and the X-Wing hedging | Pass → CE resume mechanism in ADR-0007; fail → temp-file ciphertext spool | CT | BUD-TMP | SYN → results | (spike runner) | (spike runner) |
-| A2-S3 Interop | Rust output (with the X-Wing stanza) decrypts with Go age ≥ 1.3.0 and typage, and vice versa; 100 % of CCTV vectors (incl. `hybrid_*`) and project vectors pass. **Expect `hybrid_low_order` to fail on a plain `hpke` 0.14.1 decoder (C22)**; record it, then re-run with a rejecting decapsulation | Pass → Rust `hpke` X-Wing in the encoder; fail → F2 fallback (X25519 on device, PQ rewrap at home) | CT | — | SYN → results | (spike runner) | (spike runner) |
-| A2-S4 Forgery and truncation | A forged object plus record (attacker holds only the public key) and a dropped final chunk are both rejected before any catalog write, with specific error codes | Pass → F4 binding set; fail → add an outer binding | CT | — | SYN → results | (spike runner) | (spike runner) |
-
-The measurement in M1 used Go age binaries on an x86 container VM, not a phone.
+| A2-S1 Throughput and energy, X25519 vs PQ | Encryption is never the bottleneck vs a 100 Mbit uplink; PQ header ≤ 3 KB per object; ≤ 10 % PQ loss on a low-end phone; BUD-BAT-S recorded | Pass → PQ from day one (OD-06); fail → X25519 now plus a migration plan (§F2 fallback) | CT + OL | BUD-HASH, BUD-BAT-S | SYN → results | **CT ran; OL kit-ready.** Overall: **inconclusive** | **Header:** 1 PQ = 1,627 B (pass); 2 PQ = 3,184 B (**fail** as written); X25519 168 B; record file 2,683 B. **x86 throughput:** never below 70.9 MB/s (> 12.5 MB/s). **PQ×1 loss:** 52 % @16 KiB, 37 % @100 KiB, 15 % @1 MiB, 5 % @4 MiB (C26). **Phone loss and BUD-BAT-S: no result.** Evidence: [`spikes/A2-S1/`](../../spikes/A2-S1/README.md). Kit: [`docs/research/kits/A2-S1/`](kits/A2-S1/README.md) (`run-android.sh`, soak workload) |
+| A2-S2 Kill-and-resume, 50 random kills | With PQ headers: exact SHA-256; ≤ 1 segment re-encrypted per kill; no (key, nonce) reuse; no file key survives commit | Pass → CE journaled resume in ADR-0007; fail → temp-file spool | CT | BUD-TMP | SYN → results | **Pass** | 50 kills (1 stanza, 127/127 checks) + 20 kills (2 stanzas, 63/63). Max 1 part per kill. Wire consistency; 12/12 edit-after-kill refusals; 0 key hits; no temp ciphertext. Limits: kills only in start/resume; parts of 1–4 chunks. Evidence: [`spikes/A2-S2/evidence/`](../../spikes/A2-S2/evidence/README.md) |
+| A2-S3 Interop | Rust `hpke` X-Wing output ↔ Go age ≥ 1.3.0, typage, kage; 100 % CCTV + project vectors; `hybrid_low_order` predicted to fail on plain `hpke` | Pass → Rust `hpke` X-Wing in the encoder; fail → F2 fallback | CT | — | SYN → results | **Pass** | 853/853 matrix. CCTV: Go 147/147; Rust strict, typage and kage 85/85 applicable. Rust **lax** decoder fails `hybrid_low_order` and `hybrid_identity`, as predicted. 15 project vectors are deterministic and pass 15/15 everywhere. typage writes mixed headers. kage 0.8.0 has native PQ. Evidence: [`spikes/A2-S3/`](../../spikes/A2-S3/README.md) (its "x-wing 0.1.0" should read 0.1.1, per the lock file) |
+| A2-S4 Forgery and truncation | A forged object + record (attacker holds only the public key) and a dropped final chunk are rejected before any catalog write, with specific codes | Pass → F4 binding set; fail → outer binding | CT | — | SYN → results | **Pass** | 30/30. Stock `age -d` accepts the forgery (exit 0). 26 attacks rejected with their own codes and an unchanged store; an honest replay is idempotent. `header_mac` in the record is only a pre-filter. Not covered: a registered device claiming another device's dedup_id with the correct sha256/size (A3/D4), and USB→R2 fallback (to add once the staging key is dropped from the record). Evidence: [`spikes/A2-S4/`](../../spikes/A2-S4/README.md) |
 
 ## Conflicts with settled text
 
-None that contradict. For the owner's awareness:
-
-1. ADR-0001 §2 says content is encrypted to "the homelab public key (e.g. X25519 / age)". `mlkem768x25519` fits the "e.g.", and the singular "key" is extended by a recovery recipient. Both points are also recorded in D2's conflicts section.
-2. Device-signed records and homelab-signed receipts are already queued as OD-04 (superseding details of ADR-0001 §4).
-3. The A2-S1 pass rule ("PQ header ≤ 3 KB per object") is A2-local (budgets.md: "Keep local"). Two PQ stanzas fail it. This note does **not** change the threshold. It asks the owner through DR-A2-2.
+- None that contradict CLAUDE.md, ADR-0001 or ADR-0002.
+- **Avoided conflict.** The earlier draft bound the R2 staging key in the signed record. That would have broken the settled transport-agnostic bundles ("the same encrypted objects and manifest travel via R2, via USB drive…"). It is now replaced with transport-neutral fields (§F4).
+- For awareness:
+  - ADR-0001's "the homelab public key (e.g. X25519 / age)" admits `mlkem768x25519` and an added recovery recipient.
+  - Device-signed records and homelab-signed receipts are OD-04.
+  - The A2-S1 header and throughput rules are A2-local (budgets.md "Keep local"). This note does not change them, and it asks how they aggregate (DR-A2-1, DR-A2-2).
 
 ## Open questions
 
-1. **Rust X-Wing interop.** Does `hpke` 0.14.1 (on `x-wing` 0.1.0, "draft 06") produce stanzas that Go age 1.3.2 opens, and does it decrypt the CCTV `hybrid_*` vectors? Owner: A2-S3 (spike runner). Needed by Gate A.
-2. **Phone cost of X-Wing encapsulation** (low-end Android, iPhone), including small-file-heavy libraries. Owner: A2-S1 OL kit. Needed by Gate A.
-3. **Recipient placement**, P1 vs P2 (DR-A2-2). It couples to OD-07 (A6) and OD-08 (D2). A joint A2/A6/D2 review is needed before ADR-0007/0008/0012 drafts.
-4. **Is a 128-bit file key adequate against quantum key search** for keep-forever data? The age spec fixes 16 bytes and derives a 256-bit payload key. No primary source on this was read in this run (NIST blocked). Skeptic 1 should find one.
-5. **Status of draft-ietf-hpke-pq**, and whether a later revision changes MLKEM768-X25519 bytes. Datatracker was blocked. Owner: H1 source escalation.
-10. **CFRG's choice on non-contributory X25519 in X-Wing** (C22), and whether it reaches age's `mlkem768x25519` definition. The CFRG mail archive was blocked. Expected impact is decoder strictness only. Owner: H1 (source), A2 (track before Gate A).
-6. **Record encoding:** JSON-in-signed-note vs deterministic CBOR, after A5's item model and the E7/D2 break-glass tool requirements. Owner: A2 Wave 2.
-7. **kage PQ support**, and which Tink release first ships X_WING. Relevant only if a non-Rust client is chosen (ADR-0003). Owner: T1/B-track.
-8. **Device signing key storage:** Ed25519 support in Android Keystore and iOS Secure Enclave was not checked. The Secure Enclave is P-256. Owner: D3.
-9. **Error-code table and strict parser limits** (maximum header size, maximum stanza count, maximum record size) for `object-format.md`. The values are spec parameters to propose in the next stage, not budgets.
+1. **Phone cost of X-Wing** (low-end Android; iPhone later), including small-file-heavy libraries and BUD-BAT-S. Owner: A2-S1 OL kit. Needed by Gate A.
+2. **How the A2-S1 rules aggregate:** "≤ 10 % loss" (per object, at the typical size, or byte-weighted over the E1 mix) and "≤ 3 KB" (per object or per stanza). Owner: owner/H1.
+3. **Recipient placement:** P1-E vs P2′ (DR-A2-2), jointly with OD-07 (A6) and OD-08 (D2). P1-E's escrow needs D2 review.
+4. **Is a 128-bit age file key adequate against quantum key search** for keep-forever data? No primary source was read (NIST blocked). Owner: H1 source escalation; F3.
+5. **draft-ietf-hpke-pq -04/-05 contents vs -03** for MLKEM768-X25519 bytes. Datatracker blocked. Owner: H1.
+6. **CFRG's choice on non-contributory X25519 in X-Wing**, and whether it reaches age's definition. Mail archive blocked. Owner: H1, with A2 tracking before Gate A.
+7. **Record encoding:** JSON-in-signed-note vs CBOR. Owner: A2, Wave 2 (after A5).
+8. **Device signing-key algorithm and storage** (Ed25519 software vs P-256 hardware; symmetric MAC complement). Owner: D3.
+9. **Which Tink release ships X_WING:** relevant only if ADR-0003 leaves a Rust core. kage is answered (0.8.0 has PQ). Owner: T1/B-track.
+10. **Strict parser limits.** Proposed in `object-format.md`: header ≤ 16 KiB, ≤ 16 stanzas, record ≤ 1 MiB, as in the spike. Confirm in Wave 2 (G2 fuzzing).
+11. **`mlkem768p256tag` for a hardware-held R:** stanza size, hardware support and Rust decrypt support. Owner: D2 (OD-08).
+12. **A2-S4 gaps:** USB→R2 fallback with the same `record_id`; cross-device dedup_id claims. Owners: A2 (re-run once the record change lands), A3/D4.
 
 ## Recommendation
 
-Adopt for the ADR-0007 draft:
+For the ADR-0007 draft (`docs/adr/0007-object-envelope-and-metadata-record.md`):
 
-1. **Construction:** standard age v1 objects from the client's own encoder, with CE's journaled resume (CE D-1). Restrict the profile to a single stanza type per object: no scrypt, plugin or armor. Use a generic multi-stanza header parser with strict limits.
-2. **PQ from day one (DR-A2-1):** every stanza on every object and record is `mlkem768x25519`. This is conditional on A2-S3 showing Rust↔Go interop. If that fails, take the F2 fallback. Every decoder the project ships must pass all CCTV `hybrid_*` vectors, including the low-order rejection (C22).
-3. **Recipients (DR-A2-2):** the device writes the ingest stanza only; the homelab rewraps to {archive X, recovery R} at ingest and keeps h0. Pending the joint decision with D2 and A6.
-4. **Sender authentication:** device Ed25519 signature on a signed-note record inside the encryption, binding the §F4 fields. Allocate `device_seq` and sign at sealing time. Receipts bind `record_sha256`. No HPKE Auth or PSK mode.
-5. **Truncation and random access:** CE §5.4 and §5.5 rules, unchanged.
-6. **Length hiding (DR-A2-4):** Padmé zero padding if F3-S1 passes, with every cloud-visible size field switched to the padded size. No compression in v1.
-7. **Deliverables next stage:** `docs/spec/object-format.md` with encrypt-direction project vectors (injected randomness) and decrypt-direction CCTV conformance.
+1. **Construction:** standard age v1 objects from the client's own encoder with CE's journaled resume (C1, C13, C25, C27).
+   - Profile: only `mlkem768x25519` stanzas; no scrypt, plugin, armor or grease.
+   - Use a strict multi-stanza parser.
+   - Enforce the profile **at ingest**, because not every encoder does (C29).
+2. **PQ from day one (OD-06): recommended**, resting on C4, C5, C6, C7, C13 (verified) and A2-S3. It is now **conditional only on the A2-S1 OL phone result**, and on the owner's reading of how the 10 % rule aggregates. If it fails, use the F2 fallback.
+3. **Recipients (DR-A2-2):**
+   - The format allows 1–N PQ stanzas.
+   - The **homelab writes the stored {X, R}** in every recommended option, with pkR pinned from the owner-signed trust bundle and a sampled R drill.
+   - The provisional lean is **P1-E** (devices write {I_e}; retired ingest keys are escrowed to R), with **P2′** as the alternative. The owner decides with OD-07 and OD-08.
+   - State that rewrap is not revocation.
+4. **Sender authentication:** a device signature on a signed-note record inside the encryption.
+   - It binds content, the **transport-neutral** object block, device, sequence and time, and is signed at sealing.
+   - Receipts bind `record_sha256`.
+   - The homelab's signed verdict is the durable authority (C10, C12 verified; C24 secondary only, with that rule).
+   - The algorithm is any trust-bundle-registered signed-note type (Ed25519 or P-256 per D3).
+   - No HPKE Auth or PSK mode.
+5. **Truncation, random access and restore:** CE §5.4/§5.5, plus restore output exposed only after full verification.
+6. **Dependencies:** exact pins for `hpke`, `x-wing` and `ml-kem`; the low-order rejection in project code; CCTV + project vectors in CI on every bump.
+7. **Length hiding (DR-A2-4):** Padmé (or buckets) only if F3-S1 passes. No compression in v1.
+8. **Deliverables:** ADR-0007 (Proposed, partial) and `docs/spec/object-format.md` (Draft), referencing the A2-S3 project vectors until they move under `docs/spec/`.
 
 **What would change this:**
-
-- A2-S3 interop failure: X25519 on devices, PQ at home.
-- A2-S1 showing PQ encapsulation is a phone bottleneck (unlikely for a per-object cost, but unmeasured).
-- OD-07 choosing a posture without rewrap: then R must be written by the homelab anyway, or P2/P3 accepted knowingly.
-- A5 needing binary-heavy records: then CBOR.
+- the phone shows PQ cost matters → F2 fallback;
+- OD-07 picks a posture with no rewrap → the homelab must still add R, or P2 is accepted knowingly;
+- D2 rejects the escrow → P2′;
+- A5 needs binary-heavy records → CBOR;
+- a later hpke-pq or CFRG revision changes the MLKEM768-X25519 bytes before Gate A → re-run A2-S3.
 
 ## Decision requests
 
 ### DR-A2-1: Post-quantum recipients from day one (this is OD-06)
-- **Needed by:** Gate A (one-way door #2), before the first real ingest.
-- **Evidence:** §F2; C4–C8, C13, C21; F3 Q7; D2 F3.
-- **Options:**
-
-  | Option | What it means for the family | Cost | Reversibility | Risks |
-  |---|---|---|---|---|
-  | A. PQ (`mlkem768x25519`) for all stanzas now (recommended) | Nothing visible | +1.5–3 KB per object (≈ 0.07–0.14 % of bytes); custom Rust stanza code; heirs need age ≥ 1.3.0 | Moving back to classic is possible but pointless | KEM referenced from an I-D; Rust interop unproven until A2-S3 |
-  | B. X25519 now; PQ later by rewrap | Nothing visible | Smallest header; later rewrap of stored headers (about 10 TB of I/O unless done at ingest) | Stored copies can be upgraded; **transit copies already recorded cannot** | Harvest-now on every staged object and USB stick until the switch |
-  | C. Mixed PQ + X25519 | — | — | — | Forbidden by the spec's SHOULD NOT and refused by Go age |
-
-- **Recommendation:** A, gated on A2-S3.
-- **Touches settled text:** no ("e.g. X25519 / age").
-- **If no decision by the deadline:** draft ADR-0007 with A and the fallback written in. No production keys are generated before acceptance.
-
-### DR-A2-2: Where the recovery stanza is written, and the A2-S1 header limit
-- **Needed by:** Gate A, decided together with OD-07 (A6) and OD-08 (D2).
-- **Evidence:** §F3; C6, C9, C21; D2 Q2; A6 F3.
-- **Options:**
-
-  | Option | What it means for the family | Cost | Reversibility | Risks |
-  |---|---|---|---|---|
-  | P1. Device writes {ingest}; the homelab writes {archive, recovery} at ingest (recommended) | Nothing visible | 1,627 B device header (passes A2-S1) | Can move to P2 later with a client update | Objects still in transit when both device and homelab are lost cannot be recovered (AR-07); ingest keys kept until the pipeline drains |
-  | P2. Device writes {ingest, recovery} (D2 draft) | Nothing visible | 3,184 B header (fails A2-S1 as written) | Can drop R later with a client update | Recovery stanzas cannot be verified at ingest (C9); a faulty client could silently break recovery if they are the only copy |
-  | P3. P2 plus disclosed encapsulation randomness so the homelab checks R | Nothing visible | As P2, plus custom crypto | As P2 | Needs expert review |
-
-- **Recommendation:** P1. If the owner prefers P2, also confirm that A2-S1's limit is meant *per stanza*, and still require a homelab-written R on stored objects.
-- **Touches settled text:** no.
-- **If no decision by the deadline:** draft ADR-0007 so the format allows 1–N PQ stanzas (both options fit), and leave placement to ADR-0008/0012.
-
-### DR-A2-3: Sender authentication by a device-signed record (not HPKE Auth), with signature agility
 - **Needed by:** Gate A (one-way door #2).
-- **Evidence:** §F4; C10–C12, C15.
+- **Evidence:** §F2; C4–C8, C13, C22 (verified); C25–C27 (spike measurements); C30 (arithmetic).
 - **Options:**
 
   | Option | What it means for the family | Cost | Reversibility | Risks |
   |---|---|---|---|---|
-  | A. Ed25519 device signature on a signed-note record inside the encryption; receipts bind the record digest (recommended) | Nothing visible | Tiny | New signature types can be added (signed-note agility) | A compromised device can still sign junk as itself (bounded by D1 SR-10/SR-24) |
-  | B. HPKE Auth mode | — | — | — | Not available with PQ KEMs; not stock age |
-  | C. Hybrid Ed25519 + ML-DSA signatures now | Nothing visible | Larger records (signed-note warns PQ signatures "can be up to nearly 5kB", S11; exact ML-DSA sizes not read in this run); library maturity unchecked | — | Premature; verification happens at ingest, before any quantum computer |
+  | A. PQ for all stanzas now (recommended, if the phone cost is acceptable) | Nothing visible | +1.5 KB per transit object; stored {X, R} + h0 ≈ 4.8 KB (0.1–1 % of bytes depending on mean size); x86: +77 µs per stanza per object; phone unmeasured | Moving back is possible but pointless | KEM from an I-D; X-Wing low-order behaviour still open at CFRG; pre-1.0 Rust crates |
+  | B. X25519 on devices; PQ rewrap at home | Nothing visible | Smallest device cost | Stored copies upgradeable; **recorded transit copies are not** | Harvest-now on every staged object and USB stick |
+  | C. Mixed PQ + X25519 | — | — | — | SHOULD NOT; Go refuses |
 
-- **Recommendation:** A.
-- **Touches settled text:** no; this refines OD-04's "device-signed manifests".
-- **If no decision by the deadline:** assume A.
+- **Also asked:** how A2-S1's "≤ 10 % loss on a low-end phone" aggregates. On x86 the per-object loss is already 37–52 % below 100 KiB, while at photo sizes it is 5–15 %. Choose one: per object, at the typical object size (the kit's reading), or byte-weighted over the E1 mix.
+- **Recommendation:** A, once the A2-S1 OL result is in under the agreed reading; otherwise B.
+- **If no decision by the deadline:** draft with A and the fallback written in. No production keys are generated before acceptance.
 
-### DR-A2-4: Length hiding with Padmé (conditional on F3-S1)
-- **Needed by:** Gate A, because padding changes object lengths and cloud-visible size fields.
+### DR-A2-2: Who writes the recovery stanza (H1 to number; couples OD-07, OD-08)
+- **Needed by:** Gate A.
+- **Evidence:** §F3; C2 (verified), C6 (verified), C9 (secondary only); D2 §F2; A6 F3.
+- **Options:**
+
+  | Option | What it means for the family | Cost | Reversibility | Risks |
+  |---|---|---|---|---|
+  | P1-E. Device writes {I_e}; the homelab writes {X, R}; retired I_e escrowed to R (recommended, provisional) | Nothing visible | 1,627 B device header; escrow artifacts per epoch | Can move to P2′ with a client update | New, unreviewed; the escrow must survive (keep it off-box with the recovery kit) |
+  | P2′. Device writes {I_e, R}; the homelab rewrites stored headers to {X, R} | Nothing visible | 3,184 B and one more encapsulation per object (phone cost unmeasured) | Can drop R later | Transit R stanzas unverified (fallback use only) |
+  | P1. As P1-E, but retired I_e destroyed | Nothing visible | Smallest | — | Late bundles after destruction are unreadable unless re-sealed or re-uploaded |
+  | P2. Device R as the stored recovery path | Nothing visible | 3,184 B | — | The stored R is never verified (C9) |
+
+- **Also asked:** is the "≤ 3 KB" rule per object or per stanza? It is a cost note here, not the driver.
+- **Recommendation:** P1-E, or P2′ if D2 prefers self-contained transit objects. In every case: homelab-written stored R, pkR pinned from the trust bundle, a sampled R drill, short I_e epochs, and I_e kept out of backups.
+- **If no decision by the deadline:** ADR-0007 allows 1–N PQ stanzas, and placement goes to ADR-0008/0012.
+
+### DR-A2-3: Sender authentication by a device-signed record (refines OD-04; H1 to number)
+- **Needed by:** Gate A.
+- **Evidence:** §F4; C10, C11, C12 (verified); C24 (secondary only); C28.
+- **Options:**
+
+  | Option | What it means for the family | Cost | Reversibility | Risks |
+  |---|---|---|---|---|
+  | A. Classical signed-note signature (Ed25519 or ECDSA P-256, per D3) on the record inside the encryption; receipts bind the record digest; the homelab verdict is durable authority (recommended) | Nothing visible | Tiny | signed-note type agility | Relies on reasoning (C24) plus the verify-once rule; a software key can be exfiltrated |
+  | B. A plus a per-device symmetric MAC key verified only at home | Nothing visible | Enrollment state | Removable | Adds key management (D3) |
+  | C. Hybrid Ed25519 + ML-DSA now | Nothing visible | Larger records (up to ~5 kB per S11) | — | No general ML-DSA signed-note type yet (only a 0xff extension); premature |
+  | D. HPKE Auth mode | — | — | — | Not available with PQ KEMs |
+
+- **Recommendation:** A, with the verify-once design rule written into ADR-0007/0009/0013. B is worth D3's evaluation if the owner wants no reliance on C24.
+- **If no decision by the deadline:** A with Ed25519.
+
+### DR-A2-4: Length hiding (conditional on F3-S1; H1 to number)
+- **Needed by:** Gate A.
 - **Evidence:** §F7; F3 C7–C10; CE D-7.
 - **Options:**
 
   | Option | What it means for the family | Cost | Reversibility | Risks |
   |---|---|---|---|---|
-  | A. Padmé zero padding (recommended if F3-S1 shows most sizes unique and cost < 3 %) | The break-glass tool must trim files to their true size | ≤ 3.1 % storage and upload for files ≥ 64 KiB (arithmetic) | Can be switched off for new objects; old objects stay padded | Useless unless every cloud-visible size field is padded too |
-  | B. No padding (CE D-7 default) | None | None | Can adopt later for new objects only | Exact sizes fingerprint files (AR-05) |
+  | A. Padmé zero padding (if F3-S1 passes) | Heirs must trim to the true size; stock `age -d` output has trailing zeros | ≤ 3.1 % for files ≥ 64 KiB (arithmetic) | Off for new objects only | Useless unless every cloud-visible size is padded; some formats may break with trailing zeros (skeptic-reported); depends on the record surviving |
+  | B. Size buckets | As A | Depends on bucket design (not computed) | As A | Coarser or finer leakage than Padmé (F3) |
+  | C. No padding | None | None | Can adopt later for new objects | Exact sizes fingerprint files (AR-05) |
 
-- **Recommendation:** A if F3-S1 passes; otherwise B, with AR-05 accepted.
-- **Touches settled text:** no.
-- **If no decision by the deadline:** B, and reserve `padded_len` in the record so A can be added later.
+- **Recommendation:** A if F3-S1 passes; otherwise C, with `padded_len` reserved.
+- **If no decision by the deadline:** C.
 
 ## Hand-offs
 
 | To | What | Why |
 |---|---|---|
-| D2 (ADR-0008), A6 (ADR-0012) | DR-A2-2 placement; C9 (device-written R cannot be verified); keep h0; stanza-count check per trust-bundle epoch | Recipient set and posture must agree |
-| A3 (ADR-0009) | Seq and signature at sealing (agree with F8); receipts bind `record_sha256`; record-batch framing; padded sizes in receipts | §F4, §F6, §F7 |
-| A4 (ADR-0011) | USB bundles carry the same objects and records; late bundles need I_e kept until drained under P1 | §F3 |
-| A1 (ADR-0006) | Record carries the text-form `dedup_id` if JSON records are kept (A1 assumed the binary form in CBOR) | §F6 |
-| D3 (ADR-0014), E5 | The QR carries the trust-bundle digest, never a 1,959-character PQ recipient; device Ed25519 key storage per platform | C6; open question 8 |
-| A8 (ADR-0028) | Restore sealing to a device key: if PQ (D2 K-10), the client needs the Rust X-Wing *decrypt* path too, because the `age` crate lacks it; that path must reject low-order X25519 shares (`hpke` 0.14.1 alone does not) | C7, C22 |
-| G2 (ADR-0035) | Run CCTV plus project vectors in CI against every implementation (Duplicacy lesson) | C14, S23 |
-| F3 | F3-S1 result decides DR-A2-4 | §F7 |
-| H1 | Blocked sources (Method); OD numbers for DR-A2-1..4; DR-A2-1 is OD-06 | Registry owner |
-| Next A2 stage | ADR-0007 draft and `docs/spec/object-format.md` with vectors once A2-S1..S4 report | Deliverables |
+| D2 (ADR-0008), A6 (ADR-0012/0013) | DR-A2-2. P1-E escrow of retired I_e to R (review needed); pkR pinned from the owner-signed trust bundle at the homelab; sampled R drill or R-canaries (D2-S3); short I_e epochs, I_e out of backups; decide whether to keep h0 at rest (an old I_e opens it); `mlkem768p256tag` for a hardware R | §F3 |
+| A3 (ADR-0009) | Sign at sealing; receipts bind `record_sha256`; record batches of per-(device, file) signed units; padded sizes; **E_REPLAY_SEQ as a visible health issue plus seq-epoch recovery**; re-seal un-receipted items on ingest-key epoch change; the homelab's signed verdict is the durable authority | §F3, §F4 |
+| A4 (ADR-0011) | The record binds `h0_sha256`, not the R2 key; the staging key or USB path maps outside the signature; manifests reference record digests rather than re-sign; same `record_id` across USB→R2 | §F4, §F6 |
+| A6/A7/C8 (ADR-0013, 0029, 0032) | Never re-verify device signatures as authority in rebuilds, fixity or provenance; rely on homelab receipts | §F4 (C24) |
+| D3 (ADR-0014), E5 | Signature algorithm per device (Ed25519 software vs P-256 hardware); optional symmetric MAC key; QR carries the trust-bundle digest only | §F4 |
+| A8 (ADR-0028) | PQ device restore keys need a Rust X-Wing decrypt path with its own low-order check; restore output exposed only after full verification | §F5 |
+| G2 (ADR-0035), G1 | Exact pins for `hpke`/`x-wing`/`ml-kem`; CCTV + project vectors on every bump; label the typage/kage CCTV runners as weaker; parser fuzzing against the spec limits | §F5, C25 |
+| D2, F3 | **Correct the copied "0.9M–4.5M files" figure** (C21 contested); use F3 C28 / §F2 table | C21 |
+| F3 | F3-S1 decides DR-A2-4 | §F7 |
+| H1 | Blocked sources (Method); OD numbers for DR-A2-2..4; DR-A2-1 = OD-06; the A2-S1 aggregation questions | Registry owner |
+| Spike runner (A2) | Fix the A2-S3 README's `x-wing` version; add a USB→R2 fallback case to A2-S4 after the record change | §Spikes |
