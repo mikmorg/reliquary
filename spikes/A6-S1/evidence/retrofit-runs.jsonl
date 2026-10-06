@@ -1,0 +1,6 @@
+{"MBps_written":131.2368538544366,"bytes_read":229506822,"bytes_written":229559252,"header_bytes_after":194740,"header_bytes_before":142310,"mode":"rewrap","objects":535,"seconds":1.7491980740000002}
+{"MBps_written":91.29764646348771,"bytes_read":229506822,"bytes_written":229559252,"header_bytes_after":0,"header_bytes_before":0,"mode":"reencrypt","objects":535,"seconds":2.514404926}
+{"MBps_written":136.22714963040488,"bytes_read":229506822,"bytes_written":229559252,"header_bytes_after":194740,"header_bytes_before":142310,"mode":"rewrap","objects":535,"seconds":1.685121157}
+{"MBps_written":89.32562053193418,"bytes_read":229506822,"bytes_written":229559252,"header_bytes_after":0,"header_bytes_before":0,"mode":"reencrypt","objects":535,"seconds":2.569914999}
+{"MBps_written":136.91028388368295,"bytes_read":229506822,"bytes_written":229559252,"header_bytes_after":194740,"header_bytes_before":142310,"mode":"rewrap","objects":535,"seconds":1.6767129939999998}
+{"MBps_written":89.01140355615588,"bytes_read":229506822,"bytes_written":229559252,"header_bytes_after":0,"header_bytes_before":0,"mode":"reencrypt","objects":535,"seconds":2.578986993}

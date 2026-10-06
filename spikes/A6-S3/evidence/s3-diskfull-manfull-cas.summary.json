@@ -1,0 +1,18 @@
+{
+ "placement": "manfull",
+ "layout": "cas",
+ "trials": 20,
+ "failure_kinds": {
+  "ENOSPC@manifest": 20
+ },
+ "recover_while_full_ok": 20,
+ "recover_while_full_failed": 0,
+ "retry_while_full_new_acks": 0,
+ "violations": {},
+ "final_ok": 20,
+ "final_fail": 0,
+ "quarantined": 40,
+ "tmp_removed": 0,
+ "torn": 40,
+ "trials_without_enospc": 0
+}

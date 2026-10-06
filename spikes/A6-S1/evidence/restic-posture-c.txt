@@ -1,0 +1,33 @@
+# restic 0.19.1 posture-C probes, 2026-10-06 (SYN corpus: 535 files, 229,295,536 B; tmpfs on a cloud VM)
+## check with no password (rc=1)
+create exclusive lock for repository
+Fatal: an empty password is not allowed by default. Pass the flag `--insecure-no-password` to restic to disable this check
+## check --read-data with the SECOND (key add) password (rc=0)
+using temporary cache in /dev/shm/a6run/s1/rcache/restic-check-cache-2822870058
+create exclusive lock for repository
+load indexes
+check all packs
+check snapshots, trees and blobs
+[0:00] 100.00%  1 / 1 snapshots
+read all data
+[0:00] 100.00%  15 / 15 packs
+no errors were found
+## restic key add: wall 2.979 s; keys/ then held 2 files, 878 bytes in total; no data file changed
+## one bit flipped in one data pack: keyless sha256(file)==name check -> detected; restic check --read-data (rc=1):
+using temporary cache in /dev/shm/a6run/s1/rcache/restic-check-cache-3146409048
+create exclusive lock for repository
+load indexes
+check all packs
+check snapshots, trees and blobs
+[0:00] 100.00%  1 / 1 snapshots
+read all data
+pack f4db2e70e16e699ef712317f93790d1b71a51d703c5e9434d10845f9ecc6661e contains 2 errors: [blob b2e02510360e0e9b538ef5922a99d59ddda0eaf292ac48aacc102bbda42a635f: decrypting blob <data/b2e02510> from pack f4db2e70e16e699ef712317f93790d1b71a51d703c5e9434d10845f9ecc6661e failed: ciphertext verification failed unexpected pack id 21f574ff9addcb1f8d7022c43904c5814243d91dc24b25d778bfc5188054a1ff]
+[0:00] 100.00%  15 / 15 packs
+
+The repository contains damaged pack files. These damaged files must be removed to repair the repository. This can be done using the following commands. Please read the troubleshooting guide at https://restic.readthedocs.io/en/stable/077_troubleshooting.html first.
+
+restic repair packs f4db2e70e16e699ef712317f93790d1b71a51d703c5e9434d10845f9ecc6661e
+restic repair snapshots --forget
+
+Damaged pack files can be caused by backend problems, hardware problems or bugs in restic. Please open an issue at https://github.com/restic/restic/issues/new/choose for further troubleshooting!
+Fatal: repository contains errors

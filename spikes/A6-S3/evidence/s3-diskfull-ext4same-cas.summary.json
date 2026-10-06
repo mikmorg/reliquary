@@ -1,0 +1,19 @@
+{
+ "placement": "ext4same",
+ "layout": "cas",
+ "trials": 20,
+ "failure_kinds": {
+  "ENOSPC@temp-object": 19,
+  "ENOSPC@blob-object": 1
+ },
+ "recover_while_full_ok": 20,
+ "recover_while_full_failed": 0,
+ "retry_while_full_new_acks": 0,
+ "violations": {},
+ "final_ok": 20,
+ "final_fail": 0,
+ "quarantined": 0,
+ "tmp_removed": 26,
+ "torn": 0,
+ "trials_without_enospc": 0
+}

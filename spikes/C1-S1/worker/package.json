@@ -1,0 +1,11 @@
+{
+  "name": "c1-spikes-worker",
+  "private": true,
+  "description": "C1 spikes (C1-S1..S4) throwaway Worker. EMULATED leg runs under wrangler dev (Miniflare); the SB kits point it at the sandbox account.",
+  "dependencies": {
+    "aws4fetch": "1.0.20",
+    "hono": "^4.13.11",
+    "wrangler": "4.143.0",
+    "zod": "^4.6.5"
+  }
+}

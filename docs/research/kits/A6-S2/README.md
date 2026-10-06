@@ -23,6 +23,21 @@ The plain CAS meets BUD-INGEST, BUD-RESTORE and BUD-AUDIT with peak RAM far belo
 
 What a container smoke run showed (2026-10-06, synthetic 196 MB, tmpfs; **not evidence for any budget**): the harness runs end to end. The a6cas ingest is single-threaded, and it ran at about 70 MB/s on a shared 4-vCPU cloud VM. If the homelab shows the same, BUD-INGEST would need parallel ingest, which is a code change rather than a different engine. This kit measures it.
 
+**Second smoke run (2026-10-06, second runner pass, tmpfs on a shared 4-vCPU cloud VM; not evidence for any budget):**
+
+- **Run:** a6cas rebuilt from the committed source; corpus of 535 files, 229,295,536 bytes; `SAMPLES=10`, `BATCH=200`, `DROP_CACHES=0`.
+- **Result:** the kit ran end to end, with rc 0 in 28 s, and `summarise.py` printed every block.
+
+Figures, quoted only to show the harness works:
+
+| Engine | Ingest (MB/s) | Keyless audit / check (MB/s) | Single-file restore, max (s) | Catalog rebuild | Peak RSS (MB) |
+|---|---|---|---|---|---|
+| CAS | 76.6 | 362.9 | 0.012 | byte-identical | 20.6 |
+| OCFL | 60.2 | 342.1 | 0.011 | byte-identical | 18.8 |
+| restic | 74.5 (backup) | 209.5 (`check --read-data`) | 0.868 (`dump`) | n/a | 162.2 |
+
+The single-threaded ingest observation stands. On this VM it stayed below 100 MB/s.
+
 ## Decision it informs
 
 | If the result is… | Then… |

@@ -122,9 +122,65 @@ In the crash-point runs, "acked 593 of 600" at cycle end is expected. Items whos
 - **(High, measured, from A6-S4)** The layout is safe only with **one writer**. See `../A6-S4/README.md` for the two lock defects this work found and fixed.
 - Throughput seen while testing (single-threaded ingest, tmpfs, shared 4-vCPU VM): 70–105 MB/s, varying between runs. **Not homelab evidence and not a BUD-INGEST result.** It does show that single-threaded ingest may be close to the 100 MB/s floor, so A6-S2 must measure it on real hardware.
 
+## Disk-full fault case (added 2026-10-06, second runner pass)
+
+**Why:** the A6 note asks for disk-full to be added to the fault cases, after Kopia #4348 ("possible to corrupt a repository when … the repository runs out of free space").
+
+**Harness:** `harness/diskfull.py`. In each trial the store and/or the catalog sits on a size-limited filesystem, with the size drawn at random between 2 % and 98 % of a complete store. Each trial then:
+
+1. ingests until the process fails by itself (no kill);
+2. while the disk is **still full**, runs `recover`, checks I1/I2, retries ingest once, and checks again;
+3. grows the filesystem, recovers, and ingests to the end;
+4. runs the keyed check (I3: archive and recovery keys, plus the truth file).
+
+Corpus, keys and binary are the same as above. The binary was rebuilt from the committed source with Go 1.26.0.
+
+**Results** (measured; `evidence/s3-diskfull-*.jsonl` and `*.summary.json`):
+
+| Run | Filesystem | What fills up | Trials | Where it failed (syscall) | `recover` while full ok | New ACKs on retry while full | I1/I2 violations | Finished and I3 OK | Repairs (quarantined / temp removed / torn manifest) |
+|---|---|---|---|---|---|---|---|---|---|
+| `same-cas` | tmpfs | store + catalog (one fs) | 30 | `write` temp object: 30 | 30/30 | 0 | **0** | 30/30 | 0 / 34 / 0 |
+| `same-ocfl` | tmpfs | store + catalog, OCFL layout | 15 | `write` temp object: 15 | 15/15 | 0 | **0** | 15/15 | 0 / 12 / 0 |
+| `ext4same-cas` | **ext4 on a loop device** (filler file takes the space) | store + catalog | 20 | `write` temp object: 19, `mkdir` of a `blobs/aa/bb` directory: 1 | 20/20 | 0 | **0** | 20/20 | 0 / 26 / 0 |
+| `manfull-cas` | tmpfs; only `store/manifest/` is tiny | the append-only manifest | 20 | `write` to `manifest.jsonl`: 20 | 20/20 | 0 | **0** | 20/20 | 40 / 0 / 40 |
+| `catfull-cas` | tmpfs; only the catalog's fs is tiny | SQLite catalog (`SQLITE_FULL`) | 15 | "database or disk is full": 15 | 13/15 (see below) | 0 | **0** | 15/15 | 0 / 0 / 0 |
+
+**Findings:**
+
+- **(High, measured, container)** In 100 disk-full trials, across all five placements:
+  - no ACKed item was ever missing from the catalog or the manifest;
+  - the keyless audit never mismatched;
+  - nothing was ACKed while the disk stayed full;
+  - every trial finished cleanly once space was freed.
+
+  Repairs were automatic:
+  - torn manifest lines, left by a short `write` at ENOSPC, were truncated (40 events);
+  - blobs that had been renamed into place but had no manifest line were quarantined (40);
+  - temp files were removed.
+
+  The manifest-full run is the strongest case: in all 20 trials the object was already renamed into place when the manifest append failed.
+- **(Medium, measured)** `recover` failed while full in 2 `catfull` trials. In both, the catalog filesystem (61 KB and 66 KB) was too small even for SQLite to create the empty schema. Ingest had therefore ACKed **0** items and stored nothing, so nothing could be lost. Lesson for ADR-0013: refuse to start ingest unless the catalog can open and has free-space headroom, rather than relying on recovery.
+- **(Medium) Not covered:**
+  - ENOSPC raised by `fsync` (delayed allocation) never happened here. Every failure came from `write` or `mkdir`, so the fsync error path is untested.
+  - ZFS is copy-on-write. It keeps "slop" space, and when full it can fail even when asked to free space. Neither tmpfs nor ext4 behaves like that.
+
+  Both gaps are now Part B of the OL kit: `docs/research/kits/A6-S3/diskfull-zfs.sh`, a file-backed throwaway pool, optionally natively encrypted. Its ZFS hooks are **untested**. The hook mechanism (`--placement external`) was smoke-tested with tmpfs hooks, 2 trials, no violations.
+
+## Reproduction check (2026-10-06, second runner pass)
+
+The binary was rebuilt from the committed source (`a6cas/`), and the corpus regenerated with the same seed. The generator gave the same totals as the first run: 600 records, 535 unique contents, 229,295,536 bytes. Shorter runs with new seeds, on tmpfs (`evidence/s3-repro-*`):
+
+| Run | Kills | Iterations | Cycles finished (I3 OK) | I1/I2 violations | Quarantined / temp removed / torn |
+|---|---|---|---|---|---|
+| `repro-kill9-cas` (seed 161) | 30 | 35 | 5 (5/5) | **0** | 0 / 19 / 0 |
+| `repro-crashpoints-cas` (seed 162; 8 crash points, all hit at least twice) | 30 | 30 | 0 | **0** | 14 / 10 / 5 |
+| `repro-kill9-ocfl` (seed 163) | 20 | 21 | 1 (1/1) | **0** | 0 / 12 / 0 |
+
+These agree with the first run. The LazyFS runs were not repeated: LazyFS is no longer built in this container.
+
 ## Pass / fail
 
-**CT half: Pass** (emulated power cut, labelled as such). The real power-off (OL) is pending: `docs/research/kits/A6-S3/`.
+**CT half: Pass** (emulated power cut, labelled as such; plus 100 disk-full trials on tmpfs and ext4). The real power-off and the ZFS disk-full run (OL) are pending: `docs/research/kits/A6-S3/`.
 
 ## Rebuild and rerun
 
@@ -134,4 +190,7 @@ In the crash-point runs, "acked 593 of 600" at cycle end is expected. Items whos
 4. For the LazyFS runs, mount LazyFS with `harness/lazyfs.toml`:
    `lazyfs /dev/shm/lfs.mnt --config-path lazyfs.toml -o allow_other -o modules=subdir -o subdir=/dev/shm/lfs.root`
    (`user_allow_other` must be in `/etc/fuse.conf`). Then run `harness/run-lfs.sh`.
-5. Clean up afterwards: delete `$D` and the LazyFS root.
+5. Disk-full runs (root needed for `mount`):
+   `python3 -I harness/diskfull.py --a6cas a6cas --corpus $D/corpus --keys $D/keys --base /dev/shm/a6df --full-bytes 236000000 --placement same|catfull|manfull|ext4same --layout cas|ocfl --trials N --seed S --evidence out.jsonl`
+   Seeds used: same-cas 81, same-ocfl 82, catfull-cas 83, manfull-cas 84, ext4same-cas 85.
+6. Clean up afterwards: delete `$D` and the LazyFS root, and unmount anything left under `/dev/shm/a6df`.

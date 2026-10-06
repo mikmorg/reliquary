@@ -62,6 +62,28 @@ None. The pass line is PLAN A6-S3's.
 
 **Stop and record "No result" if:** the VM does not come back after a cut (record the error), or the host is the production homelab and other VMs are affected.
 
+## Part B (added 2026-10-06): disk full on a real ZFS pool
+
+**Why.** Kopia issue #4348 reports that a repository can be corrupted when the disk fills during a backup. The container run (`spikes/A6-S3/README.md`, "Disk-full fault case") found no violation in 100 trials on tmpfs and on ext4 over a loop device. It could not test ZFS, which is copy-on-write: it keeps back "slop" space, and when it is full it can fail in ways that tmpfs and ext4 do not. This part runs the same harness on a real, throwaway ZFS pool.
+
+**Hypothesis.** When the pool fills, nothing is ACKed unless it is durable. `a6cas recover` works while the pool is still full. Retrying ingest while full ACKs nothing new. Once space is freed, ingest finishes and every object decrypts to its SHA-256.
+
+**Equipment.** Use the same test VM as Part A, with `zfsutils-linux` installed (OpenZFS; record `zfs version`). The script makes its own file-backed pool at `/var/tmp/a6df/a6full.img`, about 3 × the corpus size, so **never run it on the production pool's host**. Set `ENC=1` for a second run on a natively encrypted pool (posture B).
+
+**Procedure.**
+
+1. In the VM, make a corpus that fits the test pool easily, for example `a6cas gen -out /srv/a6/corpus -keys /srv/a6/keys -n 600 -dup 0.1 -scale 0.05 -seed 3` (about 230 MB).
+2. Copy the repository's `spikes/A6-S3/harness/diskfull.py` into the VM, at the same relative path as this kit, or set `HARNESS=/path/to/diskfull.py`.
+3. Run `A6=/srv/a6 TRIALS=20 ./diskfull-zfs.sh`. If time allows, run it again with `ENC=1`. **You should see** one summary JSON per run.
+4. In each summary, read these fields:
+   - `violations` must be `{}`;
+   - `retry_while_full_new_acks` must be 0;
+   - `final_ok` must equal `trials`.
+
+   Also read `recover_while_full_failed`. It is allowed to be non-zero, but only when that trial ACKed nothing. If it is non-zero, open the matching line in `diskfull-zfs.jsonl` and copy the `while_full.recover.err` field into the results.
+
+**Untested.** The author of `diskfull-zfs.sh` could not run it, because the cloud container has no ZFS. It worked with stand-in hooks: tmpfs instead of a pool, and `mount -o remount` instead of destroying the reservation (`--placement external`, 2 trials). The ZFS hooks themselves have never run. If a hook fails, record the error and fix the hook. The harness does not need changing.
+
 ## Cleaning up
 
 1. Roll back or delete the test VM. It holds only synthetic data and throwaway keys.
@@ -88,6 +110,13 @@ Copy this section into `docs/research/kits/A6-S3/results.md` and fill it in. Do 
 | No acknowledged item lost (10 cuts) | — | | |
 | Nothing acknowledged before it is durable | — | | |
 | Store and catalog reconcile automatically | — | | |
+
+**Part B (disk full on ZFS):**
+
+| Run | `zfs version` | Trials | `failure_kinds` | recover while full ok / failed | retry_while_full_new_acks | violations | final_ok / trials |
+|---|---|---|---|---|---|---|---|
+| plain dataset | | | | | | | |
+| `ENC=1` (native encryption) | | | | | | | |
 
 - **Overall:** Pass | Fail | No result
 - **Surprises and points of confusion:**

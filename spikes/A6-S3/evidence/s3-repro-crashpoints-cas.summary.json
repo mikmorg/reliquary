@@ -1,0 +1,24 @@
+{
+ "mode": "kill -9",
+ "nofsync": false,
+ "layout": "cas",
+ "kills": 30,
+ "cycles_completed": 0,
+ "violations": {},
+ "quarantined": 14,
+ "torn_manifest_events": 5,
+ "tmp_removed": 10,
+ "acks_total": 300,
+ "final_checks": [],
+ "self_crash_points": {
+  "after-ack": 2,
+  "catalog-before-ack": 2,
+  "manifest-before-catalog": 2,
+  "manifest-torn": 5,
+  "renamed-before-dirsync": 4,
+  "renamed-before-manifest": 5,
+  "tmp-synced": 7,
+  "tmp-written-unsynced": 3
+ },
+ "iterations": 30
+}

@@ -1,0 +1,29 @@
+# C1 spikes, EMULATED leg (NOT real R2/Cloudflare): wrangler dev + Miniflare local R2/D1/DO.
+# Throwaway research code. Credentials are local test strings, not real secrets.
+name = "c1spikes"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+S3_BASE = "http://127.0.0.1:8787/cdn-cgi/local/r2/s3/staging"
+S3_REGION = "auto"
+S3_AK = "c1-local-ak"
+S3_SK = "c1-local-secret-not-a-real-credential"
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "staging"
+local_dev = { experimental_s3_credentials = { accessKeyId = "c1-local-ak", secretAccessKey = "c1-local-secret-not-a-real-credential" } }
+
+[[d1_databases]]
+binding = "DB"
+database_name = "c1"
+database_id = "00000000-0000-0000-0000-0000000000c1"
+
+[[durable_objects.bindings]]
+name = "LEASES"
+class_name = "LeaseShard"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["LeaseShard"]

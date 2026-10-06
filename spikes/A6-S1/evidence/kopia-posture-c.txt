@@ -1,0 +1,7 @@
+# Kopia v0.23.1 (go install, filesystem repo) posture-C probes, 2026-10-06 (same 535 files)
+## repository connect with no password (rc=1)
+Enter password to open repository: getting password: password prompt error: inappropriate ioctl for device
+## files in the repo by prefix (p = packs): 11 p*, 2 q*, 2 x*, 2 _*, kopia.repository.f, kopia.blobcfg.f, kopia.maintenance.f, .shards
+## keyless test: does any file name equal an unkeyed sha256/sha224/sha3_256/blake2s/blake2b of its content?
+{"kopia:no_unkeyed_hash_match": 3, ":no_unkeyed_hash_match": 1, "8:no_unkeyed_hash_match": 2, "1:no_unkeyed_hash_match": 1, "f:no_unkeyed_hash_match": 3, "c:no_unkeyed_hash_match": 3, "7:no_unkeyed_hash_match": 1, "3:no_unkeyed_hash_match": 1, "a:no_unkeyed_hash_match": 2, "4:no_unkeyed_hash_match": 1, "_:no_unkeyed_hash_match": 2, "e:no_unkeyed_hash_match": 1}
+## source: pack blob IDs are random: repo/content/content_manager.go:756 cryptorand.Read(blobID), :774 blob.ID(fmt.Sprintf("%v%x-%v", prefix, blobID, sessionID)); other blobs: internal/blobcrypto/blob_crypto.go Encrypt(): blobID = prefix + hex(c.HashFunc()(payload)) (the repository's hash function)

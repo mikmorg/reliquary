@@ -1,0 +1,266 @@
+{
+ "target": "miniflare",
+ "endpoint": "http://127.0.0.1:8787/cdn-cgi/local/r2/s3",
+ "bucket": "staging",
+ "run_id": "ec6aa413",
+ "finished_utc": "2026-10-06T16:58:05.301810+00:00",
+ "duration_s": 15.6,
+ "results": [
+  {
+   "hyp": "H1",
+   "id": "C01",
+   "title": "aws4fetch-presigned PUT with signed If-None-Match:*, absent then existing key",
+   "observed": {
+    "signedHeaders": "host;if-none-match",
+    "first": {
+     "status": 200,
+     "code": null
+    },
+    "second": {
+     "status": 412,
+     "code": "PreconditionFailed"
+    },
+    "stored": "first"
+   },
+   "expected_or_documented": "first 200, second 412 PreconditionFailed (R2 may answer 429 to a second write <1 s later, limits.mdx)",
+   "verdict": "pass"
+  },
+  {
+   "hyp": "H1",
+   "id": "C02",
+   "title": "Same URL, client omits the signed If-None-Match header, key exists",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch",
+    "stored": "orig"
+   },
+   "expected_or_documented": "403 SignatureDoesNotMatch; original kept",
+   "verdict": "pass"
+  },
+  {
+   "hyp": "H2",
+   "id": "C03",
+   "title": "Binding resumeMultipartUpload().complete() onto an existing key (no onlyIf exists on complete)",
+   "observed": {
+    "complete": 200,
+    "overwritten": true
+   },
+   "expected_or_documented": "undocumented; the binding complete() takes no condition",
+   "verdict": "documented-gap: overwrites"
+  },
+  {
+   "hyp": "H3",
+   "id": "C04",
+   "title": "Presigned POST ?uploads (CreateMultipartUpload) used without credentials",
+   "observed": {
+    "status": 200,
+    "code": null,
+    "uploadId": true
+   },
+   "expected_or_documented": "undocumented (R2 docs: presigned URLs support GET, HEAD, PUT, DELETE)",
+   "verdict": "accepted"
+  },
+  {
+   "hyp": "H3",
+   "id": "C05",
+   "title": "Presigned POST ?uploadId (CompleteMultipartUpload) used without credentials",
+   "observed": {
+    "status": 200,
+    "code": null,
+    "object_after": 200,
+    "match": true
+   },
+   "expected_or_documented": "undocumented",
+   "verdict": "accepted"
+  },
+  {
+   "hyp": "H4",
+   "id": "C06",
+   "title": "Presigned UploadPart with Content-MD5 signed in; tampered body (same length) then genuine",
+   "observed": {
+    "signedHeaders": "content-md5;host",
+    "tampered": {
+     "status": 400,
+     "code": "BadDigest"
+    },
+    "genuine": {
+     "status": 200,
+     "code": null
+    },
+    "part_etag": "\"vZMcUm9GqEyLq_1Dft2tpPKTkZG0cKH62ZhO4Wa5uranXFhw8NuFeVKLlqWHO8e7hQDsPwv8IV-z81n7-cc6TKg8DV2wdNLwoan5KFoX4U8RnSx_FRbF7tBnwJ6sQw1whYd-dresvEes_L7bDtLVFypdIdYXOcA6OGravSBp3y0\"",
+    "md5": "a9a255b6eb8cad1d7bf0300694018fe1",
+    "part_etag_is_md5": false
+   },
+   "expected_or_documented": "tampered 400 BadDigest; genuine 200 (UploadPart lists Content-MD5 as supported)",
+   "verdict": "pass"
+  },
+  {
+   "hyp": "H4",
+   "id": "C07",
+   "title": "Same UploadPart URL, client omits the signed Content-MD5 (5 MiB tampered body)",
+   "observed": {
+    "status": 0,
+    "code": "CONN:ConnectionResetError"
+   },
+   "expected_or_documented": "403 SignatureDoesNotMatch",
+   "verdict": "rejected (not 403)"
+  },
+  {
+   "hyp": "H5",
+   "id": "C08",
+   "title": "aws4fetch presign with allHeaders and Content-Length signed; shorter, longer, exact body",
+   "observed": {
+    "signedHeaders": "content-length;host",
+    "shorter": {
+     "status": 403,
+     "code": "SignatureDoesNotMatch"
+    },
+    "longer": {
+     "status": 500,
+     "code": null
+    },
+    "exact": {
+     "status": 200,
+     "code": null
+    },
+    "stored_after_wrong_lengths": false
+   },
+   "expected_or_documented": "shorter/longer 403 SignatureDoesNotMatch; exact 200",
+   "verdict": "pass-with-wrong-status (nothing stored)"
+  },
+  {
+   "hyp": "H6",
+   "id": "C09",
+   "title": "aws4fetch presign with x-amz-checksum-sha256 signed; tampered body (same length)",
+   "observed": {
+    "signedHeaders": "host;x-amz-checksum-sha256",
+    "status": 200,
+    "code": null,
+    "tampered_stored": true
+   },
+   "expected_or_documented": "R2: 400 BadDigest expected if R2 validates SHA-256 on PutObject; Miniflare is known to ignore it (G2-S1 T47)",
+   "verdict": "fail"
+  },
+  {
+   "hyp": "H6",
+   "id": "C10",
+   "title": "Binding put() with a wrong sha256 option",
+   "observed": {
+    "http": 200,
+    "threw": "put: The SHA-256 checksum you specified did not match what we received.\nYou provided a SHA-256 checksum with value: d9298a10d1b0735837dc4bd85dac641b0f3cef27a47e5d53a54f2f3f5b2fcffa\nActual SHA-256 was: eb9a5cf74b345931431a3c882d694a864d900b084df2a8f13548da2cc3401231 (10037)",
+    "stored": false,
+    "size": null
+   },
+   "expected_or_documented": "documented: put() verifies sha256 -> error, nothing stored",
+   "verdict": "pass"
+  },
+  {
+   "hyp": "H7",
+   "id": "C11",
+   "title": "Single PUT: S3 ETag header vs MD5(body); binding etag/httpEtag",
+   "observed": {
+    "s3_etag": "\"5443c064158c0026e3176efd1656ce78\"",
+    "md5": "5443c064158c0026e3176efd1656ce78",
+    "binding_etag": "5443c064158c0026e3176efd1656ce78",
+    "binding_httpEtag": "\"5443c064158c0026e3176efd1656ce78\"",
+    "binding_md5": "5443c064158c0026e3176efd1656ce78"
+   },
+   "expected_or_documented": "S3 ETag = \"<md5 hex>\" (quoted); binding etag unquoted, httpEtag quoted",
+   "verdict": "pass"
+  },
+  {
+   "hyp": "H7",
+   "id": "C12",
+   "title": "Multipart 5 MiB + 5 MiB + 12,345 B: part ETags = MD5(part); object ETag = MD5(concat part MD5s)-N",
+   "observed": {
+    "part_etags_are_md5": [
+     {
+      "etag": "\"IV5tV9E-4qB-UwQKK2NPF6jVDCnGyS1eQXP3Yh-Z3P7JDj3Sna22_HIVNHhaimD34BBdvjEc-fP18Wh3nWUtqvCIof7zea9wGq22VTdwJbs_0FVel5FcWCkQw3CUsp-XUhKwV-gDnjT7BRIfk1OzJJoHQq1HT_-mOJizU_91XdU\"",
+      "md5": "7780bf0e59b9dcf94fc25f6beffd3744",
+      "equal": false
+     },
+     {
+      "etag": "\"fcZvfDl2zXNZwJ72l2oDBDnqcpEHHBnNw9awd6vIgzNw14GVRKsxFJgxqqvGSnOMtjrA78eNdNCpI_lbVY1URMgfFEfR2W0IJpL3sGrJY4UBnAEvrssODmlg4v4dSazMSSj-_SQB7PE66-g-iGqeGkeKAPXNMjxjl3kpcKuhOUw\"",
+      "md5": "9ab81d81e8fb45a6159de6d7bead3b4d",
+      "equal": false
+     },
+     {
+      "etag": "\"Jc-JVXBYUeYLoO2ZtBVheMHXKb9Hh5nymKWZgJHYl1s5jWjnRn4zW7h8Tp_-gF1DRPsoILnjPJMlAfdzMYdnyLXXXc1B375rqHeDo66R4_hJjgviqjThh8caLQdKQI1BfRkmtb8AOjlc6RgbwTzKmVRS8WqyKBfW4VvfJcD0Yjg\"",
+      "md5": "ce7fe70c2c3690d7ba84fd36451ef075",
+      "equal": false
+     }
+    ],
+    "binding_complete_etag": "12f9bd4e5241b87de6247a0a68f0e362-3",
+    "s3_head_etag": "\"12f9bd4e5241b87de6247a0a68f0e362-3\"",
+    "formula": "12f9bd4e5241b87de6247a0a68f0e362-3",
+    "size": 10498105
+   },
+   "expected_or_documented": "R2 release note 2023-06-21: multipart ETags are MD5-based",
+   "verdict": "object ETag formula holds; part ETags are not MD5"
+  },
+  {
+   "hyp": "H10",
+   "id": "C13",
+   "title": "Presigned PUT, X-Amz-Expires=3, headers sent at t=0, rest of body sent at t=6 s",
+   "observed": {
+    "status_line": "HTTP/1.1 200 OK",
+    "code": null,
+    "stored": true
+   },
+   "expected_or_documented": "undocumented for R2 (AWS checks expiry when the request arrives)",
+   "verdict": "completes"
+  },
+  {
+   "hyp": "H12",
+   "id": "C14",
+   "title": "Binding put() onlyIf If-None-Match:* as Headers and as {etagDoesNotMatch:'*'}",
+   "observed": {
+    "headers": {
+     "absent": true,
+     "existing": false,
+     "kept": true
+    },
+    "cond": {
+     "absent": true,
+     "existing": false,
+     "kept": true
+    }
+   },
+   "expected_or_documented": "absent stored; existing refused (put returns null); original kept (workerd #2572 wildcard history)",
+   "verdict": "pass"
+  },
+  {
+   "hyp": "H13",
+   "id": "C15",
+   "title": "Locally signed temp credential: actions=[Put, multipart write], prefixPaths=[in/]",
+   "observed": {
+    "put_in_prefix": 403,
+    "put_in_prefix_code": "SignatureDoesNotMatch",
+    "put_out_of_prefix": 403,
+    "get_in_prefix(not granted)": 403,
+    "delete_in_prefix(not granted)": 403,
+    "list(not granted)": 403,
+    "existing_survives_delete": true
+   },
+   "expected_or_documented": {
+    "put_in_prefix": 200,
+    "put_out_of_prefix": 403,
+    "get_in_prefix(not granted)": 403,
+    "delete_in_prefix(not granted)": 403,
+    "list(not granted)": 403
+   },
+   "verdict": "not-emulated (in-scope request refused too)"
+  },
+  {
+   "hyp": "H13",
+   "id": "C16",
+   "title": "Temp credential used 1.5 s after its exp claim",
+   "observed": {
+    "status": 403,
+    "code": "SignatureDoesNotMatch"
+   },
+   "expected_or_documented": "403",
+   "verdict": "not-emulated (valid credentials are refused too)"
+  }
+ ]
+}

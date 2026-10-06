@@ -1,0 +1,14 @@
+second concurrent ingest while the first runs: a6cas: store is locked by another writer: resource temporarily unavailable
+killed ingest after 401 ACKs
+catalog deleted mid-ingest; rebuilding
+rebuild: 352 blobs, 401 records in 0.27s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+resume: 199 new ACKs, 401 dup ACKs (stored receipt path)
+catalog deleted; 1135 canonical rows before
+rebuild: 535 blobs, 600 records in 0.48s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (manifest + records) wall s: 0.486
+RESULT byte-identical canonical export: YES (26f40b75e98e33bc...)
+rebuild: 535 blobs, 600 records in 1.62s; meta_sha256 reconstruction mismatches: 0; repeated manifest keys: 0
+rebuild (object files only, manifest ignored) wall s: 1.624
+files-only rebuild: rows 1135 of 1135 ; fields that differ from the original catalog: {'blob.epoch': 535, 'blob.committed_at': 535, 'record.meta_sha256': 600, 'record.committed_at': 600}
+{"MBps":402.3812313297456,"bytes_read":230029293,"mismatch":0,"missing":0,"objects_ok":1135,"problems":null,"seconds":0.571670036}
+truth check: 600 records; all truth present with correct sha256: True

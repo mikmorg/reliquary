@@ -1,0 +1,3 @@
+{"fail":0,"mode":"check","objects":535,"payload_byte_identical_to_orig":0,"plaintext_sha256_ok":535,"seconds":1.949063057}
+{"fail":0,"mode":"check","objects":535,"payload_byte_identical_to_orig":0,"plaintext_sha256_ok":535,"seconds":1.26787319}
+{"fail":535,"mode":"check","objects":0,"payload_byte_identical_to_orig":0,"plaintext_sha256_ok":0,"seconds":0.50363703}

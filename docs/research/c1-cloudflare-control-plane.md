@@ -1,10 +1,11 @@
 # C1. Cloudflare control-plane mapping and API v1
 
 - **Workstream:** C1 (see `docs/research/PLAN.md`, section "C1.")
-- **Status:** Draft (analyst deep read, Wave 1, batch W1-b). Not yet under skeptic review. Spike results pending: a separate spike runner is running the C1 spikes and writing the C1-S1 kit in parallel.
+- **Status:** Draft (analyst deep read, Wave 1, batch W1-b; second analyst pass 2026-10-06). Not yet under skeptic review. Spike results pending: a separate spike runner is running the C1 spikes and owns the C1-S1 kit (`docs/research/kits/C1-S1/`).
 - **Date:** 2026-10-06 (scout sweep 2026-09-29; analyst re-reads 2026-10-06). The run brief gives 2026-09-29 as "today", but the container clock and the npm registry timestamps show 2026-10-06, so access dates below use 2026-10-06 where the analyst re-fetched.
+- **Second-pass changes (2026-10-06):** every Cloudflare source behind a key claim was re-fetched and re-checked; no key claim changed. Added: R2 release notes on conditional `CreateMultipartUpload` and wildcard `If-None-Match` (C49); the runtime-update qualifier (C50); temporary-credential details (C51); the G2-S1 emulated results, labelled as emulated (C52); the iOS/Android background-queue conflict with BUD-REVOKE from B4 (C53, new F12); SR-IDs now cite `docs/security/threat-model.md`; tool versions refreshed (C47).
 - **Feeds:** ADR-0010 (reserved; the draft and `docs/design/api-v1.md` are the next stage), one-way door #7 (R2 key layout, Gate B) and #8 (API hostname and bootstrap endpoint, Gate C), OD-04 (C1-S1 evidence), OD-14 (beta-feature policy section), new decision requests DR-C1-1 to DR-C1-5 below (H1 assigns OD numbers)
-- **Depends on:** A3 (`a3-ingest-protocol.md`, draft: per-upload keys, advisory lease, reconciliation, receipts), D1 (`d1-threat-model.md`, draft: SR-01…SR-26), CE spike (`content-encryption-format.md`: staging and `meta/` keys), C4 (`c4-cost-model.md`: unit prices and per-file operation assumptions), T2 (`fact-check-adr-0001-0002.md`), H1 sandbox (L01, not yet available)
+- **Depends on:** A3 (`a3-ingest-protocol.md`, draft: per-upload keys, advisory lease, reconciliation, receipts), D1 (`d1-threat-model.md` and the register `docs/security/threat-model.md`: SR-01…SR-31), B4 (`b4-ios-decision.md`: IOS-C10, IOS-C16, DR-B4-2), CE spike (`content-encryption-format.md`: staging and `meta/` keys), C4 (`c4-cost-model.md`: unit prices and per-file operation assumptions), T2 (`fact-check-adr-0001-0002.md`), H1 sandbox (L01, not yet available)
 - **Traceability rows advanced:** R-09, R-11, R-12, R-13, R-18, R-37, Q1-3 (presigned UploadPart, with C1-S1), C-01 (warm cache; proposal below)
 
 ## Summary
@@ -14,8 +15,9 @@ Recommended topology, in one line: **a TypeScript Worker on the owner's own doma
 1. **D1 over Durable Objects for state, because the protocol no longer needs a strong lock.** A3 made the claim an advisory lease, so the D1-vs-DO choice is about throughput and operations, not correctness. D1 is single-threaded per database (C27), but arithmetic at family scale stays well inside its guidance *if every API request does one D1 `batch()`*, however many items it carries. D1 wins on operability: numbered migrations, Time Travel restore from the CLI, `wrangler d1 export`, ad-hoc SQL. C1-S2 and C1-S3 measure the ceiling; the fallback is to shard the dedup and lease tables into SQLite-backed DOs.
 2. **Key layout: per-upload keys, and the ingest bucket gets no Expiration rule at all.** Restores go to a separate bucket whose objects expire. "Staging never has an age-based expiry" is then a property of the bucket, not of a prefix rule someone can mistype. The only age-based removal left in the ingest bucket is R2's default 7-day abort of *incomplete* multipart uploads. That never removes a staged object, and A3 handles slow uploads.
 3. **Worker language: TypeScript.** Rust on Workers is labelled Beta, `workers-rs` is pre-1.0, and panic recovery needs a nightly toolchain (C32–C35). The cost of TypeScript is that a few small formats get a second implementation: request authentication, code hashing and ID encoding. That stays small only under one design rule: **the Worker never parses a Reliquary cryptographic artifact.** Records, receipts, manifests and envelopes are opaque bytes to it.
-4. **What R2 itself enforces is still mostly undocumented.** That covers create-only on presigned PUT and on multipart completion, signed Content-Length, Content-MD5 and checksums, and lifecycle extension past 7 days. C1-S1 must settle these. Nothing in this design depends on a positive result: per-upload keys plus homelab verification are the safety net (SR-07, SR-04). The R2 conditionals only reduce cost and nuisance.
+4. **What R2 itself enforces is still mostly undocumented.** That covers create-only on presigned PUT and on multipart completion, signed Content-Length, Content-MD5 and checksums, and lifecycle extension past 7 days. C1-S1 must settle these. The emulated G2-S1 run shows Miniflare differs from the R2 docs on several of exactly these checks (C52), so no local result counts. Nothing in this design depends on a positive result: per-upload keys plus homelab verification are the safety net (SR-07, SR-04). The R2 conditionals only reduce cost and nuisance.
 5. **New option found:** R2 **temporary credentials** can be scoped to one bucket, an explicit S3 action list and exact keys or prefixes, and a Worker can mint them locally (C10, C11). They are the best fit for the **homelab's** R2 access: read, list and delete on `staging/` and `meta/` only, write on `restore/` only. A long-lived token cannot express that (C12).
+6. **Open conflict: background transfer queues vs BUD-REVOKE.** A 15-minute URL can expire before an OS-scheduled background transfer starts (B4 K6, C53). The API therefore provides a cheap, idempotent "re-sign this upload's URLs" call, and clients re-sign on wake rather than holding long-lived URLs (F12). Whether any platform needs longer URLs is DR-B4-2, not decided here.
 
 Confidence: **high** on the Cloudflare facts (primary docs source, re-read). **Medium** on the topology and language choice: they are reasoned from the docs and from A3/D1, with no measurement yet. **Low** on any R2 behaviour C1-S1 has not yet run.
 
@@ -39,8 +41,9 @@ Confidence: **high** on the Cloudflare facts (primary docs source, re-read). **M
 | 14 | Background jobs | One Cron Trigger running idempotent "what is due" queries over D1 state: stale devices, nudges, dead-man's switch, day-6 multipart checkpoint (A3). DO alarms only inside C2's counter DOs. Workflows not needed in v1. | Medium-high |
 | 15 | Change management | Expand/contract D1 migrations that are compatible with two Worker versions at once (gradual deployments split traffic per request, C42). DO class changes only by plain `wrangler deploy` (C43). Pinned compatibility date. Separate sandbox and production accounts. Time Travel bookmark taken before each migration. | High (docs); Medium (policy) |
 | 16 | Beta dependencies (OD-14 input) | Avoided: Rust Workers, Workers VPC, D1 read replication. Used: none required. Depended on but not labelled beta: temporary-credential local signing (JWT format documented by example; action scoping "API support coming soon"). Email Service (beta) is C3's. | High |
-| 17 | (new) Can the device run multipart without the Worker presigning every part? | Yes, with a temporary credential scoped to one key and `UploadPart`/`ListParts` only. But background upload APIs (iOS URLSession, queued Android work) want fully formed requests, so **presigned URLs stay primary**. Temp credentials are kept for the homelab and optionally desktop. | Medium |
+| 17 | (new) Can the device run multipart without the Worker presigning every part? | Yes, with a temporary credential scoped to one key and `UploadPart`/`ListParts` only. But iOS background `URLSession` (later) needs fully formed requests, and a presigned URL needs no SigV4 code on the device, so **presigned URLs stay primary**. Temp credentials are kept for the homelab and optionally desktop. A device credential would not ease BUD-REVOKE: it is a bearer token with the same lifetime problem (C51). | Medium |
 | 18 | (new) Records: presigned PUT or through the Worker? | **Through the Worker.** Records are small. The Worker writes them with a create-only `onlyIf`, checks size and quota, and appends the feed event in the same request. This removes the presigned-overwrite question for `meta/` entirely. | Medium-high |
+| 18b | (new) How do short URLs coexist with OS background queues that may start a transfer much later (B4 K6)? | Clients re-sign on wake through an idempotent `POST /v1/uploads/{id}/urls` and treat a 403 on an expired URL as "re-sign", never as failure. Android WorkManager runs app code first, so it re-signs just in time. iOS background `URLSession` is the hard case (deferred platform; DR-B4-2). Also: a task count per photo may be too high for iOS (IOS-C16), which is A2/A4's pack question, not C1's. | Medium |
 | 19 | (new) Warm cache (C-01 orphan) | v1 default: **off** (window 0). If enabled, it is a homelab-driven delay before deleting committed staging objects, never a lifecycle rule. C4 prices a 30-day warm cache at about $42 vs about $12 for a 2 TB seed month. | Medium |
 
 ## Method
@@ -65,6 +68,7 @@ Confidence: **high** on the Cloudflare facts (primary docs source, re-read). **M
   4. Worker size "64 MiB" (Workers limits) vs "3 MB/10 MB" (a Workflows limits row): the Workflows row looks stale. Treat 64 MiB as current and re-check if a Wasm bundle ever matters (C44).
   5. Tool versions moved since the scouts: wrangler 4.143.0 → 4.147.0, miniflare 5.20260926.0-alpha → 5.20261001.0-alpha, hono 4.13.11 → 4.13.13 (C47).
 - **Contradictions inside primary sources** (recorded, not resolved): conditional CompleteMultipartUpload (C7 vs C8); revocation latency "up to a minute" vs "immediately" (C14 vs C11).
+- **Second analyst pass (2026-10-06):** re-fetched presigned URLs, S3 API table, temporary credentials and its example, tokens, lifecycles, bucket locks, limits, consistency, Workers binding reference, R2 release notes, D1 FAQ partial, D1 `batch()`, `json_each`, Workers limits, Rust page, `workers-rs` README, custom domains, `workers.dev`, gradual deployments with DOs, DO class lifecycle and the Workers VPC page. All earlier quotations matched. New primary material: two older R2 release-note entries (C49) and the runtime-update qualifier (C50). Project inputs added: G2-S1 emulated results (`spikes/G2-S1/results/comparison.md`), the threat register, B4. npm and crates.io re-queried.
 - **Stop rule:** the analyst's re-reads added two primary sources the scouts had not read (the temporary-credentials example page, and the gradual-deployments-with-DOs page). Neither changes the recommendation; both refine it (F4, F10).
 
 ## Sources
@@ -117,6 +121,9 @@ All Cloudflare docs are `cloudflare/cloudflare-docs @ production : src/content/�
 | S42 | workers-sdk #14916 (local D1 SQLITE_BUSY crashes `wrangler dev`), #15774 (D1 migrations 403/7403), #15387 (versions upload vs DO migration), #15904 (D1 REST batch atomicity question) | users | 2026-07-29 to 2026-09-27 | 2026-09-29 (community scout) | No |
 | S43 | workers-rs #166, #453, #826 (panic handling history); #967 (DO sync KV API missing) | users | 2022-04 to 2026-04 | 2026-09-29 (community scout; titles and states only for some) | No |
 | S44 | Ente museum `server/pkg/controller/file.go`, `object_cleanup.go`; Immich `asset-media.service.ts`; restic rest-server `repo/repo.go`; Headscale `preauth_key.go` | projects | main/master heads | 2026-09-29 (source scout; A3 re-read Ente and restic) | Yes |
+| S45 | G2-S1 emulator fidelity results, `spikes/G2-S1/results/comparison.md` (Miniflare run `127a684a`, 2026-09-29; **emulated, not real R2/Cloudflare**) | Project (G2 spike runner) | 2026-09-29 | 2026-10-06 | Yes (project measurement of an emulator; says nothing about R2) |
+| S46 | Threat register, `docs/security/threat-model.md` (SR-01…SR-31) | Project (D1) | draft | 2026-10-06 | Yes (project) |
+| S47 | B4 iOS decision note, `docs/research/b4-ios-decision.md` (K6, IOS-C10, IOS-C16, DR-B4-2) | Project (B4) | draft | 2026-10-06 | Yes (project; K6 itself rests on Apple sources cited there) |
 
 ## Claims
 
@@ -145,7 +152,7 @@ Skeptic columns are empty until Stage 4. "Key?" follows PLAN §5.1.
 | C19 | Maximum upload is 5 GiB less 5 MiB (4.995 GiB) per request or part, and 4.995 TiB multipart. "The max upload size limit does not apply to subrequests." | S8 | No | | | | Pending |
 | C20 | Workers request body size depends on the zone plan: 100 MB Free/Pro, 200 MB Business, up to 5 GB Enterprise; 413 above. URL max 16 KB; 128 KB headers. | S26 | Yes (records through Worker) | | | | Pending |
 | C21 | Workers Paid: CPU 30 s default, configurable to 5 min; waiting on network or storage is not CPU. Subrequests 10,000 per invocation by default (to 10M). 6 simultaneous connections waiting for headers. 128 MB per isolate (JS heap + Wasm). 1 s startup. Worker size 64 MiB uncompressed. 250 Cron Triggers per account. | S26 | Yes | | | | Pending |
-| C22 | Runtime updates happen "a few times per week"; in-flight requests get a 30 s grace and are then terminated. | S26 | Yes (long Worker-proxied uploads) | | | | Pending |
+| C22 | Runtime updates happen "a few times per week"; in-flight requests get a 30 s grace and are then terminated. The same paragraph calls this "very unlikely because it requires a long-running request to coincide with a runtime update" (see C50). | S26 | Yes (long Worker-proxied uploads) | | | | Pending |
 | C23 | Cron Trigger CPU: 30 s for intervals < 1 h, 15 min for ≥ 1 h. Wall time 15 min for Cron, DO alarms and Queue consumers. Crons run in UTC. Changes take up to 15 min to propagate. | S26, S29 | No | | | | Pending |
 | C24 | D1 `batch()` statements run "sequentially, non-concurrently" as one SQL transaction; a failing statement aborts or rolls back the sequence. D1 is otherwise auto-commit. | S16 | Yes | | | | Pending |
 | C25 | D1: 10 GB per database ("cannot be further increased"); 100 bound parameters, 100 KB statement, 2 MB row, 30 s query, 1,000 queries per invocation (Paid). | S14, S15 | Yes | | | | Pending |
@@ -170,8 +177,13 @@ Skeptic columns are empty until Stage 4. "Key?" follows PLAN §5.1.
 | C44 | The Workflows limits page still cites 3 MB/10 MB "max script size per Worker size limits", while the Workers limits page says 64 MiB uncompressed. | S30, S26 | No | | | | Pending (doc inconsistency) |
 | C45 | The R2 binding put-if-absent path had a wildcard-etag parsing bug in 2024 (workerd #2572, closed; fix version not checked). Local `wrangler dev` crashed on a recoverable D1 `SQLITE_BUSY` under concurrent writes in wrangler 4.114/4.115 (#14916, open as of 2026-09-29). | S41, S42 | Yes (C1-S1/S2 design) | | | | **Secondary only** |
 | C46 | Workflows (Paid): 10,000 steps by default (25,000 max), `step.sleep` up to 365 days, 1 GB persisted state per instance, 30-day retention. Free: 1,024 steps, 100 MB. | S30 | No | | | | Pending |
-| C47 | npm latest on 2026-10-06: wrangler 4.147.0 (2026-10-02), miniflare 5.20261001.0-alpha (2026-10-01; the `latest` tag points at an alpha), hono 4.13.13 (2026-10-04), aws4fetch 1.0.20 (2024-08-28), @cloudflare/vitest-pool-workers 0.22.0 (2026-08-18), drizzle-orm 0.45.3 (2026-09-21), kysely 0.29.6 (2026-09-16), chanfana 3.4.0 (2026-08-17), zod 4.6.5 (2026-09-13). | S39 | No | | | | Pending |
+| C47 | npm latest on 2026-10-06 (second query, 2026-10-06 ~20:00 UTC): wrangler 4.148.0 (2026-10-06), miniflare 5.20261006.0-alpha (2026-10-06; the `latest` tag still points at an alpha); earlier the same day wrangler 4.147.0 and miniflare 5.20261001.0-alpha. Also hono 4.13.13 (2026-10-04), aws4fetch 1.0.20 (2024-08-28), @cloudflare/vitest-pool-workers 0.22.0 (2026-08-18), drizzle-orm 0.45.3 (2026-09-21), kysely 0.29.6 (2026-09-16), chanfana 3.4.0 (2026-08-17), zod 4.6.5 (2026-09-13). | S39 | No | | | | Pending |
 | C48 | Workers limits page: Zod older than 4.5.0 "use[s] substantially more memory per schema". | S26 | No | | | | Pending |
+| C49 | R2 release notes: 2022-05-27, "If conditional headers are provided to S3 API `UploadObject` or `CreateMultipartUpload` operations, and the object exists, a `412 Precondition Failed` status code will be returned if these checks are not met." 2022-07-30: `If-Match`/`If-None-Match` accept arrays, weak ETags and the wildcard `*`. 2023-06-16: the bindings parse multiple, weak and wildcard ETags. None of this appears in the S3 table rows for CreateMultipartUpload or CompleteMultipartUpload (C5, C8). | S11 | Yes (C1-S1 design) | | | | Pending (release notes vs table; C1-S1) |
+| C50 | The Workers limits page qualifies the 30 s runtime-update grace (C22) as "very unlikely" to bite, because a long request must coincide with an update. So C22 is a weak argument against Worker-proxied uploads; the 100 MB body cap (C20) and availability coupling are the strong ones. | S26 | Yes | | | | Pending |
+| C51 | Temporary credentials reuse the parent access key ID, are bound to exactly one bucket ("cross-bucket access is not supported within a single credential"), take `scope` and/or `actions` (the documented example combines `object-read-only` with `actions`), and are bearer tokens "until the credential expires". The example defaults `ttlSeconds` to 3,600; no maximum is documented on the pages read. | S3, S4 | Yes | | | | Pending |
+| C52 | **Emulated only (Miniflare, G2-S1, 2026-09-29):** signed `If-None-Match: *` on a presigned PUT → 412 and object kept (T23); 16-way presigned create-only race → exactly one winner in 20/20 rounds (T27); Complete with `If-None-Match: *` on an existing key → 200 and **overwritten** (T38); CreateMultipartUpload with `If-None-Match: *` on an existing key → 200 (T39); wrong `x-amz-checksum-sha256`, plain or signed into a presigned PUT → 200 and stored (T41, T47); signed Content-MD5 tampered → 400 BadDigest (T48); signed Content-Length with a longer body → 403 (T49); ListParts/ListMultipartUploads → 501 (T35); lifecycle config via S3 → 501 (T54); unequal non-last parts → error at Complete (T32); binding `put` with `onlyIf` `If-None-Match: *` on an existing key → refused (W02); D1 `INSERT … ON CONFLICT DO NOTHING` 16-way race → one winner in 10/10 rounds (W05). Where the R2 docs speak (C49 on Create, C6 on SHA-256), Miniflare's answer disagrees, so these results prove nothing about R2. | S45 | No (emulator fidelity only) | | | | Emulated |
+| C53 | iOS: transfers started in the background are discretionary and a URL signed at hand-off can expire before iOS sends it (BUD-REVOKE, 15 min); B4 recommends refreshable URLs over longer ones and leaves the policy to C1/D3 (IOS-C10, DR-B4-2). B4 also flags that one task per photo may exceed Apple's guidance on task counts (IOS-C16). | S47 | Yes | | | | Pending (B4 marks K6 Verified; the upload extension is inference) |
 
 ## Findings
 
@@ -179,7 +191,7 @@ Skeptic columns are empty until Stage 4. "Key?" follows PLAN §5.1.
 
 | Component | Role | Holds | Notes |
 |---|---|---|---|
-| **Worker `rq-api`** (TypeScript) on `api.<owner-domain>` | Device, homelab and enrollment API; presigning; minting homelab R2 credentials; writing records to R2; cron jobs | R2 parent secret (for presign and temp-credential minting), R2 bindings, D1 binding, homelab **public** control key, dedup-free config | Holds no trust-forging key (SR-23). `workers_dev = false`; preview URLs disabled (C40). |
+| **Worker `rq-api`** (TypeScript) on `api.<owner-domain>` | Device, homelab and enrollment API; presigning; minting homelab R2 credentials; writing records to R2; cron jobs | Two R2 parent secrets (device-signing for presign; homelab-minting for temp credentials, F4), R2 bindings, D1 binding, homelab **public** control key, dedup-free config | Holds no trust-forging key (SR-23). `workers_dev = false`; preview URLs disabled (C40). |
 | **D1 `rq-control`** | System of record for the control plane | Tables in F6 | One database. Every API request performs **at most one** `batch()` (F2). |
 | **DO class `DeviceGate`** (optional, C2 decides) | Exact per-device counters and quotas; outstanding-lease count | Small per-device SQLite | One object per device via `idFromName(device_id)`. Not on the critical path for correctness. |
 | **R2 bucket `rq-ingest`** | Content and record staging | `staging/`, `meta/` | **No Expiration rule, ever.** Default 7-day multipart abort only. |
@@ -252,6 +264,7 @@ Environments: `local` (Miniflare/`wrangler dev`, pinned versions), `sandbox` (H1
    - Content-Length;
    - `x-amz-checksum-sha256` on single PUT (C6).
    aws4fetch signs these only if they are set (and, for content-length, only with `allHeaders`, C36).
+   - Not proposed: `If-None-Match` on CreateMultipartUpload. A 2022 release note says R2 returns 412 there (C49), but it only checks the key at creation, the binding's `createMultipartUpload` takes no `onlyIf` (C8), and the key is freshly random anyway. Complete-time conditions are worse than useless if R2 aborts the upload on failure (C7).
 
 **Records (device → Worker → R2):** `POST /v1/records` carries a record batch body: signed and encrypted, opaque to the Worker, and much smaller than the 100 MB body limit (C20).
 - The Worker writes `meta/<device_id>/<batch_id>.age` with `put(…, {onlyIf: If-None-Match "*"})`. The wildcard-etag history (C45) means C1-S1 must test this exact call.
@@ -259,13 +272,13 @@ Environments: `local` (Miniflare/`wrangler dev`, pinned versions), `sandbox` (H1
 - This removes presigned-overwrite exposure for `meta/`, gives exact size and rate control, and replaces the R2 event notification as the feed source.
 
 **Why presigned URLs, not temporary credentials, for devices:**
-- Background upload machinery wants fully formed requests: iOS background `URLSession` later, Android queued work, possibly started hours later.
+- iOS background `URLSession` (deferred platform) takes fully formed requests that the system may send much later. Android WorkManager runs app code first, so it can fetch or re-sign URLs just in time. Either way the URL must be refreshable (F12): "fully formed" does not mean "long-lived".
 - A presigned URL is a plain HTTP PUT that needs no SigV4 code on the device.
 - A temp credential scoped to one `objectPaths` key with `UploadPart` and `ListParts` only (C10, C11) is a good **desktop** option, because it saves the window calls. Keep it as an option and do not ship two paths in v1.
 
 **Why not upload content through the Worker (the fallback if R2 behaves badly):**
 - Part size would be capped by the zone's 100 MB body limit on Free/Pro (C20).
-- Runtime updates kill requests still running after a 30 s grace (C22), and a 100 MB part over a slow uplink runs longer than that.
+- Runtime updates kill requests still running after a 30 s grace (C22). Cloudflare itself calls this "very unlikely" (C50), so it is a minor point; parts are retryable anyway.
 - Every byte would depend on Worker availability.
 - It buys create-only (`onlyIf`) and per-object `sha256` (C16), but the homelab verifies everything anyway (SR-04).
 
@@ -273,6 +286,8 @@ Environments: `local` (Miniflare/`wrangler dev`, pinned versions), `sandbox` (H1
 - A revoked device gets no new URLs within 60 s: the Worker checks device status in D1 on every call.
 - Outstanding URLs live ≤ 15 min by construction.
 - **Kill switch:** rotating the R2 parent token invalidates every outstanding URL and temp credential at once. Propagation is "up to a minute" (C14) or "immediately" (C11); C1-S1 measures it. The price is that every in-flight upload restarts its current window.
+- **Use two parent tokens, not one** (proposal): a *device-signing* token (Object R&W on `rq-ingest` only) used only to presign device URLs, and a *homelab-minting* token (Object R&W on both buckets) used only to mint homelab temp credentials. Rolling the device-signing token then kills every outstanding device URL (SR-09's "per-epoch signing token" lever) without cutting the homelab off mid-drain. Per-*device* R2 tokens would need the Worker to hold a Cloudflare API token that can create tokens, which is a worse secret than the one it replaces; not recommended.
+- **What a leaked URL or parent secret can do:** a presigned PUT is a bearer token reusable until expiry (C3), so its holder can overwrite that one staging key with other bytes. The homelab rejects them against the signed record (SR-04) and the device re-uploads: availability, not loss. A leaked parent secret (Worker compromise) can additionally read ciphertext and delete staged-but-uncommitted objects; committed data is already at home. Both stay within SR-23's "availability, money or invite abuse".
 
 ### F5. Homelab authentication and notifications
 
@@ -353,6 +368,7 @@ Environments: `local` (Miniflare/`wrangler dev`, pinned versions), `sandbox` (H1
   - Clients cache the last good document.
   - Clients ship with **two** bootstrap locations on two independent hostnames, so one lapsed domain or one lost account does not strand installed kits (C8 unattended survivability).
   - Proposal only: the owner decides the second location (DR-C1-4).
+  - SR-31: bootstrap config, hostnames and minimum-version fields "never carry a key, a secret or a trust decision". The offline signature protects clients against a hijacked or lapsed hostname; it is not a licence to put trust material (keys, pins) into the document. Pins stay in the kit and in signed updates (D3, D5).
 - **Versioning:** path prefix `/v1/`. Within v1, changes are additive only: new optional fields and endpoints. Clients ignore unknown fields. Every request carries `Reliquary-Client: <platform>/<semver>`.
   - Below the minimum version, the answer is a problem body with code `update_required` (status 426 proposed; the choice is open), carrying `min_version`.
   - The client renders the plain-language text itself, so it can be localised (E6).
@@ -372,7 +388,7 @@ Environments: `local` (Miniflare/`wrangler dev`, pinned versions), `sandbox` (H1
   | Group | Endpoints |
   |---|---|
   | Public | `GET /v1/bootstrap`; `POST /v1/enroll/redeem`; `POST /v1/enroll/pair`; email verification as GET page plus POST confirm (C3) |
-  | Device | `POST /v1/check`; `POST /v1/uploads`; `POST /v1/uploads/{id}/parts`; `POST /v1/uploads/{id}/complete`; `POST /v1/records`; `GET /v1/receipts?cursor=`; `GET /v1/status` (server time, latest signed homelab heartbeat); `GET /v1/restores` (later, A8) |
+  | Device | `POST /v1/check`; `POST /v1/uploads`; `POST /v1/uploads/{id}/parts`; `POST /v1/uploads/{id}/urls` (re-sign, F12); `POST /v1/uploads/{id}/complete`; `POST /v1/records`; `GET /v1/receipts?cursor=`; `GET /v1/status` (server time, latest signed homelab heartbeat); `GET /v1/restores` (later, A8) |
   | Homelab | `GET /v1/homelab/feed`; `POST /v1/homelab/commits`; `POST /v1/homelab/rejections`; `POST /v1/homelab/credentials`; `PUT /v1/homelab/revocations`; `POST /v1/homelab/heartbeat`; `POST /v1/homelab/restore-jobs`; `GET /v1/homelab/export` |
   | Admin (owner) | Invites create, revoke, list; device revoke. The path depends on D3/C8: owner phone or homelab CLI. |
 
@@ -408,6 +424,23 @@ Cron limits are ample: 30 s CPU and 15 min wall per run (C23). Cron changes take
   | Temp credentials, action scoping by local JWT | Documented; "API support coming soon" (C11) | Yes (homelab) | Break-glass long-lived token; or the Temporary Credentials API with `object-read-write` + prefixes. Server-side only, so no client update. |
   | Email Service | Beta (T2) | C3's call | Resend/Postmark (C3) |
 
+### F12. Background transfer queues vs BUD-REVOKE (new; reconciles B4 and SR-09)
+
+The conflict: BUD-REVOKE wants outstanding URLs dead within 15 min. OS background machinery may start a transfer later than that (B4 K6, C53). Presigned URLs are bearer tokens for their whole lifetime (C3), and so are temporary credentials (C51), so switching mechanism does not help.
+
+| Option | Revocation | Fits | Cost | Verdict |
+|---|---|---|---|---|
+| **A. Re-sign on wake (recommended default)** | ≤ 15 min kept | Desktop daemon, Android WorkManager (code runs before the transfer) | One extra Worker request per wake per upload; local HMAC only (C1) | Default for v1 platforms |
+| B. Refresh on failure: a 403 on an expired URL returns the part to "spooled" and re-signs | ≤ 15 min kept | All, incl. iOS later (IOS-C10: B4-S1 re-uploads were byte-identical) | A wasted request per expiry | Always on, as the safety net for A |
+| C. Longer URLs for one platform (e.g. iOS background) | Weakened to that lifetime | iOS | Owner accepts a longer window | DR-B4-2, owner's call; not needed for v1 platforms |
+| D. Worker-proxied part upload with per-request auth | Checked at send time | All | 100 MB body cap (C20), Worker CPU/requests, availability coupling | Fallback only |
+
+API consequences (ADR-0010):
+- `POST /v1/uploads/{id}/urls` takes `{parts: [n…]}` (or nothing, for a single PUT) and returns fresh URLs for the **same keys and UploadId**. It is idempotent, cheap, and refused for revoked devices and for uploads no longer `open`.
+- Re-signing never mints a URL for a different key, so per-upload keys and SR-07 still hold.
+- Clients treat 403 `AccessDenied`/`ExpiredRequest` on a presigned request as "re-sign", never as failure. The exact R2 error for an expired URL is a C1-S1 observation (H10). In the emulated run Miniflare returned 403 `ExpiredRequest` (G2-S1 T08), which says nothing about R2.
+- IOS-C16 (task count per photo) is a packaging question for A2/A4 (ADR-0011), not for C1. C1 only needs the API to accept a packed object as one upload, which it already does.
+
 ### F11. Load-bearing limits list (verification date 2026-10-06 unless noted)
 
 | Limit | Value | Source | Bites where |
@@ -420,6 +453,7 @@ Cron limits are ample: 30 s CPU and 15 min wall per run (C23). Cron changes take
 | Lifecycle rules | 1,000 per bucket; deletion lag ~24 h | C13 | Restore bucket |
 | R2 REST API | 1,200 req / 5 min per account | C18 | Avoid on the hot path |
 | Token permission propagation | up to 1 min (vs "immediately" for temp creds) | C14, C11 | BUD-REVOKE kill switch |
+| Temp credential scope | one bucket per credential; TTL max undocumented | C51 | Homelab needs two credentials |
 | Workers CPU / request | 30 s default, 5 min max (Paid) | C21 | Presign windows |
 | Subrequests | 10,000 default | C21 | DO fan-out |
 | Request body | 100 MB Free/Pro zone | C20 | Records via Worker |
@@ -447,6 +481,10 @@ Cron limits are ample: 30 s CPU and 15 min wall per run (C23). Cron changes take
 | Content through the Worker | Fits | `onlyIf`, `sha256`, exact size, hides account ID | 100 MB body cap; runtime-update kills; availability coupling | C16, C20, C22 |
 | **Homelab R2 via Worker-minted temp credentials (recommended)** | Fits | No long-lived secret at home; action/prefix scope | Depends on Worker availability; local-signing format | C10–C12 |
 | Homelab long-lived bucket token | Fits | Independent of Worker | Cannot separate delete from write or scope prefixes | C12 |
+| **Two R2 parent tokens: device-signing and homelab-minting (recommended)** | Fits | Rolling one kills all device URLs without cutting off the homelab | Two secrets in Worker config | C11, C14, SR-09 |
+| One parent token for everything | Fits | Simplest | The kill switch also breaks homelab draining | C11 |
+| **Short URLs + re-sign on wake/failure (recommended)** | Fits BUD-REVOKE | Revocation window kept | Extra Worker calls; client logic | F12, C53 |
+| Longer URLs for background queues | Weakens BUD-REVOKE | Simple client | Longer bearer-token window | DR-B4-2 |
 | **TypeScript Worker (recommended)** | Fits | GA, native crypto, tooling | Small formats twice | F7 |
 | Rust `workers-rs` | Fits | One implementation | Beta, pre-1.0, nightly for unwind | C32–C35 |
 
@@ -479,6 +517,10 @@ Cron limits are ample: 30 s CPU and 15 min wall per run (C23). Cron changes take
 
 Placeholder: the spike runner owns execution and the C1-S1 kit (`docs/research/kits/C1-S1/`). The hypotheses below fix the wording so the kit, the results and ADR-0010 match. **No sandbox account exists yet (H5 L01).** Any local run is **emulated, not real R2/Cloudflare**, and cannot settle C1-S1.
 
+**Emulated evidence already in the repo (NOT real R2/Cloudflare).** G2-S1 ran a 50-check S3 fidelity script against Miniflare and four other local S3 servers on 2026-09-29 (S45, C52). For C1 it shows two things. First, the Worker-side paths the design needs work in Miniflare: binding `put` with a wildcard `onlyIf` (W02), Worker-presigned UploadPart with a binding complete (W04), and a D1 claim race with one winner (W05). Second, Miniflare does **not** reproduce documented R2 behaviour on checksums (C6 vs T41/T47) or conditional Create (C49 vs T39), and it lacks ListParts and lifecycle (T35, T54). So the A0 skeleton can run on Miniflare, but every C1-S1 hypothesis still needs the sandbox.
+
+**Proposed addition to the kit (for the spike runner):** **H14:** S3 CreateMultipartUpload with `If-None-Match: *` on an existing key returns 412 (release note 2022-05-27, C49; Miniflare returns 200). Low decision value: record it so the docs conflict is closed.
+
 **C1-S1 hypotheses (real R2):**
 - **H1:** presigned PUT with signed `If-None-Match: *` → 412 on an existing key; the existing object is unchanged.
 - **H2:** CompleteMultipartUpload (S3 API) with `If-None-Match: *` on an existing key → precondition failure. Record whether the upload is aborted (C7) or survives.
@@ -497,7 +539,7 @@ Placeholder: the spike runner owns execution and the C1-S1 kit (`docs/research/k
 | Spike | Hypothesis | Pass → / fail → (decision) | Exec tag | Budget IDs | Data class | Status | Result |
 |---|---|---|---|---|---|---|---|
 | C1-S1 | H1–H13 above | Pass on H1/H2/H12 → sign create-only (SR-08) as defence in depth. Fail → per-upload keys (already mandatory) plus homelab verification; record the gap. H8 fail → segment checkpoint or USB (A3-S3). H13 fail → long-lived homelab token. | SB (kit); emulated subset CT | BUD-REVOKE | `SYN → results` | Running (spike runner; kit) | Pending |
-| C1-S2 | 50 concurrent leases × 10,000 trials: exactly one live lease per ID, D1 `batch()` vs DO `transactionSync` | Pass → D1. Fail → DO shards for `uploads` (F2). | CT (emulated) / SB | — | `SYN → results` | Running (spike runner) | Pending |
+| C1-S2 | 50 concurrent leases × 10,000 trials: exactly one live lease per ID, D1 `batch()` vs DO `transactionSync` | Pass → D1. Fail → DO shards for `uploads` (F2). | CT (emulated) / SB | — | `SYN → results` | Running (spike runner) | Pending. Related emulated datum only: G2-S1 W05, 16-way D1 race, one winner in 10/10 rounds (Miniflare) |
 | C1-S3 | 1,000-ID presence check against 5M rows via `json_each` | p99 < 500 ms and < $1/M → D1. Else → DO shards. | SB | BUD-CLOUD | `SYN → results` | Not started (needs L01) | — |
 | C1-S4 | Presign 200 parts in one request (aws4fetch, explicit expiry) | Within Paid CPU, URLs work from curl → windowed presign. Also measure Ed25519 verify for BUD-CPU-REQ. | SB | BUD-CPU-REQ | `SYN → results` | Not started (needs L01) | — |
 | C1-S5 | Old client against an additive and a breaking v2 change | Additive change invisible; breaking change → typed `update_required` | CT | — | `SYN → results` | Running or pending (spike runner) | Pending |
@@ -526,13 +568,18 @@ Placeholder: the spike runner owns execution and the C1-S1 kit (`docs/research/k
 | 8 | Status code for `update_required` (426 vs 400 + code); whether the bootstrap signature reuses the update trust root (D5) | API draft; D5 | ADR-0010 draft |
 | 9 | Primary sources for RFC 9457 and the Idempotency-Key draft status (blocked) | H1 | Before ADR-0010 cites them |
 | 10 | Exact per-device counters: DO vs D1 counters vs the rate-limit binding | C2 | Wave 2 |
+| 11 | The exact R2 status and error code for an expired presigned URL, so clients can map it to "re-sign" (F12) | C1-S1 H10 | Gate B |
+| 12 | Does R2 honour `If-None-Match` on S3 CreateMultipartUpload (release note C49 vs table silence)? | C1-S1 H14 (proposed) | Gate B |
+| 13 | Maximum `ttlSeconds` for locally signed temporary credentials; not documented on the pages read (C51) | C1-S1 H13; T2 watch list | Gate B |
+| 14 | Does any v1 platform need URLs longer than 15 min once re-sign on wake exists? | B2 (Android), B4/DR-B4-2 (iOS), D3 | Wave 2 |
 
 ## Recommendation
 
 Adopt for the ADR-0010 draft:
 - the F1 topology (TS Worker on the owner's domain, one D1 database, two R2 buckets, optional per-device DOs, one Cron Trigger);
 - the F3 key layout, with **no Expiration rule in the ingest bucket**;
-- windowed presigned content uploads with ≤ 15-min URLs, and records through the Worker;
+- windowed presigned content uploads with ≤ 15-min URLs, a re-sign endpoint and "403 means re-sign" client rule (F12), and records through the Worker;
+- two R2 parent tokens in the Worker (device-signing and homelab-minting) so the BUD-REVOKE kill switch does not cut off the homelab;
 - the homelab polling a Worker feed and reconciling by listing, with Worker-minted, action-scoped temporary R2 credentials;
 - the opaque-artifact rule for the Worker;
 - the F8 API conventions;
@@ -613,12 +660,14 @@ Adopt for the ADR-0010 draft:
 | A3 | Feed polling replaces queue hints in v1 (DR-C1-3); records go through the Worker; uniform `staging/<dedup_id>/<upload_id>/s<n>` keys | F3–F5 |
 | A1 | Dedup-ID textual encoding length (key length, Worker validation) | F3 |
 | D3 | Request-auth format (two implementations: Rust and TS); config-signing key for bootstrap; homelab control key; whether the device list is homelab-signed (rebuildability) | F6–F8 |
-| D2 | Key inventory gains: homelab control key, config-signing key, R2 parent secret (Worker), break-glass R2 token (offline) | F5, F8 |
-| C2 | `DeviceGate` DO for exact counters; `workers_dev = false` **and** preview URLs disabled; kill switch = roll the R2 parent token | F1, F4, C40 |
+| D2 | Key inventory gains: homelab control key, config-signing key, two R2 parent secrets in the Worker (device-signing, homelab-minting), break-glass R2 token (offline) | F4, F5, F8 |
+| C2 | `DeviceGate` DO for exact counters; `workers_dev = false` **and** preview URLs disabled; kill switch = roll the device-signing R2 parent token (two parent tokens, F4) | F1, F4, C40 |
 | C4 | Feed polling instead of Queues removes the Queues line; restore bucket is separate | F5 |
 | C7 | Dead-man's switch via cron on the signed heartbeat | F9 |
 | C8 | Nightly `export` of cloud-only tables; break-glass token runbook; rebuild into a new account changes the R2 host (clients must not pin it) | F6, F8 |
 | B6 | Windowed presign; ETag formulas for local verification; part-size policy within C9 | F4 |
 | G2 | Shared test vectors for every format the Worker implements | F7 |
+| B2, B4 | Re-sign endpoint and the "403 means re-sign" rule; URL lifetime stays 15 min unless DR-B4-2 decides otherwise | F12 |
+| C1-S1 spike runner | Proposed H14 (conditional CreateMultipartUpload); record the expired-URL error code (H10) and the max temp-credential TTL (H13) | Spikes, C49, C51 |
 | H1 | Log blocked sources (RFC Editor, datatracker, AWS docs, Cloudflare blog/status); add a new one-way-door note: bootstrap locations shipped in kits; track C-01 as proposed "off" | Method, F3 |
 | T2 | Watch list: temp-credential local-signing format, R2 release notes for conditional Complete, D1 single-thread guidance | F10 |

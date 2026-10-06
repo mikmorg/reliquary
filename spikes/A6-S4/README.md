@@ -58,6 +58,22 @@ All rows and every other field come back from the objects alone (blobs are decry
 
 **Lesson for ADR-0012:** the CAS layout is only "trivially safe" with exactly one writer. The production ingest service needs a store-wide writer lock that a test checks, and the same lock for any repair or prune tool (SR-20).
 
+**Reproduction check** (2026-10-06, second runner pass; `evidence/s4-repro-2026-10-06b.txt`). The binary was rebuilt from the committed source. The scenario was the mid-ingest loss one, on a fresh store of the 600-record corpus:
+
+1. A second, concurrent ingest was refused ("store is locked by another writer").
+2. The first ingest was killed after 401 ACKs.
+3. The catalog was deleted and rebuilt (352 blobs, 401 records).
+4. Ingest resumed: 199 new ACKs, plus 401 ACKs on the stored-receipt path.
+5. The catalog was deleted again and rebuilt from manifest and records in 0.49 s.
+
+Result:
+
+- the canonical export (1,135 rows) was **byte-identical**;
+- the truth check gave 600/600;
+- the keyless audit gave 1,135 objects OK.
+
+A files-only rebuild lost the same four fields as before.
+
 ## Pass / fail
 
 **Pass** (final run, after the two fixes): byte-identical canonical export in all three scenarios. The failures before the fixes are recorded above.
