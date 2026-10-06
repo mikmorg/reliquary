@@ -35,6 +35,7 @@ Status values: **Open** (waiting for evidence), **Ready** (decision request writ
 | OD-19 | Documents on Android in v1 (SAF vs all-files access vs media only) | Wave 1 | E2, B3 | ADR-0004, ADR-0018, ADR-0019 | No (scope within "files on the device") | Open | |
 | OD-20 | Per-person storage budgets and categories that need approval | Wave 2 | C4 | C4 fair-share proposal | Possibly: CLAUDE.md keep-forever | Open | |
 | OD-21 | Confirm the research-data rules: data classes, rules R1–R12 and the output check, including exact sizes counting as family data (R3), 90-day deletion of raw outputs (R7), and no committed third-party binaries until ADR-0036 (R9). Added by the Wave 0 checker from H3's owner actions 1–2. | **Wave 0** (before any `FAM → AGG` spike) | H3 | `h3-research-data-governance.md` | No; it tightens the plan's H3 rules | **Open: needs the H2 intake now** (Q-J6) | |
+| OD-22 | Add a one-way "Reliquary" drop folder (plus "Send to Reliquary" menus) as a v1 source alongside auto-discovery; two-way sync rejected for v1 | Wave 2 | E4, B5, E3 | `ux-drop-folder.md` | No; it adds a source within "files on the device" | **Decided 2026-10-06** (direction) | Yes: one-way drop folder. Details designed in Wave 2. |
 
 ## Suggested sittings
 
