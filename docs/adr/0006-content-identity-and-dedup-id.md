@@ -1,7 +1,7 @@
 # ADR-0006: Content identity is SHA-256; dedup IDs are kind- and epoch-tagged keyed MACs re-derivable from a cached digest
 
 - **Status:** Proposed
-- **Date:** 2026-10-06
+- **Date:** 2026-10-06 (A1-S1 kit addendum and backend source check added 2026-10-07)
 - **Owner workstream:** A1
 - **Decider:** the owner
 - **Gate:** A
@@ -59,7 +59,8 @@ Granularity: whole file vs block or tree hash vs content-defined chunking (CDC).
 
 **1. Algorithm: SHA-256.** It is unchanged from ADR-0001. It is native on every platform (Android `MessageDigest`/`Mac` API 1+, CryptoKit, Workers `DigestStream`), and `sha256sum` can check it.
 - *Confirmation pending (Gate A):* A1-S1 must show SHA-256 meeting BUD-HASH on the low-end phone class.
-- If the `sha2` crate misses BUD-HASH on a device, first measure other SHA-256 backends on that device and ABI, including 32-bit `armeabi-v7a`, where `sha2` 0.11 is always software: `ring`, `aws-lc-rs`, and platform `MessageDigest`. Only after that may BLAKE3 be proposed, as a superseding decision.
+- If the `sha2` crate misses BUD-HASH on a device, first measure other SHA-256 backends on that device and ABI: `aws-lc-rs`, platform `MessageDigest` (Conscrypt) and `ring`. This includes 32-bit `armeabi-v7a`, where `sha2` 0.11 is always software. If one passes, the outcome is a per-ABI library requirement (T1/B2), not a change of algorithm. Only after that may BLAKE3 be proposed, as a superseding decision.
+- *From source (note C25):* on 32-bit ARM, AWS-LC and BoringSSL (under Conscrypt) can use the ARMv8 SHA-256 instructions, and `ring` 0.17.14 and `sha2` cannot. Whether a given phone's Conscrypt carries that BoringSSL code is measured by the kit, not assumed.
 
 **2. Identifier structure (proposed as written; DR-A1-2 asks the owner to confirm the epoch tag):**
 - Every dedup ID carries a **kind** byte and a **u16 epoch**, and keeps the **full 256-bit** MAC.
@@ -117,7 +118,7 @@ Receipt semantics, status vocabulary and cache protection are requirements hande
   - The ID deviates from the settled wording unless option A is chosen.
   - The homelab catalog must keep `sha256` (and `inner` for kind 04) for every item.
 - **Follow-up work:**
-  - Before running, the A1-S1 kit needs an addendum: benchmark other SHA-256 backends, make the phone rotation run required, and benchmark C1 (A/N) against C2 (B) on phones.
+  - Run the A1-S1 kit, including its addendum (added 2026-10-07): other SHA-256 backends per ABI, a C1 (A/N) vs C2 (B) battery soak, and the required phone rotation run.
   - A3 defines the stale-epoch response and its grace window.
   - A4 defines bundle directory sharding.
   - D2 aligns ADR-0008 Decision 7 with the exact HKDF info bytes, and with the conditional "kind 01 or 04" in place of "construction B".
@@ -179,7 +180,9 @@ Receipt semantics, status vocabulary and cache protection are requirements hande
 | K11 restic change-detection signals and failure cases | restic `040_backup.rst`; issues #2179, #2495 | Verified |
 | K12 Tahoe: a new secret means a new dedup domain | Tahoe `convergence-secret.rst` | Verified (its "storage doubles" does **not** carry over to Reliquary) |
 | A1-S2 rotation from the cache with zero file reads (x86) | `spikes/A1-S2` | Measured (x86 reference) |
-| A1-S3 follow-up: Rust, Python and Node agree on 111 vectors; Wycheproof passes | `spikes/A1-S3/identifiers-v1` | Measured |
+| A1-S3 follow-up: Rust, Python and Node agree on 111 vectors; Wycheproof passes | `spikes/A1-S3/identifiers-v1` | Measured (Python re-run 2026-10-07: 0 failures) |
+| C25 AArch32 SHA-256 paths: AWS-LC/BoringSSL hardware, `ring` NEON/software only | `ring-0.17.14.crate`; BoringSSL and AWS-LC `internal.h`; Conscrypt README | Primary code; not skeptic-reviewed |
+| C26 x86 without SHA-NI: asm SHA-256 about 40 % less CPU than `sha2` software | `spikes/A1-S1` addendum | Measured (x86 reference only) |
 | K3 rotation cost of option A | arithmetic | **Contested**. Restated; not used as sole support |
 | K4 opacity before a leak; testing from a digest after a leak | reasoning | Secondary-only. Stated as an accepted trade-off |
 | K5 collision inheritance | reasoning | Secondary-only. Stated as an accepted trade-off |

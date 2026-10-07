@@ -3,13 +3,18 @@
 # Run on the computer the phone is paired with. Needs: adb on PATH, the phone in developer mode,
 # and the a1-hashbench binary built for the phone (see README.md, "Build the benchmark").
 #
-#   ./run-android.sh <path-to-a1-hashbench-binary> <label>      e.g. ./run-android.sh ./a1-hashbench lowend
+#   ./run-android.sh <path-to-a1-hashbench-binary> <label> [C1|C2]   e.g. ./run-android.sh ./a1-hashbench lowend
+#
+# The optional third argument picks the soak workload (default C2). The addendum (README step A6)
+# reruns the script on the low-end phone with C1 after a recharge, to compare battery cost.
 #
 # Everything the script writes is synthetic (random bytes) and goes to /data/local/tmp/a1 on the
 # phone. It never reads the camera roll or any user file. It deletes its files at the end.
 set -eu
 BIN="$1"
 LABEL="$2"
+SOAK_W="${3:-C2}"
+case "$SOAK_W" in C1|C2) ;; *) echo "soak workload must be C1 or C2" >&2; exit 2 ;; esac
 OUT="results-$LABEL-$(date +%Y%m%d-%H%M%S)"
 D=/data/local/tmp/a1
 mkdir -p "$OUT"
@@ -22,6 +27,8 @@ say "Device facts (model, Android version, CPU ABIs, CPU features)"
   adb shell getprop ro.product.model
   adb shell getprop ro.build.version.release
   adb shell getprop ro.product.cpu.abilist
+  echo "abilist32: $(adb shell getprop ro.product.cpu.abilist32)"
+  echo "abilist64: $(adb shell getprop ro.product.cpu.abilist64)"
   adb shell getprop ro.soc.model || true
   adb shell cat /proc/cpuinfo | grep -i -E "^(Features|CPU part|Hardware)" | sort | uniq -c
   adb shell cat /proc/meminfo | head -1
@@ -53,8 +60,8 @@ date -u +%FT%TZ | tee "$OUT/soak-before.txt"
 battery | tee -a "$OUT/soak-before.txt"
 thermal | tee -a "$OUT/soak-before.txt"
 
-say "Soak: 30 minutes of C2 (SHA-256 + HMAC over the digest) over the file. Watch MB/s per 10 s window."
-adb shell "$D/a1-hashbench" soak "$D/f_4GiB_plus_1" 1800 | tee "$OUT/soak.jsonl"
+say "Soak: 30 minutes of $SOAK_W over the file (C2 = SHA-256 + HMAC over the digest; C1 = SHA-256 + HMAC over the content). Watch MB/s per 10 s window."
+adb shell "$D/a1-hashbench" soak "$D/f_4GiB_plus_1" 1800 "$SOAK_W" | tee "$OUT/soak-$SOAK_W.jsonl"
 
 say "Battery and thermal state AFTER the soak"
 date -u +%FT%TZ | tee "$OUT/soak-after.txt"

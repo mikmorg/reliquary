@@ -1,0 +1,16 @@
+{"mode":"info","arch":"x86_64","os":"linux","threads":4,"cpu_features":{"sha":false,"sse4.1":true,"avx2":true,"avx512f":true,"avx512vl":true,"at_hwcap":"0x6","at_hwcap2":"0x2"},"sha2_forced_soft":false,"blake3_features":[],"alt_backends":["ring_sha256","ring_C1_sha256+hmac_content","awslc_sha256","awslc_C1_sha256+hmac_content"],"target_pointer_width":64}
+{"mode":"mem","workload":"sha256","bytes":1073741824,"runs":4,"mb_per_s_median":201,"mb_per_s_min":199,"mb_per_s_max":206,"cpu_s_per_gb_median":4.910,"sink":139}
+{"mode":"mem","workload":"hmac_sha256_content","bytes":1073741824,"runs":4,"mb_per_s_median":206,"mb_per_s_min":201,"mb_per_s_max":208,"cpu_s_per_gb_median":4.824,"sink":97}
+{"mode":"mem","workload":"C1_sha256+hmac_sha256_content","bytes":1073741824,"runs":4,"mb_per_s_median":104,"mb_per_s_min":100,"mb_per_s_max":106,"cpu_s_per_gb_median":9.519,"sink":234}
+{"mode":"mem","workload":"C2_sha256_then_hmac_digest","bytes":1073741824,"runs":4,"mb_per_s_median":210,"mb_per_s_min":203,"mb_per_s_max":218,"cpu_s_per_gb_median":4.704,"sink":8}
+{"mode":"mem","workload":"blake3","bytes":1073741824,"runs":4,"mb_per_s_median":4761,"mb_per_s_min":4629,"mb_per_s_max":4772,"cpu_s_per_gb_median":0.208,"sink":3}
+{"mode":"mem","workload":"blake3_keyed","bytes":1073741824,"runs":4,"mb_per_s_median":4763,"mb_per_s_min":4659,"mb_per_s_max":4846,"cpu_s_per_gb_median":0.209,"sink":89}
+{"mode":"mem","workload":"C3_blake3+keyed_blake3_content","bytes":1073741824,"runs":4,"mb_per_s_median":2636,"mb_per_s_min":2580,"mb_per_s_max":2682,"cpu_s_per_gb_median":0.379,"sink":90}
+{"mode":"mem","workload":"C4_blake3_then_keyed_digest","bytes":1073741824,"runs":4,"mb_per_s_median":4885,"mb_per_s_min":4857,"mb_per_s_max":4914,"cpu_s_per_gb_median":0.204,"sink":140}
+{"mode":"mem","workload":"C5_sha256+keyed_blake3_content","bytes":1073741824,"runs":4,"mb_per_s_median":189,"mb_per_s_min":188,"mb_per_s_max":190,"cpu_s_per_gb_median":5.242,"sink":210}
+{"mode":"mem","workload":"blake3_rayon_all_cores","bytes":1073741824,"runs":4,"mb_per_s_median":14190,"mb_per_s_min":12844,"mb_per_s_max":16222,"cpu_s_per_gb_median":0.245,"sink":3}
+{"mode":"mem","workload":"C4_rayon_all_cores","bytes":1073741824,"runs":4,"mb_per_s_median":15428,"mb_per_s_min":14193,"mb_per_s_max":16440,"cpu_s_per_gb_median":0.229,"sink":140}
+{"mode":"mem","workload":"ring_sha256","bytes":1073741824,"runs":4,"mb_per_s_median":342,"mb_per_s_min":334,"mb_per_s_max":354,"cpu_s_per_gb_median":2.896,"sink":139}
+{"mode":"mem","workload":"ring_C1_sha256+hmac_content","bytes":1073741824,"runs":4,"mb_per_s_median":169,"mb_per_s_min":165,"mb_per_s_max":172,"cpu_s_per_gb_median":5.842,"sink":234}
+{"mode":"mem","workload":"awslc_sha256","bytes":1073741824,"runs":4,"mb_per_s_median":353,"mb_per_s_min":350,"mb_per_s_max":357,"cpu_s_per_gb_median":2.831,"sink":139}
+{"mode":"mem","workload":"awslc_C1_sha256+hmac_content","bytes":1073741824,"runs":4,"mb_per_s_median":168,"mb_per_s_min":164,"mb_per_s_max":173,"cpu_s_per_gb_median":5.881,"sink":234}

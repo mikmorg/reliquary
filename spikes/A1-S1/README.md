@@ -105,3 +105,46 @@ The same source builds for Windows (checked with `cargo check --target x86_64-pc
 ## Evidence
 
 `evidence/*.jsonl`: raw output, one JSON object per line, with `uptime` lines before and after each run.
+
+## Addendum (2026-10-07, A1 synthesis): alternative SHA-256 backends
+
+**Why.** All three skeptics pointed out that `sha2` 0.11 always uses software SHA-256 on 32-bit ARM, so a slow `sha2` on a low-end phone must not by itself trigger a switch to BLAKE3. The A1 decision rule now says: measure other SHA-256 backends on the same device and ABI first. This addendum adds those backends to the benchmark and checks what their code does on 32-bit ARM. Data class `SYN → results`.
+
+**Code changes** (throwaway):
+- Optional cargo features `backend-ring` (ring 0.17.14) and `backend-awslc` (aws-lc-rs 1.18.1). These add the workloads `ring_sha256`, `ring_C1_sha256+hmac_content`, `awslc_sha256` and `awslc_C1_sha256+hmac_content` to `mem` and `file`. Default builds are unchanged.
+- The `info` line now also prints `at_hwcap`, `at_hwcap2` (raw auxv words, Linux and Android), `target_pointer_width` and `alt_backends`. A 32-bit process can therefore be classified on the phone.
+- `soak <path> <secs> [C1|C2]`: the soak can run C1, so the battery cost of C1 and C2 can be compared (DR-A1-1 B vs N).
+- `java/MdBench.java`: a platform probe. It times `MessageDigest("SHA-256")` and `Mac("HmacSHA256")` from the default provider (SHA-256, C1, C2) and prints the provider name. On Android, that provider is normally Conscrypt. It runs through `app_process` after `d8`; see the kit.
+
+**What the source code says about 32-bit ARM** (primary sources, read 2026-10-07):
+
+| Backend | 32-bit ARM (`armeabi-v7a`) SHA-256 path | Source |
+|---|---|---|
+| RustCrypto `sha2` 0.11.0 | Software only ("All other targets: use soft") | `sha2-0.11.0.crate` README (skeptic-verified 2026-10-06) |
+| `ring` 0.17.14 | **NEON or plain asm only. No ARMv8 SHA-256 instructions.** The `target_arch = "arm"` branch dispatches `sha256_block_data_order_neon` or `_nohw`; only the `aarch64` branch uses `sha256_block_data_order_hw` | `ring-0.17.14.crate` `src/digest/sha2/sha2_32.rs` lines 30–43 |
+| BoringSSL (main) | **Uses the ARMv8 SHA-256 instructions in 32-bit mode when the CPU reports them.** For `OPENSSL_ARM` it defines `SHA256_ASM_HW` with `sha256_hw_capable() = CRYPTO_is_ARMv8_SHA256_capable()`, and `sha256-armv4.pl` emits `sha256h`/`sha256h2` | `google/boringssl @ main`: `crypto/fipsmodule/sha/internal.h`, `crypto/fipsmodule/sha/asm/sha256-armv4.pl` |
+| AWS-LC (main), under `aws-lc-rs` | Same as BoringSSL (`SHA256_ASM_HW` for `OPENSSL_ARM`) | `aws/aws-lc @ main`: `crypto/fipsmodule/sha/internal.h` |
+| Android platform `MessageDigest` | Default provider is normally Conscrypt, which uses BoringSSL and is updated through Mainline. **Which BoringSSL revision a given phone's Conscrypt carries, and so whether it has the AArch32 hardware path, is not known from source.** The kit measures it | `google/conscrypt @ master` README (lines 13, 22, 28–32, 87) |
+
+So on a 32-bit-only phone whose CPU has the ARMv8 crypto extensions, aws-lc-rs and probably the platform `MessageDigest` can use hardware SHA-256, and `sha2` and `ring` cannot. On an AArch64 core without `HWCAP_SHA2`, every backend is software, and asm (ring, aws-lc, BoringSSL) may still beat `sha2`'s Rust code. That is unmeasured on ARM.
+
+**Measured on x86 (reference only, not a phone).** After the container restart this VM is an "Intel(R) Xeon(R) Processor @ 2.80GHz", 4 vCPU, **without SHA-NI**, with AVX-512. CPU pressure was low (PSI some avg10 0.00–2.73). That makes it a fair comparison of *software* SHA-256 implementations on x86. In memory, 1 GiB, median of 4 runs after one warm-up, two separate runs:
+
+| Workload | MB/s (run 1 / run 2) | CPU s/GB (run 1 / run 2) |
+|---|---|---|
+| `sha2` sha256 (software, this host) | 201 / 203 | 4.91 / 4.86 |
+| `ring` sha256 | 342 / 349 | 2.90 / 2.85 |
+| `aws-lc-rs` sha256 | 353 / 340 | 2.83 / 2.92 |
+| JVM `MessageDigest` (OpenJDK 21, SUN provider; logic check of `MdBench`) | 326 | 3.04 |
+| `sha2` C1 / `ring` C1 / `aws-lc-rs` C1 / JVM C1 | 104 / 171 / 171 / 169 | 9.5 / 5.8 / 5.8 / 5.9 |
+| `sha2` C2 / JVM C2 | 210 / 347 | 4.70 / 2.85 |
+| blake3 (AVX-512) | 4,761 | 0.208 |
+
+- On this x86 host without SHA-NI, the asm SHA-256 backends used about 40 % less CPU per GB than `sha2`'s software path (2.85–2.92 vs 4.86–4.91 CPU s/GB). This is evidence that the backend choice can matter by a large factor when the SHA-2 instructions are absent. **It does not transfer to ARM.** The phone kit measures that.
+- The 2-hashes-per-byte cost of C1 shows up again in every backend (C1 ≈ 2 × SHA-256 CPU).
+- **Cross-implementation check (weak):** the first byte of the final ID (`sink`) was identical across `sha2`, `ring`, aws-lc-rs and the JVM probe for SHA-256 (139), C1 (234) and C2 (8). That covers the same data and the same constructions. It is a one-byte check, not a vector test; the A1-S3 vectors are the conformance test.
+- **Not done here:** Android cross-builds of the new features. `cargo check --target armv7-linux-androideabi` fails without the std target and NDK, and `aarch64-linux-android` fails in blake3's C build without the NDK compiler. `d8` could not be fetched (`dl.google.com` is blocked from the container), so `MdBench` was not dexed. Both steps are in the kit and are untested.
+
+Raw output: `evidence/mem-altbackends-x86.jsonl`, `evidence/mem-altbackends-x86-run2.jsonl`, `evidence/mem-platform-jvm-x86.jsonl`, `evidence/altbackends-host-2026-10-07.txt`.
+
+Reproduce: `cargo build --release --features backend-ring,backend-awslc && ./target/release/a1-hashbench mem 1024 4`; `cd java && javac --release 8 MdBench.java && java -Xmx2g -cp . MdBench 1024 4`.

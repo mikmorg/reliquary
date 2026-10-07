@@ -15,8 +15,8 @@ Find out what really happens on R2 when a phone pauses a large multipart upload 
 ## Hypothesis
 
 1. **H1 (24 h resume):** one day after the upload starts, ListParts returns the parts already uploaded with the journaled ETags. The upload then finishes without re-sending any of them (`resent_journaled_bytes = 0`), and the object's SHA-256 matches.
-2. **H2 (default 7-day abort):** with no custom rule, R2 aborts an incomplete multipart upload about 7 days after **initiation**. Afterwards ListParts and UploadPart return NoSuchUpload, the protocol's "upload gone" path. Lifecycle timing is approximate, "typically within 24 hours" (A3 note C13, C14).
-3. **H3 (extension):** it is undocumented whether an AbortIncompleteMultipartUpload rule can extend the window beyond 7 days (A3 note C13, open question 1). Two outcomes are possible. If R2 rejects `DaysAfterInitiation = 10`, extension is impossible. If R2 accepts it and the upload is still there on day 8, extension works.
+2. **H2 (default 7-day abort):** with no custom rule, R2 aborts an incomplete multipart upload about 7 days after **initiation**. Afterwards ListParts and UploadPart return NoSuchUpload, the protocol's "upload gone" path. Lifecycle timing is approximate, "typically within 24 hours" (A3 note K7, K8).
+3. **H3 (extension):** it is undocumented whether an AbortIncompleteMultipartUpload rule can extend the window beyond 7 days (A3 note K7 and C31, open question 1). Two outcomes are possible. If R2 rejects `DaysAfterInitiation = 10`, extension is impossible. If R2 accepts it and the upload is still there on day 8, extension works.
 4. **H4 (cleanup):** an `AbortIncompleteMultipartUpload` rule with `DaysAfterInitiation = 1` removes an abandoned upload within roughly 1–2 days.
 5. **H5 (segment checkpoint, A3 note F2 option 1):** on day 6, the contiguous finished parts 1..k complete as segment `s0`, a new upload `s1` carries the rest, and `s0 ‖ s1` hashes to the expected whole-object SHA-256.
 
@@ -28,7 +28,7 @@ Find out what really happens on R2 when a phone pauses a large multipart upload 
 | **Pass, and H3 shows extension works** | ADR-0009 can use a longer abort window on `staging/` instead of, or as well as, the checkpoint. C1 records the rule. |
 | **Fail on H1** (ListParts loses parts, ETags differ, or completion fails after 24 h) | Resume is unsafe on R2. ADR-0009 falls back to one object per segment (A2/A4) and drops multipart for long uploads. |
 | **Fail on H5** (a completed prefix of parts cannot become a segment) | Restart plus the USB fallback for files that cannot finish within 7 days ("too-large-for-link"). |
-| **No result** (no sandbox account, host blocked) | The 7-day behaviour stays "documented, not measured" in ADR-0009 (claims C13 and C14 remain secondary to a test). The A0 harness keeps its emulated lifecycle sweeper (G2 note F1). |
+| **No result** (no sandbox account, host blocked) | The 7-day behaviour stays "documented, not measured" in ADR-0009 (claims K7 and K8 remain secondary to a test). The A0 harness keeps its emulated lifecycle sweeper (G2 note F1). |
 
 ## Budget IDs cited
 

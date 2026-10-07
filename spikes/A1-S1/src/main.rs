@@ -14,8 +14,12 @@
 //!   mem   [MiB] [runs]            in-memory buffer of random bytes (default 1024 MiB, 5 runs)
 //!   file  <path> [runs] [cold]    streaming reads (1 MiB buffer; 16 MiB for rayon); "cold" drops caches first
 //!   ladder                        per-file cost at small sizes (0 B .. 16 MiB), key setup included
-//!   soak  <path> <seconds>        repeats C2 over a file for a fixed time, prints MB/s per 10 s window
-//!                                 (thermal-throttling check on phones; see the OL kit)
+//!   soak  <path> <seconds> [C1|C2]  repeats C2 (default) or C1 over a file for a fixed time, prints MB/s
+//!                                 per 10 s window (thermal and battery check on phones; see the OL kit)
+//!
+//! Optional features `backend-ring` / `backend-awslc` add the workloads ring_sha256, ring_C1,
+//! awslc_sha256 and awslc_C1 (same constructions through ring 0.17.14 / aws-lc-rs 1.18.1), so the
+//! RustCrypto `sha2` backend can be compared with other SHA-256 code on the same device and ABI.
 
 use hmac::{Hmac, KeyInit, Mac};
 use sha2::{Digest, Sha256};
@@ -41,6 +45,14 @@ enum W {
     C5,
     Blake3Rayon,
     C4Rayon,
+    #[cfg(feature = "backend-ring")]
+    RingSha256,
+    #[cfg(feature = "backend-ring")]
+    RingC1,
+    #[cfg(feature = "backend-awslc")]
+    AwsSha256,
+    #[cfg(feature = "backend-awslc")]
+    AwsC1,
 }
 
 impl W {
@@ -58,10 +70,27 @@ impl W {
             W::C5 => "C5_sha256+keyed_blake3_content",
             W::Blake3Rayon => "blake3_rayon_all_cores",
             W::C4Rayon => "C4_rayon_all_cores",
+            #[cfg(feature = "backend-ring")]
+            W::RingSha256 => "ring_sha256",
+            #[cfg(feature = "backend-ring")]
+            W::RingC1 => "ring_C1_sha256+hmac_content",
+            #[cfg(feature = "backend-awslc")]
+            W::AwsSha256 => "awslc_sha256",
+            #[cfg(feature = "backend-awslc")]
+            W::AwsC1 => "awslc_C1_sha256+hmac_content",
         }
     }
+    fn alt_backends() -> Vec<W> {
+        #[allow(unused_mut)]
+        let mut v: Vec<W> = Vec::new();
+        #[cfg(feature = "backend-ring")]
+        v.extend([W::RingSha256, W::RingC1]);
+        #[cfg(feature = "backend-awslc")]
+        v.extend([W::AwsSha256, W::AwsC1]);
+        v
+    }
     fn all_mem() -> Vec<W> {
-        vec![
+        let mut v = vec![
             W::Sha256,
             W::HmacContent,
             W::C1,
@@ -73,7 +102,9 @@ impl W {
             W::C5,
             W::Blake3Rayon,
             W::C4Rayon,
-        ]
+        ];
+        v.extend(W::alt_backends());
+        v
     }
     fn rayon(self) -> bool {
         matches!(self, W::Blake3Rayon | W::C4Rayon)
@@ -90,6 +121,10 @@ enum St {
     B3B3(blake3::Hasher, blake3::Hasher),
     ShaB3(Sha256, blake3::Hasher),
     B3R(blake3::Hasher),
+    #[cfg(feature = "backend-ring")]
+    Ring(ring::digest::Context, Option<ring::hmac::Context>),
+    #[cfg(feature = "backend-awslc")]
+    Aws(aws_lc_rs::digest::Context, Option<aws_lc_rs::hmac::Context>),
 }
 
 fn start(w: W) -> St {
@@ -104,6 +139,16 @@ fn start(w: W) -> St {
         W::C3 => St::B3B3(blake3::Hasher::new(), blake3::Hasher::new_keyed(&KEY)),
         W::C5 => St::ShaB3(Sha256::new(), blake3::Hasher::new_keyed(&KEY)),
         W::Blake3Rayon | W::C4Rayon => St::B3R(blake3::Hasher::new()),
+        #[cfg(feature = "backend-ring")]
+        W::RingSha256 | W::RingC1 => St::Ring(
+            ring::digest::Context::new(&ring::digest::SHA256),
+            matches!(w, W::RingC1).then(|| ring::hmac::Context::with_key(&ring::hmac::Key::new(ring::hmac::HMAC_SHA256, &KEY))),
+        ),
+        #[cfg(feature = "backend-awslc")]
+        W::AwsSha256 | W::AwsC1 => St::Aws(
+            aws_lc_rs::digest::Context::new(&aws_lc_rs::digest::SHA256),
+            matches!(w, W::AwsC1).then(|| aws_lc_rs::hmac::Context::with_key(&aws_lc_rs::hmac::Key::new(aws_lc_rs::hmac::HMAC_SHA256, &KEY))),
+        ),
     }
 }
 
@@ -137,6 +182,20 @@ fn update(s: &mut St, buf: &[u8]) {
         St::B3R(h) => {
             h.update_rayon(buf);
         }
+        #[cfg(feature = "backend-ring")]
+        St::Ring(h, m) => {
+            h.update(buf);
+            if let Some(m) = m {
+                m.update(buf);
+            }
+        }
+        #[cfg(feature = "backend-awslc")]
+        St::Aws(h, m) => {
+            h.update(buf);
+            if let Some(m) = m {
+                m.update(buf);
+            }
+        }
     }
 }
 
@@ -169,6 +228,32 @@ fn finish(w: W, s: St) -> [u8; 32] {
         (_, St::B3(h)) | (_, St::B3R(h)) => *h.finalize().as_bytes(),
         (_, St::B3B3(a, b)) => xor(*a.finalize().as_bytes(), *b.finalize().as_bytes()),
         (_, St::ShaB3(h, b)) => xor(h.finalize().into(), *b.finalize().as_bytes()),
+        #[cfg(feature = "backend-ring")]
+        (_, St::Ring(h, m)) => {
+            let mut a = [0u8; 32];
+            a.copy_from_slice(h.finish().as_ref());
+            match m {
+                Some(m) => {
+                    let mut b = [0u8; 32];
+                    b.copy_from_slice(m.sign().as_ref());
+                    xor(a, b)
+                }
+                None => a,
+            }
+        }
+        #[cfg(feature = "backend-awslc")]
+        (_, St::Aws(h, m)) => {
+            let mut a = [0u8; 32];
+            a.copy_from_slice(h.finish().as_ref());
+            match m {
+                Some(m) => {
+                    let mut b = [0u8; 32];
+                    b.copy_from_slice(m.sign().as_ref());
+                    xor(a, b)
+                }
+                None => a,
+            }
+        }
     }
 }
 
@@ -247,6 +332,15 @@ fn info() {
             feats.push(format!("\"{}\":{}", n, b));
         }
     }
+    // Raw ELF auxv words, so 32-bit (AArch32) processes can be classified too: on a 32-bit ARM
+    // process, HWCAP2 bit 3 is HWCAP2_SHA2 (Linux arch/arm uapi hwcap.h). On AArch64, HWCAP bit 6
+    // is HWCAP_SHA2 (Documentation/arch/arm64/elf_hwcaps.rst). Interpretation is left to the kit.
+    #[cfg(any(target_os = "linux", target_os = "android"))]
+    {
+        let (h1, h2) = unsafe { (libc::getauxval(libc::AT_HWCAP), libc::getauxval(libc::AT_HWCAP2)) };
+        feats.push(format!("\"at_hwcap\":\"{:#x}\",\"at_hwcap2\":\"{:#x}\"", h1, h2));
+    }
+    let backends: Vec<String> = W::alt_backends().iter().map(|w| format!("\"{}\"", w.name())).collect();
     let sha_soft = cfg!(any(sha2_backend = "soft", sha2_256_backend = "soft"));
     let b3_features = [
         ("pure", cfg!(feature = "blake3-pure")),
@@ -260,13 +354,15 @@ fn info() {
         .map(|(n, _)| format!("\"{}\"", n))
         .collect();
     println!(
-        "{{\"mode\":\"info\",\"arch\":\"{}\",\"os\":\"{}\",\"threads\":{},\"cpu_features\":{{{}}},\"sha2_forced_soft\":{},\"blake3_features\":[{}]}}",
+        "{{\"mode\":\"info\",\"arch\":\"{}\",\"os\":\"{}\",\"threads\":{},\"cpu_features\":{{{}}},\"sha2_forced_soft\":{},\"blake3_features\":[{}],\"alt_backends\":[{}],\"target_pointer_width\":{}}}",
         std::env::consts::ARCH,
         std::env::consts::OS,
         std::thread::available_parallelism().map(|n| n.get()).unwrap_or(1),
         feats.join(","),
         sha_soft,
-        b3.join(",")
+        b3.join(","),
+        backends.join(","),
+        std::mem::size_of::<usize>() * 8
     );
 }
 
@@ -334,6 +430,7 @@ fn file_mode(path: &str, runs: usize, cold: bool) {
     let len = std::fs::metadata(path).unwrap().len();
     let mut ws = vec![W::ReadOnly];
     ws.extend([W::C1, W::C2, W::C3, W::C4, W::C5, W::C4Rayon]);
+    ws.extend(W::alt_backends());
     for w in ws {
         let ch = if w.rayon() { 16 << 20 } else { 1 << 20 };
         let mut buf = vec![0u8; ch];
@@ -418,7 +515,7 @@ fn ladder() {
     }
 }
 
-fn soak(path: &str, secs: u64) {
+fn soak(path: &str, secs: u64, w: W) {
     let len = std::fs::metadata(path).unwrap().len();
     let mut buf = vec![0u8; 1 << 20];
     let t_end = Instant::now() + Duration::from_secs(secs);
@@ -427,7 +524,7 @@ fn soak(path: &str, secs: u64) {
     let t0 = Instant::now();
     while Instant::now() < t_end {
         let mut f = File::open(path).unwrap();
-        let mut s = start(W::C2);
+        let mut s = start(w);
         loop {
             let n = f.read(&mut buf).unwrap();
             if n == 0 {
@@ -437,7 +534,8 @@ fn soak(path: &str, secs: u64) {
             win_bytes += n as u64;
             if win_start.elapsed() >= Duration::from_secs(10) {
                 println!(
-                    "{{\"mode\":\"soak\",\"t_s\":{:.0},\"mb_per_s\":{:.0}}}",
+                    "{{\"mode\":\"soak\",\"workload\":\"{}\",\"t_s\":{:.0},\"mb_per_s\":{:.0}}}",
+                    w.name(),
                     t0.elapsed().as_secs_f64(),
                     win_bytes as f64 / win_start.elapsed().as_secs_f64() / 1e6
                 );
@@ -445,7 +543,7 @@ fn soak(path: &str, secs: u64) {
                 win_bytes = 0;
             }
         }
-        std::hint::black_box(finish(W::C2, s));
+        std::hint::black_box(finish(w, s));
         let _ = len;
     }
 }
@@ -474,10 +572,15 @@ fn main() {
         }
         Some("soak") => {
             info();
-            soak(arg(2).expect("path"), arg(3).map(|s| s.parse().unwrap()).unwrap_or(600))
+            let w = match arg(4) {
+                None | Some("C2") => W::C2,
+                Some("C1") => W::C1,
+                Some(o) => panic!("soak workload must be C1 or C2, got {o}"),
+            };
+            soak(arg(2).expect("path"), arg(3).map(|s| s.parse().unwrap()).unwrap_or(600), w)
         }
         _ => {
-            eprintln!("usage: a1-hashbench info | mem [MiB] [runs] | file <path> [runs] [cold] | ladder | soak <path> <secs>");
+            eprintln!("usage: a1-hashbench info | mem [MiB] [runs] | file <path> [runs] [cold] | ladder | soak <path> <secs> [C1|C2]");
             std::process::exit(2)
         }
     }

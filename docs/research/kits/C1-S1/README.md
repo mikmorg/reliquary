@@ -44,14 +44,14 @@ Each line is the hypothesis, followed by the check that tests it. "T" checks are
 | H3: presigned POST rejected | A3 C17 is confirmed. Create and Complete go through the Worker. |
 | H4, H5 pass | Sign `Content-MD5` into every UploadPart and single PUT URL, and Content-Length into single PUT URLs (SR-09). |
 | H6 fail on presigned PUT | Do not rely on `x-amz-checksum-sha256` for presigned uploads. Integrity is checked by the homelab anyway (SR-04). |
-| H7 differs from the formulas | The device cannot verify the completed ETag locally. Drop that cheap check from ADR-0010 F4 step 3. |
+| H7 differs from the formulas | The device cannot verify the completed ETag locally. Drop that cheap check from C1 note F4 step 3. |
 | H9: the lock blocks overwrite by Complete, and does not block in-progress uploads or the homelab's cleanup outside the lock window | An Age lock on `staging/` becomes an optional defence-in-depth setting (owner decision). Otherwise no lock on the ingest bucket. |
-| H10: URL expiry mid-body fails the upload | Part size must be small enough to finish within the URL lifetime on the slowest expected uplink. ADR-0010 F4 sizes windows and parts from that. |
+| H10: URL expiry mid-body fails the upload | Part size must be small enough to finish within the URL lifetime on the slowest expected uplink. C1 note F4 sizes windows and parts from that. |
 | H11: delay ≤ 60 s for temp credentials and URLs die too | Rolling the parent token is a usable kill switch for BUD-REVOKE. |
 | H11: presigned URLs survive token deletion | Outstanding URLs are bounded only by their lifetime (≤ 15 min by design). Record it against BUD-REVOKE. |
 | H13 pass | The homelab gets Worker-minted, action- and prefix-scoped temporary credentials (C1 note F5). |
 | H13 fail | The homelab uses a long-lived bucket-scoped token (C1 note fallback). |
-| H14 either way | Record it in ADR-0010's limits list. No design change: Create always runs in the Worker on a fresh per-upload key. |
+| H14 either way | Record it in the C1 note's limits list (F11). No design change: Create always runs in the Worker on a fresh per-upload key. |
 | **No result** (no sandbox, host blocked) | Every H stays "documented, not measured" in ADR-0010. Nothing in the design depends on a positive result, because per-upload keys plus homelab verification are the safety net. |
 
 ## Budget IDs cited

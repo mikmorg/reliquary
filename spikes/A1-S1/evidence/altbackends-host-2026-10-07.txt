@@ -1,0 +1,5 @@
+model name	: Intel(R) Xeon(R) Processor @ 2.80GHz
+no sha_ni flag
+rustc 1.94.1 (e408947bf 2026-03-25)
+PSI cpu before run1: some avg10=2.73 avg60=1.79 avg300=0.59 total=3210985
+PSI cpu after run1: some avg10=0.00 avg60=0.02 avg300=0.22 total=3370108

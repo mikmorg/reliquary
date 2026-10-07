@@ -202,7 +202,7 @@ The vectors cover:
 - epochs 0, 1, 0x0102 and 0xffff;
 - 14 domain-separation negatives and 25 encoding negatives.
 
-Measured agreement on 2026-10-06 (Rust, Python and Node, plus `sha256sum` and `openssl` spot checks) is in `spikes/A1-S3/identifiers-v1/README.md`.
+Measured agreement on 2026-10-06 (Rust, Python and Node, plus `sha256sum` and `openssl` spot checks) is in `spikes/A1-S3/identifiers-v1/README.md`. The Python checker was re-run on the committed file on 2026-10-07 (0 failures).
 
 When DR-A1-1 is decided, the retired kinds' positives are moved to a `retired` section and kept as negatives (they MUST NOT be accepted).
 

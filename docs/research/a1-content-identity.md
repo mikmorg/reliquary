@@ -1,8 +1,8 @@
 # A1. Content identity and dedup ID
 
 - **Workstream:** A1 (see `docs/research/PLAN.md`, section "A1.")
-- **Status:** Final for Wave 1. Skeptic-reviewed (three lenses, 2026-10-06; tally computed in code). Owner decisions DR-A1-1 and DR-A1-2 are pending. The phone part of A1-S1 is kit-ready and not yet run.
-- **Date:** 2026-09-29 (last updated 2026-10-06, synthesis)
+- **Status:** Final for Wave 1. Skeptic-reviewed (three lenses, 2026-10-06; tally computed in code). Owner decisions DR-A1-1 and DR-A1-2 are pending. The phone part of A1-S1 is kit-ready, including the addendum (other SHA-256 backends, C1 vs C2 battery, required phone rotation run), and has not been run.
+- **Date:** 2026-09-29 (synthesis 2026-10-06; finalized 2026-10-07)
 - **Feeds:**
   - ADR-0006, Proposed: [`docs/adr/0006-content-identity-and-dedup-id.md`](../adr/0006-content-identity-and-dedup-id.md)
   - [`docs/spec/identifiers.md`](../spec/identifiers.md) (Draft) and [`identifiers-vectors.json`](../spec/identifiers-vectors.json)
@@ -21,7 +21,7 @@
 
 ## Summary
 
-**Algorithm: keep SHA-256**, which ADR-0001 already names. It is native on every client platform and `sha256sum` can check it (verified claims K1, K6, K8). No phone has been measured. The A1-S1 kit must show that it meets BUD-HASH on the low-end class. If the `sha2` crate is too slow there, which happens on cores without SHA-2 instructions and in every 32-bit ARM build, other SHA-256 backends are tried before BLAKE3 is considered.
+**Algorithm: keep SHA-256**, which ADR-0001 already names. It is native on every client platform and `sha256sum` can check it (verified claims K1, K6, K8). No phone has been measured. The A1-S1 kit must show that it meets BUD-HASH on the low-end class. The `sha2` crate is slow on cores without SHA-2 instructions and in every 32-bit ARM build. If it misses BUD-HASH there, other SHA-256 backends are tried before BLAKE3 is considered. Per their source code, BoringSSL/Conscrypt and AWS-LC have an AArch32 hardware path and `ring` does not (C25).
 
 **ID format:** every dedup ID carries a **kind** byte and a **16-bit epoch**, and keeps the **full 256 bits**. The text form is `rd1-<kk>-<eeee>-<52 lowercase base32>`. The base32 body keeps an ID from ever being confused with a plain SHA-256, which stays hex. `docs/spec/identifiers.md` fixes the bytes. 111 vectors were cross-checked in Rust, Python and Node on 2026-10-06, and the HMAC/HKDF primitives were checked against Wycheproof.
 
@@ -60,6 +60,9 @@
   - **verified** = has a primary source, and at least 2 of 3 skeptics did not refute it;
   - **secondary-only** = no primary source;
   - **contested** = everything else.
+- **Finalization (2026-10-07):**
+  - Re-ran the Python conformance checker on the committed `identifiers-vectors.json` after the container restart: 72/14/25, 0 failures.
+  - Closed the A1-S1 kit addendum. Read the 32-bit ARM SHA-256 dispatch in `ring` 0.17.14, BoringSSL and AWS-LC, plus Conscrypt's README (S54–S57). Added optional `ring`/`aws-lc-rs` workloads, a C1 soak and a platform `MessageDigest` probe to the benchmark. Ran them on x86 as a reference (C26). Made the phone rotation run required.
 - **Synthesis (2026-10-06):**
   - Rewrote the note against every critical and major issue (see §Skeptic issues).
   - Regenerated the vectors for the exact draft spec (A1-S3 follow-up, `spikes/A1-S3/identifiers-v1/`).
@@ -137,6 +140,10 @@
 | S51 | ADR-0008 (Proposed) Decision 7: `S_e`, HKDF label, rotation trigger conditional on DR-A1-1 | Project (D2) | 2026-10-06 | 2026-10-06 | Project draft |
 | S52 | "The first practical collision for 31-step SHA-256" (Li, Liu, Wang, Dong, Sun, ASIACRYPT 2024) and "New records in collision attacks on SHA-2" (EUROCRYPT 2024) | IACR | 2024 | 2026-10-06 (reported by skeptic 1 from search results; the pages are blocked from the container) | No (secondary) |
 | S53 | Cloudflare D1 limits — `cloudflare-docs @ production : src/content/docs/d1/platform/limits.mdx` ("10 GB (Workers Paid) / 500 MB (Free)") | Cloudflare | production | 2026-10-06 (skeptic 1) | Yes |
+| S54 | `ring` 0.17.14 — static.crates.io `ring-0.17.14.crate`, `src/digest/sha2/sha2_32.rs` (per-arch dispatch), `crypto/fipsmodule/sha/asm/sha256-armv4.pl` | ring | 0.17.14 (latest per index, 2026-10-07) | 2026-10-07 | Yes (code) |
+| S55 | BoringSSL — `google/boringssl @ main : crypto/fipsmodule/sha/internal.h`, `crypto/fipsmodule/sha/asm/sha256-armv4.pl` | Google | main | 2026-10-07 | Yes (code) |
+| S56 | AWS-LC — `aws/aws-lc @ main : crypto/fipsmodule/sha/internal.h`; `aws-lc-rs` 1.18.1 (index) | AWS | main; 1.18.1 | 2026-10-07 | Yes (code) |
+| S57 | Conscrypt README — `google/conscrypt @ master : README.md` (default Android provider, built on BoringSSL, updated through Mainline) | Google | master | 2026-10-07 | Yes |
 
 ## Claims
 
@@ -173,6 +180,8 @@ Skeptics: 1 = sources, 2 = logic, 3 = adversary. "Upheld" means not refuted.
 | C22 | Under A6's posture A′, fixity audits read ciphertext and need no key | S49 | Project draft (A6 not yet skeptic-reviewed) |
 | C23 | End to end on x86 (arithmetic from §14): content form ≈ 387 MB/s, digest form ≈ 509 MB/s (default); ≈ 100 vs ≈ 162 MB/s (portable) | S2 | Arithmetic, not measured |
 | C24 | The nested form (kind 04) rotates from the cache, needs the bytes to test after a leak, and does not inherit unkeyed SHA-256 collisions | reasoning (skeptics 2 and 3) | Analytical; not skeptic-reviewed |
+| C25 | On 32-bit ARM: `ring` 0.17.14 dispatches only `sha256_block_data_order_neon` or `_nohw` (hardware SHA-256 is used only on `aarch64`). BoringSSL and AWS-LC define `SHA256_ASM_HW` for `OPENSSL_ARM`, gated on `CRYPTO_is_ARMv8_SHA256_capable()`, and their `sha256-armv4.pl` emits `sha256h`/`sha256h2`. Android's default `MessageDigest` provider is normally Conscrypt, built on BoringSSL. Which BoringSSL revision a given phone carries is not known from source | S54, S55, S56, S57 | Primary (code and README); not skeptic-reviewed (added at finalization) |
+| C26 | x86 **without SHA-NI** (Xeon @ 2.80 GHz, low CPU pressure, 2026-10-07), 1 GiB in memory, two runs: SHA-256 CPU s/GB was `sha2` 4.86–4.91, `ring` 2.85–2.90, aws-lc-rs 2.83–2.92, JVM SUN provider 3.04. The asm backends used about 40 % less CPU than `sha2`'s software path. The first ID byte agreed across all four for SHA-256, C1 and C2 | `spikes/A1-S1/README.md` addendum | Measured, x86 reference only; does **not** transfer to ARM |
 
 ## Findings
 
@@ -189,7 +198,8 @@ Skeptics: 1 = sources, 2 = logic, 3 = adversary. "Upheld" means not refuted.
   - The A1-S1 kit already records the ABI list (`ro.product.cpu.abilist`) and has a 32-bit build path. It does not yet benchmark other backends.
 - **Decision rule (replaces the earlier one):**
   1. SHA-256 (`sha2`) meets BUD-HASH on the low-end class without throttling → SHA-256 is final.
-  2. Otherwise, on the same device and ABI, measure other SHA-256 backends: `ring`, `aws-lc-rs`, and platform `MessageDigest` via JNI. Whether they have AArch32 hardware paths is **unverified**. If any of them meets BUD-HASH → SHA-256 with that backend.
+  2. Otherwise, on the same device and ABI, measure other SHA-256 backends: `aws-lc-rs`, platform `MessageDigest` (Conscrypt), and `ring` (kit addendum steps A1–A5). If any of them meets BUD-HASH → SHA-256 with that backend, as a library requirement to T1/B2.
+     - From source (C25): on 32-bit ARM, AWS-LC and BoringSSL can use the ARMv8 SHA-256 instructions, while `ring` and `sha2` cannot. On AArch64 cores without `HWCAP_SHA2` every backend is software, but asm may still beat `sha2`. On x86 without SHA-NI, asm used about 40 % less CPU than `sha2` (C26, reference only).
   3. Only if no SHA-256 backend meets BUD-HASH while BLAKE3 (NEON) does → raise a decision request to supersede ADR-0001's algorithm.
   - Report BUD-BAT-S for every candidate.
 
@@ -326,7 +336,7 @@ Unchanged. The ID is a pure function of the bytes and the epoch key, and provena
 |---|---|
 | A1-S3 vectors do not cover the recommended construction or encoding (major; all three) | **Fixed.** A1-S3 follow-up regenerated 111 vectors for the exact draft spec (kinds 01/03/04, HKDF info with kind, epoch and scope, `rd1` text and binary forms, encoding negatives including bare hex, importer conformance rule). Rust, Python and Node agree; Wycheproof and RFC 5869 (via Go) pass. The first A1-S3 is relabelled "harness validated on candidates". |
 | Rotation-cost argument overstated; ignores F3's contested verdict (major; all three) | **Fixed.** K3 marked contested and withdrawn. §2 restates A's cost as a range: no device-wide re-read; possible laziness under DR-F3-2 D/E. "Never retired" removed. F3 C15/M-25 cited. One new consideration added in the other direction: under A6 posture A′ the fixity read is keyless, so A's re-derivation cannot ride on it (C22, draft). |
-| 32-bit Android gets software SHA-256 (major; all three) | **Fixed** in the §1 decision rule (try other SHA-256 backends per ABI before BLAKE3). The A1-S1 kit records the ABI already. **Open:** the kit has no step to benchmark other backends; a kit addendum is listed as follow-up. |
+| 32-bit Android gets software SHA-256 (major; all three) | **Fixed.** The §1 decision rule tries other SHA-256 backends per ABI before BLAKE3. Source reading (C25) shows which backends have an AArch32 hardware path. The A1-S1 kit addendum (2026-10-07, steps A1–A5) records `abilist32`/`abilist64` and raw `AT_HWCAP`/`AT_HWCAP2`, builds 64- and 32-bit binaries with `ring` and `aws-lc-rs`, and runs a platform `MessageDigest` probe. The decision table gives a "library requirement, not algorithm change" outcome. Phone numbers are still to come. |
 | DR-A1-2 option B misstates its cost (major; sources, logic) | **Fixed.** Option B's cost is now re-upload traffic, battery and staging churn plus silent dedup misses. Storage is unaffected (store by SHA-256). |
 | Presence oracle and dedup scopes ignored (major; logic) | **Fixed.** New §8; `scope=` in the HKDF info; DR-A1-1 is tied to DR-F3-2. |
 | Online membership oracle ignored in B's risk (major; adversary) | **Fixed.** §2 and DR-A1-1 risk rows. Mitigations handed to A3/C1/F3 (scoping, alerts) and B6 (cache encryption). |
@@ -341,7 +351,7 @@ Unchanged. The ID is a pure function of the bytes and the epoch key, and provena
 | x86 BLAKE3 data unused (minor; adversary) | **Fixed** (§1). |
 | Collision analysis circular; cite the state of the art (minor; sources, adversary) | **Fixed.** K5 narrowed; S52 cited as secondary; eprint access requested from H1. |
 | "Rotation stops all testing" ignores the size channel; M-14 and M-32 missing (minor) | **Fixed** (§5, §2). |
-| A1-S2 "pass" is x86 only (minor; sources) | **Fixed.** Reported as "pass (x86 reference)". The phone run is required in the kit addendum (follow-up). |
+| A1-S2 "pass" is x86 only (minor; sources) | **Fixed.** Reported as "pass (x86 reference)". The phone rotation run is now a required kit step (A8). |
 | D1 cap without the plan (minor) | **Fixed** (§3, S53). |
 | Wycheproof reachable in place of the RFC appendices (minor) | **Fixed** (S45, S46; A1-S3 follow-up). |
 | USB FAT32 directory limits (minor; adversary) | **Handed to A4** (unverified). |
@@ -381,7 +391,7 @@ Unchanged. The ID is a pure function of the bytes and the epoch key, and provena
 |---|---|---|---|---|
 | RustCrypto `sha2` 0.11.0 | SHA-256; SHA-NI/AArch64 detection at run time; software on 32-bit ARM | MIT/Apache-2.0 (verify at G3) | Latest per index 2026-10-06 | S7 |
 | RustCrypto `hmac` 0.13.0, `hkdf` 0.13.0 | HMAC, HKDF | MIT/Apache-2.0 (verify) | Built and checked against Wycheproof 2026-10-06 | S8, S45 |
-| `ring` / `aws-lc-rs` / platform `MessageDigest` | Candidate SHA-256 backends for 32-bit or no-SHA2 phones | — | **Not evaluated**; AArch32 hardware paths unverified | §1 |
+| `aws-lc-rs` 1.18.1 / platform `MessageDigest` (Conscrypt) / `ring` 0.17.14 | Candidate SHA-256 backends for 32-bit or no-SHA2 phones | Apache-2.0/ISC (verify at G3) | Built and run on x86 only (C26). AArch32 hardware path from source: AWS-LC and BoringSSL yes, `ring` no (C25). Android builds untested (no NDK in the container) | §1, C25, C26 |
 | `blake3` 1.8.7 | Benchmark comparison only | CC0/Apache-2.0 (verify) | — | S9 |
 | Node `node:crypto`, Python `hashlib`/`hmac` | Second and third implementations for vectors | — | Node 22.22.2, Python 3.11.15 | A1-S3 follow-up |
 | C2SP Wycheproof | Primitive test vectors | Apache-2.0 (not committed) | main, 2026-10-06 | S45 |
@@ -391,7 +401,8 @@ Unchanged. The ID is a pure function of the bytes and the epoch key, and provena
 | Spike | Hypothesis | Pass → / fail → (decision) | Exec tag | Budget IDs | Data class | Status | Result |
 |---|---|---|---|---|---|---|---|
 | A1-S1 (CT part, x86 reference) | Hashing once and MACing the digest (C2/C4) costs about half of a second keyed pass (C1/C3); BLAKE3 uses less CPU than hardware SHA-256; on x86, I/O is not the bottleneck | Reference only. Cannot pass or fail BUD-HASH or BUD-BAT-S, which are defined on a low-end phone | CT | BUD-HASH, BUD-BAT-S | `SYN → results` | **Ran; inconclusive** (by design) | One contended KVM Xeon VM (SHA-NI, AVX-512), CPU pressure 78–97 %. In memory, CPU s/GB: SHA-256 0.914; C1 1.685; **C2 0.954**; BLAKE3 0.224; C3 0.427; C4 0.233; C5 1.135. Software-only: C1 7.456 vs C2 3.794. Cold-file MB/s: read 1974, C1 460, C2 680, C4 2194. **Energy: no result** (no RAPL). [`spikes/A1-S1/README.md`](../../spikes/A1-S1/README.md), raw `evidence/*.jsonl` |
-| A1-S1 (OL part: 4 device classes, energy, thermal) | On ARMv8 phones with SHA-2 instructions, SHA-256 meets BUD-HASH widely; without them BLAKE3 is clearly faster; C2 ≈ half of C1 everywhere; I/O limits at least one phone class | Pass → SHA-256 final (ADR-0006 Decision 1); fail → the §1 rule (other SHA-256 backends, then BLAKE3). C1 vs C2 energy informs B vs N (DR-A1-1) | OL | BUD-HASH, BUD-BAT-S | `SYN → results` | **Kit-ready** (addendum needed) | Kit: [`docs/research/kits/A1-S1/`](kits/A1-S1/README.md) (Android over wireless adb, desktop scripts, 30-min soak, battery and thermal readings, ABI list, 32-bit build path). **Addendum before running (follow-up):** benchmark `ring`/`aws-lc-rs`/platform `MessageDigest` per ABI; make the A1-S2 phone rotation run required, not optional |
+| A1-S1 (OL part: 4 device classes, energy, thermal) | On ARMv8 phones with SHA-2 instructions, SHA-256 meets BUD-HASH widely; without them BLAKE3 is clearly faster; C2 ≈ half of C1 everywhere; I/O limits at least one phone class | Pass → SHA-256 final (ADR-0006 Decision 1); fail → the §1 rule (other SHA-256 backends, then BLAKE3). C1 vs C2 energy informs B vs N (DR-A1-1) | OL | BUD-HASH, BUD-BAT-S | `SYN → results` | **Kit-ready** (addendum included 2026-10-07) | Kit: [`docs/research/kits/A1-S1/`](kits/A1-S1/README.md) (Android over wireless adb, desktop scripts, 30-min soak, battery and thermal readings, ABI list, 32-bit build path). **Addendum A1–A9:** 64- and 32-bit builds with `ring`/`aws-lc-rs`; platform `MessageDigest` probe through `app_process`; a second soak with C1 (`run-android.sh … C1`) for C1 vs C2 battery; **required** 1M-entry rotation run on the low-end phone. The NDK builds and `d8` step are untested in the container |
+| A1-S1 addendum (CT part: other SHA-256 backends, x86 reference) | Asm SHA-256 backends beat `sha2`'s software path when the SHA-2 instructions are absent | Reference only (x86); informs the §1 rule | CT | BUD-HASH | `SYN → results` | **Ran** (2026-10-07) | VM without SHA-NI: SHA-256 CPU s/GB `sha2` 4.86–4.91, `ring` 2.85–2.90, aws-lc-rs 2.83–2.92, JVM 3.04; C1 ≈ 2× in every backend; first ID byte agrees across backends. [`spikes/A1-S1/README.md`](../../spikes/A1-S1/README.md) (Addendum), raw `evidence/mem-altbackends-x86*.jsonl`, `mem-platform-jvm-x86.jsonl` |
 | A1-S2 Rotation over a 1M-entry cache | Digest form: a 1M-entry client cache rotates in < 60 s with zero file reads; the homelab re-derives in < 24 h; the content form needs a full re-read | Pass → rotation-from-cache mechanics confirmed for kinds 01/04; content-form cost recorded | CT | (PLAN criterion; BUD-HASH for re-read cost) | `SYN → results` | **Pass (x86 reference)**; phone and homelab-disk confirmation pending | SQLite (rusqlite 0.40.2, WAL), 1M rows, 152 MB: in-place rotation 3.22–5.86 s wall, 2.0–3.5 CPU s; map mode 6.07 s. **Zero source-file reads** under strace. Homelab compute: 5M IDs in 1.53 s in memory. Content-form re-read: 4 KiB files 106–119 µs each cold; 1 GiB at 92–729 MB/s (median 508). Arithmetic (not measured): 10 TB ≈ 5.5 h at 508 MB/s, ≈ 30 h at 92 MB/s. Exercised the A1-S3 candidate-b labels, not the draft spec's (same mechanics). [`spikes/A1-S2/README.md`](../../spikes/A1-S2/README.md) |
 | A1-S3 Vectors (candidate harness) | Rust and an independent implementation agree on ≥ 50 vectors incl. empty, > 4 GiB, and domain-separation negatives | Pass → harness validated | CT | — | `SYN → results` | **Pass for the harness on candidates only** | 51 vectors for candidates a–d (`rq1-…` base32 form): Rust 51/51, Node 51/51, Python 27/27; both BLAKE3 libraries 35/35 on the official vectors. **Did not cover the recommended construction or encoding** (skeptic major issue). [`spikes/A1-S3/README.md`](../../spikes/A1-S3/README.md) |
 | A1-S3 follow-up: vectors for the draft spec | The exact `identifiers.md` bytes (kinds 01/03/04, HKDF info with kind/epoch/scope, `rd1` forms) reproduce across three independently written implementations, and the primitives match published reference vectors | Pass → `identifiers-vectors.json` is the conformance set for ADR-0006 | CT | — | `SYN → results` | **Pass** (run by the synthesis stage, 2026-10-06) | **111 vectors** (72 positive incl. 0 B and 2³²−1, 2³², 2³²+1 B; epochs 0, 1, 0x0102, 0xffff; 14 domain-separation negatives; 25 encoding negatives). Rust (RustCrypto), Python (stdlib, own HKDF) and Node (`node:crypto`) agree 111/111. Wycheproof HMAC-SHA256 174/174 and HKDF-SHA256 86/86, plus 4 Go/RFC 5869 HKDF cases, pass in Rust and Python. `sha256sum` and `openssl` agree on the 2³²+1 case. Python and Node share OpenSSL primitives; RustCrypto is the independent primitive. [`spikes/A1-S3/identifiers-v1/README.md`](../../spikes/A1-S3/identifiers-v1/README.md) |
@@ -408,7 +419,7 @@ No emulator stood in for any device. All CT figures come from one shared x86 VM 
 
 ## Open questions
 
-- Which low-end Android SoCs lack `HWCAP_SHA2`? Are 32-bit-only phones in the fleet? How fast are `ring`, `aws-lc-rs` and platform `MessageDigest` there? → A1-S1 (kit addendum), H5 (L12c purchase).
+- Which low-end Android SoCs lack `HWCAP_SHA2`? Are 32-bit-only phones in the fleet? How fast are `aws-lc-rs`, platform `MessageDigest` and `ring` there, and does the phone's Conscrypt revision carry BoringSSL's AArch32 hardware path (C25)? → A1-S1 addendum steps A1–A5, H5 (L12c purchase), E1 (device census).
 - Phone energy per GB for C1 (A/N) vs C2 (B) (BUD-BAT-S). This decides B vs N on cost. → A1-S1.
 - Rotation trigger policy and owner time (BUD-SUPPORT). → D2, with costs from A1-S2.
 - Grace window for retired epochs, and offline devices across a rotation. → A3, D3, E3.
@@ -498,4 +509,5 @@ No emulator stood in for any device. All CT figures come from one shared x86 VM 
 | E3 (ADR-0024) | "Hash failed (reason, retry-after)" and "unstable file" states; nudge for "key update needed" | §6, DR-A1-2 |
 | G2 (ADR-0035) | Invariant tests: homelab rejects a recompute mismatch; Worker rejects malformed IDs; retired epochs never get "present"; every implementation runs `identifiers-vectors.json` | ADR-0006 Confirmation |
 | H1 | Number DR-A1-1 and DR-A1-2; blocked sources (RFCs, NIST, eprint, eBACS); PLAN wording fixes (`sha2` "asm", racy-git path, A1-S1 phone rotation as required) | Registry owner |
-| A1 (Wave 2) | A1-S1 kit addendum (other SHA-256 backends per ABI; required phone rotation run); retire the unchosen kinds in the vectors after DR-A1-1 | Follow-up |
+| T1 / B2 | If A1-S1 shows `sha2` too slow on a 32-bit or no-`HWCAP_SHA2` phone while another backend passes, the Rust core needs a per-ABI SHA-256 backend (aws-lc-rs or JNI to platform `MessageDigest`); `ring` does not help on 32-bit ARM (C25) | §1 |
+| A1 (Wave 2) | Retire the unchosen kinds in the vectors after DR-A1-1; read the A1-S1 phone results into ADR-0006 | Follow-up |

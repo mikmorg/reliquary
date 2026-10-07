@@ -1,0 +1,4 @@
+{"mode":"info","impl":"platform","md_provider":"SUN 21.0","mac_provider":"SunJCE","os_arch":"amd64","vm":"OpenJDK 64-Bit Server VM 21.0.10+7-Ubuntu-124.04","abi_hint":""}
+{"mode":"mem","impl":"platform","workload":"platform_sha256","bytes":1073741824,"runs":4,"mb_per_s_median":326,"cpu_s_per_gb_median":3.038,"sink":139}
+{"mode":"mem","impl":"platform","workload":"platform_C1_sha256+hmac_content","bytes":1073741824,"runs":4,"mb_per_s_median":169,"cpu_s_per_gb_median":5.866,"sink":234}
+{"mode":"mem","impl":"platform","workload":"platform_C2_sha256_then_hmac_digest","bytes":1073741824,"runs":4,"mb_per_s_median":347,"cpu_s_per_gb_median":2.852,"sink":8}
