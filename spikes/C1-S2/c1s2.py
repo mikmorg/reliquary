@@ -33,13 +33,16 @@ def main():
     u = urllib.parse.urlsplit(a.worker)
     host = u.netloc
 
+    hdrs = {"x-spike-token": os.environ["SPIKE_TOKEN"]} if os.environ.get("SPIKE_TOKEN") else {}
+
     def conn():
-        return http.client.HTTPConnection(host, timeout=120)
+        cls = http.client.HTTPSConnection if u.scheme == "https" else http.client.HTTPConnection
+        return cls(host, timeout=120)
 
     c0 = conn()
 
     def get(c, path):
-        c.request("GET", path)
+        c.request("GET", path, headers=hdrs)
         r = c.getresponse()
         return r.status, json.loads(r.read())
 

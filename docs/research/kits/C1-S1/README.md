@@ -1,12 +1,12 @@
 # Kit C1-S1: R2 behaviour on the sandbox account (real R2)
 
-- **Spike:** C1-S1 "R2 behaviour (one run, Wave 1)" (workstream C1, see `docs/research/PLAN.md`, section "C1."). Hypotheses H1–H13 are worded as in `docs/research/c1-cloudflare-control-plane.md`, section "Spikes".
+- **Spike:** C1-S1 "R2 behaviour (one run, Wave 1)" (workstream C1, see `docs/research/PLAN.md`, section "C1."). Hypotheses H1–H14 are worded as in `docs/research/c1-cloudflare-control-plane.md`, section "Spikes".
 - **Exec tag:** SB. It uses the dedicated **sandbox** Cloudflare account (H1, long-lead item L01), never production.
 - **Prepared by / date:** C1 spike runner (agent), 2026-10-06
 - **Who runs it:** the owner on a laptop, or an agent in a container that can reach `*.r2.cloudflarestorage.com` and `api.cloudflare.com`. Three steps need the Cloudflare dashboard or a logged-in `wrangler`: adding a bucket lock rule, deleting an API token, and cleaning up.
 - **Time needed:** about 45 min hands-on. Cleanup may need a wait of up to 1 day, because a bucket with locked objects cannot be emptied until the lock expires or the rule is removed (step 12).
 - **Data-handling class:** `SYN → results`. The scripts upload only random bytes they generate themselves. Nothing from the family is used.
-- **Emulated leg already run (NOT real R2/Cloudflare):** on 2026-10-06 the same script ran against Miniflare's local R2 S3 endpoint. Code and results are in `spikes/C1-S1/`. Miniflare cannot answer H6, H8, H9, H11 or H13, and its answers to the rest prove nothing about R2. That is why this kit exists.
+- **Emulated leg already run (NOT real R2/Cloudflare):** on 2026-10-06 the same script ran twice against Miniflare's local R2 S3 endpoint (16:58Z and 20:15Z; the runs agree except for the rejection mode of C07). Code and results are in `spikes/C1-S1/`. Miniflare cannot answer H6, H8, H9, H11 or H13, and its answers to the rest prove nothing about R2. That is why this kit exists.
 
 ## Purpose
 
@@ -31,6 +31,7 @@ Each line is the hypothesis, followed by the check that tests it. "T" checks are
 | H11 | After the parent token is deleted, presigned URLs and temporary credentials it signed stop working. Measure the delay. | C18 (`H11-mint`, `H11-poll`) |
 | H12 | The binding `put()` with `onlyIf` `If-None-Match: *` refuses an existing key, both as `Headers` and as `{etagDoesNotMatch: "*"}` (workerd #2572 wildcard history). | W02, W03; C14 |
 | H13 | A locally signed temporary credential with `actions` and `prefixPaths` allows only the listed actions under the listed prefix, and is refused after its `exp`. | C15, C16 |
+| H14 | S3 CreateMultipartUpload with `If-None-Match: *` on an existing key returns 412 (R2 release note 2022-05-27; Miniflare returns 200). Added at the analyst's request to close a docs conflict; low decision value. | T39 (G2-S1, run in step 5) |
 
 ## Decision it informs
 
@@ -50,6 +51,7 @@ Each line is the hypothesis, followed by the check that tests it. "T" checks are
 | H11: presigned URLs survive token deletion | Outstanding URLs are bounded only by their lifetime (≤ 15 min by design). Record it against BUD-REVOKE. |
 | H13 pass | The homelab gets Worker-minted, action- and prefix-scoped temporary credentials (C1 note F5). |
 | H13 fail | The homelab uses a long-lived bucket-scoped token (C1 note fallback). |
+| H14 either way | Record it in ADR-0010's limits list. No design change: Create always runs in the Worker on a fresh per-upload key. |
 | **No result** (no sandbox, host blocked) | Every H stays "documented, not measured" in ADR-0010. Nothing in the design depends on a positive result, because per-upload keys plus homelab verification are the safety net. |
 
 ## Budget IDs cited
@@ -92,7 +94,7 @@ Do the steps in order. After each step, write down what you saw in the results t
    - start it: `npx wrangler dev --port 8787`.
 
    **You should see:** `curl -s http://127.0.0.1:8787/health` prints `{"ok":true}`. Remote bindings change real data and are billed normally (Cloudflare docs, "Workers local development"). The D1 and Durable Object bindings stay local and are not used by this kit.
-5. If kit G2-S1 has not yet been run on the sandbox account, run its steps 4 and 5 now. They produce T22–T27, T30, T38, T41–T49 and T53 for H1–H6. **You should see:** `spikes/G2-S1/results/r2.json`.
+5. If kit G2-S1 has not yet been run on the sandbox account, run its steps 4 and 5 now. They produce T22–T27, T30, T38, T39, T41–T49 and T53 for H1–H6 and H14. **You should see:** `spikes/G2-S1/results/r2.json`.
 6. Run the main checks:
    ```sh
    cd spikes/C1-S1
@@ -140,7 +142,7 @@ Copy this section into `docs/research/kits/C1-S1/results.md` and fill it in. Do 
 | H1 | T22–T27, C01, C02 | | 412 on existing key; 403 when the header is dropped | |
 | H2 | T38, C03 | | Complete overwrites (T38); binding `complete()` overwrites (C03) | |
 | H3 | T53, C04, C05 | | Presigned POST accepted for Create and Complete | |
-| H4 | T30, C06, C07 | | Tampered part 400 BadDigest; header dropped: connection reset | |
+| H4 | T30, C06, C07 | | Tampered part 400 BadDigest; header dropped: rejected, but as a connection reset (run 1) or HTTP 500 (run 2), never 403 | |
 | H5 | T49, C08 | | Shorter 403; longer 500 (nothing stored) | |
 | H6 | T47, C09, C10 | | Signed SHA-256 ignored, tampered body stored; binding `sha256` enforced | |
 | H7 | C11, C12 | | Single-PUT ETag = MD5; object ETag formula holds; part ETags are not MD5 | |
@@ -150,6 +152,7 @@ Copy this section into `docs/research/kits/C1-S1/results.md` and fill it in. Do 
 | H11 | C18 | URL: … s; temp credential: … s after deletion | not emulated | |
 | H12 | W02, W03, C14 | | Both forms refuse an existing key | |
 | H13 | C15, C16 | | not emulated (Miniflare refuses session-token credentials) | |
+| H14 | T39 | | 200 (ignored), G2-S1 run 2026-09-29 | |
 
 | Pass criterion | Budget ID | Measured value | Pass / Fail / No result |
 |---|---|---|---|

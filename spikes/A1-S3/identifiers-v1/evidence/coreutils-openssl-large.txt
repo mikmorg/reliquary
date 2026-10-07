@@ -1,0 +1,6 @@
+2026-10-06T22:06:33Z
+content pattern-mod-251:4294967297
+d8aa6ff46166dcb8190423d56efc0e673057dfbde1de7aba6ff6e8428127a132  -
+kind 03 HMAC with vector key:
+SHA2-256(stdin)= f7a73720079e300dd9fc75661e62d5cd73d97ec6a51afb63a3067b1fc7bd5455
+OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)

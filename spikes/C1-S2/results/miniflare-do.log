@@ -1,0 +1,40 @@
+(200, {'ok': True})
+trial 0 winners 1 elapsed 0s
+trial 1000 winners 1 elapsed 60s
+trial 2000 winners 1 elapsed 116s
+trial 3000 winners 1 elapsed 186s
+trial 4000 winners 1 elapsed 256s
+trial 5000 winners 1 elapsed 323s
+trial 6000 winners 1 elapsed 392s
+trial 7000 winners 1 elapsed 462s
+trial 8000 winners 1 elapsed 528s
+trial 9000 winners 1 elapsed 594s
+{
+ "store": "do",
+ "concurrency": 50,
+ "trials": 10000,
+ "takeover_every": 10,
+ "winners_histogram": {
+  "1": 10000
+ },
+ "bad_trials": [],
+ "bad_trial_count": 0,
+ "non200_responses": 0,
+ "client_errors": [],
+ "client_error_count": 0,
+ "post_check": {
+  "dup_ids": 0,
+  "rows": 11000,
+  "distinct_ids": 10000,
+  "sample": []
+ },
+ "wall_s": 660.4,
+ "requests": 500000,
+ "latency_ms": {
+  "p50": 46.65,
+  "p99": 213.26,
+  "max": 452.63,
+  "mean": 52.21
+ },
+ "finished_utc": "2026-10-06T21:00:42Z"
+}

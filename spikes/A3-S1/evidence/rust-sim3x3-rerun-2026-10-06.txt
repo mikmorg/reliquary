@@ -1,0 +1,36 @@
+=== SIMULATION (random, NOT exhaustive) honest=3 items=3 att=3 faults=2 poisoner=false v1 ===
+runs=200000 walk_steps<=300 continuation_steps<=4000 seed=11 total_steps=25508148 time=18.9s
+faults used per run (0..=2): [0, 0, 200000]
+safety: no violation of I1, I1-strong, I2, I3, I4, I6 in any visited state
+goal reached by random fault-free continuation: 200000 / 200000; not reached: 0 (+0 attempt-exhausted)
+
+=== SIMULATION (random, NOT exhaustive) honest=2 items=3 att=3 faults=2 poisoner=true v1 ===
+runs=200000 walk_steps<=300 continuation_steps<=4000 seed=12 total_steps=26808852 time=19.8s
+faults used per run (0..=2): [0, 0, 200000]
+safety: no violation of I1, I1-strong, I2, I3, I4, I6 in any visited state
+goal reached by random fault-free continuation: 200000 / 200000; not reached: 0 (+0 attempt-exhausted)
+
+=== SIMULATION (random, NOT exhaustive) honest=3 items=3 att=3 faults=3 poisoner=false v1 ===
+runs=200000 walk_steps<=300 continuation_steps<=4000 seed=13 total_steps=25774087 time=19.8s
+faults used per run (0..=3): [0, 0, 0, 200000]
+safety: no violation of I1, I1-strong, I2, I3, I4, I6 in any visited state
+goal reached by random fault-free continuation: 199988 / 200000; not reached: 0 (+12 attempt-exhausted)
+
+=== SIMULATION (random, NOT exhaustive) honest=2 items=3 att=3 faults=3 poisoner=true v1 ===
+runs=200000 walk_steps<=300 continuation_steps<=4000 seed=14 total_steps=27052424 time=20.9s
+faults used per run (0..=3): [0, 0, 0, 200000]
+safety: no violation of I1, I1-strong, I2, I3, I4, I6 in any visited state
+goal reached by random fault-free continuation: 199995 / 200000; not reached: 0 (+5 attempt-exhausted)
+
+=== SIMULATION (random, NOT exhaustive) honest=3 items=3 att=3 faults=2 poisoner=false v0 ===
+runs=200000 walk_steps<=300 continuation_steps<=4000 seed=15 total_steps=30926459 time=22.6s
+faults used per run (0..=2): [0, 0, 200000]
+safety violations (runs with at least one violating state): {"I1-strong": 175069}
+goal reached by random fault-free continuation: 196008 / 200000; not reached: 0 (+3992 attempt-exhausted)
+
+=== SIMULATION (random, NOT exhaustive) honest=2 items=3 att=3 faults=2 poisoner=true v0 ===
+runs=200000 walk_steps<=300 continuation_steps<=4000 seed=16 total_steps=37715163 time=25.7s
+faults used per run (0..=2): [0, 0, 200000]
+safety violations (runs with at least one violating state): {"I1-strong": 175595}
+goal reached by random fault-free continuation: 178996 / 200000; not reached: 0 (+21004 attempt-exhausted)
+

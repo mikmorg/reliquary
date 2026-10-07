@@ -2,17 +2,19 @@
 """C1-S4 presign 200 UploadPart URLs in one request, and check the URLs work (throwaway, stdlib only).
 
 EMULATED when pointed at wrangler dev. The kit points it at the sandbox Worker; CPU time on real
-Workers comes from the dashboard / Workers Observability (cpu_time), not from this script.
+Workers comes from the dashboard (Metrics: "CPU Time per execution"), not from this script.
 
-  python3 c1s4.py --worker http://127.0.0.1:8787 --s3-base http://127.0.0.1:8787 --reps 50 --out r.json
+  python3 c1s4.py --worker http://127.0.0.1:8787 --reps 50 --out r.json
 """
-import argparse, hashlib, json, os, statistics, subprocess, time, urllib.parse, urllib.request
+import argparse, hashlib, json, os, statistics, subprocess, tempfile, time, urllib.parse, urllib.request
 
 MiB = 1024 * 1024
 
 
 def get(base, path, body=None):
     req = urllib.request.Request(base + path, data=body, method="POST" if body is not None else "GET")
+    if os.environ.get("SPIKE_TOKEN"):
+        req.add_header("x-spike-token", os.environ["SPIKE_TOKEN"])
     t0 = time.perf_counter()
     with urllib.request.urlopen(req, timeout=300) as r:
         out = json.loads(r.read())
@@ -68,7 +70,7 @@ def main():
     parts, blobs, curl_status = [], [], {}
     for pn, size in ((1, 5 * MiB), (2, 5 * MiB), (a.n, 777)):
         d = os.urandom(size)
-        path = f"/tmp/c1s4-part-{pn}"
+        path = os.path.join(tempfile.gettempdir(), f"c1s4-part-{pn}")
         open(path, "wb").write(d)
         r = subprocess.run(["curl", "-s", "-o", "/dev/null", "-D", "-", "-X", "PUT", "--data-binary", f"@{path}",
                             "-H", "content-type:", urls[pn - 1]], capture_output=True, text=True)

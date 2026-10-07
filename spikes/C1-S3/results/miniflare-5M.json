@@ -1,0 +1,92 @@
+{
+ "rows": 5000000,
+ "trials": 200,
+ "batch": 1000,
+ "present_fraction": 0.5,
+ "query_plan": [
+  {
+   "id": 2,
+   "parent": 0,
+   "notused": 0,
+   "detail": "SCAN j VIRTUAL TABLE INDEX 1:"
+  },
+  {
+   "id": 8,
+   "parent": 0,
+   "notused": 0,
+   "detail": "CORRELATED SCALAR SUBQUERY 1"
+  },
+  {
+   "id": 12,
+   "parent": 8,
+   "notused": 39,
+   "detail": "SEARCH d USING PRIMARY KEY (id=?)"
+  }
+ ],
+ "fill": {
+  "chunks": 20,
+  "first": [
+   {
+    "n": 250000,
+    "client_ms": 766,
+    "rows_written": 250000,
+    "duration": 709
+   },
+   {
+    "n": 250000,
+    "client_ms": 1332,
+    "rows_written": 250000,
+    "duration": 1229
+   }
+  ],
+  "last": [
+   {
+    "n": 250000,
+    "client_ms": 3264,
+    "rows_written": 250000,
+    "duration": 2415
+   },
+   {
+    "n": 250000,
+    "client_ms": 3391,
+    "rows_written": 250000,
+    "duration": 2561
+   }
+  ]
+ },
+ "json_each": {
+  "client_latency_ms": {
+   "p50": 13.5,
+   "p99": 26.0,
+   "max": 31.2
+  },
+  "d1_meta_duration_ms": {
+   "p50": 5.0,
+   "p99": 10.01
+  },
+  "rows_read_per_call": {
+   "min": 1500,
+   "median": 1500.0,
+   "max": 1500
+  },
+  "correct_missing_count": "200/200"
+ },
+ "in100": {
+  "client_latency_ms": {
+   "p50": 16.0,
+   "p99": 28.5,
+   "max": 31.1
+  },
+  "d1_meta_duration_ms": {
+   "p50": 6.0,
+   "p99": 12.01
+  },
+  "rows_read_per_call": {
+   "min": 1500,
+   "median": 1500.0,
+   "max": 1500
+  },
+  "correct_missing_count": "200/200"
+ },
+ "finished_utc": "2026-10-06T20:16:50Z"
+}

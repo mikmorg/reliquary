@@ -1,0 +1,355 @@
+##### variants start 2026-10-06T19:42:28Z
+=== E1 v0 = analyst F1-F8 as written (record after complete; homelab orphan GC), 1 honest + poisoner, att<=2, faults<=1 ===
+states=1860254 transitions=9491159 max_depth=37 time=2.8s (64-bit fingerprint collision bound 9.4e-8)
+VIOLATION I1-strong no dangling content reference
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin
+   3. dev0/item0(A) upload parts + complete
+   4. homelab orphan-GC staging object of rec(d0 item0 att0 content=A)
+   5. dev0/item0(A) send record
+  devices: d0i0(A)=awaiting(own content)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x1
+  r2: meta=0x1 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[1] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 11508 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E2 v0 + typed content-missing reject for GC'd objects, 1 honest + poisoner, att<=2, faults<=1 ===
+states=3146758 transitions=15687163 max_depth=37 time=5.5s (64-bit fingerprint collision bound 2.7e-7)
+VIOLATION I1-strong no dangling content reference
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin
+   3. dev0/item0(A) upload parts + complete
+   4. homelab orphan-GC staging object of rec(d0 item0 att0 content=A)
+   5. dev0/item0(A) send record
+  devices: d0i0(A)=awaiting(own content)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x1
+  r2: meta=0x1 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[1] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 117348 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E3 v1 = record-first complete, no orphan GC, dead-record typed reject, 1 honest + poisoner, att<=2, faults<=1 ===
+states=424298 transitions=2119612 max_depth=29 time=0.6s (64-bit fingerprint collision bound 4.9e-9)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 584 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E1 v0 = analyst F1-F8 as written (record after complete; homelab orphan GC), 2 honest, att<=2, faults<=1 ===
+states=1043879 transitions=5422295 max_depth=37 time=2.7s (64-bit fingerprint collision bound 3.0e-8)
+VIOLATION I1-strong no dangling content reference
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev1/item0(A) check+begin
+   3. dev1/item0(A) upload parts + complete
+   4. homelab orphan-GC staging object of rec(d1 item0 att0 content=A)
+   5. dev1/item0(A) send record
+  devices: d0i0(A)=hashed#0 d1i0(A)=awaiting(own content)#1
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x4
+  r2: meta=0x4 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[3] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 545 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E2 v0 + typed content-missing reject for GC'd objects, 2 honest, att<=2, faults<=1 ===
+states=1856453 transitions=9417566 max_depth=37 time=5.1s (64-bit fingerprint collision bound 9.3e-8)
+VIOLATION I1-strong no dangling content reference
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev1/item0(A) check+begin
+   3. dev1/item0(A) upload parts + complete
+   4. homelab orphan-GC staging object of rec(d1 item0 att0 content=A)
+   5. dev1/item0(A) send record
+  devices: d0i0(A)=hashed#0 d1i0(A)=awaiting(own content)#1
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x4
+  r2: meta=0x4 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[3] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 100070 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E3 v1 = record-first complete, no orphan GC, dead-record typed reject, 2 honest, att<=2, faults<=1 ===
+states=183511 transitions=931870 max_depth=29 time=0.4s (64-bit fingerprint collision bound 9.1e-10)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E3b v1, 2 honest + poisoner (1 attempt), att<=2, faults<=1 ===
+states=6072717 transitions=37628785 max_depth=37 time=20.7s (64-bit fingerprint collision bound 1.0e-6)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 60 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+##### variants end 2026-10-06T19:43:06Z exit=0
+##### mutants start 2026-10-06T19:43:06Z
+=== M0 control: v1, 1 honest + poisoner, att<=2, faults<=1 ===
+states=424298 transitions=2119612 max_depth=29 time=0.7s (64-bit fingerprint collision bound 4.9e-9)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 584 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== mutant M1 homelab skips SHA-256/HMAC verification ===
+states=549680 transitions=2804441 max_depth=29 time=0.8s (64-bit fingerprint collision bound 8.2e-9)
+VIOLATION I1 no staged delete before durable commit
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin
+   3. dev0/item0(A) upload parts + complete
+   4. dev1/item0(A) journal new attempt
+   5. lease on A expires
+   6. dev1/item0(A) check+begin
+   7. dev1/item0(A) upload parts + complete
+   8. homelab verify+put_blob rec(d1 item0 att0 content=A)
+   9. homelab archive record + sign receipt rec(d0 item0 att0 content=A)
+  10. homelab publish receipt+commit mark rec(d0 item0 att0 content=A)
+  11. homelab delete staging+meta rec(d0 item0 att0 content=A)
+  devices: d0i0(A)=awaiting(own content)#1 d1i0(A,POISON)=awaiting(own content)#1
+  homelab: blobs[A:BAD] receipts=0x1 rejected=0x0 gc_log=0x0
+  r2: meta=0x4 staging=0x4 multipart=0x0; worker: relay=0x1 leases=[3] faults=0
+VIOLATION I2 safe only with receipt
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin [FAULT: Worker lies IN_FLIGHT]
+   3. dev1/item0(A) journal new attempt
+   4. dev1/item0(A) check+begin
+   5. dev1/item0(A) upload parts + complete
+   6. homelab verify+put_blob rec(d1 item0 att0 content=A)
+   7. homelab archive record + sign receipt rec(d0 item0 att0 content=A)
+   8. homelab publish receipt+commit mark rec(d0 item0 att0 content=A)
+   9. dev0/item0(A) fetch+verify receipt -> SAFE
+  devices: d0i0(A)=SAFE#1 d1i0(A,POISON)=awaiting(own content)#1
+  homelab: blobs[A:BAD] receipts=0x1 rejected=0x0 gc_log=0x0
+  r2: meta=0x5 staging=0x4 multipart=0x0; worker: relay=0x1 leases=[3] faults=1
+VIOLATION I3 no false dedup merge
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev1/item0(A) journal new attempt
+   2. dev1/item0(A) check+begin
+   3. dev1/item0(A) upload parts + complete
+   4. homelab verify+put_blob rec(d1 item0 att0 content=A)
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=awaiting(own content)#1
+  homelab: blobs[A:BAD] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x4 staging=0x4 multipart=0x0; worker: relay=0x0 leases=[3] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== mutant M2 staging deleted before durable commit ===
+states=1009314 transitions=5423559 max_depth=29 time=1.8s (64-bit fingerprint collision bound 2.8e-8)
+VIOLATION I1 no staged delete before durable commit
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin
+   3. dev0/item0(A) upload parts + complete
+   4. homelab delete staging+meta rec(d0 item0 att0 content=A)
+  devices: d0i0(A)=awaiting(own content)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[1] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 24212 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== mutant M3 dedup hit (IN_FLIGHT/COMMITTED) shown as safe ===
+states=179550 transitions=881959 max_depth=29 time=0.3s (64-bit fingerprint collision bound 8.7e-10)
+VIOLATION I2 safe only with receipt
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin [FAULT: Worker lies IN_FLIGHT]
+  devices: d0i0(A)=SAFE#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x1 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=1
+goal (all honest SAFE, R2 clean) reachable: true
+liveness VIOLATION: 385 reachable states (not attempt-exhausted) cannot reach the goal without further faults
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin [FAULT: Worker lies IN_FLIGHT]
+  devices: d0i0(A)=SAFE#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x1 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=1
+
+=== mutant M5 no re-check and no safety valve ===
+states=27602 transitions=102653 max_depth=30 time=0.0s (64-bit fingerprint collision bound 2.1e-11)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 78 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness VIOLATION: 211 reachable states (not attempt-exhausted) cannot reach the goal without further faults
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin [FAULT: Worker lies IN_FLIGHT]
+  devices: d0i0(A)=awaiting(dedup hit)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x1 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=1
+
+=== mutant M6 receipts published once, never republished ===
+states=423706 transitions=2024814 max_depth=29 time=0.6s (64-bit fingerprint collision bound 4.9e-9)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 33206 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness VIOLATION: 30936 reachable states (not attempt-exhausted) cannot reach the goal without further faults
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin
+   3. dev0/item0(A) upload parts + complete
+   4. homelab verify+put_blob rec(d0 item0 att0 content=A)
+   5. homelab archive record + sign receipt rec(d0 item0 att0 content=A)
+   6. homelab publish receipt+commit mark rec(d0 item0 att0 content=A)
+   7. [FAULT: D1 rolled back/wiped]
+  devices: d0i0(A)=awaiting(own content)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:good] receipts=0x1 rejected=0x0 gc_log=0x0
+  r2: meta=0x1 staging=0x1 multipart=0x0; worker: relay=0x0 leases=[0] faults=1
+
+=== mutant M7 receipt re-signed on redelivery ===
+states=833586 transitions=4821096 max_depth=30 time=1.2s (64-bit fingerprint collision bound 1.9e-8)
+VIOLATION I4 one receipt per record
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin
+   3. dev0/item0(A) upload parts + complete
+   4. homelab verify+put_blob rec(d0 item0 att0 content=A)
+   5. homelab archive record + sign receipt rec(d0 item0 att0 content=A)
+   6. homelab archive record + sign receipt rec(d0 item0 att0 content=A)
+  devices: d0i0(A)=awaiting(own content)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:good] receipts=0x1 rejected=0x0 gc_log=0x0
+  r2: meta=0x1 staging=0x1 multipart=0x0; worker: relay=0x0 leases=[1] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 584 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== mutant M4 queue-only ingest (no reconciliation listing), hints droppable ===
+states=1536759 transitions=8193280 max_depth=35 time=2.7s (64-bit fingerprint collision bound 6.4e-8)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 325334 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness VIOLATION: 161170 reachable states (not attempt-exhausted) cannot reach the goal without further faults
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin [FAULT: Worker lies IN_FLIGHT]
+   3. [queue drops hint rec(d0 item0 att0 content=A)]
+  devices: d0i0(A)=awaiting(dedup hit)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x1 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=1
+
+=== M4 control: queue-only ingest, hints never dropped ===
+states=1004451 transitions=5090175 max_depth=35 time=1.5s (64-bit fingerprint collision bound 2.7e-8)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 3118 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+##### mutants end 2026-10-06T19:43:16Z exit=0
+##### xcheck start 2026-10-06T19:43:16Z
+=== X1 v1, 1 honest + poisoner, att<=2, faults<=1 (no symmetry) ===
+states=424298 transitions=2119612 max_depth=29 time=0.6s (64-bit fingerprint collision bound 4.9e-9)
+stateright 0.31.0 BFS cross-check: unique_states=424298 (matches), discoveries=["goal reachable"] time=0.9s
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 584 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== X2 v0, 1 honest + poisoner, att<=2, faults<=1 (no symmetry) ===
+states=1860254 transitions=9491159 max_depth=37 time=2.9s (64-bit fingerprint collision bound 9.4e-8)
+stateright 0.31.0 BFS cross-check: unique_states=1860254 (matches), discoveries=["I1-strong no dangling content reference", "goal reachable"] time=4.6s
+VIOLATION I1-strong no dangling content reference
+  init
+  devices: d0i0(A)=hashed#0 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x0
+  r2: meta=0x0 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[0] faults=0
+   1. dev0/item0(A) journal new attempt
+   2. dev0/item0(A) check+begin
+   3. dev0/item0(A) upload parts + complete
+   4. homelab orphan-GC staging object of rec(d0 item0 att0 content=A)
+   5. dev0/item0(A) send record
+  devices: d0i0(A)=awaiting(own content)#1 d1i0(A,POISON)=hashed#0
+  homelab: blobs[A:-] receipts=0x0 rejected=0x0 gc_log=0x1
+  r2: meta=0x1 staging=0x0 multipart=0x0; worker: relay=0x0 leases=[1] faults=0
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 11508 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== X3 v1, 2 honest, att<=2, faults<=1 (no symmetry) ===
+states=366834 transitions=1862821 max_depth=29 time=0.5s (64-bit fingerprint collision bound 3.6e-9)
+stateright 0.31.0 BFS cross-check: unique_states=366834 (matches), discoveries=["goal reachable"] time=0.8s
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+##### xcheck end 2026-10-06T19:43:26Z exit=0
+##### indep start 2026-10-06T19:43:26Z
+=== INDEPENDENCE 1 honest x {A,B}, lost-response faults on (v1, att<=2, faults<=1) ===
+states=196056 transitions checked=1078892 D1-wipe transitions=20164 transitions touching >1 dedup id=0
+
+=== INDEPENDENCE 1 honest x {A,B} + poisoner x {B}, lost-response faults off (v1, att<=2, faults<=1) ===
+states=4349624 transitions checked=27752540 D1-wipe transitions=533920 transitions touching >1 dedup id=0
+
+##### indep end 2026-10-06T19:43:56Z exit=0
+##### v1 start 2026-10-06T19:43:56Z
+=== E4 v1, 3 honest devices x 1 shared item, att<=2, faults<=1 ===
+states=19843663 transitions=140919895 max_depth=43 time=143.9s (64-bit fingerprint collision bound 1.1e-5)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E5 v1, 2 honest devices x 1 shared item, att<=3, faults<=2 (no lost-response faults) ===
+states=38646964 transitions=271823562 max_depth=43 time=181.5s (64-bit fingerprint collision bound 4.0e-5)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E6 v1, 1 honest + poisoner (1 attempt), att<=3, faults<=2 ===
+states=1465227 transitions=8245283 max_depth=31 time=2.7s (64-bit fingerprint collision bound 5.8e-8)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+  note: 446 stuck states only because a slot used all its bounded attempts (bound artifact; trace shown only if no genuine one)
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+=== E7 v1, 1 honest device, att<=4, faults<=3 ===
+states=924603 transitions=4971677 max_depth=30 time=1.4s (64-bit fingerprint collision bound 2.3e-8)
+safety: I1, I1-strong, I2, I3, I4, I6 hold in all reachable states
+goal (all honest SAFE, R2 clean) reachable: true
+liveness (AG EF goal over fault-free continuation): holds (excluding bound artifacts)
+
+##### v1 end 2026-10-06T19:49:26Z exit=0

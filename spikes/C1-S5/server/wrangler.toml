@@ -1,0 +1,4 @@
+# C1-S5 toy API server, EMULATED leg (local wrangler dev, NOT real Cloudflare). Throwaway research code.
+name = "c1s5"
+main = "src/index.js"
+compatibility_date = "2026-09-01"

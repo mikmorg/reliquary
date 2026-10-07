@@ -1,0 +1,318 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=42505 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 103 and seed 3223264458255379590 with 4 workers on 4 cores with 3641MB heap and 64MB offheap memory [pid: 19027] (Linux 6.18.44-fc-v70 amd64, Ubuntu 21.0.10 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A3-S1/model/MC_2x1_v1_K2_F1_delete_before_archive_safety.tla
+Parsing file /tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A3-S1/model/Ingest.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/TLC.tla
+Parsing file /tmp/Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Ingest
+Semantic processing of module MC_2x1_v1_K2_F1_delete_before_archive_safety
+Starting... (2026-10-06 20:51:47)
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-10-06 20:51:47.
+Error: Invariant I1_NoDeleteBeforeCommit is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ phase = (<<d1, c1>> :> "idle" @@ <<d2, c1>> :> "idle")
+/\ delMeta = {}
+/\ att = (<<d1, c1>> :> 0 @@ <<d2, c1>> :> 0)
+/\ mp = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ stg = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "none" @@
+  <<d2, c1, 2>> :> "none" )
+/\ alive = (d1 :> TRUE @@ d2 :> TRUE)
+/\ delStg = {}
+/\ mark = (c1 :> FALSE)
+/\ arch = {}
+/\ pc = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ row = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "none" @@
+  <<d2, c1, 2>> :> "none" )
+/\ orphan = {}
+/\ faults = 0
+/\ relay = {}
+/\ kind = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "none" @@
+  <<d2, c1, 2>> :> "none" )
+/\ meta = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ issued = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ rej = {}
+/\ lease = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ queue = {}
+/\ up = TRUE
+/\ inbox = {}
+/\ blob = (c1 :> "none")
+
+State 2: <Start line 149, col 3 to line 161, col 70 of module Ingest>
+/\ phase = (<<d1, c1>> :> "idle" @@ <<d2, c1>> :> "uploading")
+/\ delMeta = {}
+/\ att = (<<d1, c1>> :> 0 @@ <<d2, c1>> :> 1)
+/\ mp = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> TRUE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ stg = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "none" @@
+  <<d2, c1, 2>> :> "none" )
+/\ alive = (d1 :> TRUE @@ d2 :> TRUE)
+/\ delStg = {}
+/\ mark = (c1 :> FALSE)
+/\ arch = {}
+/\ pc = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ row = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "claimed" @@
+  <<d2, c1, 2>> :> "none" )
+/\ orphan = {}
+/\ faults = 0
+/\ relay = {}
+/\ kind = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "up" @@
+  <<d2, c1, 2>> :> "none" )
+/\ meta = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ issued = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ rej = {}
+/\ lease = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> TRUE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ queue = {}
+/\ up = TRUE
+/\ inbox = {}
+/\ blob = (c1 :> "none")
+
+State 3: <Complete line 175, col 3 to line 188, col 68 of module Ingest>
+/\ phase = (<<d1, c1>> :> "idle" @@ <<d2, c1>> :> "awaiting")
+/\ delMeta = {}
+/\ att = (<<d1, c1>> :> 0 @@ <<d2, c1>> :> 1)
+/\ mp = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ stg = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "good" @@
+  <<d2, c1, 2>> :> "none" )
+/\ alive = (d1 :> TRUE @@ d2 :> TRUE)
+/\ delStg = {}
+/\ mark = (c1 :> FALSE)
+/\ arch = {}
+/\ pc = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ row = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "staged" @@
+  <<d2, c1, 2>> :> "none" )
+/\ orphan = {}
+/\ faults = 0
+/\ relay = {}
+/\ kind = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "up" @@
+  <<d2, c1, 2>> :> "none" )
+/\ meta = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> TRUE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ issued = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ rej = {}
+/\ lease = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ queue = {<<d2, c1, 1>>}
+/\ up = TRUE
+/\ inbox = {}
+/\ blob = (c1 :> "none")
+
+State 4: <Pull line 297, col 3 to line 304, col 110 of module Ingest>
+/\ phase = (<<d1, c1>> :> "idle" @@ <<d2, c1>> :> "awaiting")
+/\ delMeta = {}
+/\ att = (<<d1, c1>> :> 0 @@ <<d2, c1>> :> 1)
+/\ mp = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ stg = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "good" @@
+  <<d2, c1, 2>> :> "none" )
+/\ alive = (d1 :> TRUE @@ d2 :> TRUE)
+/\ delStg = {}
+/\ mark = (c1 :> FALSE)
+/\ arch = {}
+/\ pc = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ row = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "staged" @@
+  <<d2, c1, 2>> :> "none" )
+/\ orphan = {}
+/\ faults = 0
+/\ relay = {}
+/\ kind = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "up" @@
+  <<d2, c1, 2>> :> "none" )
+/\ meta = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> TRUE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ issued = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ rej = {}
+/\ lease = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ queue = {}
+/\ up = TRUE
+/\ inbox = {<<d2, c1, 1>>}
+/\ blob = (c1 :> "none")
+
+State 5: <IngestA line 338, col 3 to line 352, col 117 of module Ingest>
+/\ phase = (<<d1, c1>> :> "idle" @@ <<d2, c1>> :> "awaiting")
+/\ delMeta = {}
+/\ att = (<<d1, c1>> :> 0 @@ <<d2, c1>> :> 1)
+/\ mp = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ stg = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "good" @@
+  <<d2, c1, 2>> :> "none" )
+/\ alive = (d1 :> TRUE @@ d2 :> TRUE)
+/\ delStg = {}
+/\ mark = (c1 :> FALSE)
+/\ arch = {}
+/\ pc = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 1 @@
+  <<d2, c1, 2>> :> 0 )
+/\ row = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "staged" @@
+  <<d2, c1, 2>> :> "none" )
+/\ orphan = {}
+/\ faults = 0
+/\ relay = {}
+/\ kind = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "up" @@
+  <<d2, c1, 2>> :> "none" )
+/\ meta = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> TRUE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ issued = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ rej = {}
+/\ lease = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ queue = {}
+/\ up = TRUE
+/\ inbox = {<<d2, c1, 1>>}
+/\ blob = (c1 :> "good")
+
+State 6: <IngestD line 370, col 3 to line 376, col 113 of module Ingest>
+/\ phase = (<<d1, c1>> :> "idle" @@ <<d2, c1>> :> "awaiting")
+/\ delMeta = {<<d2, c1, 1>>}
+/\ att = (<<d1, c1>> :> 0 @@ <<d2, c1>> :> 1)
+/\ mp = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ stg = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "none" @@
+  <<d2, c1, 2>> :> "none" )
+/\ alive = (d1 :> TRUE @@ d2 :> TRUE)
+/\ delStg = {<<d2, c1, 1>>}
+/\ mark = (c1 :> FALSE)
+/\ arch = {}
+/\ pc = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ row = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "staged" @@
+  <<d2, c1, 2>> :> "none" )
+/\ orphan = {}
+/\ faults = 0
+/\ relay = {}
+/\ kind = ( <<d1, c1, 1>> :> "none" @@
+  <<d1, c1, 2>> :> "none" @@
+  <<d2, c1, 1>> :> "up" @@
+  <<d2, c1, 2>> :> "none" )
+/\ meta = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ issued = ( <<d1, c1, 1>> :> 0 @@
+  <<d1, c1, 2>> :> 0 @@
+  <<d2, c1, 1>> :> 0 @@
+  <<d2, c1, 2>> :> 0 )
+/\ rej = {}
+/\ lease = ( <<d1, c1, 1>> :> FALSE @@
+  <<d1, c1, 2>> :> FALSE @@
+  <<d2, c1, 1>> :> FALSE @@
+  <<d2, c1, 2>> :> FALSE )
+/\ queue = {}
+/\ up = TRUE
+/\ inbox = {}
+/\ blob = (c1 :> "good")
+
+148 states generated, 82 distinct states found, 34 states left on queue.
+The depth of the complete state graph search is 7.
+The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 5 and the 95th percentile is 5).
+Finished in 00s at (2026-10-06 20:51:47)

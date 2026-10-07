@@ -1,0 +1,2 @@
+{ "name": "c1s5-server", "private": true, "type": "module",
+  "dependencies": { "hono": "4.13.11", "zod": "4.6.5", "wrangler": "4.143.0" } }

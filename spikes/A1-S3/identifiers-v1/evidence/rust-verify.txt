@@ -1,0 +1,27 @@
+2026-10-06T22:05:07Z
+E01 rejected: prefix/version
+E02 rejected: body alphabet
+E03 rejected: epoch not lowercase hex
+E04 rejected: length 68
+E05 rejected: length 63
+E06 rejected: length 65
+E07 rejected: non-canonical trailing bits
+E08 rejected: body alphabet
+E09 rejected: body alphabet
+E10 rejected: prefix/version
+E11 rejected: reserved kind
+E12 rejected: unknown kind
+E13 rejected: length 63
+E14 rejected: length 65
+E15 rejected: prefix/version
+E16 rejected: length 76
+E17 rejected: length 65
+E18 rejected: length 65
+E19 rejected: length 65
+E20 rejected: prefix/version
+E21 rejected: body alphabet
+B01 rejected: binary length 34
+B02 rejected: binary length 36
+B03 rejected: unknown kind
+B04 rejected: reserved kind
+positive parsed+roundtrip 72/72; encoding negatives rejected 25/25; domain negatives distinct 14/14; regenerate-equal true

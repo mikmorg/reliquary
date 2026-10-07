@@ -1,0 +1,10 @@
+{"mode":"v1","client":"1.2.0","naive":"OK (http 200, 8 items, 0 Unknown)","tolerant":"OK (http 200, 8 items, 0 Unknown)"}
+{"mode":"v2-add-field","client":"1.2.0","naive":"OK (http 200, 8 items, 0 Unknown)","tolerant":"OK (http 200, 8 items, 0 Unknown)"}
+{"mode":"v2-add-enum","client":"1.2.0","naive":"DECODE_ERROR (http 200): unknown variant `QUARANTINED`, expected one of `MISSING`, `IN_FLIGHT`, `COMMITTED` at line 1 column 390","tolerant":"OK (http 200, 8 items, 2 Unknown)"}
+{"mode":"v2-rename","client":"1.2.0","naive":"DECODE_ERROR (http 200): missing field `status` at line 1 column 103","tolerant":"DECODE_ERROR (http 200): missing field `status` at line 1 column 103"}
+{"mode":"v2-break-gated","client":"1.2.0","naive":"UPDATE_REQUIRED (http 426, min_version 2.0.0)","tolerant":"UPDATE_REQUIRED (http 426, min_version 2.0.0)"}
+{"mode":"v1","client":"2.0.0","naive":"OK (http 200, 8 items, 0 Unknown)","tolerant":"OK (http 200, 8 items, 0 Unknown)"}
+{"mode":"v2-add-field","client":"2.0.0","naive":"OK (http 200, 8 items, 0 Unknown)","tolerant":"OK (http 200, 8 items, 0 Unknown)"}
+{"mode":"v2-add-enum","client":"2.0.0","naive":"DECODE_ERROR (http 200): unknown variant `QUARANTINED`, expected one of `MISSING`, `IN_FLIGHT`, `COMMITTED` at line 1 column 390","tolerant":"OK (http 200, 8 items, 2 Unknown)"}
+{"mode":"v2-rename","client":"2.0.0","naive":"DECODE_ERROR (http 200): missing field `status` at line 1 column 103","tolerant":"DECODE_ERROR (http 200): missing field `status` at line 1 column 103"}
+{"mode":"v2-break-gated","client":"2.0.0","naive":"OK (http 200, 8 items, 0 Unknown)","tolerant":"OK (http 200, 8 items, 0 Unknown)"}

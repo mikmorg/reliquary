@@ -51,6 +51,8 @@ class Ctx:
     def w(self, path, params=None, body=None, method=None):
         url = self.a.worker + path + ("?" + urllib.parse.urlencode(params) if params else "")
         req = urllib.request.Request(url, data=body, method=method or ("POST" if body is not None else "GET"))
+        if os.environ.get("SPIKE_TOKEN"):
+            req.add_header("x-spike-token", os.environ["SPIKE_TOKEN"])
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
                 return r.status, json.loads(r.read() or b"{}")

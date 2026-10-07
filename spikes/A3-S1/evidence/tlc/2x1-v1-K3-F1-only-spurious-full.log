@@ -1,0 +1,40 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStore=/etc/ssl/certs/java/cacerts -Djavax.net.ssl.trustStoreType=JKS -Dhttps.proxyHost=127.0.0.1 -Dhttps.proxyPort=42505 -Dhttp.nonProxyHosts=localhost|127.0.0.1|::1|127.*|0.*|::|169.254.*|api.anthropic.com|api-staging.anthropic.com|api-pr-preview.anthropic.com|mcp-proxy.anthropic.com|mcp-proxy-staging.anthropic.com|registry.npmjs.org|jsr.io|npm.jsr.io|pypi.org|files.pythonhosted.org|index.crates.io|proxy.golang.org|host.docker.internal|10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.20.*|172.21.*|172.22.*|172.23.*|172.24.*|172.25.*|172.26.*|172.27.*|172.28.*|172.29.*|172.30.*|172.31.*|192.168.*|100.64.0.0/10|*.svc.cluster.local|*.svc.cluster.local -Djdk.http.auth.tunneling.disabledSchemes= -Djdk.http.auth.proxying.disabledSchemes=
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 89 and seed -7184409254406535897 with 4 workers on 4 cores with 3641MB heap and 64MB offheap memory [pid: 28197] (Linux 6.18.44-fc-v70 amd64, Ubuntu 21.0.10 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A3-S1/model/MC_2x1_v1_K3_F1_only_spurious_full.tla
+Parsing file /tmp/claude-0/-home-user-reliquary/f6c196df-b28b-589f-8d8c-44e6380a0475/scratchpad/A3-S1/model/Ingest.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/TLC.tla
+Parsing file /tmp/Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module Ingest
+Semantic processing of module MC_2x1_v1_K3_F1_only_spurious_full
+Starting... (2026-10-06 22:21:48)
+Implied-temporal checking--satisfiability problem has 3 branches.
+Computing initial states...
+Finished computing initial states: 1 distinct state generated at 2026-10-06 22:21:48.
+Progress(12) at 2026-10-06 22:21:51: 25,728 states generated (25,728 s/min), 7,482 distinct states found (7,482 ds/min), 3,387 states left on queue.
+Progress(19) at 2026-10-06 22:22:51: 938,956 states generated (913,228 s/min), 169,198 distinct states found (161,716 ds/min), 47,351 states left on queue.
+Progress(21) at 2026-10-06 22:23:51: 1,850,364 states generated (911,408 s/min), 305,096 distinct states found (135,898 ds/min), 71,495 states left on queue.
+Progress(22) at 2026-10-06 22:24:51: 2,798,855 states generated (948,491 s/min), 434,545 distinct states found (129,449 ds/min), 88,741 states left on queue.
+Progress(23) at 2026-10-06 22:25:51: 3,725,010 states generated (926,155 s/min), 553,194 distinct states found (118,649 ds/min), 95,399 states left on queue.
+Progress(25) at 2026-10-06 22:26:51: 4,672,821 states generated (947,811 s/min), 670,491 distinct states found (117,297 ds/min), 92,920 states left on queue.
+Progress(26) at 2026-10-06 22:27:51: 5,632,121 states generated (959,300 s/min), 781,505 distinct states found (111,014 ds/min), 86,348 states left on queue.
+Progress(27) at 2026-10-06 22:28:51: 6,606,125 states generated (974,004 s/min), 889,986 distinct states found (108,481 ds/min), 69,055 states left on queue.
+Progress(30) at 2026-10-06 22:29:51: 7,606,046 states generated (999,921 s/min), 997,213 distinct states found (107,227 ds/min), 39,693 states left on queue.
+Progress(40) at 2026-10-06 22:30:36: 8,374,061 states generated, 1,072,860 distinct states found, 0 states left on queue.
+Checking 3 branches of temporal properties for the complete state space with 3218580 total distinct states at (2026-10-06 22:30:36)
+Finished checking temporal properties in 10s at 2026-10-06 22:30:47
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 4.2E-7
+  based on the actual fingerprints:  val = 1.1E-8
+8374061 states generated, 1072860 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 40.
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 9 and the 95th percentile is 2).
+Finished in 08min 59s at (2026-10-06 22:30:47)

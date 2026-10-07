@@ -1,0 +1,52 @@
+{
+ "n_parts": 200,
+ "noop_client_ms": {
+  "p50": 3.85,
+  "p99": 11.62,
+  "max": 13.79,
+  "n": 50
+ },
+ "presign_many_client_ms": {
+  "p50": 28.5,
+  "p99": 190.64,
+  "max": 330.67,
+  "n": 50
+ },
+ "presign_many_in_worker_perf_ms": {
+  "p50": 22.0,
+  "p99": 183.86,
+  "max": 324,
+  "n": 50
+ },
+ "ed25519_verify_ms_each_in_worker": {
+  "runs": [
+   0.0632,
+   0.0781,
+   0.0551,
+   0.0785,
+   0.0552
+  ],
+  "verifies_per_run": 10000
+ },
+ "one_call_with_urls": {
+  "client_ms": 23.8,
+  "in_worker_perf_ms": 17,
+  "response_bytes": 103742,
+  "unique_urls": 200,
+  "max_url_len": 515
+ },
+ "curl_check": {
+  "part_status": {
+   "1": "HTTP/1.1 200 OK",
+   "2": "HTTP/1.1 200 OK",
+   "200": "HTTP/1.1 200 OK"
+  },
+  "complete": {
+   "etag": "42d760286be3baa2eabc76091e13bdad-3",
+   "httpEtag": "\"42d760286be3baa2eabc76091e13bdad-3\"",
+   "size": 10486537
+  },
+  "size_ok": true
+ },
+ "finished_utc": "2026-10-06T20:15:44Z"
+}

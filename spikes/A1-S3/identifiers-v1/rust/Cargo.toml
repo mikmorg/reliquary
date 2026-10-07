@@ -1,0 +1,17 @@
+[package]
+name = "a1-idv1"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+# THROWAWAY spike code (Reliquary A1-S3, identifiers.md draft vectors). Not production code.
+
+[dependencies]
+sha2 = "=0.11.0"
+hmac = "=0.13.0"
+hkdf = "=0.13.0"
+serde_json = { version = "1", features = ["preserve_order"] }
+hex = "0.4"
+
+[profile.release]
+opt-level = 3

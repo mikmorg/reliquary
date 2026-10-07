@@ -1,0 +1,30 @@
+{
+ "store": "d1",
+ "concurrency": 50,
+ "trials": 10000,
+ "takeover_every": 10,
+ "winners_histogram": {
+  "1": 10000
+ },
+ "bad_trials": [],
+ "bad_trial_count": 0,
+ "non200_responses": 0,
+ "client_errors": [],
+ "client_error_count": 0,
+ "post_check": {
+  "dup_ids": 0,
+  "sample": [],
+  "rows": 11001,
+  "distinct_ids": 10001,
+  "events": 11001
+ },
+ "wall_s": 1914.3,
+ "requests": 500000,
+ "latency_ms": {
+  "p50": 155.7,
+  "p99": 372.9,
+  "max": 788.45,
+  "mean": 162.67
+ },
+ "finished_utc": "2026-10-06T20:49:41Z"
+}

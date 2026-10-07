@@ -1,7 +1,9 @@
 // C1 spikes, EMULATED leg (NOT real R2/Cloudflare). Throwaway research code.
 // One Worker exposes the binding-side and in-Worker operations that C1-S1 (R2 behaviour),
 // C1-S2 (lease race, D1 vs DO), C1-S3 (1,000-ID presence check) and C1-S4 (presign 200 parts,
-// Ed25519 verify cost) need. A Python driver (c1_emulated.py) calls it over HTTP.
+// Ed25519 verify cost) need. Python drivers (c1s1.py, ../C1-S2/c1s2.py, ../C1-S3/c1s3.py, ../C1-S4/c1s4.py)
+// call it over HTTP. On the sandbox account (kits) set the SPIKE_TOKEN secret: every route except /health
+// then requires the header x-spike-token, because /presign hands out signed R2 URLs.
 import { AwsClient } from "aws4fetch";
 import { DurableObject } from "cloudflare:workers";
 
@@ -71,6 +73,8 @@ export default {
     const u = new URL(req.url);
     const p = u.searchParams;
     const key = p.get("key");
+    if (env.SPIKE_TOKEN && u.pathname !== "/health" && req.headers.get("x-spike-token") !== env.SPIKE_TOKEN)
+      return json({ error: "forbidden" }, 403);
     try {
       switch (u.pathname) {
         case "/health":

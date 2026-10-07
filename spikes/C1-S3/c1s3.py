@@ -13,6 +13,8 @@ def call(base, path, body=None, timeout=600):
     req = urllib.request.Request(base + path, data=json.dumps(body).encode() if body is not None else None,
                                  method="POST" if body is not None else "GET",
                                  headers={"content-type": "application/json"})
+    if os.environ.get("SPIKE_TOKEN"):
+        req.add_header("x-spike-token", os.environ["SPIKE_TOKEN"])
     t0 = time.perf_counter()
     with urllib.request.urlopen(req, timeout=timeout) as r:
         out = json.loads(r.read())

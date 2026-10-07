@@ -1,0 +1,23 @@
+# newer client sends an extra request field 'priority' to the v1 server (default zod object = strip)
+HTTP/1.1 200 OK
+Content-Length: 106
+Content-Type: application/json
+
+{"results":[{"id":"0000000000000000000000000000000000000000000000000000000000000001","status":"MISSING"}]}
+
+# same, server schema .strict()
+HTTP/1.1 400 Bad Request
+Content-Length: 174
+Content-Type: application/problem+json
+
+{"type":"https://reliquary.invalid/problems/invalid_request","title":"invalid request","status":400,"code":"invalid_request","retryable":false,"issues":["unrecognized_keys"]}
+
+# no Reliquary-Client header
+HTTP/1.1 400 Bad Request
+Content-Length: 161
+Content-Type: application/problem+json
+
+{"type":"https://reliquary.invalid/problems/client_header_missing","title":"client header missing","status":400,"code":"client_header_missing","retryable":false}
+
+# Reliquary-Server-Time present?
+1
